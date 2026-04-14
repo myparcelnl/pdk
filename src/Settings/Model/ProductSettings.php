@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Model;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Base\Concern\ResolvesOptionAttributes;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
@@ -26,26 +29,74 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  */
 class ProductSettings extends AbstractSettingsModel
 {
+    use ResolvesOptionAttributes;
+
     public const ID                       = 'product';
     public const COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
     public const COUNTRY_OF_ORIGIN_NONE   = 'none';
     public const CUSTOMS_CODE             = 'customsCode';
     public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
     public const DROP_OFF_DELAY           = 'dropOffDelay';
-    public const EXPORT_AGE_CHECK         = 'exportAgeCheck';
-    public const EXPORT_HIDE_SENDER       = 'exportHideSender';
-    public const EXPORT_INSURANCE         = 'exportInsurance';
-    public const EXPORT_LARGE_FORMAT      = 'exportLargeFormat';
-    public const EXPORT_ONLY_RECIPIENT    = 'exportOnlyRecipient';
-    public const EXPORT_RETURN            = 'exportReturn';
-    public const EXPORT_SIGNATURE         = 'exportSignature';
-    public const EXPORT_TRACKED           = 'exportTracked';
-    public const EXPORT_FRESH_FOOD        = 'exportFreshFood';
-    public const EXPORT_FROZEN            = 'exportFrozen';
-    public const FIT_IN_DIGITAL_STAMP     = 'fitInDigitalStamp';
-    public const FIT_IN_MAILBOX           = 'fitInMailbox';
-    public const PACKAGE_TYPE             = 'packageType';
-    public const EXCLUDE_PARCEL_LOCKERS   = 'excludeParcelLockers';
+
+    /**
+     * @deprecated now dynamically derived from AgeCheckDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_AGE_CHECK = 'exportAgeCheck';
+
+    /**
+     * @deprecated now dynamically derived from HideSenderDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_HIDE_SENDER = 'exportHideSender';
+
+    /**
+     * @deprecated now dynamically derived from InsuranceDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_INSURANCE = 'exportInsurance';
+
+    /**
+     * @deprecated now dynamically derived from LargeFormatDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_LARGE_FORMAT = 'exportLargeFormat';
+
+    /**
+     * @deprecated now dynamically derived from OnlyRecipientDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_ONLY_RECIPIENT = 'exportOnlyRecipient';
+
+    /**
+     * @deprecated now dynamically derived from DirectReturnDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_RETURN = 'exportReturn';
+
+    /**
+     * @deprecated now dynamically derived from SignatureDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_SIGNATURE = 'exportSignature';
+
+    /**
+     * @deprecated now dynamically derived from TrackedDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_TRACKED = 'exportTracked';
+
+    /**
+     * @deprecated now dynamically derived from FreshFoodDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_FRESH_FOOD = 'exportFreshFood';
+
+    /**
+     * @deprecated now dynamically derived from FrozenDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_FROZEN = 'exportFrozen';
+
+    /**
+     * @deprecated now dynamically derived from CooledDeliveryDefinition::getProductSettingsKey()
+     */
+    public const EXPORT_COOLED_DELIVERY = 'exportCooledDelivery';
+
+    public const FIT_IN_DIGITAL_STAMP   = 'fitInDigitalStamp';
+    public const FIT_IN_MAILBOX         = 'fitInMailbox';
+    public const PACKAGE_TYPE           = 'packageType';
+    public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
 
     protected $attributes = [
         'id' => self::ID,
@@ -54,40 +105,44 @@ class ProductSettings extends AbstractSettingsModel
         self::CUSTOMS_CODE             => TriStateService::INHERIT,
         self::DISABLE_DELIVERY_OPTIONS => TriStateService::INHERIT,
         self::DROP_OFF_DELAY           => TriStateService::INHERIT,
-        self::EXPORT_AGE_CHECK         => TriStateService::INHERIT,
-        self::EXPORT_HIDE_SENDER       => TriStateService::INHERIT,
-        self::EXPORT_INSURANCE         => TriStateService::INHERIT,
-        self::EXPORT_LARGE_FORMAT      => TriStateService::INHERIT,
-        self::EXPORT_ONLY_RECIPIENT    => TriStateService::INHERIT,
-        self::EXPORT_RETURN            => TriStateService::INHERIT,
-        self::EXPORT_SIGNATURE         => TriStateService::INHERIT,
-        self::EXPORT_TRACKED           => TriStateService::INHERIT,
-        self::EXPORT_FRESH_FOOD        => TriStateService::INHERIT,
-        self::EXPORT_FROZEN            => TriStateService::INHERIT,
         self::FIT_IN_DIGITAL_STAMP     => TriStateService::INHERIT,
         self::FIT_IN_MAILBOX           => TriStateService::INHERIT,
         self::PACKAGE_TYPE             => TriStateService::INHERIT,
         self::EXCLUDE_PARCEL_LOCKERS   => TriStateService::INHERIT,
     ];
 
-    protected $casts      = [
+    protected $casts = [
         self::COUNTRY_OF_ORIGIN        => TriStateService::TYPE_COERCED,
         self::CUSTOMS_CODE             => TriStateService::TYPE_COERCED,
         self::DISABLE_DELIVERY_OPTIONS => TriStateService::TYPE_STRICT,
         self::DROP_OFF_DELAY           => 'int',
-        self::EXPORT_AGE_CHECK         => TriStateService::TYPE_STRICT,
-        self::EXPORT_HIDE_SENDER       => TriStateService::TYPE_STRICT,
-        self::EXPORT_INSURANCE         => TriStateService::TYPE_STRICT,
-        self::EXPORT_LARGE_FORMAT      => TriStateService::TYPE_STRICT,
-        self::EXPORT_ONLY_RECIPIENT    => TriStateService::TYPE_STRICT,
-        self::EXPORT_RETURN            => TriStateService::TYPE_STRICT,
-        self::EXPORT_SIGNATURE         => TriStateService::TYPE_STRICT,
-        self::EXPORT_TRACKED           => TriStateService::TYPE_STRICT,
-        self::EXPORT_FRESH_FOOD        => TriStateService::TYPE_STRICT,
-        self::EXPORT_FROZEN            => TriStateService::TYPE_STRICT,
         self::FIT_IN_DIGITAL_STAMP     => 'int',
         self::FIT_IN_MAILBOX           => 'int',
         self::PACKAGE_TYPE             => TriStateService::TYPE_COERCED,
         self::EXCLUDE_PARCEL_LOCKERS   => TriStateService::TYPE_STRICT,
     ];
+
+    /**
+     * Populate attributes and casts dynamically from registered option definitions.
+     * Dynamic entries are added first so static definitions win on collision via array_merge.
+     *
+     * Product-level export settings are always tri-state (inherit/off/on), regardless of the
+     * shipment option cast. For example, exportInsurance on a product is a toggle (-1/0/1),
+     * not an amount — the amount is resolved at carrier settings level.
+     */
+    protected function initializeResolvesOptionAttributes(): void
+    {
+        [$dynamicAttributes, $dynamicCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getProductSettingsKey();
+            },
+            TriStateService::INHERIT,
+            static function (): string {
+                return TriStateService::TYPE_STRICT;
+            }
+        );
+
+        $this->attributes = array_merge($dynamicAttributes, $this->attributes);
+        $this->casts      = array_merge($dynamicCasts, $this->casts);
+    }
 }

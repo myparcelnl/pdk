@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
-use MyParcelNL\Pdk\Base\Service\CountryCodes;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * Disables all shipment options if package type is not package.
+ * Iterates registered definitions so new options are automatically included.
  */
 final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -23,16 +24,19 @@ final class PackageTypeShipmentOptionsCalculator extends AbstractPdkOrderOptionC
             return;
         }
 
-        $this->order->deliveryOptions->shipmentOptions->fill([
-            ShipmentOptions::AGE_CHECK         => TriStateService::DISABLED,
-            ShipmentOptions::DIRECT_RETURN     => TriStateService::DISABLED,
-            ShipmentOptions::HIDE_SENDER       => TriStateService::DISABLED,
-            ShipmentOptions::LARGE_FORMAT      => TriStateService::DISABLED,
-            ShipmentOptions::ONLY_RECIPIENT    => TriStateService::DISABLED,
-            ShipmentOptions::SAME_DAY_DELIVERY => TriStateService::DISABLED,
-            ShipmentOptions::SIGNATURE         => TriStateService::DISABLED,
-            ShipmentOptions::RECEIPT_CODE      => TriStateService::DISABLED,
-        ]);
-    }
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
 
+        $disabled = [];
+
+        foreach ($definitions as $definition) {
+            $key = $definition->getShipmentOptionsKey();
+
+            if ($key !== null) {
+                $disabled[$key] = TriStateService::DISABLED;
+            }
+        }
+
+        $this->order->deliveryOptions->shipmentOptions->fill($disabled);
+    }
 }
