@@ -47,7 +47,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
             return;
         }
 
-        $capability = $this->getCapability();
+        $capability = $this->getCarrierCapabilities();
 
         if (! $capability) {
             return;
@@ -76,7 +76,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
     /**
      * @return null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2
      */
-    private function getCapability(): ?RefCapabilitiesResponseCapabilityV2
+    private function getCarrierCapabilities(): ?RefCapabilitiesResponseCapabilityV2
     {
         $deliveryOptions = $this->order->deliveryOptions;
         $carrierName     = $deliveryOptions->carrier->carrier;

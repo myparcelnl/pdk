@@ -45,8 +45,16 @@ it('calculates options', function (
         ->withAllCapabilities()
         ->make();
 
+    $settings = [$definition->getCarrierSettingsKey() => $carrierSetting];
+
+    // Ensure the allow setting is true so CapabilitiesOptionCalculator does not gate the option.
+    $allowKey = $definition->getAllowSettingsKey();
+    if ($allowKey) {
+        $settings[$allowKey] = true;
+    }
+
     factory(CarrierSettings::class, $fakeCarrier->carrier)
-        ->with([$definition->getCarrierSettingsKey() => $carrierSetting])
+        ->with($settings)
         ->store();
 
     factory(PdkProductCollection::class)
