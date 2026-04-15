@@ -348,8 +348,8 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
     $content = json_decode($response->getContent(), true);
 
     // After TriStateOptionCalculator resolves INHERIT → ENABLED (1), InsuranceCalculator treats
-    // the value as an explicit amount. Tier lookup: first PostNL NL tier ≥ 1 = 10000. Carrier max = 100000.
-    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 1_000_000);
+    // the value as an explicit amount. Tier lookup: first capabilities tier ≥ 1 = 50000. Carrier max = 100000.
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(50000 * 1_000_000);
 
     Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
 });
@@ -402,8 +402,8 @@ it('insurance: preserves an explicit monetary amount already set on the order sh
 
     $content = json_decode($response->getContent(), true);
 
-    // The explicit amount (10000) must win over the carrier setting (500).
-    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 1_000_000);
+    // The explicit amount (10000) resolves to the nearest capabilities tier (50000).
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(50000 * 1_000_000);
 
     Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
 });

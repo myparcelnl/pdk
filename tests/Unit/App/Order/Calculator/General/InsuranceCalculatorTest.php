@@ -93,10 +93,10 @@ it('calculates insurance', function (array $input, int $result) {
                     ],
                 ],
             ],
-            'result' => 25000,
+            'result' => 50000,
         ],
 
-        'manual amount respects schema but ignores export settings limit' => [
+        'manual amount respects capabilities but ignores export settings limit' => [
             [
                 'deliveryOptions' => [
                     'shipmentOptions' => [
@@ -107,14 +107,14 @@ it('calculates insurance', function (array $input, int $result) {
                     CarrierSettings::EXPORT_INSURANCE_UP_TO => 0,
                 ],
             ],
-            'result' => 10000,
+            'result' => 50000,
         ],
 
-        'value € 44.81 -> rounded up to € 100' => [
+        'value € 44.81 -> rounded up to € 500' => [
             [
                 'orderPrice' => 4481,
             ],
-            'result' => 10000,
+            'result' => 50000,
         ],
 
         'value € 0 -> € 0' => [
@@ -131,18 +131,18 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 0,
         ],
 
-        'value € 1 -> rounded up to € 100' => [
+        'value € 1 -> rounded up to € 500' => [
             [
                 'orderPrice' => 1,
             ],
-            'result' => 10000,
+            'result' => 50000,
         ],
 
-        'value € 150.50 -> rounded up to € 250' => [
+        'value € 150.50 -> rounded up to € 500' => [
             [
                 'orderPrice' => 15050,
             ],
-            'result' => 25000,
+            'result' => 50000,
         ],
 
         'value € 1000 -> matches 100000' => [
@@ -195,12 +195,12 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 0,
         ],
 
-        'value € 100, insured from € 100 -> matches € 100' => [
+        'value € 100, insured from € 100 -> rounded up to € 500' => [
             [
                 'orderPrice' => 10000,
                 'settings'   => [CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT => 100],
             ],
-            'result' => 10000,
+            'result' => 50000,
         ],
 
         'value € 3100, insured up to € 3000 -> € 3000' => [
@@ -219,12 +219,12 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 300000,
         ],
 
-        'value € 310, percentage 50 -> rounded up to € 250' => [
+        'value € 310, percentage 50 -> rounded up to € 500' => [
             [
                 'orderPrice' => 31000,
                 'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 50],
             ],
-            'result' => 25000,
+            'result' => 50000,
         ],
 
         'value € 550, percentage 90 -> rounded up to € 500' => [
@@ -311,7 +311,7 @@ it('calculates insurance', function (array $input, int $result) {
                     CarrierSettings::EXPORT_INSURANCE_UP_TO_EU => 20000,
                 ],
             ],
-            'result' => 5000,
+            'result' => 20000,
         ],
 
         'country US' => [
@@ -333,7 +333,7 @@ it('calculates insurance', function (array $input, int $result) {
                     CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW => 10000,
                 ],
             ],
-            'result' => 5000,
+            'result' => 10000,
         ],
 
         sprintf('carrier %s', RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU) => [
@@ -358,7 +358,7 @@ it('calculates insurance', function (array $input, int $result) {
                 'orderPrice' => 10000,
                 'carrier'    => RefCapabilitiesSharedCarrierV2::GLS,
             ],
-            'result' => 10000,
+            'result' => 50000,
         ],
     ]);
 
@@ -406,7 +406,6 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
 it('returns capabilities default amount when no insurance is set on the order', function () {
     mockPdkProperty('orderCalculators', [InsuranceCalculator::class]);
 
-    // TRUNKRS has no insurance enum in its JSON schema, so the capabilities path is always taken.
     // default=50000 means: when no amount is specified, the carrier default is used.
     // Build a shop with only TRUNKRS so that we control exactly which insurance capabilities are returned.
     // PostNL is included to satisfy the proposition default-carrier requirement.
@@ -446,7 +445,7 @@ it('returns capabilities default amount when no insurance is set on the order', 
 it('capabilities fallback: order price rounds up to the nearest tier', function () {
     mockPdkProperty('orderCalculators', [InsuranceCalculator::class]);
 
-    // TRUNKRS has no insurance enum in its JSON schema, so the capabilities range [0,50000,100000,150000,200000] is used.
+    // Capabilities range [0,50000,100000,150000,200000] is used for TRUNKRS.
     // Build a shop with only TRUNKRS so that we control exactly which insurance capabilities are returned.
     // PostNL is included to satisfy the proposition default-carrier requirement.
     factory(Shop::class)
