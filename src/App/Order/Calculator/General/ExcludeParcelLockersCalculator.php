@@ -4,20 +4,47 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
+use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 /**
  * Automatically exclude parcel lockers for 18+ products and when general setting is enabled.
  */
 final class ExcludeParcelLockersCalculator extends AbstractPdkOrderOptionCalculator
 {
+    /**
+     * @var \MyParcelNL\Pdk\Validation\Validator\CarrierSchema
+     */
+    private $carrierSchema;
+
+    public function __construct(PdkOrder $order)
+    {
+        parent::__construct($order);
+
+        /** @var CarrierSchema $schema */
+        $schema = Pdk::get(CarrierSchema::class);
+
+        $this->carrierSchema = $schema->setCarrier($this->order->deliveryOptions->carrier);
+    }
+
     public function calculate(): void
     {
+        $definition = new ExcludeParcelLockersDefinition();
+
+        if (! $definition->validate($this->carrierSchema)) {
+            $this->order->deliveryOptions->shipmentOptions->excludeParcelLockers = TriStateService::DISABLED;
+
+            return;
+        }
+
         $shipmentOptions = $this->order->deliveryOptions->shipmentOptions;
 
         // Check if parcel lockers should be excluded based on general setting
@@ -44,7 +71,7 @@ final class ExcludeParcelLockersCalculator extends AbstractPdkOrderOptionCalcula
             if (!$orderLine->product->carrier || !$orderLine->product->carrier->id) {
                 return false;
             }
-            
+
             return Settings::get(
                 CarrierSettings::EXPORT_AGE_CHECK,
                 CarrierSettings::ID . '.' . $orderLine->product->carrier->id,

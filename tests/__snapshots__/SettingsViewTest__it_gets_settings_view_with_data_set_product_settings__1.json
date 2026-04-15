@@ -1125,6 +1125,18 @@
       "description": "settings_product_export_age_check_description"
     },
     {
+      "name": "exportReturn",
+      "$component": "TriStateInput",
+      "label": "settings_product_export_return",
+      "description": "settings_product_export_return_description"
+    },
+    {
+      "name": "exportHideSender",
+      "$component": "TriStateInput",
+      "label": "settings_product_export_hide_sender",
+      "description": "settings_product_export_hide_sender_description"
+    },
+    {
       "name": "exportInsurance",
       "$component": "TriStateInput",
       "label": "settings_product_export_insurance",
@@ -1143,16 +1155,28 @@
       "description": "settings_product_export_only_recipient_description"
     },
     {
+      "name": "exportPriorityDelivery",
+      "$component": "TriStateInput",
+      "label": "settings_product_export_priority_delivery",
+      "description": "settings_product_export_priority_delivery_description"
+    },
+    {
       "name": "exportSignature",
       "$component": "TriStateInput",
       "label": "settings_product_export_signature",
       "description": "settings_product_export_signature_description"
     },
     {
-      "name": "exportReturn",
+      "name": "exportTracked",
       "$component": "TriStateInput",
-      "label": "settings_product_export_return",
-      "description": "settings_product_export_return_description"
+      "label": "settings_product_export_tracked",
+      "description": "settings_product_export_tracked_description"
+    },
+    {
+      "name": "excludeParcelLockers",
+      "$component": "TriStateInput",
+      "label": "settings_product_exclude_parcel_lockers",
+      "description": "settings_product_exclude_parcel_lockers_description"
     },
     {
       "name": "exportFreshFood",
@@ -1165,6 +1189,12 @@
       "$component": "TriStateInput",
       "label": "settings_product_export_frozen",
       "description": "settings_product_export_frozen_description"
+    },
+    {
+      "name": "exportCooledDelivery",
+      "$component": "TriStateInput",
+      "label": "settings_product_export_cooled_delivery",
+      "description": "settings_product_export_cooled_delivery_description"
     }
   ],
   "children": null

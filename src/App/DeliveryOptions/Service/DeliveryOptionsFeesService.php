@@ -41,7 +41,7 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
         $translation     = Str::snake("delivery_options_{$identifier}_title");
         $priceSettingKey = implode('.', [
             CarrierSettings::ID,
-            $deliveryOptions->carrier->externalIdentifier,
+            $deliveryOptions->carrier->carrier,
             Str::camel("price_$identifier"),
         ]);
 
@@ -87,10 +87,11 @@ class DeliveryOptionsFeesService implements DeliveryOptionsFeesServiceInterface
      */
     private function getShipmentOptionsFees(DeliveryOptions $deliveryOptions): array
     {
-        $fees = [];
+        $fees              = [];
+        $shipmentOptionKeys = self::getFrontendShipmentOptionKeys();
 
         foreach ($deliveryOptions->shipmentOptions->toArrayWithoutNull() as $key => $option) {
-            if (! in_array($key, self::getFrontendShipmentOptionKeys(), true)) {
+            if (! in_array($key, $shipmentOptionKeys, true)) {
                 continue;
             }
 

@@ -39,4 +39,6 @@ class ContextBag extends Model
         Context::ID_PRODUCT_DATA          => ProductDataContextCollection::class,
         Context::ID_PRODUCT_SETTINGS_VIEW => ProductSettingsViewContext::class,
     ];
+
+    protected $convertCase = false;
 }

@@ -37,7 +37,7 @@
     "test:integration": "nx run @myparcel/php-pdk:__test:integration",
     "test:unit": "nx run @myparcel/php-pdk:__test:unit",
     "test:unit:coverage": "nx run @myparcel/php-pdk:__test:coverage",
-    "test:unit:snapshot": "yarn docker composer test:unit:snapshot",
+    "test:unit:snapshot": "yarn docker composer test:unit:snapshot && prettier --write 'tests/__snapshots__/**/*.json'",
     "test:watch": "npx -q nodemon --exec 'yarn test || exit 1' --watch 'src,tests' --ext 'php'"
   },
   "lint-staged": {

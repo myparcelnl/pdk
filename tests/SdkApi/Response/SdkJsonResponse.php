@@ -35,12 +35,12 @@ abstract class SdkJsonResponse extends Response
     public function __construct(
         ?array $responseContent = null,
         int    $status = 200,
-        array  $headers = ['Content-Type' => 'application/json'],
+        array  $headers = [],
         $body = null,
         string $version = '1.1',
-        string $reason = null
+        ?string $reason = null
     ) {
-        parent::__construct($status, $headers, $body, $version, $reason);
+        parent::__construct($status, array_merge(['Content-Type' => 'application/json'], $headers), $body, $version, $reason);
         $this->responseContent = $responseContent;
     }
 
