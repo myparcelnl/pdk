@@ -18,7 +18,7 @@ class JsonResponse extends Response
      * @param  int   $status
      * @param  array $headers
      *
-     * @return static
+     * @return self
      */
     public static function create($content = '', int $status = 200, array $headers = [])
     {
