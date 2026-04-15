@@ -10,17 +10,25 @@ use Symfony\Component\HttpFoundation\Response;
 class JsonResponse extends Response
 {
     /**
-     * Factory method for fluent creation. Restores compatibility with Symfony 6+
-     * which removed Response::create().
+     * Factory method for fluent creation. Uses a Symfony-compatible signature
+     * when Response::create() exists and normalizes content to the array payload
+     * expected by this response class.
      *
-     * @param  array $data
+     * @param  mixed $content
      * @param  int   $status
      * @param  array $headers
      *
      * @return static
      */
-    public static function create(array $data = [], int $status = 200, array $headers = []): self
+    public static function create($content = '', int $status = 200, array $headers = [])
     {
+        if (is_array($content)) {
+            $data = $content;
+        } elseif (null === $content || '' === $content) {
+            $data = [];
+        } else {
+            $data = ['content' => $content];
+        }
         return new static($data, $status, $headers);
     }
 
