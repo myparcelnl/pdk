@@ -54,6 +54,45 @@ class CapabilitiesValidationService
     }
 
     /**
+     * Fetch capabilities for a full order context.
+     *
+     * Used during order export where the full shipment configuration is known.
+     * Cached per unique parameter combination.
+     *
+     * @param  string      $carrier        V2 carrier name
+     * @param  string      $cc             Recipient country code
+     * @param  string      $v2PackageType  V2 package type
+     * @param  null|string $v2DeliveryType V2 delivery type (optional)
+     *
+     * @return array<string, RefCapabilitiesResponseCapabilityV2>
+     */
+    public function getCapabilitiesForOrderContext(
+        string $carrier,
+        string $cc,
+        string $v2PackageType,
+        ?string $v2DeliveryType = null
+    ): array {
+        $args = [
+            'carrier'      => $carrier,
+            'recipient'    => ['cc' => $cc],
+            'package_type' => $v2PackageType,
+        ];
+
+        if ($v2DeliveryType) {
+            $args['delivery_type'] = $v2DeliveryType;
+        }
+
+        $capabilities = $this->capabilitiesRepository->getCapabilities($args);
+
+        $indexed = [];
+        foreach ($capabilities as $capability) {
+            $indexed[$capability->getCarrier()] = $capability;
+        }
+
+        return $indexed;
+    }
+
+    /**
      * Fetch max weight for each package type from capabilities.
      *
      * Returns null for types where the API does not define a max weight constraint.
