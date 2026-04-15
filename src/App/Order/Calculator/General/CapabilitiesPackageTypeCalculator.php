@@ -51,7 +51,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
         $currentType   = $this->order->deliveryOptions->packageType;
         $v2CurrentType = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$currentType] ?? null;
 
-        if (! $carrier || ! $cc || ! $v2CurrentType) {
+        if (! $cc || ! $v2CurrentType) {
             return;
         }
 
@@ -63,6 +63,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
             $capability = null;
         }
 
+        // Current type supported for this context — no change needed.
         if ($capability) {
             return;
         }

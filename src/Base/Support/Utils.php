@@ -305,7 +305,7 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
             return -1;
         }
 
-        return $a - $b;
+        return $a <=> $b;
     }
 
     /**

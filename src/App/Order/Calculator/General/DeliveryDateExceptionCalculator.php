@@ -9,7 +9,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 
 final class DeliveryDateExceptionCalculator extends AbstractPdkOrderOptionCalculator
 {
-    // @TODO: replace with capabilities check once the API implements deliveryDate
+    // @TODO: deliveryDate is not part of capabilities but considered validation metadata — needs a different API endpoint
     private const CARRIERS_WITHOUT_DELIVERY_DATE = [
         RefCapabilitiesSharedCarrierV2::BPOST,
         RefCapabilitiesSharedCarrierV2::DPD,

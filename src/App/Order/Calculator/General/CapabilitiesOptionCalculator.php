@@ -41,12 +41,6 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
      */
     public function calculate(): void
     {
-        $carrier = $this->order->deliveryOptions->carrier;
-
-        if (! $carrier) {
-            return;
-        }
-
         $capability = $this->getCarrierCapabilities();
 
         if (! $capability) {
@@ -55,8 +49,8 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
         $this->setContractId($capability);
 
-        $options        = $capability->getOptions();
-        $carrierSettings = CarrierSettings::fromCarrier($carrier);
+        $options         = $capability->getOptions();
+        $carrierSettings = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
 
         /** @var OrderOptionDefinitionInterface[] $definitions */
         $definitions = Pdk::get('orderOptionDefinitions');
@@ -88,11 +82,18 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
             return null;
         }
 
-        $capabilities = $this->capabilitiesService->getCapabilitiesForOrderContext(
-            $carrierName,
-            $cc,
-            $v2PackageType,
-            $v2DeliveryType
+        $args = [
+            'carrier'      => $carrierName,
+            'recipient'    => ['cc' => $cc],
+            'package_type' => $v2PackageType,
+        ];
+
+        if ($v2DeliveryType) {
+            $args['delivery_type'] = $v2DeliveryType;
+        }
+
+        $capabilities = $this->capabilitiesService->indexByCarrier(
+            $this->capabilitiesService->getRepository()->getCapabilities($args)
         );
 
         return $capabilities[$carrierName] ?? null;

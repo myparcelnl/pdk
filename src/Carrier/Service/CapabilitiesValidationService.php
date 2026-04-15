@@ -31,6 +31,14 @@ class CapabilitiesValidationService
     }
 
     /**
+     * @return \MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository
+     */
+    public function getRepository(): CarrierCapabilitiesRepository
+    {
+        return $this->capabilitiesRepository;
+    }
+
+    /**
      * Fetch capabilities for a specific country + package type, indexed by carrier name.
      *
      * @param  string $cc            ISO 3166-1 alpha-2 country code
@@ -40,53 +48,26 @@ class CapabilitiesValidationService
      */
     public function getCapabilitiesForPackageType(string $cc, string $v2PackageType): array
     {
-        $capabilities = $this->capabilitiesRepository->getCapabilities([
-            'recipient'    => ['cc' => $cc],
-            'package_type' => $v2PackageType,
-        ]);
-
-        $indexed = [];
-        foreach ($capabilities as $capability) {
-            $indexed[$capability->getCarrier()] = $capability;
-        }
-
-        return $indexed;
+        return $this->indexByCarrier(
+            $this->capabilitiesRepository->getCapabilities([
+                'recipient'    => ['cc' => $cc],
+                'package_type' => $v2PackageType,
+            ])
+        );
     }
 
     /**
-     * Fetch capabilities for a full order context.
+     * Index a capabilities response array by carrier name.
      *
-     * Used during order export where the full shipment configuration is known.
-     * Cached per unique parameter combination.
-     *
-     * @param  string      $carrier        V2 carrier name
-     * @param  string      $cc             Recipient country code
-     * @param  string      $v2PackageType  V2 package type
-     * @param  null|string $v2DeliveryType V2 delivery type (optional)
+     * @param  RefCapabilitiesResponseCapabilityV2[] $capabilities
      *
      * @return array<string, RefCapabilitiesResponseCapabilityV2>
      */
-    public function getCapabilitiesForOrderContext(
-        string $carrier,
-        string $cc,
-        string $v2PackageType,
-        ?string $v2DeliveryType = null
-    ): array {
-        $args = [
-            'carrier'      => $carrier,
-            'recipient'    => ['cc' => $cc],
-            'package_type' => $v2PackageType,
-        ];
-
-        if ($v2DeliveryType) {
-            $args['delivery_type'] = $v2DeliveryType;
-        }
-
-        $capabilities = $this->capabilitiesRepository->getCapabilities($args);
-
+    public function indexByCarrier(array $capabilities): array
+    {
         $indexed = [];
         foreach ($capabilities as $capability) {
-            $indexed[$capability->getCarrier()] = $capability;
+            $indexed[$capability->getCarrier()] = $capability; // @phpstan-ignore-line SDK declares enum type but returns string
         }
 
         return $indexed;
@@ -124,10 +105,11 @@ class CapabilitiesValidationService
      */
     public function capabilitySupportsWeight($capability, int $weight): bool
     {
-        // @TODO: PHP 8.0+ — replace nested null checks with nullsafe operator: ?->
+        // Defensive null checks: the SDK PHPDoc declares these as non-nullable, but the API
+        // may omit fields at runtime. PHPStan warnings are suppressed for this reason.
         $physicalProperties = $capability->getPhysicalProperties();
 
-        if (! $physicalProperties) {
+        if (! $physicalProperties) { // @phpstan-ignore-line
             return true;
         }
 
@@ -137,11 +119,11 @@ class CapabilitiesValidationService
             return true;
         }
 
-        $min = $weightConstraint->getMin() ? (int) $weightConstraint->getMin()->getValue() : null;
-        $max = $weightConstraint->getMax() ? (int) $weightConstraint->getMax()->getValue() : null;
+        $min = $weightConstraint->getMin() ? (int) $weightConstraint->getMin()->getValue() : null; // @phpstan-ignore-line
+        $max = $weightConstraint->getMax() ? (int) $weightConstraint->getMax()->getValue() : null; // @phpstan-ignore-line
 
-        return ($max === null || $weight <= $max)
-            && ($min === null || $weight >= $min);
+        return ($max === null || $weight <= $max) // @phpstan-ignore-line
+            && ($min === null || $weight >= $min); // @phpstan-ignore-line
     }
 
     /**

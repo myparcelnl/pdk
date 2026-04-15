@@ -105,7 +105,7 @@ class PdkShippingMethod extends Model
                 if ($name && ! isset($types[$name])) {
                     $types[$name] = [
                         'name' => $name,
-                        'id'   => DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$name] ?? null,
+                        'id'   => DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$name],
                     ];
                 }
             }

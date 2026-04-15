@@ -24,7 +24,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
@@ -90,11 +89,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $taxService;
 
     /**
-     * @var \MyParcelNL\Pdk\Types\Service\TriStateService
-     */
-    private $triStateService;
-
-    /**
      * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $cartCalculationService
      * @param  \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService     $capabilitiesValidation
      * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface       $carrierRepository
@@ -102,7 +96,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface            $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface         $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface              $taxService
-     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService                     $triStateService
      */
     public function __construct(
         CartCalculationServiceInterface  $cartCalculationService,
@@ -111,8 +104,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         CountryServiceInterface          $countryService,
         CurrencyServiceInterface         $currencyService,
         DropOffServiceInterface          $dropOffService,
-        TaxServiceInterface              $taxService,
-        TriStateService                  $triStateService
+        TaxServiceInterface              $taxService
     ) {
         $this->cartCalculationService  = $cartCalculationService;
         $this->capabilitiesValidation  = $capabilitiesValidation;
@@ -121,7 +113,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $this->currencyService         = $currencyService;
         $this->dropOffService          = $dropOffService;
         $this->taxService              = $taxService;
-        $this->triStateService         = $triStateService;
     }
 
     /**
