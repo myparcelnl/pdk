@@ -21,7 +21,55 @@
   ],
   "notes": [],
   "shipment": {
-    "carrier": 1,
+    "carrier": {
+      "carrier": "POSTNL",
+      "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
+      "options": {
+        "cooledDelivery": [],
+        "freshFood": [],
+        "frozen": [],
+        "hideSender": [],
+        "oversizedPackage": [],
+        "priorityDelivery": [],
+        "recipientOnlyDelivery": [],
+        "requiresAgeVerification": [],
+        "requiresReceiptCode": [],
+        "requiresSignature": [],
+        "returnOnFirstFailedDelivery": [],
+        "sameDayDelivery": [],
+        "saturdayDelivery": [],
+        "scheduledCollection": [],
+        "tracked": [],
+        "insurance": {
+          "insuredAmount": {
+            "default": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "min": {
+              "currency": "EUR",
+              "amount": 0
+            },
+            "max": {
+              "currency": "EUR",
+              "amount": 500000
+            }
+          }
+        }
+      },
+      "deliveryTypes": [
+        "MORNING_DELIVERY",
+        "STANDARD_DELIVERY",
+        "EVENING_DELIVERY",
+        "PICKUP_DELIVERY",
+        "SAME_DAY_DELIVERY",
+        "EXPRESS_DELIVERY",
+        "EARLY_MORNING_DELIVERY"
+      ],
+      "collo": {
+        "max": 10
+      }
+    },
     "customsDeclaration": {
       "contents": 0,
       "invoice": "ABC123456",
@@ -42,19 +90,25 @@
     },
     "options": {
       "ageCheck": false,
-      "collect": false,
-      "deliveryType": 2,
+      "return": false,
       "hideSender": false,
       "insurance": 0,
-      "labelDescription": "",
       "largeFormat": false,
       "onlyRecipient": true,
       "priorityDelivery": false,
-      "packageType": 1,
-      "return": false,
       "sameDayDelivery": false,
       "saturdayDelivery": false,
-      "signature": true
+      "signature": true,
+      "tracked": false,
+      "receiptCode": false,
+      "collect": false,
+      "excludeParcelLockers": false,
+      "freshFood": false,
+      "frozen": false,
+      "cooledDelivery": false,
+      "deliveryType": 2,
+      "labelDescription": "",
+      "packageType": 1
     },
     "recipient": {
       "cc": "NL",

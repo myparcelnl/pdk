@@ -13,15 +13,17 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
 use RuntimeException;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock());
+usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock(), new UsesAccountMock());
 
 it('creates a valid request for return shipments', function () {
     $shipmentCollection = new ShipmentCollection([
         new Shipment([
             'id' => 100020,
-            'carrier' => new Carrier(['name' => 'postnl']),
+            'carrier' => factory(Carrier::class)->withCarrier('POSTNL')->make(),
             'referenceIdentifier' => 'REF-1',
             'recipient' => new ContactDetails([
                 'firstName' => 'John',
@@ -60,7 +62,7 @@ it('throws an exception when recipient data is missing', function () {
     $shipmentCollection = new ShipmentCollection([
         new Shipment([
             'id' => 100020,
-            'carrier' => new Carrier(['name' => 'postnl']),
+            'carrier' => factory(Carrier::class)->withCarrier('POSTNL')->make(),
             'referenceIdentifier' => 'REF-1',
             // No recipient data
         ]),
@@ -76,7 +78,7 @@ it('ensures return capabilities for shipments', function () {
     $shipmentCollection = new ShipmentCollection([
         new Shipment([
             'id' => 100020,
-            'carrier' => new Carrier(['name' => 'postnl']),
+            'carrier' => factory(Carrier::class)->withCarrier('POSTNL')->make(),
             'referenceIdentifier' => 'REF-1',
             'recipient' => new ContactDetails([
                 'firstName' => 'John',

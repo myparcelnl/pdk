@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -51,9 +52,12 @@ final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculat
 
         $schema->setCarrier($carrier);
 
-        $carrierNeedsCustomerInfo = $schema->needsCustomerInfo();
-        $sharingCustomerInfo      = Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
+        // @TODO this is a specific carrier check as there is currently no endpoint exposing this information
+        if ($carrier->carrier === RefTypesCarrierV2::DPD) {
+            // DPD *requires* customer information to be shared, ignore any global setting
+            return true;
+        }
 
-        return $carrierNeedsCustomerInfo || $sharingCustomerInfo;
+        return !!Settings::get(OrderSettings::SHARE_CUSTOMER_INFORMATION, OrderSettings::ID);
     }
 }

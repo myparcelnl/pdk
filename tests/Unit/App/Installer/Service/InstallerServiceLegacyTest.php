@@ -6,12 +6,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockLegacyMigrationService;
@@ -31,7 +31,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        'platform' => value(Platform::SENDMYPARCEL_NAME),
+        'platform' => value(Proposition::SENDMYPARCEL_NAME),
         'appInfo'  => factory(function (): AppInfo {
             return new AppInfo([
                 'name'    => 'test',

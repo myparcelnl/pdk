@@ -197,7 +197,7 @@ class PdkOrder extends Model
     {
         $shipment = $this->synchronizeShipment(
             new Shipment([
-                'carrier'            => $this->deliveryOptions->carrier,
+                'carrier'            => $this->deliveryOptions->carrier->carrier,
                 'customsDeclaration' => $this->customsDeclaration,
                 'deliveryOptions'    => $this->deliveryOptions,
             ])

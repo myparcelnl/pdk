@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 
@@ -37,9 +38,7 @@ dataset('pdk orders domestic', [
         return factory(PdkOrderCollection::class)->push(
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
-                    factory(DeliveryOptions::class)->withCarrier(
-                        sprintf('%s:1234', Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME)
-                    )
+                    factory(DeliveryOptions::class)->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU)
                 )
         );
     },
@@ -49,7 +48,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withLines(factory(PdkOrderLineCollection::class, 1)->eachWith(['quantity' => 5]))
                 ->withDeliveryOptions([
-                    'carrier'     => Carrier::CARRIER_POSTNL_LEGACY_NAME,
+                    'carrier'     => RefCapabilitiesSharedCarrierV2::POSTNL,
                     'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
                 ]),
             factory(PdkOrder::class)
@@ -67,7 +66,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME)
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 ->withAgeCheck(TriStateService::ENABLED)
@@ -85,7 +84,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME)
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER)
                         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
                 )
                 ->toBelgium()
@@ -97,7 +96,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(Carrier::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME)
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER)
                         ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
                 )
                 ->toTheNetherlands()
@@ -109,9 +108,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
-                        )
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::GLS)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 // For Netherlands: signature is default OFF
@@ -128,9 +125,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
-                        )
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::GLS)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 // For EU (Germany): signature will be auto-enabled by calculator
@@ -146,9 +141,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
-                        )
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::GLS)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 ->withSaturdayDelivery(TriStateService::ENABLED)
@@ -164,9 +157,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(
-                            sprintf('%s:1234', Carrier::CARRIER_GLS_LEGACY_NAME)
-                        )
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::GLS)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 ->withInsurance(TriStateService::ENABLED)
@@ -182,9 +173,7 @@ dataset('pdk orders domestic', [
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withCarrier(
-                            sprintf('%s:5678', Carrier::CARRIER_GLS_LEGACY_NAME)
-                        )
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::GLS)
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
                                 ->withOnlyRecipient(TriStateService::ENABLED)
