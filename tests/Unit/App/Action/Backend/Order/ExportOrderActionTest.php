@@ -437,7 +437,8 @@ it('does not include exclude_parcel_lockers when carrier lacks the capability', 
         expect($options)->not->toHaveKey('exclude_parcel_lockers');
     } else {
         if (array_key_exists('exclude_parcel_lockers', $options)) {
-            expect($options['exclude_parcel_lockers'])->toBe(0,
+            expect($options['exclude_parcel_lockers'])->toBe(
+                0,
                 'exclude_parcel_lockers should be 0 when carrier lacks the capability'
             );
         }

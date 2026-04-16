@@ -1,1334 +1,1334 @@
 {
-    "data": {
-        "orders": [
-            {
-                "externalIdentifier": "701",
-                "deliveryOptions": {
-                    "carrier": {
-                        "carrier": "POSTNL",
-                        "packageTypes": [
-                            "PACKAGE",
-                            "MAILBOX",
-                            "UNFRANKED",
-                            "DIGITAL_STAMP",
-                            "PALLET",
-                            "SMALL_PACKAGE",
-                            "ENVELOPE"
-                        ],
-                        "options": {
-                            "cooledDelivery": [],
-                            "freshFood": [],
-                            "frozen": [],
-                            "hideSender": [],
-                            "oversizedPackage": [],
-                            "priorityDelivery": [],
-                            "recipientOnlyDelivery": [],
-                            "requiresAgeVerification": [],
-                            "requiresReceiptCode": [],
-                            "requiresSignature": [],
-                            "returnOnFirstFailedDelivery": [],
-                            "sameDayDelivery": [],
-                            "saturdayDelivery": [],
-                            "scheduledCollection": [],
-                            "tracked": [],
-                            "insurance": {
-                                "insuredAmount": {
-                                    "default": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "min": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "max": {
-                                        "currency": "EUR",
-                                        "amount": 500000
-                                    }
-                                }
-                            }
-                        },
-                        "deliveryTypes": [
-                            "MORNING_DELIVERY",
-                            "STANDARD_DELIVERY",
-                            "EVENING_DELIVERY",
-                            "PICKUP_DELIVERY",
-                            "SAME_DAY_DELIVERY",
-                            "EXPRESS_DELIVERY",
-                            "EARLY_MORNING_DELIVERY"
-                        ],
-                        "collo": {
-                            "max": 10
-                        }
-                    },
-                    "labelAmount": 1,
-                    "shipmentOptions": {
-                        "requiresAgeVerification": -1,
-                        "returnOnFirstFailedDelivery": -1,
-                        "hideSender": -1,
-                        "insurance": -1,
-                        "oversizedPackage": -1,
-                        "recipientOnlyDelivery": -1,
-                        "priorityDelivery": -1,
-                        "sameDayDelivery": -1,
-                        "saturdayDelivery": -1,
-                        "requiresSignature": -1,
-                        "tracked": -1,
-                        "requiresReceiptCode": -1,
-                        "scheduledCollection": -1,
-                        "freshFood": -1,
-                        "frozen": -1,
-                        "cooledDelivery": -1
-                    },
-                    "deliveryType": "STANDARD_DELIVERY",
-                    "packageType": "PACKAGE"
-                },
-                "billingAddress": {
-                    "cc": "NL",
-                    "city": "Hoofddorp",
-                    "number": "31",
-                    "postalCode": "2132 JE",
-                    "street": "Antareslaan",
-                    "email": "support@myparcel.nl",
-                    "person": "Felicia Parcel",
-                    "company": "MyParcel"
-                },
-                "shippingAddress": {
-                    "cc": "NL",
-                    "city": "Hoofddorp",
-                    "number": "31",
-                    "postalCode": "2132 JE",
-                    "street": "Antareslaan",
-                    "email": "support@myparcel.nl",
-                    "person": "Felicia Parcel",
-                    "company": "MyParcel"
-                },
-                "shipments": [
-                    {
-                        "orderId": "701",
-                        "multiCollo": false,
-                        "id": 100001,
-                        "referenceIdentifier": "1",
-                        "carrier": {
-                            "carrier": "POSTNL",
-                            "packageTypes": [
-                                "PACKAGE",
-                                "MAILBOX",
-                                "UNFRANKED",
-                                "DIGITAL_STAMP",
-                                "PALLET",
-                                "SMALL_PACKAGE",
-                                "ENVELOPE"
-                            ],
-                            "options": {
-                                "cooledDelivery": [],
-                                "freshFood": [],
-                                "frozen": [],
-                                "hideSender": [],
-                                "oversizedPackage": [],
-                                "priorityDelivery": [],
-                                "recipientOnlyDelivery": [],
-                                "requiresAgeVerification": [],
-                                "requiresReceiptCode": [],
-                                "requiresSignature": [],
-                                "returnOnFirstFailedDelivery": [],
-                                "sameDayDelivery": [],
-                                "saturdayDelivery": [],
-                                "scheduledCollection": [],
-                                "tracked": [],
-                                "insurance": {
-                                    "insuredAmount": {
-                                        "default": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "min": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "max": {
-                                            "currency": "EUR",
-                                            "amount": 500000
-                                        }
-                                    }
-                                }
-                            },
-                            "deliveryTypes": [
-                                "MORNING_DELIVERY",
-                                "STANDARD_DELIVERY",
-                                "EVENING_DELIVERY",
-                                "PICKUP_DELIVERY",
-                                "SAME_DAY_DELIVERY",
-                                "EXPRESS_DELIVERY",
-                                "EARLY_MORNING_DELIVERY"
-                            ],
-                            "collo": {
-                                "max": 10
-                            }
-                        },
-                        "delayed": false,
-                        "delivered": false,
-                        "deliveryOptions": {
-                            "carrier": {
-                                "carrier": "POSTNL",
-                                "packageTypes": [
-                                    "PACKAGE",
-                                    "MAILBOX",
-                                    "UNFRANKED",
-                                    "DIGITAL_STAMP",
-                                    "PALLET",
-                                    "SMALL_PACKAGE",
-                                    "ENVELOPE"
-                                ],
-                                "options": {
-                                    "cooledDelivery": [],
-                                    "freshFood": [],
-                                    "frozen": [],
-                                    "hideSender": [],
-                                    "oversizedPackage": [],
-                                    "priorityDelivery": [],
-                                    "recipientOnlyDelivery": [],
-                                    "requiresAgeVerification": [],
-                                    "requiresReceiptCode": [],
-                                    "requiresSignature": [],
-                                    "returnOnFirstFailedDelivery": [],
-                                    "sameDayDelivery": [],
-                                    "saturdayDelivery": [],
-                                    "scheduledCollection": [],
-                                    "tracked": [],
-                                    "insurance": {
-                                        "insuredAmount": {
-                                            "default": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "min": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "max": {
-                                                "currency": "EUR",
-                                                "amount": 500000
-                                            }
-                                        }
-                                    }
-                                },
-                                "deliveryTypes": [
-                                    "MORNING_DELIVERY",
-                                    "STANDARD_DELIVERY",
-                                    "EVENING_DELIVERY",
-                                    "PICKUP_DELIVERY",
-                                    "SAME_DAY_DELIVERY",
-                                    "EXPRESS_DELIVERY",
-                                    "EARLY_MORNING_DELIVERY"
-                                ],
-                                "collo": {
-                                    "max": 10
-                                }
-                            },
-                            "labelAmount": 1,
-                            "shipmentOptions": {
-                                "ageCheck": -1,
-                                "return": -1,
-                                "hideSender": -1,
-                                "insurance": 0,
-                                "largeFormat": -1,
-                                "onlyRecipient": -1,
-                                "priorityDelivery": -1,
-                                "sameDayDelivery": -1,
-                                "saturdayDelivery": -1,
-                                "signature": -1,
-                                "tracked": -1,
-                                "receiptCode": -1,
-                                "collect": -1,
-                                "excludeParcelLockers": -1,
-                                "freshFood": -1,
-                                "frozen": -1,
-                                "cooledDelivery": -1
-                            },
-                            "deliveryType": "standard",
-                            "packageType": "package"
-                        },
-                        "hidden": false,
-                        "isReturn": false,
-                        "partnerTrackTraces": [],
-                        "price": {
-                            "amount": 100,
-                            "currency": "EUR"
-                        }
-                    },
-                    {
-                        "orderId": "701",
-                        "multiCollo": false,
-                        "id": 100002,
-                        "referenceIdentifier": "2",
-                        "carrier": {
-                            "carrier": "POSTNL",
-                            "packageTypes": [
-                                "PACKAGE",
-                                "MAILBOX",
-                                "UNFRANKED",
-                                "DIGITAL_STAMP",
-                                "PALLET",
-                                "SMALL_PACKAGE",
-                                "ENVELOPE"
-                            ],
-                            "options": {
-                                "cooledDelivery": [],
-                                "freshFood": [],
-                                "frozen": [],
-                                "hideSender": [],
-                                "oversizedPackage": [],
-                                "priorityDelivery": [],
-                                "recipientOnlyDelivery": [],
-                                "requiresAgeVerification": [],
-                                "requiresReceiptCode": [],
-                                "requiresSignature": [],
-                                "returnOnFirstFailedDelivery": [],
-                                "sameDayDelivery": [],
-                                "saturdayDelivery": [],
-                                "scheduledCollection": [],
-                                "tracked": [],
-                                "insurance": {
-                                    "insuredAmount": {
-                                        "default": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "min": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "max": {
-                                            "currency": "EUR",
-                                            "amount": 500000
-                                        }
-                                    }
-                                }
-                            },
-                            "deliveryTypes": [
-                                "MORNING_DELIVERY",
-                                "STANDARD_DELIVERY",
-                                "EVENING_DELIVERY",
-                                "PICKUP_DELIVERY",
-                                "SAME_DAY_DELIVERY",
-                                "EXPRESS_DELIVERY",
-                                "EARLY_MORNING_DELIVERY"
-                            ],
-                            "collo": {
-                                "max": 10
-                            }
-                        },
-                        "delayed": false,
-                        "delivered": false,
-                        "deliveryOptions": {
-                            "carrier": {
-                                "carrier": "POSTNL",
-                                "packageTypes": [
-                                    "PACKAGE",
-                                    "MAILBOX",
-                                    "UNFRANKED",
-                                    "DIGITAL_STAMP",
-                                    "PALLET",
-                                    "SMALL_PACKAGE",
-                                    "ENVELOPE"
-                                ],
-                                "options": {
-                                    "cooledDelivery": [],
-                                    "freshFood": [],
-                                    "frozen": [],
-                                    "hideSender": [],
-                                    "oversizedPackage": [],
-                                    "priorityDelivery": [],
-                                    "recipientOnlyDelivery": [],
-                                    "requiresAgeVerification": [],
-                                    "requiresReceiptCode": [],
-                                    "requiresSignature": [],
-                                    "returnOnFirstFailedDelivery": [],
-                                    "sameDayDelivery": [],
-                                    "saturdayDelivery": [],
-                                    "scheduledCollection": [],
-                                    "tracked": [],
-                                    "insurance": {
-                                        "insuredAmount": {
-                                            "default": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "min": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "max": {
-                                                "currency": "EUR",
-                                                "amount": 500000
-                                            }
-                                        }
-                                    }
-                                },
-                                "deliveryTypes": [
-                                    "MORNING_DELIVERY",
-                                    "STANDARD_DELIVERY",
-                                    "EVENING_DELIVERY",
-                                    "PICKUP_DELIVERY",
-                                    "SAME_DAY_DELIVERY",
-                                    "EXPRESS_DELIVERY",
-                                    "EARLY_MORNING_DELIVERY"
-                                ],
-                                "collo": {
-                                    "max": 10
-                                }
-                            },
-                            "labelAmount": 1,
-                            "shipmentOptions": {
-                                "ageCheck": -1,
-                                "return": -1,
-                                "hideSender": -1,
-                                "insurance": 500,
-                                "largeFormat": -1,
-                                "onlyRecipient": -1,
-                                "priorityDelivery": -1,
-                                "sameDayDelivery": -1,
-                                "saturdayDelivery": -1,
-                                "signature": -1,
-                                "tracked": -1,
-                                "receiptCode": -1,
-                                "collect": -1,
-                                "excludeParcelLockers": -1,
-                                "freshFood": -1,
-                                "frozen": -1,
-                                "cooledDelivery": -1
-                            },
-                            "deliveryType": "standard",
-                            "packageType": "package"
-                        },
-                        "hidden": false,
-                        "isReturn": false,
-                        "partnerTrackTraces": [],
-                        "price": {
-                            "amount": 100,
-                            "currency": "EUR"
-                        },
-                        "recipient": {
-                            "cc": "NL",
-                            "city": "Hoofddorp",
-                            "number": "31",
-                            "postalCode": "2132 JE",
-                            "street": "Antareslaan",
-                            "email": "support@myparcel.nl",
-                            "person": "Felicia Parcel",
-                            "company": "MyParcel"
-                        }
-                    }
-                ],
-                "physicalProperties": {
-                    "initialWeight": 0,
-                    "manualWeight": -1,
-                    "totalWeight": 0
-                },
-                "lines": [
-                    {
-                        "quantity": 1,
-                        "price": 0,
-                        "vat": 0,
-                        "priceAfterVat": 0,
-                        "product": {
-                            "externalIdentifier": "PDK-1",
-                            "sku": "test",
-                            "isDeliverable": true,
-                            "name": "test",
-                            "price": {
-                                "amount": 1000,
-                                "currency": "EUR"
-                            },
-                            "weight": 0,
-                            "length": 0,
-                            "width": 0,
-                            "height": 0,
-                            "settings": {
-                                "exportAgeCheck": -1,
-                                "exportReturn": -1,
-                                "exportHideSender": -1,
-                                "exportInsurance": -1,
-                                "exportLargeFormat": -1,
-                                "exportOnlyRecipient": -1,
-                                "exportPriorityDelivery": -1,
-                                "exportSignature": -1,
-                                "exportTracked": -1,
-                                "excludeParcelLockers": -1,
-                                "exportFreshFood": -1,
-                                "exportFrozen": -1,
-                                "exportCooledDelivery": -1,
-                                "id": "product",
-                                "countryOfOrigin": -1,
-                                "customsCode": -1,
-                                "disableDeliveryOptions": -1,
-                                "dropOffDelay": -1,
-                                "fitInDigitalStamp": -1,
-                                "fitInMailbox": -1,
-                                "packageType": -1
-                            },
-                            "mergedSettings": {
-                                "exportAgeCheck": -1,
-                                "exportReturn": -1,
-                                "exportHideSender": -1,
-                                "exportInsurance": -1,
-                                "exportLargeFormat": -1,
-                                "exportOnlyRecipient": -1,
-                                "exportPriorityDelivery": -1,
-                                "exportSignature": -1,
-                                "exportTracked": -1,
-                                "excludeParcelLockers": -1,
-                                "exportFreshFood": -1,
-                                "exportFrozen": -1,
-                                "exportCooledDelivery": -1,
-                                "id": "product",
-                                "countryOfOrigin": -1,
-                                "customsCode": -1,
-                                "disableDeliveryOptions": -1,
-                                "dropOffDelay": -1,
-                                "fitInDigitalStamp": -1,
-                                "fitInMailbox": -1,
-                                "packageType": -1
-                            }
-                        }
-                    }
-                ],
-                "notes": [],
-                "orderDate": "2030-01-01 12:00:00",
-                "exported": false,
-                "shipmentPrice": 100,
-                "shipmentPriceAfterVat": 121,
-                "shipmentVat": 21,
-                "orderPrice": 0,
-                "orderPriceAfterVat": 0,
-                "orderVat": 0,
-                "totalPrice": 100,
-                "totalVat": 21,
-                "totalPriceAfterVat": 121,
-                "inheritedDeliveryOptions": {
-                    "BPOST": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "BRT": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "CHEAP_CARGO": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DHL_EUROPLUS": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DHL_FOR_YOU": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DHL_PARCEL_CONNECT": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DPD": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "GLS": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "INPOST": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "POSTE_ITALIANE": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "POSTNL": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "TRUNKRS": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "UPS_EXPRESS_SAVER": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "UPS_STANDARD": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    }
-                },
-                "digitalStampRanges": [
-                    {
-                        "min": 0,
-                        "max": 20,
-                        "average": 15
-                    },
-                    {
-                        "min": 20,
-                        "max": 50,
-                        "average": 35
-                    },
-                    {
-                        "min": 50,
-                        "max": 350,
-                        "average": 200
-                    },
-                    {
-                        "min": 350,
-                        "max": 2000,
-                        "average": 1175
-                    }
-                ]
+  "data": {
+    "orders": [
+      {
+        "externalIdentifier": "701",
+        "deliveryOptions": {
+          "carrier": {
+            "carrier": "POSTNL",
+            "packageTypes": [
+              "PACKAGE",
+              "MAILBOX",
+              "UNFRANKED",
+              "DIGITAL_STAMP",
+              "PALLET",
+              "SMALL_PACKAGE",
+              "ENVELOPE"
+            ],
+            "options": {
+              "cooledDelivery": [],
+              "freshFood": [],
+              "frozen": [],
+              "hideSender": [],
+              "oversizedPackage": [],
+              "priorityDelivery": [],
+              "recipientOnlyDelivery": [],
+              "requiresAgeVerification": [],
+              "requiresReceiptCode": [],
+              "requiresSignature": [],
+              "returnOnFirstFailedDelivery": [],
+              "sameDayDelivery": [],
+              "saturdayDelivery": [],
+              "scheduledCollection": [],
+              "tracked": [],
+              "insurance": {
+                "insuredAmount": {
+                  "default": {
+                    "currency": "EUR",
+                    "amount": 0
+                  },
+                  "min": {
+                    "currency": "EUR",
+                    "amount": 0
+                  },
+                  "max": {
+                    "currency": "EUR",
+                    "amount": 500000
+                  }
+                }
+              }
             },
-            {
-                "externalIdentifier": "247",
-                "deliveryOptions": {
-                    "carrier": {
-                        "carrier": "POSTNL",
-                        "packageTypes": [
-                            "PACKAGE",
-                            "MAILBOX",
-                            "UNFRANKED",
-                            "DIGITAL_STAMP",
-                            "PALLET",
-                            "SMALL_PACKAGE",
-                            "ENVELOPE"
-                        ],
-                        "options": {
-                            "cooledDelivery": [],
-                            "freshFood": [],
-                            "frozen": [],
-                            "hideSender": [],
-                            "oversizedPackage": [],
-                            "priorityDelivery": [],
-                            "recipientOnlyDelivery": [],
-                            "requiresAgeVerification": [],
-                            "requiresReceiptCode": [],
-                            "requiresSignature": [],
-                            "returnOnFirstFailedDelivery": [],
-                            "sameDayDelivery": [],
-                            "saturdayDelivery": [],
-                            "scheduledCollection": [],
-                            "tracked": [],
-                            "insurance": {
-                                "insuredAmount": {
-                                    "default": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "min": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "max": {
-                                        "currency": "EUR",
-                                        "amount": 500000
-                                    }
-                                }
-                            }
-                        },
-                        "deliveryTypes": [
-                            "MORNING_DELIVERY",
-                            "STANDARD_DELIVERY",
-                            "EVENING_DELIVERY",
-                            "PICKUP_DELIVERY",
-                            "SAME_DAY_DELIVERY",
-                            "EXPRESS_DELIVERY",
-                            "EARLY_MORNING_DELIVERY"
-                        ],
-                        "collo": {
-                            "max": 10
-                        }
-                    },
-                    "labelAmount": 1,
-                    "shipmentOptions": {
-                        "requiresAgeVerification": -1,
-                        "returnOnFirstFailedDelivery": -1,
-                        "hideSender": -1,
-                        "insurance": -1,
-                        "oversizedPackage": -1,
-                        "recipientOnlyDelivery": -1,
-                        "priorityDelivery": -1,
-                        "sameDayDelivery": -1,
-                        "saturdayDelivery": -1,
-                        "requiresSignature": -1,
-                        "tracked": -1,
-                        "requiresReceiptCode": -1,
-                        "scheduledCollection": -1,
-                        "freshFood": -1,
-                        "frozen": -1,
-                        "cooledDelivery": -1
-                    },
-                    "deliveryType": "STANDARD_DELIVERY",
-                    "packageType": "PACKAGE"
-                },
-                "shippingAddress": [],
-                "shipments": [],
-                "physicalProperties": {
-                    "initialWeight": 0,
-                    "manualWeight": -1,
-                    "totalWeight": 0
-                },
-                "lines": [],
-                "notes": [],
-                "exported": false,
-                "shipmentPrice": 0,
-                "shipmentPriceAfterVat": 0,
-                "shipmentVat": 0,
-                "orderPrice": 0,
-                "orderPriceAfterVat": 0,
-                "orderVat": 0,
-                "totalPrice": 0,
-                "totalVat": 0,
-                "totalPriceAfterVat": 0,
-                "inheritedDeliveryOptions": {
-                    "BPOST": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "BRT": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "CHEAP_CARGO": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DHL_EUROPLUS": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DHL_FOR_YOU": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DHL_PARCEL_CONNECT": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "DPD": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "GLS": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "INPOST": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "POSTE_ITALIANE": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "POSTNL": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "TRUNKRS": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "UPS_EXPRESS_SAVER": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    },
-                    "UPS_STANDARD": {
-                        "labelAmount": 1,
-                        "shipmentOptions": {
-                            "requiresAgeVerification": 0,
-                            "returnOnFirstFailedDelivery": 0,
-                            "hideSender": 0,
-                            "insurance": 0,
-                            "oversizedPackage": 0,
-                            "recipientOnlyDelivery": 0,
-                            "priorityDelivery": 0,
-                            "sameDayDelivery": 0,
-                            "saturdayDelivery": 0,
-                            "requiresSignature": 0,
-                            "tracked": 0,
-                            "requiresReceiptCode": 0,
-                            "scheduledCollection": 0,
-                            "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
-                        },
-                        "deliveryType": "STANDARD_DELIVERY",
-                        "packageType": "PACKAGE"
-                    }
-                },
-                "digitalStampRanges": [
-                    {
-                        "min": 0,
-                        "max": 20,
-                        "average": 15
-                    },
-                    {
-                        "min": 20,
-                        "max": 50,
-                        "average": 35
-                    },
-                    {
-                        "min": 50,
-                        "max": 350,
-                        "average": 200
-                    },
-                    {
-                        "min": 350,
-                        "max": 2000,
-                        "average": 1175
-                    }
-                ]
+            "deliveryTypes": [
+              "MORNING_DELIVERY",
+              "STANDARD_DELIVERY",
+              "EVENING_DELIVERY",
+              "PICKUP_DELIVERY",
+              "SAME_DAY_DELIVERY",
+              "EXPRESS_DELIVERY",
+              "EARLY_MORNING_DELIVERY"
+            ],
+            "collo": {
+              "max": 10
             }
+          },
+          "labelAmount": 1,
+          "shipmentOptions": {
+            "requiresAgeVerification": -1,
+            "returnOnFirstFailedDelivery": -1,
+            "hideSender": -1,
+            "insurance": -1,
+            "oversizedPackage": -1,
+            "recipientOnlyDelivery": -1,
+            "priorityDelivery": -1,
+            "sameDayDelivery": -1,
+            "saturdayDelivery": -1,
+            "requiresSignature": -1,
+            "tracked": -1,
+            "requiresReceiptCode": -1,
+            "scheduledCollection": -1,
+            "freshFood": -1,
+            "frozen": -1,
+            "cooledDelivery": -1
+          },
+          "deliveryType": "STANDARD_DELIVERY",
+          "packageType": "PACKAGE"
+        },
+        "billingAddress": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "number": "31",
+          "postalCode": "2132 JE",
+          "street": "Antareslaan",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel",
+          "company": "MyParcel"
+        },
+        "shippingAddress": {
+          "cc": "NL",
+          "city": "Hoofddorp",
+          "number": "31",
+          "postalCode": "2132 JE",
+          "street": "Antareslaan",
+          "email": "support@myparcel.nl",
+          "person": "Felicia Parcel",
+          "company": "MyParcel"
+        },
+        "shipments": [
+          {
+            "orderId": "701",
+            "multiCollo": false,
+            "id": 100001,
+            "referenceIdentifier": "1",
+            "carrier": {
+              "carrier": "POSTNL",
+              "packageTypes": [
+                "PACKAGE",
+                "MAILBOX",
+                "UNFRANKED",
+                "DIGITAL_STAMP",
+                "PALLET",
+                "SMALL_PACKAGE",
+                "ENVELOPE"
+              ],
+              "options": {
+                "cooledDelivery": [],
+                "freshFood": [],
+                "frozen": [],
+                "hideSender": [],
+                "oversizedPackage": [],
+                "priorityDelivery": [],
+                "recipientOnlyDelivery": [],
+                "requiresAgeVerification": [],
+                "requiresReceiptCode": [],
+                "requiresSignature": [],
+                "returnOnFirstFailedDelivery": [],
+                "sameDayDelivery": [],
+                "saturdayDelivery": [],
+                "scheduledCollection": [],
+                "tracked": [],
+                "insurance": {
+                  "insuredAmount": {
+                    "default": {
+                      "currency": "EUR",
+                      "amount": 0
+                    },
+                    "min": {
+                      "currency": "EUR",
+                      "amount": 0
+                    },
+                    "max": {
+                      "currency": "EUR",
+                      "amount": 500000
+                    }
+                  }
+                }
+              },
+              "deliveryTypes": [
+                "MORNING_DELIVERY",
+                "STANDARD_DELIVERY",
+                "EVENING_DELIVERY",
+                "PICKUP_DELIVERY",
+                "SAME_DAY_DELIVERY",
+                "EXPRESS_DELIVERY",
+                "EARLY_MORNING_DELIVERY"
+              ],
+              "collo": {
+                "max": 10
+              }
+            },
+            "delayed": false,
+            "delivered": false,
+            "deliveryOptions": {
+              "carrier": {
+                "carrier": "POSTNL",
+                "packageTypes": [
+                  "PACKAGE",
+                  "MAILBOX",
+                  "UNFRANKED",
+                  "DIGITAL_STAMP",
+                  "PALLET",
+                  "SMALL_PACKAGE",
+                  "ENVELOPE"
+                ],
+                "options": {
+                  "cooledDelivery": [],
+                  "freshFood": [],
+                  "frozen": [],
+                  "hideSender": [],
+                  "oversizedPackage": [],
+                  "priorityDelivery": [],
+                  "recipientOnlyDelivery": [],
+                  "requiresAgeVerification": [],
+                  "requiresReceiptCode": [],
+                  "requiresSignature": [],
+                  "returnOnFirstFailedDelivery": [],
+                  "sameDayDelivery": [],
+                  "saturdayDelivery": [],
+                  "scheduledCollection": [],
+                  "tracked": [],
+                  "insurance": {
+                    "insuredAmount": {
+                      "default": {
+                        "currency": "EUR",
+                        "amount": 0
+                      },
+                      "min": {
+                        "currency": "EUR",
+                        "amount": 0
+                      },
+                      "max": {
+                        "currency": "EUR",
+                        "amount": 500000
+                      }
+                    }
+                  }
+                },
+                "deliveryTypes": [
+                  "MORNING_DELIVERY",
+                  "STANDARD_DELIVERY",
+                  "EVENING_DELIVERY",
+                  "PICKUP_DELIVERY",
+                  "SAME_DAY_DELIVERY",
+                  "EXPRESS_DELIVERY",
+                  "EARLY_MORNING_DELIVERY"
+                ],
+                "collo": {
+                  "max": 10
+                }
+              },
+              "labelAmount": 1,
+              "shipmentOptions": {
+                "ageCheck": -1,
+                "return": -1,
+                "hideSender": -1,
+                "insurance": 0,
+                "largeFormat": -1,
+                "onlyRecipient": -1,
+                "priorityDelivery": -1,
+                "sameDayDelivery": -1,
+                "saturdayDelivery": -1,
+                "signature": -1,
+                "tracked": -1,
+                "receiptCode": -1,
+                "collect": -1,
+                "excludeParcelLockers": -1,
+                "freshFood": -1,
+                "frozen": -1,
+                "cooledDelivery": -1
+              },
+              "deliveryType": "standard",
+              "packageType": "package"
+            },
+            "hidden": false,
+            "isReturn": false,
+            "partnerTrackTraces": [],
+            "price": {
+              "amount": 100,
+              "currency": "EUR"
+            }
+          },
+          {
+            "orderId": "701",
+            "multiCollo": false,
+            "id": 100002,
+            "referenceIdentifier": "2",
+            "carrier": {
+              "carrier": "POSTNL",
+              "packageTypes": [
+                "PACKAGE",
+                "MAILBOX",
+                "UNFRANKED",
+                "DIGITAL_STAMP",
+                "PALLET",
+                "SMALL_PACKAGE",
+                "ENVELOPE"
+              ],
+              "options": {
+                "cooledDelivery": [],
+                "freshFood": [],
+                "frozen": [],
+                "hideSender": [],
+                "oversizedPackage": [],
+                "priorityDelivery": [],
+                "recipientOnlyDelivery": [],
+                "requiresAgeVerification": [],
+                "requiresReceiptCode": [],
+                "requiresSignature": [],
+                "returnOnFirstFailedDelivery": [],
+                "sameDayDelivery": [],
+                "saturdayDelivery": [],
+                "scheduledCollection": [],
+                "tracked": [],
+                "insurance": {
+                  "insuredAmount": {
+                    "default": {
+                      "currency": "EUR",
+                      "amount": 0
+                    },
+                    "min": {
+                      "currency": "EUR",
+                      "amount": 0
+                    },
+                    "max": {
+                      "currency": "EUR",
+                      "amount": 500000
+                    }
+                  }
+                }
+              },
+              "deliveryTypes": [
+                "MORNING_DELIVERY",
+                "STANDARD_DELIVERY",
+                "EVENING_DELIVERY",
+                "PICKUP_DELIVERY",
+                "SAME_DAY_DELIVERY",
+                "EXPRESS_DELIVERY",
+                "EARLY_MORNING_DELIVERY"
+              ],
+              "collo": {
+                "max": 10
+              }
+            },
+            "delayed": false,
+            "delivered": false,
+            "deliveryOptions": {
+              "carrier": {
+                "carrier": "POSTNL",
+                "packageTypes": [
+                  "PACKAGE",
+                  "MAILBOX",
+                  "UNFRANKED",
+                  "DIGITAL_STAMP",
+                  "PALLET",
+                  "SMALL_PACKAGE",
+                  "ENVELOPE"
+                ],
+                "options": {
+                  "cooledDelivery": [],
+                  "freshFood": [],
+                  "frozen": [],
+                  "hideSender": [],
+                  "oversizedPackage": [],
+                  "priorityDelivery": [],
+                  "recipientOnlyDelivery": [],
+                  "requiresAgeVerification": [],
+                  "requiresReceiptCode": [],
+                  "requiresSignature": [],
+                  "returnOnFirstFailedDelivery": [],
+                  "sameDayDelivery": [],
+                  "saturdayDelivery": [],
+                  "scheduledCollection": [],
+                  "tracked": [],
+                  "insurance": {
+                    "insuredAmount": {
+                      "default": {
+                        "currency": "EUR",
+                        "amount": 0
+                      },
+                      "min": {
+                        "currency": "EUR",
+                        "amount": 0
+                      },
+                      "max": {
+                        "currency": "EUR",
+                        "amount": 500000
+                      }
+                    }
+                  }
+                },
+                "deliveryTypes": [
+                  "MORNING_DELIVERY",
+                  "STANDARD_DELIVERY",
+                  "EVENING_DELIVERY",
+                  "PICKUP_DELIVERY",
+                  "SAME_DAY_DELIVERY",
+                  "EXPRESS_DELIVERY",
+                  "EARLY_MORNING_DELIVERY"
+                ],
+                "collo": {
+                  "max": 10
+                }
+              },
+              "labelAmount": 1,
+              "shipmentOptions": {
+                "ageCheck": -1,
+                "return": -1,
+                "hideSender": -1,
+                "insurance": 500,
+                "largeFormat": -1,
+                "onlyRecipient": -1,
+                "priorityDelivery": -1,
+                "sameDayDelivery": -1,
+                "saturdayDelivery": -1,
+                "signature": -1,
+                "tracked": -1,
+                "receiptCode": -1,
+                "collect": -1,
+                "excludeParcelLockers": -1,
+                "freshFood": -1,
+                "frozen": -1,
+                "cooledDelivery": -1
+              },
+              "deliveryType": "standard",
+              "packageType": "package"
+            },
+            "hidden": false,
+            "isReturn": false,
+            "partnerTrackTraces": [],
+            "price": {
+              "amount": 100,
+              "currency": "EUR"
+            },
+            "recipient": {
+              "cc": "NL",
+              "city": "Hoofddorp",
+              "number": "31",
+              "postalCode": "2132 JE",
+              "street": "Antareslaan",
+              "email": "support@myparcel.nl",
+              "person": "Felicia Parcel",
+              "company": "MyParcel"
+            }
+          }
         ],
-        "notifications": [
-            {
-                "category": "action",
-                "content": [
-                    "return_shipment_created_description"
-                ],
-                "tags": {
-                    "action": "exportReturn",
-                    "orderIds": "701,247"
-                },
-                "timeout": false,
-                "title": "return_shipment_created_title",
-                "variant": "success"
-            },
-            {
-                "category": "action",
-                "content": [
-                    "return_shipment_created_description"
-                ],
-                "tags": {
-                    "action": "exportReturn",
-                    "orderIds": "701,247"
-                },
-                "timeout": false,
-                "title": "return_shipment_created_title",
-                "variant": "success"
+        "physicalProperties": {
+          "initialWeight": 0,
+          "manualWeight": -1,
+          "totalWeight": 0
+        },
+        "lines": [
+          {
+            "quantity": 1,
+            "price": 0,
+            "vat": 0,
+            "priceAfterVat": 0,
+            "product": {
+              "externalIdentifier": "PDK-1",
+              "sku": "test",
+              "isDeliverable": true,
+              "name": "test",
+              "price": {
+                "amount": 1000,
+                "currency": "EUR"
+              },
+              "weight": 0,
+              "length": 0,
+              "width": 0,
+              "height": 0,
+              "settings": {
+                "exportAgeCheck": -1,
+                "exportReturn": -1,
+                "exportHideSender": -1,
+                "exportInsurance": -1,
+                "exportLargeFormat": -1,
+                "exportOnlyRecipient": -1,
+                "exportPriorityDelivery": -1,
+                "exportSignature": -1,
+                "exportTracked": -1,
+                "excludeParcelLockers": -1,
+                "exportFreshFood": -1,
+                "exportFrozen": -1,
+                "exportCooledDelivery": -1,
+                "id": "product",
+                "countryOfOrigin": -1,
+                "customsCode": -1,
+                "disableDeliveryOptions": -1,
+                "dropOffDelay": -1,
+                "fitInDigitalStamp": -1,
+                "fitInMailbox": -1,
+                "packageType": -1
+              },
+              "mergedSettings": {
+                "exportAgeCheck": -1,
+                "exportReturn": -1,
+                "exportHideSender": -1,
+                "exportInsurance": -1,
+                "exportLargeFormat": -1,
+                "exportOnlyRecipient": -1,
+                "exportPriorityDelivery": -1,
+                "exportSignature": -1,
+                "exportTracked": -1,
+                "excludeParcelLockers": -1,
+                "exportFreshFood": -1,
+                "exportFrozen": -1,
+                "exportCooledDelivery": -1,
+                "id": "product",
+                "countryOfOrigin": -1,
+                "customsCode": -1,
+                "disableDeliveryOptions": -1,
+                "dropOffDelay": -1,
+                "fitInDigitalStamp": -1,
+                "fitInMailbox": -1,
+                "packageType": -1
+              }
             }
+          }
+        ],
+        "notes": [],
+        "orderDate": "2030-01-01 12:00:00",
+        "exported": false,
+        "shipmentPrice": 100,
+        "shipmentPriceAfterVat": 121,
+        "shipmentVat": 21,
+        "orderPrice": 0,
+        "orderPriceAfterVat": 0,
+        "orderVat": 0,
+        "totalPrice": 100,
+        "totalVat": 21,
+        "totalPriceAfterVat": 121,
+        "inheritedDeliveryOptions": {
+          "BPOST": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "BRT": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "CHEAP_CARGO": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DHL_EUROPLUS": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DHL_FOR_YOU": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DHL_PARCEL_CONNECT": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DPD": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "GLS": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "INPOST": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "POSTE_ITALIANE": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "POSTNL": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "TRUNKRS": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "UPS_EXPRESS_SAVER": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "UPS_STANDARD": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          }
+        },
+        "digitalStampRanges": [
+          {
+            "min": 0,
+            "max": 20,
+            "average": 15
+          },
+          {
+            "min": 20,
+            "max": 50,
+            "average": 35
+          },
+          {
+            "min": 50,
+            "max": 350,
+            "average": 200
+          },
+          {
+            "min": 350,
+            "max": 2000,
+            "average": 1175
+          }
         ]
-    }
+      },
+      {
+        "externalIdentifier": "247",
+        "deliveryOptions": {
+          "carrier": {
+            "carrier": "POSTNL",
+            "packageTypes": [
+              "PACKAGE",
+              "MAILBOX",
+              "UNFRANKED",
+              "DIGITAL_STAMP",
+              "PALLET",
+              "SMALL_PACKAGE",
+              "ENVELOPE"
+            ],
+            "options": {
+              "cooledDelivery": [],
+              "freshFood": [],
+              "frozen": [],
+              "hideSender": [],
+              "oversizedPackage": [],
+              "priorityDelivery": [],
+              "recipientOnlyDelivery": [],
+              "requiresAgeVerification": [],
+              "requiresReceiptCode": [],
+              "requiresSignature": [],
+              "returnOnFirstFailedDelivery": [],
+              "sameDayDelivery": [],
+              "saturdayDelivery": [],
+              "scheduledCollection": [],
+              "tracked": [],
+              "insurance": {
+                "insuredAmount": {
+                  "default": {
+                    "currency": "EUR",
+                    "amount": 0
+                  },
+                  "min": {
+                    "currency": "EUR",
+                    "amount": 0
+                  },
+                  "max": {
+                    "currency": "EUR",
+                    "amount": 500000
+                  }
+                }
+              }
+            },
+            "deliveryTypes": [
+              "MORNING_DELIVERY",
+              "STANDARD_DELIVERY",
+              "EVENING_DELIVERY",
+              "PICKUP_DELIVERY",
+              "SAME_DAY_DELIVERY",
+              "EXPRESS_DELIVERY",
+              "EARLY_MORNING_DELIVERY"
+            ],
+            "collo": {
+              "max": 10
+            }
+          },
+          "labelAmount": 1,
+          "shipmentOptions": {
+            "requiresAgeVerification": -1,
+            "returnOnFirstFailedDelivery": -1,
+            "hideSender": -1,
+            "insurance": -1,
+            "oversizedPackage": -1,
+            "recipientOnlyDelivery": -1,
+            "priorityDelivery": -1,
+            "sameDayDelivery": -1,
+            "saturdayDelivery": -1,
+            "requiresSignature": -1,
+            "tracked": -1,
+            "requiresReceiptCode": -1,
+            "scheduledCollection": -1,
+            "freshFood": -1,
+            "frozen": -1,
+            "cooledDelivery": -1
+          },
+          "deliveryType": "STANDARD_DELIVERY",
+          "packageType": "PACKAGE"
+        },
+        "shippingAddress": [],
+        "shipments": [],
+        "physicalProperties": {
+          "initialWeight": 0,
+          "manualWeight": -1,
+          "totalWeight": 0
+        },
+        "lines": [],
+        "notes": [],
+        "exported": false,
+        "shipmentPrice": 0,
+        "shipmentPriceAfterVat": 0,
+        "shipmentVat": 0,
+        "orderPrice": 0,
+        "orderPriceAfterVat": 0,
+        "orderVat": 0,
+        "totalPrice": 0,
+        "totalVat": 0,
+        "totalPriceAfterVat": 0,
+        "inheritedDeliveryOptions": {
+          "BPOST": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "BRT": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "CHEAP_CARGO": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DHL_EUROPLUS": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DHL_FOR_YOU": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DHL_PARCEL_CONNECT": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "DPD": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "GLS": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "INPOST": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "POSTE_ITALIANE": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "POSTNL": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "TRUNKRS": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "UPS_EXPRESS_SAVER": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          },
+          "UPS_STANDARD": {
+            "labelAmount": 1,
+            "shipmentOptions": {
+              "requiresAgeVerification": 0,
+              "returnOnFirstFailedDelivery": 0,
+              "hideSender": 0,
+              "insurance": 0,
+              "oversizedPackage": 0,
+              "recipientOnlyDelivery": 0,
+              "priorityDelivery": 0,
+              "sameDayDelivery": 0,
+              "saturdayDelivery": 0,
+              "requiresSignature": 0,
+              "tracked": 0,
+              "requiresReceiptCode": 0,
+              "scheduledCollection": 0,
+              "freshFood": 0,
+              "frozen": 0,
+              "cooledDelivery": 0
+            },
+            "deliveryType": "STANDARD_DELIVERY",
+            "packageType": "PACKAGE"
+          }
+        },
+        "digitalStampRanges": [
+          {
+            "min": 0,
+            "max": 20,
+            "average": 15
+          },
+          {
+            "min": 20,
+            "max": 50,
+            "average": 35
+          },
+          {
+            "min": 50,
+            "max": 350,
+            "average": 200
+          },
+          {
+            "min": 350,
+            "max": 2000,
+            "average": 1175
+          }
+        ]
+      }
+    ],
+    "notifications": [
+      {
+        "category": "action",
+        "content": [
+          "return_shipment_created_description"
+        ],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "701,247"
+        },
+        "timeout": false,
+        "title": "return_shipment_created_title",
+        "variant": "success"
+      },
+      {
+        "category": "action",
+        "content": [
+          "return_shipment_created_description"
+        ],
+        "tags": {
+          "action": "exportReturn",
+          "orderIds": "701,247"
+        },
+        "timeout": false,
+        "title": "return_shipment_created_title",
+        "variant": "success"
+      }
+    ]
+  }
 }
