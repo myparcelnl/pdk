@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\SdkApi\Response;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
  * Base class for mocked responses returned to openapi-generator SDK clients.
@@ -50,6 +51,22 @@ abstract class SdkJsonResponse extends Response
     public function getBody(): StreamInterface
     {
         return Utils::streamFor(json_encode($this->getContent()));
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getHeaders(): array
+    {
+        return ['Content-Type' => 'application/json'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        return SymfonyResponse::HTTP_OK;
     }
 
     /**
