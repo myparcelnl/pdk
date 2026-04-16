@@ -20,8 +20,10 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('handles receipt code', function (array $input, array $expected, string $cc = 'NL') {
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
@@ -43,22 +45,22 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ShipmentOptions::EXCLUDE_PARCEL_LOCKERS => TriStateService::INHERIT,
         ShipmentOptions::FRESH_FOOD        => TriStateService::INHERIT,
         ShipmentOptions::FROZEN            => TriStateService::INHERIT,
+        ShipmentOptions::COOLED_DELIVERY   => TriStateService::INHERIT,
         ShipmentOptions::SATURDAY_DELIVERY => TriStateService::INHERIT
     ];
+
+    // Set up a carrier with required insurance between 100 and 2500 euros.
+    factory(Carrier::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->withInsurance(100 * 100, 100 * 100, 2500 * 100)
+        ->store();
+
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(['cc' => $cc])
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withCarrier(
-                    factory(Carrier::class)
-                        ->withName(Carrier::CARRIER_POSTNL_NAME)
-                        ->withOutboundFeatures(
-                            factory(PropositionCarrierFeatures::class)
-                                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-                                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [5000, 10000, 25000]])
-                        )
-                )
+                ->withCarrier('POSTNL')
                 ->withShipmentOptions(factory(ShipmentOptions::class)->with(array_replace($defaults, $input)))
         )
         ->make();
@@ -67,7 +69,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toBe(array_replace($defaults, $expected));
+    expect($newOrder->deliveryOptions->shipmentOptions->toArray())->toEqual(array_replace($defaults, $expected));
 
     $reset();
 })->with([
@@ -149,7 +151,7 @@ it('handles receipt code', function (array $input, array $expected, string $cc =
         ],
         [
             ShipmentOptions::RECEIPT_CODE   => TriStateService::ENABLED,
-            ShipmentOptions::INSURANCE      => 5000,
+            ShipmentOptions::INSURANCE      => 100 * 100,
             ShipmentOptions::SIGNATURE      => TriStateService::DISABLED,
             ShipmentOptions::ONLY_RECIPIENT => TriStateService::DISABLED,
             ShipmentOptions::LARGE_FORMAT   => TriStateService::DISABLED,
@@ -162,13 +164,9 @@ it('sets insurance to 0 when no valid insurance amounts are available', function
     $reset = mockPdkProperty('orderCalculators', [PostNLReceiptCodeCalculator::class]);
 
     $carrier = factory(Carrier::class)
-        ->withName(Carrier::CARRIER_POSTNL_NAME)
-        ->withOutboundFeatures(
-            factory(PropositionCarrierFeatures::class)
-                ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_INSURANCE_NAME])
-                ->withMetadata([PropositionCarrierMetadata::FEATURE_NAME_INSURANCE_OPTIONS => [0]])
-        )
-        ->make();
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->withInsurance(0, 0, 0) // insurance is supported but must be 0 for this test
+        ->store();
 
     $order = factory(PdkOrder::class)
         ->toTheNetherlands()

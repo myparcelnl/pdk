@@ -15,6 +15,8 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Integration\Api\Adapter\BehatMyParcelClientAdapter;
 use MyParcelNL\Pdk\Tests\Integration\Api\Service\BehatMyParcelApiService;
 use MyParcelNL\Pdk\Tests\Integration\Base\BehatConfig;
+use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
+use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleContractDefinitionsResponse;
 use function DI\get;
 use function DI\value;
 
@@ -48,6 +50,15 @@ final class PdkContext extends AbstractContext
             ConfigInterface::class               => get(BehatConfig::class),
             PdkAccountRepositoryInterface::class => get(MockPdkAccountRepository::class),
         ]);
+
+        $this->onBeforeScenario(function () {
+            MockSdkApiHandler::reset();
+            MockSdkApiHandler::enqueue(new ExampleContractDefinitionsResponse());
+        });
+
+        $this->onAfterScenario(function () {
+            MockSdkApiHandler::reset();
+        });
     }
 
     /**
@@ -63,6 +74,7 @@ final class PdkContext extends AbstractContext
     }
 
     /**
+     * @Given an account exists
      * @Given /my account is set up(?: with (\d+) shops?)?/
      */
     public function myAccountIsSetUp(int $shops = 1): void

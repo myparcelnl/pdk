@@ -9,8 +9,9 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment as PdkShipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 it('creates fulfilment shipment from pdk shipment', function (array $input) {
     $pdkShipment = new PdkShipment($input);
     $shipment    = Shipment::fromPdkShipment($pdkShipment);

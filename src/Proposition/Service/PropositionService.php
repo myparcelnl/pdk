@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
+use RuntimeException;
 
 class PropositionService
 {

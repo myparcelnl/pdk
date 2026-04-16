@@ -1,13 +1,14 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Service;
 
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -85,27 +86,27 @@ it('can check if a country is the local country', function (string $platform, st
     expect($result)->toBe($isLocal);
 })->with([
     'myparcelnl, check NL' => [
-        'platform' => Platform::MYPARCEL_NAME,
+        'platform' => Proposition::MYPARCEL_NAME,
         'country'  => 'NL',
         'isLocal'  => true,
     ],
     'myparcelnl, check BE' => [
-        'platform' => Platform::MYPARCEL_NAME,
+        'platform' => Proposition::MYPARCEL_NAME,
         'country'  => 'BE',
         'isLocal'  => false,
     ],
     'myparcelnl, check DE' => [
-        'platform' => Platform::MYPARCEL_NAME,
+        'platform' => Proposition::MYPARCEL_NAME,
         'country'  => 'DE',
         'isLocal'  => false,
     ],
     'myparcelbe, check BE' => [
-        'platform' => Platform::SENDMYPARCEL_NAME,
+        'platform' => Proposition::SENDMYPARCEL_NAME,
         'country'  => 'BE',
         'isLocal'  => true,
     ],
     'myparcelbe, check NL' => [
-        'platform' => Platform::SENDMYPARCEL_NAME,
+        'platform' => Proposition::SENDMYPARCEL_NAME,
         'country'  => 'NL',
         'isLocal'  => false,
     ],

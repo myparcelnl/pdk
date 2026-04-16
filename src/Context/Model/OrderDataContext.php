@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -18,7 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property null|string                                                 $externalIdentifier
  * @property null|string                                                 $apiIdentifier
  * @property null|\MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration      $customsDeclaration
- * @property \MyParcelNL\Pdk\Shipment\Model\DeliveryOptions              $deliveryOptions
+ * @property array                                                       $deliveryOptions
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection $lines
  * @property \MyParcelNL\Pdk\App\Order\Collection\PdkOrderNoteCollection $notes
  * @property null|\MyParcelNL\Pdk\Base\Model\ContactDetails              $senderAddress
@@ -38,17 +39,20 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property int                                                         $totalPrice
  * @property int                                                         $totalPriceAfterVat
  * @property int                                                         $totalVat
- * @property Collection<DeliveryOptions>                                 $inheritedDeliveryOptions
+ * @property Collection<array>                                           $inheritedDeliveryOptions
  * @property array                                                       $digitalStampRanges
  */
 class OrderDataContext extends PdkOrder
 {
     public const ID = Context::ID_ORDER_DATA;
 
+    protected CarrierRepositoryInterface $carrierRepository;
+
     public function __construct(?array $data = null)
     {
         $this->attributes['inheritedDeliveryOptions'] = null;
         $this->attributes['digitalStampRanges']       = Pdk::get('digitalStampRanges');
+        $this->carrierRepository                      = Pdk::get(CarrierRepositoryInterface::class);
 
         parent::__construct($data);
     }
@@ -75,20 +79,32 @@ class OrderDataContext extends PdkOrder
         return $clone->toArray($flags);
     }
 
+    /**
+     * Never cast the deliveryOptions to the DO model, as we return a different format here
+     * @return array
+     */
+    protected function getCasts(): array
+    {
+        return array_diff_key(parent::getCasts(), ['deliveryOptions' => null, 'inheritedDeliveryOptions' => null]);
+    }
+
     protected function getDeliveryOptionsAttribute(array $value): array
     {
-        if (!$value || !$value['carrier']) {
+        if (!$value) {
             return $value;
         }
-        $value['carrier'] = FrontendData::convertCarrierToLegacyFormat(new Carrier($value['carrier']))->toArray();
 
-        return $value;
+        // Convert the rest of the delivery options to V2 capabilities-compatible format
+        return array_filter(
+            DeliveryOptions::toCapabilitiesDefinitions(new DeliveryOptions($value)),
+            static fn($option) => null !== $option
+        );
     }
 
     /**
      * Get the inherited delivery options from product and carrier settings for all available carriers.
      *
-     * @return Collection<DeliveryOptions>
+     * @return Collection<array>
      * @noinspection PhpUnused
      */
     protected function getInheritedDeliveryOptionsAttribute(): Collection
@@ -99,8 +115,11 @@ class OrderDataContext extends PdkOrder
         $carriers = AccountSettings::getCarriers();
 
         return (new Collection($carriers))->mapWithKeys(function (Carrier $carrier) use ($service): array {
-            $clonedOrder = new PdkOrder($this->only(['deliveryOptions', 'lines']));
-            $newCarrier  = new Carrier($carrier->except(['capabilities', 'returnCapabilities', 'inboundFeatures', 'outboundFeatures']));
+            $clonedOrder = new PdkOrder([
+                'deliveryOptions' => $this->attributes['deliveryOptions'],
+                'lines'           => $this->attributes['lines'],
+            ]);
+            $newCarrier  = $this->carrierRepository->find($carrier->carrier);
 
             $clonedOrder->deliveryOptions->carrier = $newCarrier;
 
@@ -111,7 +130,10 @@ class OrderDataContext extends PdkOrder
 
             $calculatedOrder->deliveryOptions->offsetUnset('carrier');
 
-            return [FrontendData::getLegacyIdentifier($carrier->externalIdentifier) => $calculatedOrder->deliveryOptions->toArrayWithoutNull()];
+            return [$carrier->carrier => array_filter(
+                DeliveryOptions::toCapabilitiesDefinitions($calculatedOrder->deliveryOptions),
+                static fn($option) => null !== $option
+            )];
         });
     }
 }

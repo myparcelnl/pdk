@@ -6,6 +6,8 @@ namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -99,7 +101,7 @@ class PostOrdersRequest extends Request
         $shipment = $order->shipment;
 
         return [
-            'carrier'             => $shipment->carrier,
+            'carrier'             => $this->getCarrierId($shipment->carrier),
             'contract_id'         => $shipment->contractId ? (int) $shipment->contractId : null,
             'customs_declaration' => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'      => $shipment->dropOffPoint
@@ -131,5 +133,14 @@ class PostOrdersRequest extends Request
         return array_map(static function ($item) {
             return is_bool($item) ? (int) $item : $item;
         }, $options);
+    }
+
+    private function getCarrierId(Carrier $carrier): int
+    {
+        $id = Utils::convertToId($carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+        if (! $id) {
+            throw new \InvalidArgumentException(sprintf('Cannot encode shipment: carrier %s is not mapped to an ID.', $carrier->carrier));
+        }
+        return $id;
     }
 }
