@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Base;
 
 use MyParcelNL\Pdk\Account\Model\Account;
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
+use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 
@@ -108,6 +108,6 @@ it('determines proposition from account', function (int $platformId, string $pla
         ->and($propositionService->getPropositionConfig()->proposition->key)
         ->toBe($platform);
 })->with([
-    'myparcelnl'          => [Platform::MYPARCEL_ID, Platform::MYPARCEL_NAME],
-    'myparcelbe'          => [Platform::SENDMYPARCEL_ID, Platform::SENDMYPARCEL_NAME],
+    'myparcelnl'          => [Proposition::MYPARCEL_ID, Proposition::MYPARCEL_NAME],
+    'myparcelbe'          => [Proposition::SENDMYPARCEL_ID, Proposition::SENDMYPARCEL_NAME],
 ]);

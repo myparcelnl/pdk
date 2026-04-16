@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -146,11 +147,9 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         $hasInsurance = $this->carrierSchema->canHaveShipmentOption(InsuranceDefinition::class);
 
-        if ($hasInsurance) {
-            $insuranceAmounts = $this->carrier->outboundFeatures['metadata']['insuranceOptions'] ?? [];
-        } else {
-            $insuranceAmounts = [];
-        }
+        $insuranceAmounts = $hasInsurance
+            ? $this->carrierSchema->getAllowedInsuranceAmounts()
+            : [];
 
         $options = array_map(function (int $amount) {
             return $this->currencyService->format($amount);
@@ -271,10 +270,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 ->builder(function (FormOperationBuilder $builder) use ($signatureKey, $onlyRecipientKey) {
                     $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) use ($signatureKey, $onlyRecipientKey) {
                         if ($signatureKey) {
-                            $afterUpdate->setValue(true)->on($signatureKey)->if->eq(true);
+                            $afterUpdate->setValue(TriStateService::ENABLED)->on($signatureKey)->if->eq(TriStateService::ENABLED);
                         }
                         if ($onlyRecipientKey) {
-                            $afterUpdate->setValue(true)->on($onlyRecipientKey)->if->eq(true);
+                            $afterUpdate->setValue(TriStateService::ENABLED)->on($onlyRecipientKey)->if->eq(TriStateService::ENABLED);
                         }
                     });
                 });
@@ -345,7 +344,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getDefaultExportReturnsFields(): array
     {
-        $hasPackageTypeOptions = !empty($this->carrier->outboundFeatures->packageTypes);
+        $hasPackageTypeOptions = !empty($this->carrier->packageTypes);
         $canHaveLargeFormat    = $this->carrierSchema->canHaveShipmentOption(LargeFormatDefinition::class);
 
         if (! $hasPackageTypeOptions && ! $canHaveLargeFormat) {

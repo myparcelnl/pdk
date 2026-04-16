@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -9,8 +10,9 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('creates fulfilment order from pdk order', function (array $input) {
     $pdkOrder = new PdkOrder($input);
@@ -43,7 +45,7 @@ it('creates fulfilment order from pdk order', function (array $input) {
                 'weight'   => 1000,
             ],
             'deliveryOptions'       => [
-                'carrier'         => 'postnl',
+                'carrier'         => 'POSTNL',
                 'date'            => '2020-01-01',
                 'deliveryType'    => 'standard',
                 'labelAmount'     => 1,
@@ -105,7 +107,7 @@ it('creates fulfilment order from pdk order', function (array $input) {
             'shipments' => [
                 [
                     'deliveryOptions' => [
-                        'carrier'         => 'postnl',
+                        'carrier'         => 'POSTNL',
                         'date'            => '2020-01-01',
                         'deliveryType'    => 'standard',
                         'labelAmount'     => 1,
@@ -127,4 +129,3 @@ it('returns empty fulfilment order when no pdk order is passed', function () {
     expect($fulfilmentOrder)->toBeInstanceOf(Order::class);
     assertMatchesJsonSnapshot(json_encode($fulfilmentOrder->toArrayWithoutNull()));
 });
-

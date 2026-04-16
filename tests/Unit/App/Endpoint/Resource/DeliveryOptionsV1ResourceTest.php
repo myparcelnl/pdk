@@ -6,18 +6,21 @@ namespace MyParcelNL\Pdk\Tests\Unit\App\Endpoint\Resource;
 
 use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Sdk\Model\PickupLocation;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('formats delivery options correctly', function () {
     $shipmentOptions = new ShipmentOptions([
@@ -29,7 +32,7 @@ it('formats delivery options correctly', function () {
         'insurance' => 50000,
     ]);
 
-    $carrier = new Carrier(['name' => 'postnl']);
+    $carrier = factory(Carrier::class)->withCarrier('POSTNL')->make();
 
     $deliveryOptions = new DeliveryOptions([
         'carrier' => $carrier,
@@ -171,13 +174,8 @@ it('formats date as null when not set', function () {
 });
 
 it('correctly returns a pickup location when applicable', function () {
-    $carrier = new Carrier([
-        'name' => 'postnl',
-        'propositionCarrierFeatures' => new PropositionCarrierFeatures([
-            'pickupLocations' => true,
-        ]),
-    ]);
-
+    $carrier = Pdk::get(CarrierRepositoryInterface::class)->find('POSTNL');
+    $carrier->deliveryTypes = [RefTypesDeliveryTypeV2::PICKUP];
     $deliveryOptions = new DeliveryOptions([
         'carrier' => $carrier,
         'deliveryType' => 'pickup',
@@ -227,7 +225,6 @@ it('maps carrier names using direct carrier mapping', function () {
         'BPOST' => 'BPOST',
         'CHEAP_CARGO' => 'CHEAP_CARGO',
         'DPD' => 'DPD',
-        'BOL' => 'BOL',
         'DHL_FOR_YOU' => 'DHL_FOR_YOU',
         'DHL_PARCEL_CONNECT' => 'DHL_PARCEL_CONNECT',
         'DHL_EUROPLUS' => 'DHL_EUROPLUS',
@@ -239,7 +236,7 @@ it('maps carrier names using direct carrier mapping', function () {
     ];
 
     foreach ($carriers as $carrierName => $expected) {
-        $carrier = new Carrier(['name' => $carrierName]);
+        $carrier = factory(Carrier::class)->withCarrier($carrierName)->make();
         $deliveryOptions = new DeliveryOptions(['carrier' => $carrier]);
         $resource = new DeliveryOptionsV1Resource($deliveryOptions);
         $result = $resource->format();

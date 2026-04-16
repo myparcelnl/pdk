@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection StaticClosureCanBeUsedInspection,PhpUnhandledExceptionInspection */
 
 declare(strict_types=1);
@@ -15,8 +16,10 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
-usesShared(new UsesMockPdkInstance());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 beforeEach(function () {
     factory(Settings::class)->store();
@@ -98,7 +101,7 @@ it('gets context data', function (string $id, array $arguments) {
         'arguments' => [
             'order' => [
                 'deliveryOptions' => [
-                    'carrier'     => Carrier::CARRIER_POSTNL_NAME,
+                    'carrier'     => RefCapabilitiesSharedCarrierV2::POSTNL,
                     'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
                 ],
             ],

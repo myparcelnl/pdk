@@ -278,8 +278,8 @@ class FrontendRenderService implements FrontendRenderServiceInterface
                 $e->getMessage(),
                 array_merge(
                     [
-                    'trace' => $e->getTrace(),
-                ],
+                        'trace' => $e->getTrace(),
+                    ],
                     compact(
                         'template',
                         'contexts',

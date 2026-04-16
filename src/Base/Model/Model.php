@@ -60,9 +60,12 @@ class Model implements StorableArrayable, ArrayAccess, ModelInterface
 
         $this->initializeTraits();
 
+        $data = $data ?? [];
+
         if ($this->convertCase) {
-            $data = Utils::changeArrayKeysCase($data ?? []);
+            $data = Utils::changeArrayKeysCase($data);
         }
+
         $this->fill($data + $this->attributes);
     }
 
