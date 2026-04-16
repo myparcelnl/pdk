@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Proposition\Service\PropositionService;
  * @property string                    $language
  * @property string                    $mode
  * @property array                     $proposition
+ * @property array                     $platform
  * @property array{string, string}     $translations
  */
 class GlobalContext extends Model
@@ -84,7 +85,7 @@ class GlobalContext extends Model
                 'backofficeUrl'    => $proposition->applications['backoffice']['url'] ?? null,
                 'supportUrl'       => $proposition->applications['developerPortal']['url'] ?? null,
                 'localCountry'     => $proposition->countryCode,
-                'defaultCarrier'   => $defaultCarrier ? $defaultCarrier->name : null,
+                'defaultCarrier'   => $defaultCarrier ? $defaultCarrier->carrier : null, // CONSTANT_CASE name
             ];
         } catch (\Throwable $throwable) {
             // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.

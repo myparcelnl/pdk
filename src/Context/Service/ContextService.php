@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Context\Collection\OrderDataContextCollection;
@@ -139,7 +140,10 @@ class ContextService implements ContextServiceInterface
             ? $input
             : new $modelCollectionClass($input);
 
-        return new $contextCollectionClass($collection->all());
+        // All concrete Context-implementation *only* accept an array and not an existing model in their constructor.
+        return new $contextCollectionClass(array_map(function ($item) {
+            return $item instanceof Model ? $item->toArray() : $item;
+        }, $collection->all()));
     }
 
     /**

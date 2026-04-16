@@ -34,8 +34,7 @@ class CarrierSettingsView extends AbstractSettingsView
 
         $this->carriers->each(function (Carrier $carrier) use (&$array) {
             $view    = new CarrierSettingsItemView($carrier);
-            $legacyId = FrontendData::getLegacyIdentifier($carrier->externalIdentifier);
-            $array[] = ['id' => $legacyId] + $view->toArray();
+            $array[] = ['id' => $carrier->carrier] + $view->toArray();
         });
 
         return new Collection($array);

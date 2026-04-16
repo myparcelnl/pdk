@@ -2,154 +2,81 @@
     {
         "deliveryOptions": {
             "carrier": {
-                "externalIdentifier": "POSTNL",
-                "id": 1,
-                "name": "POSTNL",
-                "enabled": true,
-                "isDefault": true,
-                "optional": false,
-                "primary": false,
-                "type": "main",
-                "inboundFeatures": {
-                    "packageTypes": [
-                        "PACKAGE"
-                    ],
-                    "deliveryTypes": [
-                        "STANDARD_DELIVERY"
-                    ],
-                    "shipmentOptions": [
-                        "SIGNATURE",
-                        "RETURN",
-                        "AGE_CHECK",
-                        "ONLY_RECIPIENT",
-                        "SAME_DAY_DELIVERY",
-                        "LARGE_FORMAT",
-                        "INSURANCE"
-                    ],
-                    "metadata": {
-                        "labelDescriptionLength": 45,
-                        "insuranceSteps": [
-                            0,
-                            10000,
-                            25000,
-                            50000,
-                            100000,
-                            150000,
-                            200000,
-                            250000,
-                            300000,
-                            350000,
-                            400000,
-                            450000,
-                            500000
-                        ]
+                "carrier": "POSTNL",
+                "packageTypes": [
+                    "PACKAGE",
+                    "MAILBOX",
+                    "UNFRANKED",
+                    "DIGITAL_STAMP",
+                    "PALLET",
+                    "SMALL_PACKAGE",
+                    "ENVELOPE"
+                ],
+                "options": {
+                    "cooledDelivery": [],
+                    "freshFood": [],
+                    "frozen": [],
+                    "hideSender": [],
+                    "oversizedPackage": [],
+                    "priorityDelivery": [],
+                    "recipientOnlyDelivery": [],
+                    "requiresAgeVerification": [],
+                    "requiresReceiptCode": [],
+                    "requiresSignature": [],
+                    "returnOnFirstFailedDelivery": [],
+                    "sameDayDelivery": [],
+                    "saturdayDelivery": [],
+                    "scheduledCollection": [],
+                    "tracked": [],
+                    "insurance": {
+                        "insuredAmount": {
+                            "default": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "min": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "max": {
+                                "currency": "EUR",
+                                "amount": 500000
+                            }
+                        }
                     }
                 },
-                "outboundFeatures": {
-                    "packageTypes": [
-                        "PACKAGE",
-                        "MAILBOX",
-                        "LETTER",
-                        "DIGITAL_STAMP",
-                        "SMALL_PACKAGE"
-                    ],
-                    "deliveryTypes": [
-                        "MORNING_DELIVERY",
-                        "STANDARD_DELIVERY",
-                        "EVENING_DELIVERY",
-                        "PICKUP_DELIVERY"
-                    ],
-                    "deliveryCountries": [
-                        "NL",
-                        "BE"
-                    ],
-                    "pickupCountries": [
-                        "NL",
-                        "BE",
-                        "DK",
-                        "SE",
-                        "DE"
-                    ],
-                    "shipmentOptions": [
-                        "AGE_CHECK",
-                        "LARGE_FORMAT",
-                        "ONLY_RECIPIENT",
-                        "PRIORITY_DELIVERY",
-                        "RETURN",
-                        "SIGNATURE",
-                        "RECEIPT_CODE",
-                        "INSURANCE",
-                        "TRACKED"
-                    ],
-                    "metadata": {
-                        "labelDescriptionLength": 45,
-                        "carrierSmallPackageContract": "FEATURE_CUSTOM_CONTRACT_ONLY",
-                        "multiCollo": true,
-                        "insuranceOptions": [
-                            0,
-                            10000,
-                            25000,
-                            50000,
-                            100000,
-                            150000,
-                            200000,
-                            250000,
-                            300000,
-                            350000,
-                            400000,
-                            450000,
-                            500000
-                        ]
-                    }
-                },
-                "deliveryOptions": {
-                    "addressFields": [
-                        "postalCode",
-                        "street",
-                        "city"
-                    ],
-                    "availableFeatures": [
-                        "deliveryDaysWindow",
-                        "dropOffDays",
-                        "dropOffDelay",
-                        "pickupMapAllowLoadMore"
-                    ],
-                    "shipmentOptionsPerPackageType": {
-                        "package": [
-                            "only_recipient",
-                            "signature"
-                        ],
-                        "mailbox": [
-                            "priority_delivery"
-                        ],
-                        "letter": [],
-                        "digital_stamp": [],
-                        "package_small": [
-                            "only_recipient",
-                            "signature"
-                        ]
-                    },
-                    "allowFakeDelivery": true
+                "deliveryTypes": [
+                    "MORNING_DELIVERY",
+                    "STANDARD_DELIVERY",
+                    "EVENING_DELIVERY",
+                    "PICKUP_DELIVERY",
+                    "SAME_DAY_DELIVERY",
+                    "EXPRESS_DELIVERY",
+                    "EARLY_MORNING_DELIVERY"
+                ],
+                "collo": {
+                    "max": 10
                 }
             },
             "labelAmount": 1,
             "shipmentOptions": {
-                "insurance": -1,
                 "ageCheck": -1,
                 "return": -1,
                 "hideSender": -1,
+                "insurance": -1,
                 "largeFormat": -1,
                 "onlyRecipient": -1,
                 "priorityDelivery": -1,
-                "receiptCode": -1,
                 "sameDayDelivery": -1,
+                "saturdayDelivery": -1,
                 "signature": -1,
                 "tracked": -1,
+                "receiptCode": -1,
                 "collect": -1,
                 "excludeParcelLockers": -1,
                 "freshFood": -1,
                 "frozen": -1,
-                "saturdayDelivery": -1
+                "cooledDelivery": -1
             },
             "deliveryType": "standard",
             "packageType": "package"
@@ -178,46 +105,50 @@
                     "width": 0,
                     "height": 0,
                     "settings": {
+                        "exportAgeCheck": -1,
+                        "exportReturn": -1,
+                        "exportHideSender": -1,
+                        "exportInsurance": -1,
+                        "exportLargeFormat": -1,
+                        "exportOnlyRecipient": -1,
+                        "exportPriorityDelivery": -1,
+                        "exportSignature": -1,
+                        "exportTracked": -1,
+                        "excludeParcelLockers": -1,
+                        "exportFreshFood": -1,
+                        "exportFrozen": -1,
+                        "exportCooledDelivery": -1,
                         "id": "product",
                         "countryOfOrigin": -1,
                         "customsCode": -1,
                         "disableDeliveryOptions": -1,
                         "dropOffDelay": -1,
-                        "exportAgeCheck": -1,
-                        "exportHideSender": -1,
-                        "exportInsurance": -1,
-                        "exportLargeFormat": -1,
-                        "exportOnlyRecipient": -1,
-                        "exportReturn": -1,
-                        "exportSignature": -1,
-                        "exportTracked": -1,
-                        "exportFreshFood": -1,
-                        "exportFrozen": -1,
                         "fitInDigitalStamp": -1,
                         "fitInMailbox": -1,
-                        "packageType": -1,
-                        "excludeParcelLockers": -1
+                        "packageType": -1
                     },
                     "mergedSettings": {
+                        "exportAgeCheck": -1,
+                        "exportReturn": -1,
+                        "exportHideSender": -1,
+                        "exportInsurance": -1,
+                        "exportLargeFormat": -1,
+                        "exportOnlyRecipient": -1,
+                        "exportPriorityDelivery": -1,
+                        "exportSignature": -1,
+                        "exportTracked": -1,
+                        "excludeParcelLockers": -1,
+                        "exportFreshFood": -1,
+                        "exportFrozen": -1,
+                        "exportCooledDelivery": -1,
                         "id": "product",
                         "countryOfOrigin": -1,
                         "customsCode": -1,
                         "disableDeliveryOptions": -1,
                         "dropOffDelay": -1,
-                        "exportAgeCheck": -1,
-                        "exportHideSender": -1,
-                        "exportInsurance": -1,
-                        "exportLargeFormat": -1,
-                        "exportOnlyRecipient": -1,
-                        "exportReturn": -1,
-                        "exportSignature": -1,
-                        "exportTracked": -1,
-                        "exportFreshFood": -1,
-                        "exportFrozen": -1,
                         "fitInDigitalStamp": -1,
                         "fitInMailbox": -1,
-                        "packageType": -1,
-                        "excludeParcelLockers": -1
+                        "packageType": -1
                     }
                 }
             }
