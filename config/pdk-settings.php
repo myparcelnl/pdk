@@ -178,4 +178,23 @@ return [
     'settingKeyInstalledVersion' => factory(function () {
         return PdkFacade::get('createSettingsKey')('installed_version');
     }),
+
+    /**
+     * Settings key where the list of applied migration identities is saved.
+     * Format: string[] of migration ids (FQCN for class-based, filename for file-based).
+     */
+    'settingKeyAppliedMigrations' => factory(function () {
+        return PdkFacade::get('createSettingsKey')('applied_migrations');
+    }),
+
+    /**
+     * Directory the installer scans for timestamped migration files.
+     * Defaults to "<rootDir>/src/Migration". Plugins can override in their
+     * own config to point at a different directory, or set to null to disable
+     * PDK-owned discovery entirely (e.g. if the plugin prefers to register
+     * every source explicitly via its MigrationService).
+     */
+    'migrationDirectory' => factory(function () {
+        return rtrim(PdkFacade::get('rootDir'), '/') . '/src/Migration';
+    }),
 ];
