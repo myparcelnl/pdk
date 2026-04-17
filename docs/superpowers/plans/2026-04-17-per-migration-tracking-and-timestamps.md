@@ -4,6 +4,43 @@
 
 **Jira:** [INT-951 — Als PDK plugin wil ik betrouwbaar en vooral eenvoudig migraties kunnen doen](https://myparcelnl.atlassian.net/browse/INT-951). The PR that ships this work must reference INT-951 in the description; commit message templates in this plan include the key.
 
+---
+
+## 📍 Execution progress
+
+Work is happening in a git worktree at `~/projects/worktrees/pdk-int-951/` (branch `feat/int-951-per-migration-tracking`, tracks `origin/main`). Tasks marked done below have been committed on this branch.
+
+**Done in session 1 (2026-04-17):**
+- ✅ Task 1 — `TimestampedMigrationInterface` (commit `488ac4fd`)
+- ✅ Task 2 — `AbstractTimestampedMigration` (commit `b84a8680`)
+- ✅ Task 3 — `settingKeyAppliedMigrations` + `migrationDirectory` config (commit `084f24e8`)
+- ✅ Task 4 — `MockTimestampedMigration20260101` fixture (commit `057a5c45`)
+
+Each of Tasks 1–3 passed both spec-compliance and code-quality review. Task 4 passed spec compliance; the code-quality review was deferred when session 1 was paused. All foundation pieces (interface, abstract class, config, test fixture) are in place; the remaining work is behavioural changes to `InstallerService` plus the WC adoption.
+
+**Remaining (resume here in session 2):**
+- ⬜ Task 5 — Identity resolver + `getAppliedMigrations()` with seeding (main behavioural change in `InstallerService::getUpgradeMigrations()`)
+- ⬜ Task 5b — Eager-seed `applied_migrations` during fresh install
+- ⬜ Task 6 — Mark migrations applied after `up()` runs
+- ⬜ Task 7 — File-based migration loader
+- ⬜ Task 7b — PDK-owned discovery via `migrationDirectory`
+- ⬜ Task 8 — Sort timestamp migrations after version migrations
+- ⬜ Task 9 — Regression test: RC version scenario
+- ⬜ Task 10 — Full test suite sanity check
+- ⬜ Task 15 — `make:migration` console command
+- ⬜ Tasks 11–14 (in the WooCommerce plugin repo, not the PDK): verify PDK-owned discovery works in WC, create the concrete carrier V2 timestamped migration, integration test, manual verification. These happen in `~/projects/docker-wordpress/plugins/myparcelnl-woocommerce/` against a branch composer-linked to this PDK worktree or to the released PDK version once this PR merges.
+
+**When resuming:**
+
+1. `cd ~/projects/worktrees/pdk-int-951 && git pull origin feat/int-951-per-migration-tracking` (or simply confirm the branch still matches what you pushed).
+2. Re-run the installer baseline: `php -d auto_prepend_file=tests/bootstrap.php vendor/bin/pest tests/Unit/App/Installer` — should be 14/14 passing.
+3. Re-dispatch the superpowers:subagent-driven-development skill; start with a code-quality review of Task 4 (commit `057a5c45`) before moving to Task 5.
+4. Continue task-by-task in plan order.
+
+**Known pre-existing baseline failures (unrelated to this plan):** 7 tests in `tests/Unit/App/Action/Backend/Debug/DownloadLogsActionTest.php` and `tests/Unit/Base/Service/ZipServiceTest.php` fail under PHP 8.4 due to old Symfony Console deprecations. Baseline was 7 fails before this work started; any change in that count is an INT-951 regression and needs investigating.
+
+---
+
 **Goal:** Replace the version-comparison migration gate with per-migration class/file tracking, and introduce Laravel-style timestamp-based file migrations (anonymous classes) alongside the existing class-based ones. Fix the concrete WooCommerce bug where `Migration6_1_0` is silently skipped on the test RC build because `6.1.0 <= 6.3.0 (installed)` and `6.4.0 > 6.3.0-rc.X`.
 
 **Architecture:** Introduce a new settings option `_myparcelcom_applied_migrations` (a list of migration identities — class FQCN for class-based migrations, filename for file-based migrations). `InstallerService` filters the migration collection by identity instead of by version range. On first run after this change ships, the option is seeded from the legacy `installed_version` so class-based migrations that already ran under the old gate are not re-executed. A new `TimestampedMigrationInterface` + `AbstractTimestampedMigration` base supports Laravel-style migrations where a single file `returns new class extends AbstractTimestampedMigration { … }`. File-based migrations are **never** auto-seeded — they always run once, regardless of when they were added.
