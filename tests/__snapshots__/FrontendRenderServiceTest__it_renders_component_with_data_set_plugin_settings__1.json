@@ -1807,22 +1807,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -3417,22 +3417,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -5027,22 +5027,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -6637,22 +6637,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -8247,22 +8247,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -9857,22 +9857,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -11467,22 +11467,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -13077,22 +13077,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -14687,22 +14687,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -16297,22 +16297,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -17907,22 +17907,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -19568,22 +19568,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -21178,22 +21178,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
@@ -22788,22 +22788,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": 1,
+                                                "$value": true,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": 1
+                                                        "$eq": true
                                                     }
                                                 ]
                                             }
