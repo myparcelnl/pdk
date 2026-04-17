@@ -14,7 +14,7 @@ final class PriorityDeliveryDefinition implements OrderOptionDefinitionInterface
 {
     public function getCarrierSettingsKey(): ?string
     {
-        return CarrierSettings::ALLOW_PRIORITY_DELIVERY;
+        return CarrierSettings::EXPORT_PRIORITY_DELIVERY;
     }
 
     public function getProductSettingsKey(): ?string
