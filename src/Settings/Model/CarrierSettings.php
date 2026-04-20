@@ -40,6 +40,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool                 $exportLargeFormat
  * @property bool                 $exportOnlyRecipient
  * @property bool                 $exportReceiptCode
+ * @property bool                 $exportPriorityDelivery
  * @property bool                 $exportReturn
  * @property bool                 $exportReturnLargeFormat
  * @property bool                 $exportSignature
@@ -122,6 +123,7 @@ class CarrierSettings extends AbstractSettingsModel
     public const  EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
     public const  EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
     public const  EXPORT_RECEIPT_CODE                     = 'exportReceiptCode';
+    public const  EXPORT_PRIORITY_DELIVERY                = 'exportPriorityDelivery';
     public const  EXPORT_RETURN                           = 'exportReturn';
     public const  EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
     public const  EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
@@ -186,6 +188,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_LARGE_FORMAT                     => false,
         self::EXPORT_ONLY_RECIPIENT                   => false,
         self::EXPORT_RECEIPT_CODE                     => false,
+        self::EXPORT_PRIORITY_DELIVERY                => false,
         self::EXPORT_RETURN                           => false,
         self::EXPORT_RETURN_LARGE_FORMAT              => false,
         self::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -240,6 +243,7 @@ class CarrierSettings extends AbstractSettingsModel
         self::DROP_OFF_POSSIBILITIES                  => DropOffPossibilities::class,
         self::EXPORT_AGE_CHECK                        => 'bool',
         self::EXPORT_RECEIPT_CODE                     => 'bool',
+        self::EXPORT_PRIORITY_DELIVERY                => 'bool',
         self::EXPORT_INSURANCE                        => 'bool',
         self::EXPORT_INSURANCE_FROM_AMOUNT            => 'int',
         self::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 'float',

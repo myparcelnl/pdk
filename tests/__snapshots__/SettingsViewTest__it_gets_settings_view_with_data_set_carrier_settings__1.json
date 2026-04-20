@@ -86,6 +86,12 @@
           "description": "settings_carrier_export_only_recipient_description"
         },
         {
+          "name": "exportPriorityDelivery",
+          "$component": "ToggleInput",
+          "label": "settings_carrier_export_priority_delivery",
+          "description": "settings_carrier_export_priority_delivery_description"
+        },
+        {
           "name": "exportLargeFormat",
           "$component": "ToggleInput",
           "label": "settings_carrier_export_large_format",

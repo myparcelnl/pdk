@@ -547,6 +547,7 @@
           "exportLargeFormat": false,
           "exportOnlyRecipient": false,
           "exportReceiptCode": false,
+          "exportPriorityDelivery": false,
           "exportReturn": false,
           "exportReturnLargeFormat": false,
           "exportReturnPackageType": "package",

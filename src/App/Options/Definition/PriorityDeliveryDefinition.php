@@ -14,7 +14,7 @@ final class PriorityDeliveryDefinition implements OrderOptionDefinitionInterface
 {
     public function getCarrierSettingsKey(): ?string
     {
-        return CarrierSettings::ALLOW_PRIORITY_DELIVERY;
+        return CarrierSettings::EXPORT_PRIORITY_DELIVERY;
     }
 
     public function getProductSettingsKey(): ?string
@@ -34,8 +34,6 @@ final class PriorityDeliveryDefinition implements OrderOptionDefinitionInterface
 
     public function validate(CarrierSchema $carrierSchema): bool
     {
-        return $carrierSchema->hasShipmentOptionName(
-            PropositionCarrierFeatures::SHIPMENT_OPTION_PRIORITY_DELIVERY_NAME
-        );
+        return $carrierSchema->canHavePriorityDelivery();
     }
 }
