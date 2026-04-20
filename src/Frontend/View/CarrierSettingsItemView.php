@@ -282,7 +282,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 new InteractiveElement(CarrierSettings::EXPORT_RECEIPT_CODE, Components::INPUT_TOGGLE),
             ] : [],
 
-            $this->carrierSchema->hasShipmentOptionName(PropositionCarrierFeatures::SHIPMENT_OPTION_PRIORITY_DELIVERY_NAME) ? [
+            $this->carrierSchema->canHavePriorityDelivery() ? [
                 new InteractiveElement(CarrierSettings::EXPORT_PRIORITY_DELIVERY, Components::INPUT_TOGGLE),
             ] : [],
 
