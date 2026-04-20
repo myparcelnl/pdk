@@ -1,4 +1,5 @@
-FROM ghcr.io/myparcelnl/php-xd:7.4-fpm-alpine
+ARG PHP_VERSION=7.4
+FROM ghcr.io/myparcelnl/php-xd:${PHP_VERSION}
 
 # install php zip extension
 RUN apk add --no-cache libzip-dev \

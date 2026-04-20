@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.2](https://github.com/myparcelnl/pdk/compare/v3.4.1...v3.4.2) (2026-04-10)
+
+
+### :bug: Bug Fixes
+
+* allow default label description when current is null ([#435](https://github.com/myparcelnl/pdk/issues/435)) ([748306f](https://github.com/myparcelnl/pdk/commit/748306f046fce03b505c93d23643683f8ba4a56b))
+
+## [3.4.1](https://github.com/myparcelnl/pdk/compare/v3.4.0...v3.4.1) (2026-04-02)
+
+
+### :bug: Bug Fixes
+
+* fix several minor PHP 8 compatibility issues ([#434](https://github.com/myparcelnl/pdk/issues/434)) ([85f3825](https://github.com/myparcelnl/pdk/commit/85f382599165deeadac0d964a851e9cf356ce375))
+
+## [3.4.0](https://github.com/myparcelnl/pdk/compare/v3.3.3...v3.4.0) (2026-04-01)
+
+
+### :sparkles: New Features
+
+* **deps:** support symfony console v6 ([#433](https://github.com/myparcelnl/pdk/issues/433)) ([0a338d7](https://github.com/myparcelnl/pdk/commit/0a338d7f47cc4258eaaba2bc2e4f90c4895bbff7))
+
 ## [3.3.3](https://github.com/myparcelnl/pdk/compare/v3.3.2...v3.3.3) (2026-03-24)
 
 

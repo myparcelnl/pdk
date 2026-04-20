@@ -11,7 +11,7 @@ The MyParcel PDK (Plugin Development Kit) is meant for developing entire plugins
 
 ## Requirements
 
-- PHP >=7.4
+- PHP 7.4 – 8.5
 - Composer
 
 ## Documentation
@@ -57,6 +57,15 @@ docker compose up php
 Run all tests:
 
 ```shell
+docker compose run php composer test
+```
+
+#### Testing on a specific PHP version
+
+The default PHP version is 7.4. To test on a different version, change `PHP_VERSION` in `.env` and rebuild:
+
+```shell
+docker compose build
 docker compose run php composer test
 ```
 

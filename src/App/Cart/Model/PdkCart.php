@@ -66,6 +66,8 @@ class PdkCart extends Model
     }
 
     /**
+     * Avoids setting the shipping method directly, as it should be calculated based on the cart's contents and shipping address.
+     *
      * @param  array|PdkShippingMethod $value
      *
      * @return self
@@ -87,6 +89,6 @@ class PdkCart extends Model
         /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
         $service = Pdk::get(CartCalculationServiceInterface::class);
 
-        $this->shippingMethod = $service->calculateShippingMethod($this);
+        $this->attributes['shippingMethod'] = $service->calculateShippingMethod($this);
     }
 }

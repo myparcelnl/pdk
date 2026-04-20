@@ -87,7 +87,11 @@ class PdkActionsService implements PdkActionsServiceInterface
             $request = Request::createFromGlobals();
 
             foreach ($parameters as $key => $value) {
-                $request->query->set($key, $value);
+                if (is_scalar($value) || is_array($value)) {
+                    $request->query->set($key, $value);
+                } else {
+                    $request->attributes->set($key, $value);
+                }
             }
 
             $request->query->set('action', $input);

@@ -19,7 +19,7 @@ trait EncodesCustomsDeclaration
     {
         /** @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService */
         $countryService = Pdk::get(CountryServiceInterface::class);
-        $cc             = $shipment->recipient->cc;
+        $cc             = $shipment->recipient ? $shipment->recipient->cc : null;
 
         if (! $cc || ! $countryService->isRow($cc)) {
             return null;

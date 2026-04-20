@@ -34,7 +34,7 @@ class GetShopCarrierConfigurationsResponse extends ApiResponseWithBody
         $this->configurations = new ShopCarrierConfigurationCollection(
             array_map(static function (array $configuration) {
                 return ($configuration['configuration'] ?? []) + [
-                        'carrier' => $configuration['carrier_id'],
+                        'carrier' => $configuration['carrier_id'] ?? null,
                     ];
             }, $configurations)
         );

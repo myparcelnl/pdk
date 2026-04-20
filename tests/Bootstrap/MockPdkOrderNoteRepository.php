@@ -19,12 +19,10 @@ class MockPdkOrderNoteRepository extends AbstractPdkOrderNoteRepository
     private $notes;
 
     /**
-     * @param  array                                             $orderNotes
      * @param  \MyParcelNL\Pdk\Storage\Contract\StorageInterface $storage
-     *
-     * @noinspection PhpOptionalBeforeRequiredParametersInspection
+     * @param  array                                             $orderNotes
      */
-    public function __construct($orderNotes = [], StorageInterface $storage)
+    public function __construct(StorageInterface $storage, $orderNotes = [])
     {
         parent::__construct($storage);
 

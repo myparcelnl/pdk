@@ -141,19 +141,25 @@ class CartCalculationService implements CartCalculationServiceInterface
 
         // Check if any product in the cart has 18+ classification (product level)
         $has18PlusProduct = $cart->lines->contains(function ($line) {
+            if (! is_object($line) || ! $line->product || ! $line->product->mergedSettings) {
+                return false;
+            }
             $productSettings = $line->product->mergedSettings;
             return TriStateService::ENABLED === $productSettings->exportAgeCheck;
         });
 
         // Check if any product explicitly excludes parcel lockers (product level)
         $productExcludesParcelLockers = $cart->lines->contains(function ($line) {
+            if (! is_object($line) || ! $line->product || ! $line->product->mergedSettings) {
+                return false;
+            }
             $productSettings = $line->product->mergedSettings;
             return TriStateService::ENABLED === $productSettings->excludeParcelLockers;
         });
 
         // Check if 18+ is enabled on carrier level for any carrier in the cart
         $has18PlusCarrier = $cart->lines->contains(function ($line) {
-            if (!$line->product->carrier || !$line->product->carrier->id) {
+            if (! is_object($line) || ! $line->product || ! $line->product->carrier || ! $line->product->carrier->id) {
                 return false;
             }
             
