@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -118,6 +119,7 @@ class OrderDataContext extends PdkOrder
             $clonedOrder = new PdkOrder([
                 'deliveryOptions' => $this->attributes['deliveryOptions'],
                 'lines'           => $this->attributes['lines'],
+                'shippingAddress' => $this->attributes['shippingAddress'],
             ]);
             $newCarrier  = $this->carrierRepository->find($carrier->carrier);
 
@@ -127,6 +129,10 @@ class OrderDataContext extends PdkOrder
                 $clonedOrder,
                 PdkOrderOptionsServiceInterface::EXCLUDE_SHIPMENT_OPTIONS
             );
+
+            // Apply carrier-specific cascades (for example 18+ => signature + only recipient)
+            // so the admin context reflects the same effective defaults as export calculations.
+            (new CarrierSpecificCalculator($calculatedOrder))->calculate();
 
             $calculatedOrder->deliveryOptions->offsetUnset('carrier');
 

@@ -147,3 +147,36 @@ it('isRequired overrides even explicit carrier settings in inherited delivery op
     expect($inherited['POSTNL']['shipmentOptions']['requiresSignature'])
         ->toBe(TriStateService::ENABLED);
 });
+
+it('applies carrier-specific cascades in inherited delivery options', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:POSTNL');
+    $storage->delete('carrier:all');
+
+    factory(Settings::class)
+        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_AGE_CHECK => 1])
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)->withCarrier('POSTNL')
+        )
+        ->make();
+
+    $context = factory(OrderDataContext::class)
+        ->with($order->getAttributes())
+        ->make();
+
+    $inherited = $context->inheritedDeliveryOptions->toArrayWithoutNull();
+
+    expect($inherited['POSTNL']['shipmentOptions'])
+        ->toMatchArray([
+            'requiresAgeVerification' => TriStateService::ENABLED,
+            'requiresSignature'       => TriStateService::ENABLED,
+            'recipientOnlyDelivery'   => TriStateService::ENABLED,
+        ]);
+});
