@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
@@ -163,7 +164,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function createCarrierSettings(Carrier $carrier, PdkCart $cart, string $packageType): array
     {
-        $carrierSettings = CarrierSettings::fromCarrier($carrier);
+        $carrierSettings = $this->getCarrierSettings($carrier);
 
         $dropOff           = $this->dropOffService->getForDate($carrierSettings);
         $dropOffCollection = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
@@ -202,6 +203,30 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 'dropOffDays'          => $dropOffDays,
             ]
         );
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     *
+     * @return \MyParcelNL\Pdk\Settings\Model\CarrierSettings
+     */
+    private function getCarrierSettings(Carrier $carrier): CarrierSettings
+    {
+        $allCarrierSettings = Settings::all()->carrier;
+        $carrierSettings    = $allCarrierSettings->get($carrier->carrier);
+        $storedSettings     = Settings::get($carrier->carrier, CarrierSettings::ID);
+
+        if (null !== $storedSettings && $carrierSettings) {
+            return clone $carrierSettings;
+        }
+
+        $globalSettings = $allCarrierSettings->get(SettingsManager::KEY_ALL);
+
+        if ($globalSettings) {
+            return (clone $globalSettings)->fill(['id' => $carrier->carrier]);
+        }
+
+        return new CarrierSettings(['id' => $carrier->carrier]);
     }
 
     /**

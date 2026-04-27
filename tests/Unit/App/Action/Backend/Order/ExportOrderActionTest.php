@@ -243,6 +243,60 @@ it('exports order with age check setting enabled', function (bool $orderMode) {
 })
     ->with('order mode toggle');
 
+it('exports order with age check setting enabled when checkout stored disabled dependents', function (bool $orderMode) {
+    $fakeCarrier = factory(Carrier::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->withAllCapabilities()
+        ->make();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
+        ->withCarrier(
+            $fakeCarrier->carrier,
+            factory(CarrierSettings::class)
+                ->withExportAgeCheck(true)
+                ->withExportOnlyRecipient(true)
+                ->withExportSignature(true)
+        )
+        ->store();
+
+    $collection = factory(PdkOrderCollection::class)
+        ->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(
+                    factory(DeliveryOptions::class)
+                        ->withCarrier($fakeCarrier)
+                        ->withShipmentOptions(
+                            factory(ShipmentOptions::class)
+                                ->withAgeCheck(TriStateService::INHERIT)
+                                ->withOnlyRecipient(TriStateService::DISABLED)
+                                ->withSignature(TriStateService::DISABLED)
+                        )
+                )
+        )
+        ->store()
+        ->make();
+
+    MockApi::enqueue(
+        ...$orderMode
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
+    );
+
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
+
+    $lastRequest = MockApi::ensureLastRequest();
+    $body        = json_decode($lastRequest->getBody()->getContents(), true);
+    $options     = getRequestOptions($body, $orderMode);
+
+    expect($options['age_check'])->toBe(1)
+        ->and($options['only_recipient'])->toBe(1)
+        ->and($options['signature'])->toBe(1);
+})
+    ->with('order mode toggle');
+
 it('exports order with return setting enabled', function (bool $orderMode) {
     $body    = exportWithSetting($orderMode, factory(CarrierSettings::class)->withExportReturn(true));
     $options = getRequestOptions($body, $orderMode);

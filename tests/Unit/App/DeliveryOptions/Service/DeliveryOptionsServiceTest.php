@@ -15,16 +15,18 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
+use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 uses()->group('checkout');
 
@@ -242,4 +244,52 @@ it('uses international mailbox price when shipping address is non-local', functi
 
     $carrierId   = FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier);
     expect($result['carrierSettings'][$carrierId]['pricePackageTypeMailbox'])->toBe(1.05);
+});
+
+it('uses global carrier settings when a carrier-specific row is missing', function () {
+    $carrierFactory = factory(Carrier::class)->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
+    $fakeCarrier    = $carrierFactory->make();
+
+    $globalCarrierSettings = new CarrierSettings([
+        'id'                                      => SettingsManager::KEY_ALL,
+        CarrierSettings::DELIVERY_OPTIONS_ENABLED => true,
+        CarrierSettings::ALLOW_DELIVERY_OPTIONS   => true,
+        CarrierSettings::ALLOW_STANDARD_DELIVERY  => true,
+        CarrierSettings::ALLOW_MORNING_DELIVERY   => true,
+        CarrierSettings::ALLOW_PICKUP_DELIVERY    => true,
+    ]);
+
+    Pdk::get(PdkSettingsRepositoryInterface::class)
+        ->store(Pdk::get('createSettingsKey')(CarrierSettings::ID), [
+            SettingsManager::KEY_ALL => $globalCarrierSettings->toStorableArray(),
+        ]);
+
+    factory(Shop::class)
+        ->withCarriers(factory(CarrierCollection::class)->push($carrierFactory))
+        ->store();
+
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createAllCarrierSettings(new PdkCart([
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 1,
+                    'isDeliverable' => true,
+                ],
+            ],
+        ],
+    ]));
+
+    $carrierId = FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier);
+
+    expect($result['carrierSettings'][$carrierId])
+        ->toMatchArray([
+            'allowDeliveryOptions'   => true,
+            'allowStandardDelivery'  => true,
+            'allowMorningDelivery'   => true,
+            'allowPickupLocations'   => true,
+        ]);
 });
