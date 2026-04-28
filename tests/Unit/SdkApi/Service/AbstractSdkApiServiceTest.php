@@ -31,6 +31,11 @@ class ConcreteSdkApiServiceForTest extends AbstractSdkApiService
         return null; // Dummy implementation
     }
 
+    protected function getApiClients(): array
+    {
+        return [];
+    }
+
     // Expose protected methods for testing
     public function publicGetApiKey(): ?string
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApi;
 
-use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\SdkApi\Service\AbstractSdkApiService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration as CoreApiConfiguration;
 
@@ -53,26 +52,14 @@ abstract class AbstractCoreApiService extends AbstractSdkApiService
     /**
      * Get a configured CoreAPI configuration object.
      *
-     * Builds a Configuration instance with:
-     * - Access token (base64-encoded API key)
-     * - User agent string (platform + PDK + PHP versions)
-     * - Host URL (conditional on environment: production or acceptance)
+     * Factory: builds a fresh Configuration instance and delegates field-setting to
+     * {@see AbstractSdkApiService::applyConfigSettings()} so that the same business logic
+     * is shared with {@see AbstractSdkApiService::refreshApiConfig()}.
      *
      * @return CoreApiConfiguration The configured API configuration
      */
     public function getApiConfig(): CoreApiConfiguration
     {
-        $config = new CoreApiConfiguration();
-        $apiKey = $this->getApiKey();
-        $config->setAccessToken($apiKey ? base64_encode($apiKey) : '');
-        $config->setUserAgent($this->getUserAgent());
-
-        // Set an alternate host for acceptance testing if the environment is set to acceptance,
-        // otherwise use the default host from the generated OpenAPI client.
-        if ($this->isAcceptanceEnvironment()) {
-            $config->setHost(Config::API_URL_ACCEPTANCE);
-        }
-
-        return $config;
+        return $this->applyConfigSettings(new CoreApiConfiguration());
     }
 }

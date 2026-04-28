@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionsService;
@@ -39,7 +40,7 @@ it('switches to production API successfully', function () {
         ->once()
         ->with(Mockery::type(AccountSettings::class));
     
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
+    $action = new SwitchToProductionApiAction($apiService, $settingsRepository, mock(CapabilitiesService::class));
     $request = new Request();
     
     $response = $action->handle($request);
@@ -57,7 +58,7 @@ it('handles exceptions gracefully', function () {
         ->once()
         ->andThrow(new \Exception('Test exception'));
     
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
+    $action = new SwitchToProductionApiAction($apiService, $settingsRepository, mock(CapabilitiesService::class));
     $request = new Request();
     
     $response = $action->handle($request);
@@ -84,7 +85,7 @@ it('calls UPDATE_ACCOUNT action after successful switch', function () {
         ->once()
         ->with(Mockery::type(AccountSettings::class));
     
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
+    $action = new SwitchToProductionApiAction($apiService, $settingsRepository, mock(CapabilitiesService::class));
     $request = new Request();
     
     $response = $action->handle($request);
@@ -106,7 +107,7 @@ it('logs success message', function () {
         ->once()
         ->with(Mockery::type(AccountSettings::class));
     
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
+    $action = new SwitchToProductionApiAction($apiService, $settingsRepository, mock(CapabilitiesService::class));
     $request = new Request();
     
     $response = $action->handle($request);
@@ -124,7 +125,7 @@ it('logs error message when exception occurs', function () {
         ->once()
         ->andThrow(new \Exception('Test exception'));
     
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
+    $action = new SwitchToProductionApiAction($apiService, $settingsRepository, mock(CapabilitiesService::class));
     $request = new Request();
     
     $response = $action->handle($request);
@@ -150,7 +151,7 @@ it('updates account settings with empty array', function () {
             return isset($array['id']) && $array['id'] === 'account';
         }));
     
-    $action = new SwitchToProductionApiAction($apiService, $settingsRepository);
+    $action = new SwitchToProductionApiAction($apiService, $settingsRepository, mock(CapabilitiesService::class));
     $request = new Request();
     
     $response = $action->handle($request);

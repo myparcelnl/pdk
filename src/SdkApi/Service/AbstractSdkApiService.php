@@ -46,6 +46,53 @@ abstract class AbstractSdkApiService
     abstract public function getApiConfig();
 
     /**
+     * Return the SDK API client instances owned by this service. Each instance must
+     * expose a `getConfig()` method returning an SDK Configuration object that supports
+     * `setAccessToken`, `setUserAgent` and `setHost`.
+     *
+     * Used by {@see refreshApiConfig()} so that settings changes (API key, environment)
+     * made within the same request are propagated onto already-constructed clients.
+     *
+     * @return array
+     */
+    abstract protected function getApiClients(): array;
+
+    /**
+     * Apply current settings (API key, user agent, host) onto an SDK Configuration object.
+     *
+     * Single source of truth shared between {@see getApiConfig()} (factory path used at
+     * construction time) and {@see refreshApiConfig()} (mutate path used after settings change).
+     *
+     * @param  object $config A generated SDK Configuration instance
+     * @return object The same instance, for chaining
+     */
+    protected function applyConfigSettings(object $config): object
+    {
+        $apiKey = $this->getApiKey();
+        $config->setAccessToken($apiKey ? base64_encode($apiKey) : '');
+        $config->setUserAgent($this->getUserAgent());
+        $config->setHost($this->isAcceptanceEnvironment() ? Config::API_URL_ACCEPTANCE : Config::API_URL_PRODUCTION);
+
+        return $config;
+    }
+
+    /**
+     * Re-apply current settings onto every API client instance owned by this service.
+     *
+     * Call this after the API key or environment has been changed within the current
+     * request, so already-constructed clients pick up the new values without needing
+     * a fresh request.
+     *
+     * @return void
+     */
+    public function refreshApiConfig(): void
+    {
+        foreach ($this->getApiClients() as $client) {
+            $this->applyConfigSettings($client->getConfig());
+        }
+    }
+
+    /**
      * Get the API key from account settings.
      *
      * @return null|string The unformatted API key, or null if not set

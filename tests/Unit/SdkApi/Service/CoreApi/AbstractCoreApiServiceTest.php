@@ -24,6 +24,11 @@ class ConcreteCoreApiServiceForTest extends AbstractCoreApiService
     {
         return $this->getApiConfig();
     }
+
+    protected function getApiClients(): array
+    {
+        return [];
+    }
 }
 
 // Tests for getApiConfig()
