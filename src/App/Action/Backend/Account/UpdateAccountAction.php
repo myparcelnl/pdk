@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,16 +43,23 @@ class UpdateAccountAction implements ActionInterface
      */
     protected CarrierCapabilitiesRepository $carrierCapabilitiesRepository;
 
+    /**
+     * @var \MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService
+     */
+    protected CapabilitiesService $capabilitiesService;
+
     public function __construct(
         PdkSettingsRepositoryInterface     $pdkSettingsRepository,
         PdkAccountRepositoryInterface      $pdkAccountRepository,
         AccountRepository                  $accountRepository,
-        CarrierCapabilitiesRepository      $carrierCapabilitiesRepository
+        CarrierCapabilitiesRepository      $carrierCapabilitiesRepository,
+        CapabilitiesService                $capabilitiesService
     ) {
         $this->pdkSettingsRepository          = $pdkSettingsRepository;
         $this->pdkAccountRepository           = $pdkAccountRepository;
         $this->accountRepository              = $accountRepository;
         $this->carrierCapabilitiesRepository  = $carrierCapabilitiesRepository;
+        $this->capabilitiesService            = $capabilitiesService;
     }
 
     /**
@@ -128,6 +136,10 @@ class UpdateAccountAction implements ActionInterface
         $accountSettings = new AccountSettings($mergedData);
 
         $this->pdkSettingsRepository->storeSettings($accountSettings);
+
+        // The capabilitiesService only sets the API key from its constructor
+        // Call the refresh method to update the API key in the service so it can be used immediately after updating the account settings
+        $this->capabilitiesService->refreshApiConfig();
 
         return $accountSettings;
     }
