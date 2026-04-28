@@ -4,8 +4,11 @@
 node_modules
 vendor
 
-# Ignore html snapshots
+# Ignore snapshots — formatting is owned by the snapshot writer (Spatie), not Prettier.
+# Prettier's config (2-space) doesn't match Spatie's output (4-space), so running it on
+# snapshots produces large reformat diffs unrelated to the tested value changes.
 tests/__snapshots__/**/*.html
+tests/__snapshots__/**/*.json
 
 # Ignore php .inc files
 **/*.inc

@@ -25,7 +25,6 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -269,11 +268,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $ageCheckElement = (new InteractiveElement($ageCheckDefinition->getCarrierSettingsKey(), Components::INPUT_TOGGLE))
                 ->builder(function (FormOperationBuilder $builder) use ($signatureKey, $onlyRecipientKey) {
                     $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) use ($signatureKey, $onlyRecipientKey) {
+                        // Toggle-typed fields on the JS side emit/receive booleans, so
+                        // operand literals must be true/false — not TriStateService::ENABLED
+                        // (int 1), which fails the frontend's strict `$eq` check.
                         if ($signatureKey) {
-                            $afterUpdate->setValue(TriStateService::ENABLED)->on($signatureKey)->if->eq(TriStateService::ENABLED);
+                            $afterUpdate->setValue(true)->on($signatureKey)->if->eq(true);
                         }
                         if ($onlyRecipientKey) {
-                            $afterUpdate->setValue(TriStateService::ENABLED)->on($onlyRecipientKey)->if->eq(TriStateService::ENABLED);
+                            $afterUpdate->setValue(true)->on($onlyRecipientKey)->if->eq(true);
                         }
                     });
                 });
