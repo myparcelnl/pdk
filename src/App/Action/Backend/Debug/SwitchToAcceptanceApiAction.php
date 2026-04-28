@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Notification\Model\Notification;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,15 +34,23 @@ class SwitchToAcceptanceApiAction implements ActionInterface
     private $settingsRepository;
 
     /**
-     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface                 $apiService
-     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository
+     * @var \MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService
+     */
+    private $capabilitiesService;
+
+    /**
+     * @param  \MyParcelNL\Pdk\Api\Contract\ApiServiceInterface                    $apiService
+     * @param  \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface    $settingsRepository
+     * @param  \MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService $capabilitiesService
      */
     public function __construct(
         ApiServiceInterface            $apiService,
-        PdkSettingsRepositoryInterface $settingsRepository
+        PdkSettingsRepositoryInterface $settingsRepository,
+        CapabilitiesService            $capabilitiesService
     ) {
-        $this->apiService         = $apiService;
-        $this->settingsRepository = $settingsRepository;
+        $this->apiService          = $apiService;
+        $this->settingsRepository  = $settingsRepository;
+        $this->capabilitiesService = $capabilitiesService;
     }
 
     /**
@@ -57,6 +66,11 @@ class SwitchToAcceptanceApiAction implements ActionInterface
 
             // Store the environment preference in database (no cache files)
             $accountSettings = $this->updateAccountSettings(['environment' => Config::ENVIRONMENT_ACCEPTANCE]);
+
+            // Push the freshly-saved environment onto SDK clients whose Configuration host
+            // was frozen at DI-resolution time, so subsequent calls within this request hit
+            // the acceptance host instead of production.
+            $this->capabilitiesService->refreshApiConfig();
 
             Logger::info('API URLs successfully switched to acceptance environment', [
                 'storedEnvironment' => $accountSettings->environment
