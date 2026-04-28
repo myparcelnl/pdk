@@ -69,16 +69,6 @@ docker compose build
 docker compose run php composer test
 ```
 
-#### Updating snapshots
-
-To update test snapshots and format them consistently:
-
-```shell
-yarn test:unit:snapshot
-```
-
-This runs the Pest snapshot update inside Docker, then applies Prettier formatting on the host. Use this instead of running `composer test:unit:snapshot` directly inside Docker, as PHP's `json_encode` outputs 4-space indented JSON while the project standard (enforced by Prettier) is 2-space.
-
 ### Adding a shipment option
 
 Shipment options are managed through the `OrderOptionDefinitionInterface` system. Each option is a single Definition class that declares all its keys (shipment, capabilities, carrier settings, product settings, allow, price). All models, views, and services build their attributes and form elements dynamically from these definitions.
