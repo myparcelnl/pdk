@@ -18,6 +18,20 @@ it('can be converted to array', function () {
     ]);
 });
 
+it('preserves a falsy $value when converted to array', function ($falsyValue) {
+    $operation = new FormSetValueOperation(new FormOperationBuilder(), $falsyValue);
+
+    expect($operation->toArray())->toBe([
+        '$setValue' => [
+            '$value' => $falsyValue,
+        ],
+    ]);
+})->with([
+    'false'        => [false],
+    'integer zero' => [0],
+    'empty string' => [''],
+]);
+
 it('throws error when a non-scalar value is passed', function () {
     new FormSetValueOperation(new FormOperationBuilder(), (object) ['something' => 1]);
 })->throws(InvalidArgumentException::class);
