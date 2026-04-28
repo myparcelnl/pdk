@@ -75,7 +75,7 @@ abstract class AbstractFormOperation extends AbstractFormBuilderCore implements 
     final public function toArray(?int $flags = null): array
     {
         return [
-            $this->getOperationKey() => Utils::filterNull(array_filter($this->createArray())),
+            $this->getOperationKey() => Utils::filterNull($this->createArray()),
         ];
     }
 }
