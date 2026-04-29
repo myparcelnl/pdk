@@ -12,6 +12,7 @@ The PDK does not store translation values directly — values only exist in plug
 ## Sheet location
 
 The Google Sheet that drives all translations:
+
 - **Document:** "PDK Vertalingen"
 - **Sheet:** "Vertalingen"
 - **URL:** https://docs.google.com/spreadsheets/d/1TPE7gwG2GXtX7vlKIaskwMy0Xr4o_ir-lsedWB86xyc/edit?gid=0#gid=0
@@ -32,9 +33,10 @@ Two distinct things get called "translations" in this codebase:
 When narrating any decision or observation to the user, always say "key" or "value" (or a more specific synonym) explicitly. Don't write "patterns" or "style" or "newer additions" without clarifying whether you mean key naming or value wording — the user has to pause and re-read to figure out which you mean.
 
 Examples:
+
 - ✅ "Sibling **values** for `settings_carrier_export_*` use a mix of 'Activate X' / 'Enable X' / just 'X'. I'll follow the dominant 'Activate X' pattern for these new entries."
 - ✅ "The **key** `shipment_options_oversized_package` is the capability-key form of the legacy **key** `shipment_options_large_format`. I'll reuse the legacy **value** 'Extra large format' verbatim under the new **key**."
-- ❌ "settings_carrier_export_* has mixed patterns in legacy ('Activate X' / 'Enable X' / just 'X'). Newer additions (fresh_food, frozen) drop the verb, so I'll do the same." → ambiguous: are we talking about keys or values? Always clarify.
+- ❌ "settings*carrier_export*\* has mixed patterns in legacy ('Activate X' / 'Enable X' / just 'X'). Newer additions (fresh_food, frozen) drop the verb, so I'll do the same." → ambiguous: are we talking about keys or values? Always clarify.
 
 ## Modes
 
@@ -59,16 +61,17 @@ If the plugin uses a different command (older repos), check `package.json` for a
 
 ### Step 2 — enumerate expected keys
 
-Use `scripts/find_missing_keys.sh <plugin-path>`. The script reads PDK Definition classes and SDK constants, computes expected keys by category, diffs against the plugin's `en.json`, and prints missing keys grouped per category.
+Use `scripts/find_missing_keys.sh <plugin-path>`. The script introspects PDK Definition classes and SDK constant classes via PHP reflection (run inside the PDK's docker `php` service), computes expected keys by category, checks each of the plugin's 5 language translation files, and prints missing keys grouped per category with per-language gaps.
 
 If you need to understand or extend what the script enumerates, read `references/key-patterns.md` — it documents every key pattern and where it comes from.
 
 The output is grouped per category:
+
 ```
-== shipment_options ==                    (label + _description from Definition classes)
+== shipment_options ==                    (label keys from Definition::getCapabilitiesOptionsKey)
 == settings_carrier (per-option) ==        (allow/price/export keys per Definition)
 == settings_product (per-option) ==        (per-option product settings)
-== settings_carrier (static dividers) ==   (export, delivery_options, etc. grep'd from views)
+== settings_carrier (static dividers) ==   (export, delivery_options, etc. from CarrierSettingsItemView)
 == delivery_type ==                        (SDK ShipmentDefsDeliveryOptionsDeliveryNameV2)
 == package_type ==                         (SDK RefShipmentPackageTypeV2)
 == carrier ==                              (SDK RefCapabilitiesSharedCarrierV2)
@@ -93,6 +96,7 @@ Present the grouped missing keys to the user. For each missing key, mention if a
 2. **Per-category description toggle** — descriptions are optional and not auto-flagged by the diff script. For each category in scope, ask whether `_description` rows should also be drafted. Default: include description if a `_description` legacy key already exists for the option being renamed, otherwise label-only. Ask once per category, not per key, unless the user wants finer control. The same applies to divider `_description` keys — only generate them when the user opts in.
 
 3. **Draft English first** — for each key, draft an English value. Sources to draw on, in order:
+
    - The legacy key's existing translation (verbatim if the option semantics are identical).
    - The PDK Definition class's docblock and class name.
    - The SDK class's docblock for the corresponding constant or attribute.
@@ -103,6 +107,7 @@ Present the grouped missing keys to the user. For each missing key, mention if a
 5. **Translate the missing languages** — for fully missing keys, draft all 5 languages from English. For partial gaps (e.g. `(missing: it)`), only draft the languages listed in the `(missing: …)` annotation — pull the existing values for the other languages from the plugin's translation JSON files so the TSV row is complete. Reuse existing translations of the same word/phrase where they appear elsewhere in the same JSON file (grep `nl.json` for "Signature" equivalents to match style). Match the tone and length of nearby legacy translations.
 
 6. **Output the TSV** — write to `<pdk-root>/missing_pdk_translations.tsv` (the PDK repo root, not the plugin dir — the TSV is a working artifact for this skill, not part of any plugin). Format: tab-separated, **no header row**, columns in this order: `key, en, nl, fr, de, it`. Sort alphabetically by key. Then:
+
    - Tell the user the file path.
    - Run `open <pdk-root>/missing_pdk_translations.tsv` so the file opens in the user's default editor for review.
    - Print the sheet URL: https://docs.google.com/spreadsheets/d/1TPE7gwG2GXtX7vlKIaskwMy0Xr4o_ir-lsedWB86xyc/edit?gid=0#gid=0
@@ -110,6 +115,7 @@ Present the grouped missing keys to the user. For each missing key, mention if a
    - Remind them: "Append to the bottom of the 'Vertalingen' sheet."
 
 7. **Offer post-translation rebuild** — after the user confirms the TSV is in the sheet, ask whether they want to:
+
    - Re-run `yarn translations:import` in this plugin.
    - Run the same in any sibling plugin/module the user mentions (e.g. WooCommerce).
    - Trigger a JS rebuild (`yarn build:js:dev --skip-nx-cache` or equivalent).
