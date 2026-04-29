@@ -78,8 +78,8 @@ class CapabilitiesService extends AbstractShipmentApiService
      * This is useful for building checkout flows with dynamic delivery options.
      *
      * @param array $parameters Array of shipment parameters including:
-     *                          - carrier: string (required) - Carrier identifier
-     *                          - recipient: array - Recipient address details (cc, postal_code, etc.)
+     *                          - carrier: string- Carrier identifier
+     *                          - recipient: array (required) - Recipient address details (cc, postal_code, etc.)
      *                          - sender: array - Sender address details
      *                          - package_type: string - Package type (package, mailbox, letter, etc.)
      *                          - physical_properties: array - Weight, dimensions

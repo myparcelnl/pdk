@@ -18,8 +18,13 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
+use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
+use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesSdkApiMock;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -28,7 +33,36 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 
 uses()->group('checkout');
 
-usesShared(new UsesMockPdkInstance(), new UsesAccountMock);
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock());
+
+// Enqueue capabilities responses for tests that set a recipient country.
+// The default account setup (UsesAccountMock) creates carriers with ALL package types.
+// getPackageTypeWeights() makes one capabilities call per allowed package type (5 mapped types).
+// Tests without cc won't consume these; UsesSdkApiMock::afterEach() cleans up leftovers.
+beforeEach(function () {
+    $responseData = [
+        [
+            'carrier'            => 'POSTNL',
+            'contract'           => ['id' => 1, 'type' => 'MAIN'],
+            'packageTypes'       => ['PACKAGE', 'MAILBOX', 'UNFRANKED', 'DIGITAL_STAMP', 'SMALL_PACKAGE'],
+            'options'            => (object) [],
+            'physicalProperties' => [
+                'weight' => [
+                    'min' => ['value' => 1, 'unit' => 'g'],
+                    'max' => ['value' => 23000, 'unit' => 'g'],
+                ],
+            ],
+            'deliveryTypes'      => ['STANDARD_DELIVERY'],
+            'transactionTypes'   => [],
+            'collo'              => ['max' => 1],
+        ],
+    ];
+
+    // Enqueue one response per allowed package type (5 mapped V2 types from carrier contract definitions).
+    for ($i = 0; $i < 5; $i++) {
+        MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($responseData));
+    }
+});
 
 it(
     'creates carrier settings',
@@ -99,6 +133,9 @@ it(
 
     'mailbox package' => [
         'cart' => [
+            'shippingMethod' => [
+                'shippingAddress' => ['cc' => 'NL'],
+            ],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -116,6 +153,9 @@ it(
 
     'mailbox package that is too heavy for mailbox' => [
         'cart' => [
+            'shippingMethod' => [
+                'shippingAddress' => ['cc' => 'NL'],
+            ],
             'lines'   => [
                 [
                     'quantity' => 5,
@@ -133,6 +173,9 @@ it(
 
     'mailbox package with fit in mailbox' => [
         'cart' => [
+            'shippingMethod' => [
+                'shippingAddress' => ['cc' => 'NL'],
+            ],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -151,6 +194,9 @@ it(
 
     'digital stamp' => [
         'cart' => [
+            'shippingMethod' => [
+                'shippingAddress' => ['cc' => 'NL'],
+            ],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -168,6 +214,9 @@ it(
 
     'letter' => [
         'cart' => [
+            'shippingMethod' => [
+                'shippingAddress' => ['cc' => 'NL'],
+            ],
             'lines'   => [
                 [
                     'quantity' => 1,
@@ -222,8 +271,7 @@ it('uses international mailbox price when shipping address is non-local', functi
 
     $result = $service->createAllCarrierSettings(new PdkCart([
         'shippingMethod' => [
-            'shippingAddress'     => ['cc' => 'KH'],
-            'allowedPackageTypes' => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME],
+            'shippingAddress' => ['cc' => 'KH'],
         ],
         'lines' => [
             [

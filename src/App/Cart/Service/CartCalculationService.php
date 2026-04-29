@@ -7,63 +7,17 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
-use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
-use MyParcelNL\Pdk\Base\Service\WeightService;
-use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
-    /**
-     * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
-     */
-    private $countryService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface $countryService
-     */
-    public function __construct(CountryServiceInterface $countryService)
-    {
-        $this->countryService = $countryService;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     *
-     * @return \MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection
-     */
-    public function calculateAllowedPackageTypes(PdkCart $cart): PackageTypeCollection
-    {
-        return PackageTypeCollection::fromAll()
-            ->sortBySize(true)
-            ->filter(function (PackageType $packageType) use ($cart) {
-                $packageTypeName = $packageType->name;
-                if (DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME === $packageTypeName) {
-                    return true;
-                }
-
-                $allowed = $cart->lines->containsStrict('product.mergedSettings.packageType', $packageTypeName)
-                    && $this->isWeightUnderPackageTypeLimit($cart, $packageType);
-
-                if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName) {
-                    $cc = $cart->shippingMethod->shippingAddress->cc;
-
-                    return $allowed
-                        && $this->allowMailboxToCountry($cc)
-                        && $this->calculateMailboxPercentage($cart) <= 100.0;
-                }
-
-                return $allowed;
-            });
-    }
 
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
@@ -101,7 +55,6 @@ class CartCalculationService implements CartCalculationServiceInterface
 
         if ($hasDeliveryOptions) {
             $shippingMethod->minimumDropOffDelay = $cart->lines->max('product.settings.dropOffDelay');
-            $shippingMethod->allowedPackageTypes = $this->calculateAllowedPackageTypes($cart);
         }
 
         return $shippingMethod;
@@ -174,39 +127,44 @@ class CartCalculationService implements CartCalculationServiceInterface
     }
 
     /**
-     * @param  null|string $cc
+     * Get the unique package types requested by products in the cart.
      *
-     * @return bool
+     * Resolves INHERIT to the default package type. Returns deduplicated values.
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     *
+     * @return string[] PDK package type names
      */
-    private function allowMailboxToCountry(?string $cc): bool
+    public function getCartPackageTypes(PdkCart $cart): array
     {
-        if (null === $cc) {
-            return false;
-        }
+        return $cart->lines
+            ->pluck('product.settings.packageType')
+            ->map(static function ($packageType) {
+                if ((new TriStateService())->cast($packageType) === TriStateService::INHERIT) {
+                    return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
+                }
 
-        $countryIsLocal            = $this->countryService->isLocalCountry($cc);
-        $allowInternationalMailbox = Settings::all()->carrier->contains(function (CarrierSettings $carrierSettings) {
-            $allowInternationalMailbox = $carrierSettings->allowInternationalMailbox;
-            $hasDeliveryOptions        = $carrierSettings->deliveryOptionsEnabled;
-
-            return $allowInternationalMailbox && $hasDeliveryOptions;
-        });
-
-        return $countryIsLocal || $allowInternationalMailbox;
+                return $packageType;
+            })
+            ->unique()
+            ->values()
+            ->toArray();
     }
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart     $cart
-     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType $packageType
+     * Calculate the total cart weight including empty package weight for the given package type.
      *
-     * @return bool
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     * @param  string                                  $packageTypeName
+     *
+     * @return int
      */
-    private function isWeightUnderPackageTypeLimit(PdkCart $cart, PackageType $packageType): bool
+    public function getCartWeightForPackageType(PdkCart $cart, string $packageTypeName): int
     {
-        $limit  = Arr::get(Pdk::get('packageTypeWeightLimits'), $packageType->name, INF);
-        $weight = Pdk::get(WeightService::class)
-            ->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
-
-        return $weight <= $limit;
+        return Pdk::get(WeightServiceInterface::class)
+            ->addEmptyPackageWeight($cart->lines->getTotalWeight(), new PackageType([
+                'name' => $packageTypeName,
+                'id'   => DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$packageTypeName] ?? null,
+            ]));
     }
 }
