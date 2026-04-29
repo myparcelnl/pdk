@@ -387,8 +387,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $elements[] = (new InteractiveElement(CarrierSettings::DELIVERY_OPTIONS_ENABLED, Components::INPUT_TOGGLE))
             ->builder(function (FormOperationBuilder $builder) {
                 $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
-                    // Toggle settings are stored as TriState integers (-1/0/1); operands
-                    // must match so the frontend's strict `$eq` check succeeds.
+                    // Use the disabled scalar value here so it matches the toggle input's
+                    // value representation and the frontend's strict `$eq` check succeeds.
                     foreach ($this->deliveryOptionsResetService->getDeliveryOptionSettings() as $setting) {
                         $afterUpdate
                             ->setValue(TriStateService::DISABLED)
