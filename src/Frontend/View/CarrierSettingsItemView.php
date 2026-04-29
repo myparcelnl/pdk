@@ -24,6 +24,7 @@ use MyParcelNL\Pdk\Frontend\Form\Components;
 use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
@@ -268,14 +269,13 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $ageCheckElement = (new InteractiveElement($ageCheckDefinition->getCarrierSettingsKey(), Components::INPUT_TOGGLE))
                 ->builder(function (FormOperationBuilder $builder) use ($signatureKey, $onlyRecipientKey) {
                     $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) use ($signatureKey, $onlyRecipientKey) {
-                        // Toggle-typed fields on the JS side emit/receive booleans, so
-                        // operand literals must be true/false — not TriStateService::ENABLED
-                        // (int 1), which fails the frontend's strict `$eq` check.
+                        // Toggle settings are stored as TriState integers (-1/0/1); operands
+                        // must match so the frontend's strict `$eq` check succeeds.
                         if ($signatureKey) {
-                            $afterUpdate->setValue(true)->on($signatureKey)->if->eq(true);
+                            $afterUpdate->setValue(TriStateService::ENABLED)->on($signatureKey)->if->eq(TriStateService::ENABLED);
                         }
                         if ($onlyRecipientKey) {
-                            $afterUpdate->setValue(true)->on($onlyRecipientKey)->if->eq(true);
+                            $afterUpdate->setValue(TriStateService::ENABLED)->on($onlyRecipientKey)->if->eq(TriStateService::ENABLED);
                         }
                     });
                 });
@@ -387,11 +387,13 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $elements[] = (new InteractiveElement(CarrierSettings::DELIVERY_OPTIONS_ENABLED, Components::INPUT_TOGGLE))
             ->builder(function (FormOperationBuilder $builder) {
                 $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) {
+                    // Use the disabled scalar value here so it matches the toggle input's
+                    // value representation and the frontend's strict `$eq` check succeeds.
                     foreach ($this->deliveryOptionsResetService->getDeliveryOptionSettings() as $setting) {
                         $afterUpdate
-                            ->setValue(false)
+                            ->setValue(TriStateService::DISABLED)
                             ->on($setting)
-                            ->if->eq(false);
+                            ->if->eq(TriStateService::DISABLED);
                     }
                 });
             });

@@ -1809,22 +1809,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -2294,132 +2294,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -3431,22 +3431,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -3916,132 +3916,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -5053,22 +5053,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -5538,132 +5538,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -6675,22 +6675,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -7160,132 +7160,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -8297,22 +8297,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -8782,132 +8782,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -9919,22 +9919,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -10404,132 +10404,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -11541,22 +11541,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -12026,132 +12026,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -13163,22 +13163,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -13648,132 +13648,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -14785,22 +14785,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -15270,132 +15270,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -16407,22 +16407,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -16892,132 +16892,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -18029,22 +18029,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -18514,132 +18514,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -19702,22 +19702,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -20187,132 +20187,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -21324,22 +21324,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -21809,132 +21809,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
@@ -22946,22 +22946,22 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": true,
+                                                "$value": 1,
                                                 "$target": "exportOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": true
+                                                        "$eq": 1
                                                     }
                                                 ]
                                             }
@@ -23431,132 +23431,132 @@
                                     "$afterUpdate": [
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryOptions",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowStandardDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMorningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowEveningDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSameDayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowMondayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSaturdayDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowSignature",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowOnlyRecipient",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPriorityDelivery",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowPickupLocations",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
                                         },
                                         {
                                             "$setValue": {
-                                                "$value": false,
+                                                "$value": 0,
                                                 "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
-                                                        "$eq": false
+                                                        "$eq": 0
                                                     }
                                                 ]
                                             }
