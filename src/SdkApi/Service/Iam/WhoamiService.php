@@ -48,13 +48,31 @@ class WhoamiService extends AbstractIamApiService
         $logContext = ['operation' => 'whoamiGet'];
 
         try {
-            $response = $this->iamApi->whoamiGet();
+            $principal = $this->iamApi->whoamiGet();
 
             Logger::debug('Successfully called whoami', array_replace($logContext, [
-                'accountId' => $response->getAccountId(),
+                'accountId' => $principal->getAccountId(),
             ]));
 
-            return $response;
+            // @TODO Remove this manual mapping once the upstream OpenAPI Generator's
+            // discriminator handling is fixed and the IAM SDK is
+            // regenerated, whoamiGet() should return a proper `WhoamiGet200Response`
+            // (or the corrected `Principal`) directly and this whole block collapses
+            // to:
+            //     return $this->iamApi->whoamiGet();
+            //
+            // `role` and `impersonator` are intentionally not mapped: Principal
+            // exposes `RoleUser` / `PrincipalType`, while WhoamiGet200Response
+            // expects `Role` / `WhoamiGet200ResponseImpersonator` — different DTOs,
+            // no safe pass-through. No current PDK caller reads them.
+            return new WhoamiGet200Response([
+                'account_id'           => $principal->getAccountId(),
+                'platform'             => $principal->getPlatform(),
+                'principal'            => $principal,
+                'shop_ids'             => $principal->getShopIds(),
+                'features'             => $principal->getFeatures(),
+                'fulfilment_platforms' => $principal->getFulfilmentPlatforms(),
+            ]);
         } catch (ApiException $e) {
             Logger::error('Whoami API call failed', array_replace($logContext, [
                 'error'           => $e->getMessage(),
