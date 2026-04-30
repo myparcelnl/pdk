@@ -50,7 +50,7 @@ Adding a new divider in PHP means the next run picks it up automatically; renami
 
 **Note on enums:** there are several delivery-type-shaped classes in the SDK (`RefTypesDeliveryTypeV2`, `RefShipmentOptionsDeliveryTypeAll`, etc.). `ShipmentDefsDeliveryOptionsDeliveryNameV2` is the one whose values match the runtime translation keys. If a future SDK regen moves these constants, update the script.
 
-## package*type*\*
+## `package_type_*`
 
 **Pattern:** `package_type_<lowercase_name>`.
 
