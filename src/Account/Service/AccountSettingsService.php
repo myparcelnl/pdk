@@ -121,6 +121,14 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
+     * @return int
+     */
+    public function getOrderModeVersion(): int
+    {
+        return $this->featuresService->getOrderModeVersion();
+    }
+
+    /**
      * @return bool
      */
     public function usesOrderMode(): bool

@@ -107,6 +107,10 @@ class ExportOrderAction extends AbstractOrderAction
             return $this->exportShipments($orders);
         }
 
+        if (AccountSettings::getOrderModeVersion() >= 2) {
+            return $orders;
+        }
+
         $response = $this->exportOrders($orders);
 
         Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [

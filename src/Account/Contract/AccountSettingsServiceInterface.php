@@ -37,6 +37,11 @@ interface AccountSettingsServiceInterface
     public function hasTaxFields(): bool;
 
     /**
+     * @return int
+     */
+    public function getOrderModeVersion(): int;
+
+    /**
      * @return bool
      */
     public function usesOrderMode(): bool;
