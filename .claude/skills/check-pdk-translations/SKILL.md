@@ -45,7 +45,7 @@ Examples:
 
 ## Required input
 
-- **Plugin path** — absolute path to a plugin's translations directory (e.g. `/Users/freek.vanrijt/projects/docker-prestashop/modules/myparcelnl`). If the user did not provide one, ask. Do not invent a default.
+- **Plugin path** — absolute path to a plugin's translations directory (e.g. `/Users/user-name/projects/docker-prestashop/modules/myparcelnl`). If the user did not provide one, ask. Do not invent a default.
 
 ## Workflow
 
