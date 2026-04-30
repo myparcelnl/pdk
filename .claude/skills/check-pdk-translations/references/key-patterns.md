@@ -34,7 +34,7 @@ Reference for what generates each translation key the skill audits. Read this wh
 - explicit `null` overrides suppress the key,
 - unoverridden methods inherit the abstract delegate (typical for shipment-option definitions like `SignatureDefinition` → `settings_product_export_signature`).
 
-## settings*carrier*\* (static dividers)
+## `settings_carrier_*` (static dividers)
 
 **Pattern:** `settings_carrier_<divider_name>_title` (visible header). `_description` is optional and not auto-flagged.
 
