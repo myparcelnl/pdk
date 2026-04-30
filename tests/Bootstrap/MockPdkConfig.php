@@ -23,6 +23,7 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
 use MyParcelNL\Pdk\SdkApi\Service\Iam\WhoamiService;
 use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
@@ -110,6 +111,7 @@ class MockPdkConfig
 
             CapabilitiesService::class                  => get(MockCapabilitiesService::class),
             WhoamiService::class                        => get(MockWhoamiService::class),
+            CarrierCapabilitiesRepository::class        => get(MockCarrierCapabilitiesRepository::class),
 
             MemoryCacheStorage::class => get(MockMemoryCacheStorage::class),
         ];

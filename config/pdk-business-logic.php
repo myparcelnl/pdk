@@ -19,16 +19,14 @@ use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
-use MyParcelNL\Pdk\App\Order\Calculator\General\AllowedInCarrierCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\General\CarrierSpecificCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesPackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomsDeclarationCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\DeliveryDateExceptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\ExcludeParcelLockersCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\General\PackageTypeShipmentOptionsCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\General\TrackedCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -92,14 +90,16 @@ return [
 
     'orderCalculators' => factory(function () {
         return [
-            PackageTypeCalculator::class,
+            // Package type must be determined first — all subsequent calculations depend on it.
+            CapabilitiesPackageTypeCalculator::class,
+            // Resolve tri-state values from settings/product/carrier chain.
             TriStateOptionCalculator::class,
-            AllowedInCarrierCalculator::class,
-            PackageTypeShipmentOptionsCalculator::class,
-            TrackedCalculator::class,
+            // Apply capabilities constraints (requires/excludes/isRequired) on the resolved values.
+            CapabilitiesOptionCalculator::class,
+            // Exception: null delivery date for carriers that don't support it (API doesn't implement this yet).
+            DeliveryDateExceptionCalculator::class,
             LabelDescriptionCalculator::class,
             InsuranceCalculator::class,
-            CarrierSpecificCalculator::class,
             WeightCalculator::class,
             CustomerInformationCalculator::class,
             CustomsDeclarationCalculator::class,

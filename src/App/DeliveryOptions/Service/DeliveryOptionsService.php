@@ -24,7 +24,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
@@ -88,8 +87,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @var \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface
      */
     private $taxService;
-
-
 
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $cartCalculationService

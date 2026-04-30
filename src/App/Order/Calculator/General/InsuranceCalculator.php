@@ -13,21 +13,10 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
-    /**
-     * Schema path used to resolve carrier- and context-specific insurance tier deviations from the base JSON schemas.
-     * The JSON schemas act as an override for specific carrier/country/packageType/deliveryType combinations.
-     *
-     * @TODO INT-930: replace schema-based tier deviations with capabilities API tier lists when the API supports
-     *               explicit per-carrier tier definitions.
-     * @var string
-     */
-    public const INSURANCE_SCHEMA_PREFIX = 'properties.deliveryOptions.properties.shipmentOptions.properties.insurance';
-
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
      */
@@ -39,20 +28,14 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private $currencyService;
 
     /**
-     * @var \MyParcelNL\Pdk\Validation\Repository\SchemaRepository
-     */
-    private $schemaRepository;
-
-    /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
     public function __construct(PdkOrder $order)
     {
         parent::__construct($order);
 
-        $this->countryService   = Pdk::get(CountryServiceInterface::class);
-        $this->currencyService  = Pdk::get(CurrencyServiceInterface::class);
-        $this->schemaRepository = Pdk::get(SchemaRepository::class);
+        $this->countryService  = Pdk::get(CountryServiceInterface::class);
+        $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
     }
 
     /**
@@ -192,17 +175,10 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     }
 
     /**
-     * Resolve the list of allowed insurance tier amounts for the given carrier and order context.
+     * Resolve the list of allowed insurance tier amounts for the given carrier.
      *
-     * The JSON schema is consulted first: if it defines an explicit enum of tiers for this
-     * carrier/country/packageType/deliveryType combination, those tiers are used as-is.
-     * This allows platform-specific deviations (e.g. PostNL NL has finer low-end steps).
-     *
-     * When no schema enum is defined the carrier capabilities range is used as the fallback,
-     * producing tiers from min to max in 50 000-cent steps.
-     *
-     * @TODO INT-930: once the capabilities API supports explicit per-carrier tier lists, remove the
-     *               schema lookup entirely and always derive tiers from capabilities.
+     * Tiers are derived from the carrier's capabilities data (min/max insurance range),
+     * producing steps from min to max based on the range size.
      *
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
@@ -210,23 +186,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      */
     private function resolveAllowedInsuranceAmounts(Carrier $carrier): array
     {
-        $carrierName = $carrier->carrier ?? Pdk::get(PropositionService::class)->getDefaultCarrier()->carrier;
-
-        // @TODO INT-930: replace schema-based tier deviations with capabilities API tier lists.
-        $orderSchema = $this->schemaRepository->getOrderValidationSchema(
-            $carrierName,
-            $this->order->shippingAddress->cc ?? null,
-            $this->order->deliveryOptions->packageType,
-            $this->order->deliveryOptions->deliveryType
-        );
-
-        $schemaTiers = $this->schemaRepository->getValidOptions($orderSchema, self::INSURANCE_SCHEMA_PREFIX);
-
-        if (! empty($schemaTiers)) {
-            return $schemaTiers;
-        }
-
-        // No schema-defined tiers for this context: fall back to capabilities.
         $carrierSchema = Pdk::get(CarrierSchema::class)->setCarrier($carrier);
 
         return $carrierSchema->getAllowedInsuranceAmounts();
