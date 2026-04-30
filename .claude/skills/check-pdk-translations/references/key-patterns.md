@@ -24,7 +24,7 @@ Reference for what generates each translation key the skill audits. Read this wh
 
 `introspect_keys.php` invokes each method via PHP reflection, so inherited defaults from the abstract class are resolved natively. It emits the three base keys whenever the method returns non-null. Explicit `null` overrides correctly suppress the key (no false positives for definitions like `ExcludeParcelLockersDefinition`/`SaturdayDeliveryDefinition` that return `null` from one or more of these methods).
 
-## settings*product*\* (per-option)
+## `settings_product_*` (per-option)
 
 **Pattern:** `settings_product_<snake_case>` (base key, audited by the script). `_description` may exist at runtime but is not auto-emitted.
 
