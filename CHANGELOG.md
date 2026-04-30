@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.0](https://github.com/myparcelnl/pdk/compare/v3.4.2...v3.5.0) (2026-04-30)
+
+
+### :sparkles: New Features
+
+* add (default) 'export priority delivery'-setting ([#455](https://github.com/myparcelnl/pdk/issues/455)) ([8a50908](https://github.com/myparcelnl/pdk/commit/8a50908cfb07bb03b77eb09ec250095214cbe557))
+
+
+### :bug: Bug Fixes
+
+* **security:** fix CVE-2026-40175 and CVE-2025-62718 ([#457](https://github.com/myparcelnl/pdk/issues/457)) ([45b0f67](https://github.com/myparcelnl/pdk/commit/45b0f67f3f1936858371967f827b91f8f72f103d))
+
 ## [3.4.2](https://github.com/myparcelnl/pdk/compare/v3.4.1...v3.4.2) (2026-04-10)
 
 
