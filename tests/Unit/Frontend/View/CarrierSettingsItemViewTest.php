@@ -125,6 +125,7 @@ it('shows settings based on capabilities', function (PropositionCarrierFeaturesF
                 ->withShipmentOptions([PropositionCarrierFeatures::SHIPMENT_OPTION_PRIORITY_DELIVERY_NAME]);
         },
         [
+            CarrierSettings::EXPORT_PRIORITY_DELIVERY,
             CarrierSettings::ALLOW_PRIORITY_DELIVERY,
             CarrierSettings::PRICE_PRIORITY_DELIVERY,
         ],

@@ -59,6 +59,7 @@ return [
                     ],
                     CarrierSettings::EXPORT_AGE_CHECK                        => false,
                     CarrierSettings::EXPORT_RECEIPT_CODE                     => false,
+                    CarrierSettings::EXPORT_PRIORITY_DELIVERY                => false,
                     CarrierSettings::EXPORT_INSURANCE                        => false,
                     CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
                     CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 100,

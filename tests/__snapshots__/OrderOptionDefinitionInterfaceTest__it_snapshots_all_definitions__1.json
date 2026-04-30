@@ -61,7 +61,7 @@
   },
   {
     "class": "MyParcelNL\\Pdk\\App\\Options\\Definition\\PriorityDeliveryDefinition",
-    "carrierSettingsKey": "allowPriorityDelivery",
+    "carrierSettingsKey": "exportPriorityDelivery",
     "shipmentOptionsKey": "priorityDelivery"
   },
   {
