@@ -53,7 +53,7 @@ if [[ ! -f "$PDK_ROOT/vendor/autoload.php" ]]; then
   exit 1
 fi
 
-KEYS_TMPDIR=$(mktemp -d -t pdk_translations_keys.XXXXXX)
+KEYS_TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/pdk_translations_keys.XXXXXX")
 trap 'rm -rf "${KEYS_TMPDIR:-}"' EXIT
 
 for lang in "${LANGS[@]}"; do
