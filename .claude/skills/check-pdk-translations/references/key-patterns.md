@@ -2,7 +2,7 @@
 
 Reference for what generates each translation key the skill audits. Read this when extending `find_missing_keys.sh` or when the user asks about a category beyond the defaults.
 
-## shipment*options*\*
+## `shipment_options_*`
 
 **Pattern:** `shipment_options_<snake_case_capability_key>` (label, audited by the script). `_description` and `_subtext` siblings exist at runtime but are not auto-emitted (see "Description and subtext are optional" below).
 
@@ -12,7 +12,7 @@ Reference for what generates each translation key the skill audits. Read this wh
 
 **Description and subtext are optional.** `defineFormField` in `js-pdk/apps/admin/src/forms/helpers/defineFormField.ts` auto-attaches `description` and `subtext` translation lookups to every shipment-option field. For each label `shipment_options_X`, the form will also try `shipment_options_X_description` and `shipment_options_X_subtext`, but missing keys silently fall through (key returned, nothing rendered). The script therefore only flags missing **labels** — auto-flagging every description sibling produced false-positive noise during the skill's first iteration. The translate-mode workflow opts in to descriptions per category instead.
 
-## settings*carrier*\* (per-option)
+## `settings_carrier_*` (per-option)
 
 **Pattern:** `settings_carrier_<snake_case>` (base key, audited by the script). `_description` may exist at runtime but is not auto-emitted.
 
@@ -42,7 +42,7 @@ Reference for what generates each translation key the skill audits. Read this wh
 
 Adding a new divider in PHP means the next run picks it up automatically; renaming or moving the view requires updating the script.
 
-## delivery*type*\*
+## `delivery_type_*`
 
 **Pattern:** `delivery_type_<lowercase_name>`.
 
