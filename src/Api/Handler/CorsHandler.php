@@ -24,10 +24,10 @@ class CorsHandler
      */
     public function __construct(array $options = [])
     {
-        $allowedHosts = Pdk::get('allowedProxyHosts');
+        $allowedOrigins = Pdk::get('allowedProxyOrigins') ?? Pdk::get('allowedProxyHosts');
 
         $defaultOptions = [
-            'allowedOrigins'      => $allowedHosts,
+            'allowedOrigins'      => (array) $allowedOrigins,
             'allowedMethods'      => ['GET', 'POST', 'OPTIONS'],
             'allowedHeaders'      => ['Content-Type', 'Accept', 'Authorization', 'Origin'],
             'exposedHeaders'      => [],
