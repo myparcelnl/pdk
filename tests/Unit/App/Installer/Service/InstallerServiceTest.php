@@ -12,7 +12,9 @@ use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
 use Psr\Log\LoggerInterface;
 
 use function DI\factory;
@@ -34,15 +36,10 @@ usesShared(
                 CheckoutSettings::DELIVERY_OPTIONS_HEADER => 'default',
             ],
         ]),
-    ])
+    ]),
+    new UsesAccountMock(),
+    new UsesSettingsMock()
 );
-
-afterEach(function () {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
-    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
-
-    $settingsRepository->reset();
-});
 
 function expectSettingsToContain(array $values): void
 {

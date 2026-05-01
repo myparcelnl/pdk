@@ -188,6 +188,7 @@ return [
      */
     AddressesApiService::class                 => autowire(),
 
+
     /**
      * @todo remove in v3.0.0
      */
