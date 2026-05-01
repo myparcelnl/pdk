@@ -191,7 +191,7 @@ it('skips order v2 webhook when only the legacy order_id is present', function (
     setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
     storeOrderWithShipment('197');
 
-    $message = '[PDK]: Skipping order v2 shipment status change webhook without a shipment reference identifier';
+    $message = '[PDK]: Skipping order v2 shipment webhook without a shipment reference identifier';
     $result = dispatchWebhook(validHookBody('api-uuid-string'), false);
 
     expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
