@@ -97,23 +97,23 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
 
     /**
      * Returns:
-     *   2 — ORDER_MANAGEMENT (v2) takes precedence when both v1 and v2 are present
-     *   1 — LEGACY_ORDER_MANAGEMENT (v1) only
-     *   0 — neither present; shop uses shipments (fallback)
+     *   ORDER_MODE_V2 — ORDER_MANAGEMENT (v2) takes precedence when both v1 and v2 are present
+     *   ORDER_MODE_V1 — LEGACY_ORDER_MANAGEMENT (v1) only
+     *   ORDER_MODE_SHIPMENTS — neither present; shop uses shipments (fallback)
      *
      * @return int
      */
     public function getOrderModeVersion(): int
     {
         if ($this->hasFeature(self::FEATURE_ORDER_MANAGEMENT)) {
-            return 2;
+            return AccountFeaturesServiceInterface::ORDER_MODE_V2;
         }
 
         if ($this->hasFeature(self::FEATURE_LEGACY_ORDER_MANAGEMENT)) {
-            return 1;
+            return AccountFeaturesServiceInterface::ORDER_MODE_V1;
         }
 
-        return 0;
+        return AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS;
     }
 
     /**
