@@ -89,10 +89,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private $taxService;
 
-    /**
-     * @var \MyParcelNL\Pdk\Types\Service\TriStateService
-     */
-    private $triStateService;
 
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $cartCalculationService
@@ -102,7 +98,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface            $currencyService
      * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface         $dropOffService
      * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface              $taxService
-     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService                     $triStateService
      */
     public function __construct(
         CartCalculationServiceInterface  $cartCalculationService,
@@ -112,7 +107,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         CurrencyServiceInterface         $currencyService,
         DropOffServiceInterface          $dropOffService,
         TaxServiceInterface              $taxService,
-        TriStateService                  $triStateService
     ) {
         $this->cartCalculationService  = $cartCalculationService;
         $this->capabilitiesValidation  = $capabilitiesValidation;
@@ -121,7 +115,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $this->currencyService         = $currencyService;
         $this->dropOffService          = $dropOffService;
         $this->taxService              = $taxService;
-        $this->triStateService         = $triStateService;
     }
 
     /**
@@ -322,7 +315,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             }
 
             // Mailbox requires the cart contents to physically fit (product-level, not carrier-level).
-            if (DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName
+            if (
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName
                 && $this->cartCalculationService->calculateMailboxPercentage($cart) > 100.0
             ) {
                 continue;
@@ -400,13 +394,13 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             : [];
 
         return $allCarriers->filter(
-            function (Carrier $carrier) use ($carrierSettings, $capabilitiesByCarrier, $weight): bool {
+            function (Carrier $carrier) use ($carrierSettings, $capabilitiesByCarrier, $weight, $cc): bool {
                 if (! $this->isCarrierEnabled($carrierSettings, $carrier)) {
                     return false;
                 }
 
-                // Without capabilities (no recipient country), accept all enabled carriers.
-                if (empty($capabilitiesByCarrier)) {
+                // Without recipient set, accept all enabled carriers.
+                if (! $cc) {
                     return true;
                 }
 
