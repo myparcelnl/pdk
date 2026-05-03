@@ -80,7 +80,9 @@ final class ShipmentWebhookService
      */
     public function handleLabelCreated(array $content): void
     {
-        if (AccountFeaturesServiceInterface::ORDER_MODE_V2 !== $this->accountFeaturesService->getOrderModeVersion()) {
+        $orderModeVersion = (int) $this->accountFeaturesService->getOrderModeVersion();
+
+        if (AccountFeaturesServiceInterface::ORDER_MODE_V2 !== $orderModeVersion) {
             return;
         }
 
@@ -96,12 +98,11 @@ final class ShipmentWebhookService
     {
         $apiIdentifier = $this->getTrimmedValue($content, 'order_id');
 
-        if ('' === $apiIdentifier || ! method_exists($this->pdkOrderRepository, 'getByApiIdentifier')) {
+        if ('' === $apiIdentifier) {
             return [];
         }
 
-        /** @var null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder $order */
-        $order = call_user_func([$this->pdkOrderRepository, 'getByApiIdentifier'], $apiIdentifier);
+        $order = $this->pdkOrderRepository->getByApiIdentifier($apiIdentifier);
 
         if (! $order || ! $order->externalIdentifier) {
             return [];
@@ -350,10 +351,19 @@ final class ShipmentWebhookService
      */
     private function updateShipmentsFromApi(array $orderIds, array $content): void
     {
+        $shipmentContent = $this->getShipmentContent($content);
+        $shipmentId      = $this->getShipmentId($shipmentContent);
+
+        if (null === $shipmentId) {
+            $this->logSkippedWebhook('Skipping shipment webhook without a shipment id', $content);
+
+            return;
+        }
+
         Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [
             'orderIds'                      => $orderIds,
-            'shipmentIds'                   => [$content['shipment_id']],
-            'orderStatus'                   => OrderSettings::getStatus((int) ($content['status'] ?? null)),
+            'shipmentIds'                   => [$shipmentId],
+            'orderStatus'                   => OrderSettings::getStatus((int) ($shipmentContent['status'] ?? null)),
             'linkFirstShipmentToFirstOrder' => true,
         ]);
     }

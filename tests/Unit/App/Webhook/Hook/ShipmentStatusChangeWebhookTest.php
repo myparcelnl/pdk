@@ -146,14 +146,44 @@ it('dispatches update action when order_id is valid', function () {
 
 
 it('dispatches update action when shipment_reference_identifier is valid', function () {
-    $result = dispatchWebhook(validHookBody(null, 'REF-123'));
+    $body = validHookBody(null, 'REF-123');
+    unset($body['shipment_id']);
+    $body['shipmentId'] = 192031595;
+
+    $result = dispatchWebhook($body);
 
     expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
         ->toBeTrue()
         ->and($result['actions']
             ->getCalls()
             ->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS)['parameters']['orderIds'])
-        ->toBe(['REF-123']);
+        ->toBe(['REF-123'])
+        ->and($result['actions']
+            ->getCalls()
+            ->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS)['parameters']['shipmentIds'])
+        ->toBe([192031595]);
+});
+
+it('skips shipment updates when the shipment id is missing', function () {
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
+
+    $body = validHookBody('api-uuid-string');
+    unset($body['shipment_id']);
+
+    $result = dispatchWebhook($body, false);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeFalse()
+        ->and($result['logger']->getLogs('debug'))
+        ->toContain([
+            'level'   => 'debug',
+            'message' => '[PDK]: Skipping shipment webhook without a shipment id',
+            'context' => [
+                'shipment_id'                   => null,
+                'order_id'                      => 'api-uuid-string',
+                'shipment_reference_identifier' => null,
+            ],
+        ]);
 });
 
 it('updates existing shipments locally in order v2 without fetching shipment data from the api', function () {

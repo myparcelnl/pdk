@@ -25,6 +25,11 @@ interface PdkOrderRepositoryInterface extends ModelRepositoryInterface, Reposito
     public function find($id): ?PdkOrder;
 
     /**
+     * Find an order by its Order v1 API identifier.
+     */
+    public function getByApiIdentifier(string $uuid): ?PdkOrder;
+
+    /**
      * Create a collection of order objects from input data
      *
      * @param  string|string[] $orderIds - Single id, array of ids or string of semicolon-separated ids.
