@@ -11,8 +11,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\IamApi\Api\DefaultApi;
 use MyParcelNL\Sdk\Client\Generated\IamApi\ApiException;
-use MyParcelNL\Sdk\Client\Generated\IamApi\Model\WhoamiGet200Response;
-use Psr\Log\LogLevel;
+use MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -21,7 +20,7 @@ usesShared(new UsesMockPdkInstance());
 /**
  * Create a partial mock of WhoamiService that intercepts the DefaultApi call.
  */
-function makeWhoamiServiceWithMockedApi(WhoamiGet200Response $response): WhoamiService
+function makeWhoamiServiceWithMockedApi(FixedPrincipal $response): WhoamiService
 {
     TestBootstrapper::hasApiKey('test-api-key');
 
@@ -39,10 +38,10 @@ function makeWhoamiServiceWithMockedApi(WhoamiGet200Response $response): WhoamiS
     return $service;
 }
 
-it('returns a WhoamiGet200Response on success', function () {
+it('returns a FixedPrincipal on success', function () {
     TestBootstrapper::hasApiKey('test-api-key');
 
-    $expectedResponse = new WhoamiGet200Response([
+    $expectedResponse = new FixedPrincipal([
         'account_id' => '12345',
         'shop_ids'   => ['67890'],
         'features'   => ['ORDER_NOTES', 'DIRECT_PRINTING'],
@@ -52,7 +51,7 @@ it('returns a WhoamiGet200Response on success', function () {
 
     $response = $service->getWhoami();
 
-    expect($response)->toBeInstanceOf(WhoamiGet200Response::class)
+    expect($response)->toBeInstanceOf(FixedPrincipal::class)
         ->and($response->getFeatures())->toBe(['ORDER_NOTES', 'DIRECT_PRINTING']);
 });
 
