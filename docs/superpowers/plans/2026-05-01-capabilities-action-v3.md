@@ -517,16 +517,15 @@ git checkout -b feat/INT-1505-admin-capabilities-context origin/capabilities
 
 > If `feat/add-proxy-capabilities-endpoint` (the JS-PDK side of the proxy work) merges into `capabilities` first, branch off the merge commit. If the proxy branch is still separate, this plan adds the admin-side entry independently — `BackendEndpoint.ProxyCapabilities` parallels the existing `FrontendEndpoint.ProxyCapabilities` and points at the same backend route.
 
-### Task B1: Add `BackendEndpoint.ProxyCapabilities` + `AdminContextKey.Capabilities` + types
+### Task B1: Add `BackendEndpoint.ProxyCapabilities` + types
 
 **Files:**
 
 - Modify: `libs/common/src/data/endpoints.ts`
 - Modify: `apps/admin/src/types/sdk.types.ts`
 - Modify: `apps/admin/src/types/actions/endpoints.types.ts` + `parameters.types.ts`
-- Modify: wherever `AdminContextKey` is defined — add `Capabilities = 'capabilities'`
 
-`AdminContextKey.Capabilities` is purely a cache-routing key for the JS store — not a PHP PDK Context.
+The TanStack cache key for the new query reuses `BackendEndpoint.ProxyCapabilities` directly (existing pattern in `useFetchWebhooksQuery`). **Do not** add a `Capabilities` entry to `AdminContextKey` — that enum is reserved for real PHP-rendered contexts; mixing in JS-only cache keys misleads implementers into looking for a server-side context that doesn't exist.
 
 - [ ] **Step 1: Backend endpoint constant**
 
@@ -538,13 +537,7 @@ ProxyCapabilities = 'proxyCapabilities',
 
 > The string value matches `PdkCapabilitiesActions::PROXY_CAPABILITIES = 'proxyCapabilities'`. The PHP side registers under `PdkEndpoint::CONTEXT_SHARED`, so admin (backend) and frontend callers both resolve to the same action; only the JS-side enum constant differs by surface.
 
-- [ ] **Step 2: AdminContextKey enum**
-
-```ts
-Capabilities = 'capabilities',
-```
-
-- [ ] **Step 3: SDK definition for the new admin endpoint**
+- [ ] **Step 2: SDK definition for the new admin endpoint**
 
 In `apps/admin/src/types/sdk.types.ts`:
 
@@ -575,16 +568,16 @@ interface ProxyCapabilitiesDefinition extends PdkEndpointDefinition {
 
 Add `ProxyCapabilitiesDefinition` to the discriminated-union of admin endpoint definitions in the same file.
 
-- [ ] **Step 4: Wire endpoints + parameters**
+- [ ] **Step 3: Wire endpoints + parameters**
 
 In `apps/admin/src/types/actions/endpoints.types.ts`, add `BackendEndpoint.ProxyCapabilities` to the admin endpoint union. In `parameters.types.ts`, map it to the body type.
 
-- [ ] **Step 5: typecheck + commit**
+- [ ] **Step 4: typecheck + commit**
 
 ```bash
 yarn nx typecheck admin
-git add libs/common/src/data/endpoints.ts apps/admin/src/types/ apps/admin/src/data/
-git commit -m "feat(admin): add BackendEndpoint.ProxyCapabilities + AdminContextKey.Capabilities"
+git add libs/common/src/data/endpoints.ts apps/admin/src/types/
+git commit -m "feat(admin): add BackendEndpoint.ProxyCapabilities and admin SDK definition"
 ```
 
 ---
