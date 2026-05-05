@@ -170,6 +170,7 @@
           "subscription": -1,
           "packageTypes": ["package"],
           "deliveryTypes": ["standard", "pickup"],
+          "fakeDelivery": true,
           "shipmentOptionsPerPackageType": {
             "package": ["signature", "saturday_delivery", "insurance"]
           }
