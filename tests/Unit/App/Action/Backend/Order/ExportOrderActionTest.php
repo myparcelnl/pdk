@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
-use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
 use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
@@ -1055,12 +1054,9 @@ it(
         PdkOrderCollectionFactory $factory,
         bool                      $accountHasCarrierSmallPackageContract,
         bool                      $carrierHasInternationalMailboxAllowed,
-        callable                  $assertions
+        callable                  $assertions,
+        bool                      $orderMode
     ) {
-        factory(Account::class)->withSubscriptionFeatures([])->store();
-
-        MockApi::enqueue(new ExamplePostShipmentsResponse());
-
         $collection  = $factory
             ->store()
             ->make();
@@ -1205,4 +1201,5 @@ it(
                 };
             },
         ],
-    ]);
+    ])
+    ->with('order mode toggle');
