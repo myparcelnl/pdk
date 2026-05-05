@@ -9,8 +9,8 @@ use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException as CoreApiException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -57,8 +57,12 @@ class CapabilitiesAction implements ActionInterface
     }
 
     /**
-     * Pull the action's control parameter ($filterOptions) out of the payload and translate any
-     * PDK-camelCase argument names to SDK-snake_case so callers don't have to know SDK conventions.
+     * Pull the action's control parameter ($filterOptions) out of the payload and translate the
+     * incoming top-level keys from the actual capabilities API shape (camelCase, e.g.
+     * `physicalProperties`, `packageType`) to the SDK PHP model's local names (snake_case, e.g.
+     * `physical_properties`, `package_type`). The mapping is read from
+     * `CapabilitiesPostCapabilitiesRequestV2::attributeMap()` so it stays in sync with the SDK
+     * automatically — no hardcoded field list to maintain. Already-snake_case keys pass through.
      *
      * @param  array $payload
      *
@@ -69,27 +73,35 @@ class CapabilitiesAction implements ActionInterface
         $shouldFilterOptions = ! empty($payload['filterOptions']);
         unset($payload['filterOptions']);
 
-        if (isset($payload['packageType'])) {
-            $payload['package_type'] = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$payload['packageType']]
-                ?? $payload['packageType'];
-            unset($payload['packageType']);
+        $camelToSnake = array_flip(CapabilitiesPostCapabilitiesRequestV2::attributeMap());
+        $translated   = [];
+
+        foreach ($payload as $key => $value) {
+            $translated[$camelToSnake[$key] ?? $key] = $value;
         }
 
-        if (isset($payload['deliveryType'])) {
-            $payload['delivery_type'] = DeliveryOptions::DELIVERY_TYPES_V2_MAP[$payload['deliveryType']]
-                ?? $payload['deliveryType'];
-            unset($payload['deliveryType']);
-        }
-
-        return [$payload, $shouldFilterOptions];
+        return [$translated, $shouldFilterOptions];
     }
 
+    /**
+     * Extract the action's payload. The PDK SDK wraps request bodies as
+     * {"data": {"<property>": <body>}} where <property> matches CapabilitiesEndpointRequest::
+     * getProperty() (i.e. "capabilities"). Older callers may post the body unwrapped — handle
+     * both. Query-string params are merged in for backward compatibility with the original
+     * proxy implementation.
+     */
     private function getRequestData(Request $request): array
     {
-        $body     = json_decode($request->getContent(), true);
-        $bodyData = is_array($body) ? ($body['data'] ?? $body) : [];
-        $query    = $request->query->all();
+        $body = json_decode($request->getContent(), true);
 
+        if (is_array($body)) {
+            $wrapped  = $body['data']['capabilities'] ?? null;
+            $bodyData = is_array($wrapped) ? $wrapped : ($body['data'] ?? $body);
+        } else {
+            $bodyData = [];
+        }
+
+        $query = $request->query->all();
         unset($query['action'], $query['pdk_action'], $query['path']);
 
         return array_replace($bodyData, $query);

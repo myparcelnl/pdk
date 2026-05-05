@@ -172,7 +172,7 @@ it('filters options to registered keys when filterOptions=true is in the body', 
     }
 });
 
-it('accepts PDK-camelCase packageType and forwards SDK-snake_case to the API', function () {
+it('translates capabilities-API camelCase top-level keys to SDK-PHP snake_case before calling the SDK', function () {
     $request = Request::create(
         '/',
         'POST',
@@ -180,7 +180,7 @@ it('accepts PDK-camelCase packageType and forwards SDK-snake_case to the API', f
         [],
         [],
         ['CONTENT_TYPE' => 'application/json'],
-        '{"cc":"NL","packageType":"package","deliveryType":"standard"}'
+        '{"recipient":{"countryCode":"NL"},"physicalProperties":{"weight":{"value":2000,"unit":"g"}},"packageType":"PACKAGE","deliveryType":"STANDARD"}'
     );
 
     /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService $mockService */
@@ -190,8 +190,11 @@ it('accepts PDK-camelCase packageType and forwards SDK-snake_case to the API', f
         ->withArgs(function (array $payload) {
             return ! array_key_exists('packageType', $payload)
                 && ! array_key_exists('deliveryType', $payload)
-                && ($payload['package_type'] ?? null) === \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2::PACKAGE
-                && ($payload['delivery_type'] ?? null) === \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2::STANDARD;
+                && ! array_key_exists('physicalProperties', $payload)
+                && ($payload['package_type'] ?? null) === 'PACKAGE'
+                && ($payload['delivery_type'] ?? null) === 'STANDARD'
+                && ($payload['physical_properties']['weight'] ?? null) === ['value' => 2000, 'unit' => 'g']
+                && ($payload['recipient']['countryCode'] ?? null) === 'NL';
         })
         ->andReturn([]);
 
@@ -207,6 +210,53 @@ it('accepts PDK-camelCase packageType and forwards SDK-snake_case to the API', f
     $response = $action->handle($request);
 
     expect($response->getStatusCode())->toBe(200);
+});
+
+it('reads filterOptions from the query string (kept out of the body so it does not pollute the API payload)', function () {
+    $request = Request::create(
+        '/?filterOptions=true',
+        'POST',
+        [],
+        [],
+        [],
+        ['CONTENT_TYPE' => 'application/json'],
+        '{"recipient":{"countryCode":"NL"}}'
+    );
+
+    $fakeResults = [
+        [
+            'carrier' => 'POSTNL',
+            'options' => [
+                'requiresSignature' => ['available' => true],
+                'bogusOption'       => ['available' => true],
+            ],
+        ],
+    ];
+
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService $mockService */
+    $mockService = Mockery::mock(CapabilitiesService::class);
+    $mockService->shouldReceive('getCapabilities')
+        ->once()
+        ->withArgs(function (array $payload) {
+            return ! array_key_exists('filterOptions', $payload);
+        })
+        ->andReturn($fakeResults);
+
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Handler\CorsHandler $mockCorsHandler */
+    $mockCorsHandler = Mockery::mock(CorsHandler::class);
+    $mockCorsHandler->shouldReceive('addCorsHeaders')
+        ->once()
+        ->andReturnUsing(static fn($_request, $response) => $response);
+
+    mockPdkProperty(CorsHandler::class, $mockCorsHandler);
+
+    $action   = new CapabilitiesAction($mockService);
+    $response = $action->handle($request);
+    $payload  = json_decode($response->getContent(), true);
+
+    expect($response->getStatusCode())->toBe(200)
+        ->and($payload['results'][0]['options'])->toHaveKey('requiresSignature')
+        ->and($payload['results'][0]['options'])->not->toHaveKey('bogusOption');
 });
 
 it('does not forward filterOptions to the SDK args (control flag must be stripped before calling getCapabilities)', function () {
