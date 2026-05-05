@@ -18,8 +18,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
 use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
