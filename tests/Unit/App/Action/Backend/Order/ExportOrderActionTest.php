@@ -1054,8 +1054,8 @@ it(
     function (
         PdkOrderCollectionFactory $factory,
         bool                      $accountHasCarrierSmallPackageContract,
-        callable                  $assertions,
-        bool                      $carrierHasInternationalMailboxAllowed
+        bool                      $carrierHasInternationalMailboxAllowed,
+        callable                  $assertions
     ) {
         factory(Account::class)->withSubscriptionFeatures([])->store();
 

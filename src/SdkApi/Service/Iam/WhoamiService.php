@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\SdkApi\Service\Iam;
 
 use MyParcelNL\Sdk\Client\Generated\IamApi\Api\DefaultApi;
 use MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal;
+use Override;
 
 /**
  * Service for calling the IAM /whoami endpoint.
@@ -31,6 +32,11 @@ class WhoamiService extends AbstractIamApiService
     public function __construct()
     {
         $this->iamApi = new DefaultApi($this->createGuzzleClient(), $this->getApiConfig());
+    }
+
+    protected function getApiClients(): array
+    {
+        return [$this->iamApi];
     }
 
     /**
