@@ -14,7 +14,6 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int         $emptyMailboxWeight
  * @property int         $emptyParcelWeight
  * @property int         $emptyPackageSmallWeight
- * @property bool        $orderMode
  * @property int|bool    $orderStatusMail
  * @property bool        $processDirectly
  * @property bool        $saveCustomerAddress
@@ -43,7 +42,6 @@ final class OrderSettings extends AbstractSettingsModel
     public const EMPTY_MAILBOX_WEIGHT       = 'emptyMailboxWeight';
     public const EMPTY_PARCEL_WEIGHT        = 'emptyParcelWeight';
     public const EMPTY_PACKAGE_SMALL_WEIGHT = 'emptyPackageSmallWeight';
-    public const ORDER_MODE                 = 'orderMode';
     public const PROCESS_DIRECTLY           = 'processDirectly';
     public const SAVE_CUSTOMER_ADDRESS      = 'saveCustomerAddress';
     public const SEND_NOTIFICATION_AFTER    = 'sendNotificationAfter';
@@ -65,7 +63,6 @@ final class OrderSettings extends AbstractSettingsModel
         self::EMPTY_MAILBOX_WEIGHT       => 0,
         self::EMPTY_PARCEL_WEIGHT        => 0,
         self::EMPTY_PACKAGE_SMALL_WEIGHT => 0,
-        self::ORDER_MODE                 => false,
         self::PROCESS_DIRECTLY           => Settings::OPTION_NONE,
         self::SAVE_CUSTOMER_ADDRESS      => false,
         self::SEND_NOTIFICATION_AFTER    => Settings::OPTION_NONE,
@@ -86,7 +83,6 @@ final class OrderSettings extends AbstractSettingsModel
         self::EMPTY_MAILBOX_WEIGHT       => 'int',
         self::EMPTY_PARCEL_WEIGHT        => 'int',
         self::EMPTY_PACKAGE_SMALL_WEIGHT => 'int',
-        self::ORDER_MODE                 => 'bool',
         self::PROCESS_DIRECTLY           => 'string',
         self::SAVE_CUSTOMER_ADDRESS      => 'bool',
         self::SEND_NOTIFICATION_AFTER    => TriStateService::TYPE_STRING,

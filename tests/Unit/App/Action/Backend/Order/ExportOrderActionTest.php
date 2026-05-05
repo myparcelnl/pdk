@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
@@ -40,6 +41,7 @@ use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostShipmentsValidationErrorResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -109,13 +111,16 @@ function assertOnlyOptionEnabled(array $options, string $targetKey): void
  */
 function exportWithSetting(bool $orderMode, CarrierSettingsFactory $carrierSettingsFactory): array
 {
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+    );
+
     $fakeCarrier = factory(Carrier::class)
         ->withCarrier('POSTNL') // Carrier needs to actually exist in the maps to ID, so lets use POSTNL as a default here
         ->withAllCapabilities()
         ->make();
 
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarrier($fakeCarrier->carrier, $carrierSettingsFactory)
         ->store();
 
@@ -284,13 +289,16 @@ it('exports order with receipt code setting enabled', function (bool $orderMode)
     ->with('order mode toggle');
 
 it('exports order with insurance setting enabled', function (bool $orderMode) {
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+    );
+
     $fakeCarrier = factory(Carrier::class)
         ->withCarrier('POSTNL')
         ->withAllCapabilities()
         ->make();
 
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarrier(
             $fakeCarrier->carrier,
             factory(CarrierSettings::class)
@@ -337,6 +345,10 @@ it('does not add export options when carrier lacks the capability', function (bo
         ->withOptions([]) // no shipment options at all
         ->make();
 
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+    );
+
     // Enable ALL carrier export settings — none should appear in the request body
     factory(CarrierSettings::class, $fakeCarrier->carrier)
         ->withExportSignature(true)
@@ -347,9 +359,7 @@ it('does not add export options when carrier lacks the capability', function (bo
         ->withExportHideSender(true)
         ->store();
 
-    factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
-        ->store();
+    factory(Settings::class)->store();
 
     $collection = factory(PdkOrderCollection::class)
         ->push(
@@ -399,8 +409,11 @@ it('does not include exclude_parcel_lockers when carrier lacks the capability', 
         ->withOptions(['requiresSignature' => []])
         ->make();
 
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+    );
+
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarrier($fakeCarrier->carrier)
         ->store();
 
@@ -437,7 +450,8 @@ it('does not include exclude_parcel_lockers when carrier lacks the capability', 
         expect($options)->not->toHaveKey('exclude_parcel_lockers');
     } else {
         if (array_key_exists('exclude_parcel_lockers', $options)) {
-            expect($options['exclude_parcel_lockers'])->toBe(0,
+            expect($options['exclude_parcel_lockers'])->toBe(
+                0,
                 'exclude_parcel_lockers should be 0 when carrier lacks the capability'
             );
         }
@@ -464,7 +478,6 @@ it('does not include exclude_parcel_lockers for 18+ products when carrier lacks 
         ->make();
 
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode(false))
         ->withCarrier($fakeCarrier->carrier)
         ->store();
 
@@ -601,8 +614,11 @@ it('exports orders and returns correct action response shape', function (
         ->pluck('deliveryOptions.carrier.carrier')
         ->toArray();
 
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT] : []
+    );
+
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
@@ -663,8 +679,11 @@ it('merges partial payload with existing order', function (
         ->pluck('deliveryOptions.carrier.carrier')
         ->toArray();
 
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT] : []
+    );
+
     factory(Settings::class)
-        ->withOrder(factory(OrderSettings::class)->withOrderMode($orderMode))
         ->withCarriers($carriers, $carrierSettingsFactory)
         ->store();
 
@@ -764,6 +783,8 @@ it('exports multicollo order', function (
     PdkOrderCollectionFactory $orderFactory,
     int                       $expectedNumberOfShipments
 ) {
+    TestBootstrapper::hasSubscriptionFeatures([]);
+
     $orders = new Collection($orderFactory->make());
 
     $orderFactory->store();
@@ -825,6 +846,8 @@ it('exports multicollo order', function (
     ->with('multicolloPdkOrders');
 
 it('adds api errors as notifications if shipment export fails', function () {
+    TestBootstrapper::hasSubscriptionFeatures([]);
+
     $errorResponse = new ExamplePostShipmentsValidationErrorResponse();
     MockApi::enqueue($errorResponse);
 
@@ -873,6 +896,8 @@ it('adds api errors as notifications if shipment export fails', function () {
 });
 
 it('exports order and directly returns barcode if concept shipments is off', function () {
+    TestBootstrapper::hasSubscriptionFeatures([]);
+
     factory(Settings::class)
         ->withOrder(factory(OrderSettings::class)->withConceptShipments(false))
         ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
@@ -910,6 +935,8 @@ it('exports order and directly returns barcode if concept shipments is off', fun
 it(
     'exports pickup order without signature',
     function (?RetailLocationFactory $pickupLocation, ShippingAddressFactory $shippingAddress) {
+        TestBootstrapper::hasSubscriptionFeatures([]);
+
         factory(CarrierSettings::class)
             ->withId((string) RefTypesCarrier::POSTNL)
             ->withExportSignature(false)
@@ -970,6 +997,8 @@ it(
 it(
     'exports evening order',
     function (ShippingAddressFactory $shippingAddress) {
+        TestBootstrapper::hasSubscriptionFeatures([]);
+
         factory(CarrierSettings::class)
             ->withId((string) RefTypesCarrier::POSTNL)
             ->store();
@@ -1037,8 +1066,11 @@ it(
             ->withAllowInternationalMailbox($carrierHasInternationalMailboxAllowed)
             ->store();
 
+        TestBootstrapper::hasSubscriptionFeatures(
+            $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+        );
+
         factory(OrderSettings::class)
-            ->withOrderMode($orderMode)
             ->withConceptShipments(true)
             ->store();
 

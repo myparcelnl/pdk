@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Tests\Api\Response\ExampleAclResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetAccountsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository;
@@ -37,10 +36,7 @@ function executeUpdateAccount(
     MockSdkApiHandler::enqueue(
         new ExampleContractDefinitionsResponse()
     );
-    MockApi::enqueue(
-        new ExampleGetAccountsResponse($accounts),
-        new ExampleAclResponse()
-    );
+    MockApi::enqueue(new ExampleGetAccountsResponse($accounts));
 
     // Call the actual update account endpoint (uses the mocked responses above)
     $request = new Request(

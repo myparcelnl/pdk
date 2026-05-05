@@ -16,7 +16,6 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
@@ -36,7 +35,6 @@ it('posts order notes if order has notes', function (
 
     (new FactoryCollection([
         factory(Account::class)->withShops()->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES]),
-        factory(OrderSettings::class)->withOrderMode(true),
         $ordersFactory,
         $notesFactory,
     ]))->store();
@@ -126,10 +124,6 @@ it('does not post order notes if account does not have feature', function (PdkOr
 
     $orderCollection = $factory->store()
         ->make();
-
-    factory(OrderSettings::class)
-        ->withOrderMode(true)
-        ->store();
 
     Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
         'orderIds' => (new Collection($orderCollection))
