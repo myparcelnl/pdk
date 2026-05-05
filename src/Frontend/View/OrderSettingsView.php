@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\App\Order\Contract\OrderStatusServiceInterface;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Frontend\Form\Element\Concern\ElementBuilderWithOptionsInterface;
 use MyParcelNL\Pdk\Frontend\Form\Element\NumberInput;
 use MyParcelNL\Pdk\Frontend\Form\Element\SelectInput;
@@ -43,14 +42,13 @@ final class OrderSettingsView extends NewAbstractSettingsView
         $this->formBuilder->add(
             new SettingsDivider($this->label('general')),
 
-            $this->createOrderModeToggle(),
-            (new ToggleInput(OrderSettings::CONCEPT_SHIPMENTS))->visibleWhen(OrderSettings::ORDER_MODE, false),
+            new ToggleInput(OrderSettings::CONCEPT_SHIPMENTS),
 
             (new SelectInput(OrderSettings::PROCESS_DIRECTLY))
                 ->withOptions($orderStatusOptions, $orderStatusOptionsFlags),
 
             new ToggleInput(OrderSettings::SEND_RETURN_EMAIL),
-            (new ToggleInput(OrderSettings::SAVE_CUSTOMER_ADDRESS))->visibleWhen(OrderSettings::ORDER_MODE, false),
+            new ToggleInput(OrderSettings::SAVE_CUSTOMER_ADDRESS),
             new ToggleInput(OrderSettings::SHARE_CUSTOMER_INFORMATION),
 
             new SettingsDivider($this->label('status')),
@@ -91,26 +89,5 @@ final class OrderSettingsView extends NewAbstractSettingsView
         return OrderSettings::ID;
     }
 
-    /**
-     * The toggle should be readonly and show a hint if the account does not have order mode enabled.
-     *
-     * @return \MyParcelNL\Pdk\Frontend\Form\Element\Contract\ElementBuilderInterface|\MyParcelNL\Pdk\Frontend\Form\Element\ToggleInput
-     */
-    private function createOrderModeToggle()
-    {
-        $usesOrderMode = AccountSettings::usesOrderMode();
 
-        $orderModeToggle = (new ToggleInput(OrderSettings::ORDER_MODE))
-            ->withProps(
-                $usesOrderMode
-                    ? []
-                    : ['subtext' => 'hint_enable_order_mode_backoffice']
-            );
-
-        if (! $usesOrderMode) {
-            $orderModeToggle->readOnlyWhen();
-        }
-
-        return $orderModeToggle;
-    }
 }
