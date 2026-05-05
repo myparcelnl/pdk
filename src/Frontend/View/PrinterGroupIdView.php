@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
@@ -18,10 +19,28 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 final class PrinterGroupIdView extends NewAbstractSettingsView
 {
     /**
+     * @var \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface
+     */
+    private $featuresService;
+
+    public function __construct(AccountFeaturesServiceInterface $featuresService)
+    {
+        parent::__construct();
+
+        $this->featuresService = $featuresService;
+    }
+
+    /**
      * @return void
      */
     protected function addElements(): void
     {
+        // Direct printing is gated on the IAM whoami DIRECT_PRINTING feature; without it the
+        // printing API rejects the request, so don't render the printer-group selector at all.
+        if (! $this->featuresService->canUseDirectPrinting()) {
+            return;
+        }
+
         $request = new Request([
             'method' => 'GET',
             'path'   => 'printer-groups',

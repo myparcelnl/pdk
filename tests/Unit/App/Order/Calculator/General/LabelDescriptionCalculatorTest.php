@@ -143,7 +143,7 @@ it('gets label description from settings', function (?string $setting, $labelDes
         'static setting, empty string set in order'                  => [
             'setting' => 'value',
             'input'   => '',
-            'output'  => '',
+            'output'  => 'value', // the desired behavior is to fall back to default when empty, as coerceString will force null to be empty string
         ],
         'setting containing placeholder, order value set to inherit' => [
             'setting' => '[ORDER_ID]',

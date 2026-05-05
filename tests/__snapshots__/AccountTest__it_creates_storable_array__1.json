@@ -13,7 +13,6 @@
   },
   "generalSettings": {
     "environment": "production",
-    "orderMode": false,
     "hasCarrierContract": false,
     "hasCarrierSmallPackageContract": false
   },
