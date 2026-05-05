@@ -15,8 +15,8 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
  * - Order v2 takes precedence over Order v1 when both are present
  * - Fallback to shipments mode (0) when neither v1 nor v2 is present
  *
- * Feature keys are defined here as constants rather than spread through the
- * codebase, so that renames in the IAM API only require a change in one place.
+ * Feature keys are defined on AccountFeaturesServiceInterface so that renames
+ * in the IAM API only require a change in one place.
  *
  * The underlying features are populated by {@see \MyParcelNL\Pdk\App\Action\Backend\Account\UpdateSubscriptionFeaturesAction},
  * which fetches them from the IAM /whoami endpoint via {@see \MyParcelNL\Pdk\SdkApi\Service\Iam\WhoamiService}.
@@ -26,29 +26,29 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
     /**
      * IAM feature key: order notes (create/edit/delete order notes).
      */
-    public const FEATURE_ORDER_NOTES = 'ORDER_NOTES';
+    public const FEATURE_ORDER_NOTES = AccountFeaturesServiceInterface::FEATURE_ORDER_NOTES;
 
     /**
      * IAM feature key: direct printing (print labels without download step).
      */
-    public const FEATURE_DIRECT_PRINTING = 'DIRECT_PRINTING';
+    public const FEATURE_DIRECT_PRINTING = AccountFeaturesServiceInterface::FEATURE_DIRECT_PRINTING;
 
     /**
      * IAM feature key: My Returns portal access.
      * Not yet present in the IAM API; defaults to false until the API surfaces it.
      */
-    public const FEATURE_MY_RETURNS = 'MY_RETURNS';
+    public const FEATURE_MY_RETURNS = AccountFeaturesServiceInterface::FEATURE_MY_RETURNS;
 
     /**
      * IAM feature key: Order management v2 (Vasco/Order v2 platform).
      * When present, Order v2 behaviour applies. Wins over LEGACY_ORDER_MANAGEMENT.
      */
-    public const FEATURE_ORDER_MANAGEMENT = 'ORDER_MANAGEMENT';
+    public const FEATURE_ORDER_MANAGEMENT = AccountFeaturesServiceInterface::FEATURE_ORDER_MANAGEMENT;
 
     /**
      * IAM feature key: Order management v1 (legacy order mode).
      */
-    public const FEATURE_LEGACY_ORDER_MANAGEMENT = 'LEGACY_ORDER_MANAGEMENT';
+    public const FEATURE_LEGACY_ORDER_MANAGEMENT = AccountFeaturesServiceInterface::FEATURE_LEGACY_ORDER_MANAGEMENT;
 
     /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
@@ -68,7 +68,7 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function canUseOrderNotes(): bool
     {
-        return $this->hasFeature(self::FEATURE_ORDER_NOTES);
+        return $this->hasFeature(AccountFeaturesServiceInterface::FEATURE_ORDER_NOTES);
     }
 
     /**
@@ -76,7 +76,7 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function canUseDirectPrinting(): bool
     {
-        return $this->hasFeature(self::FEATURE_DIRECT_PRINTING);
+        return $this->hasFeature(AccountFeaturesServiceInterface::FEATURE_DIRECT_PRINTING);
     }
 
     /**
@@ -84,7 +84,7 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function canUseMyReturns(): bool
     {
-        return $this->hasFeature(self::FEATURE_MY_RETURNS);
+        return $this->hasFeature(AccountFeaturesServiceInterface::FEATURE_MY_RETURNS);
     }
 
     /**
@@ -105,11 +105,11 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function getOrderModeVersion(): int
     {
-        if ($this->hasFeature(self::FEATURE_ORDER_MANAGEMENT)) {
+        if ($this->hasFeature(AccountFeaturesServiceInterface::FEATURE_ORDER_MANAGEMENT)) {
             return AccountFeaturesServiceInterface::ORDER_MODE_V2;
         }
 
-        if ($this->hasFeature(self::FEATURE_LEGACY_ORDER_MANAGEMENT)) {
+        if ($this->hasFeature(AccountFeaturesServiceInterface::FEATURE_LEGACY_ORDER_MANAGEMENT)) {
             return AccountFeaturesServiceInterface::ORDER_MODE_V1;
         }
 

@@ -224,6 +224,59 @@ class Shipment extends Model
     }
 
     /**
+     * Builds a Shipment from supported webhook fields only. The mapping is explicit because webhook payloads can use
+     * multiple aliases for the same shipment attribute.
+     *
+     * @param  array     $payload
+     * @param  string    $orderId
+     * @param  null|self $existingShipment
+     * @param  bool      $preserveExistingStatus
+     *
+     * @return self
+     * @throws \Exception
+     */
+    public static function fromWebhookPayload(
+        array $payload,
+        string $orderId,
+        ?self $existingShipment = null,
+        bool $preserveExistingStatus = false
+    ): self {
+        $data = self::getWebhookPayloadData($payload, $orderId);
+
+        if ($existingShipment) {
+            $existingData = $existingShipment->toStorableArray();
+
+            if ($preserveExistingStatus && isset($data['status'], $existingData['status'])) {
+                unset($data['status']);
+            }
+
+            $data = array_replace($existingData, $data);
+        }
+
+        return new self($data);
+    }
+
+    /**
+     * @param  array $payload
+     *
+     * @return null|int
+     */
+    public static function getIdFromWebhookPayload(array $payload): ?int
+    {
+        $payload = self::getWebhookShipmentContent($payload);
+
+        foreach (['shipment_id', 'shipmentId', 'id'] as $key) {
+            $value = self::getTrimmedValue($payload, $key);
+
+            if ('' !== $value && is_numeric($value)) {
+                return (int) $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the model as an array that can be saved in a database.
      *
      * @return array
@@ -247,6 +300,125 @@ class Shipment extends Model
         $array['carrier'] = $this->attributes['carrier'];
 
         return $array;
+    }
+
+    /**
+     * @param  array  $payload
+     * @param  string $orderId
+     *
+     * @return array
+     */
+    private static function getWebhookPayloadData(array $payload, string $orderId): array
+    {
+        $payload = self::getWebhookShipmentContent($payload);
+
+        return self::filterEmptyValues([
+            'id'                       => self::getIdFromWebhookPayload($payload),
+            'orderId'                  => $orderId,
+            'referenceIdentifier'      => $orderId,
+            'externalIdentifier'       => self::getFirstTrimmedValue($payload, [
+                'external_identifier',
+                'external_shipment_identifier',
+                'externalIdentifier',
+            ]),
+            'barcode'                  => self::getFirstTrimmedValue($payload, ['barcode']),
+            'linkConsumerPortal'       => self::getFirstTrimmedValue($payload, [
+                'link_consumer_portal',
+                'linkConsumerPortal',
+                'track_trace_url',
+                'trackTraceUrl',
+            ]),
+            'multiColloMainShipmentId' => self::getFirstTrimmedValue($payload, [
+                'multi_collo_main_shipment_id',
+                'multiColloMainShipmentId',
+            ]),
+            'status'                   => self::getNullableInt($payload, 'status'),
+            'shipmentType'             => self::getNullableInt($payload, 'shipment_type'),
+            'isReturn'                 => self::getNullableBool($payload, 'is_return'),
+            'multiCollo'               => self::getNullableBool($payload, 'multi_collo'),
+        ]);
+    }
+
+    /**
+     * @param  array $payload
+     *
+     * @return array
+     */
+    public static function getWebhookShipmentContent(array $payload): array
+    {
+        return isset($payload['shipment']) && is_array($payload['shipment'])
+            ? array_replace($payload, $payload['shipment'])
+            : $payload;
+    }
+
+    /**
+     * @param  array  $payload
+     * @param  string $key
+     *
+     * @return string
+     */
+    private static function getTrimmedValue(array $payload, string $key): string
+    {
+        return isset($payload[$key]) ? trim((string) $payload[$key]) : '';
+    }
+
+    /**
+     * @param  array    $payload
+     * @param  string[] $keys
+     *
+     * @return null|string
+     */
+    private static function getFirstTrimmedValue(array $payload, array $keys): ?string
+    {
+        foreach ($keys as $key) {
+            $value = self::getTrimmedValue($payload, $key);
+
+            if ('' !== $value) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array  $payload
+     * @param  string $key
+     *
+     * @return null|int
+     */
+    private static function getNullableInt(array $payload, string $key): ?int
+    {
+        $value = self::getTrimmedValue($payload, $key);
+
+        return '' === $value || ! is_numeric($value) ? null : (int) $value;
+    }
+
+    /**
+     * @param  array  $payload
+     * @param  string $key
+     *
+     * @return null|bool
+     */
+    private static function getNullableBool(array $payload, string $key): ?bool
+    {
+        if (! array_key_exists($key, $payload)) {
+            return null;
+        }
+
+        return filter_var($payload[$key], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    }
+
+    /**
+     * @param  array $data
+     *
+     * @return array
+     */
+    private static function filterEmptyValues(array $data): array
+    {
+        return array_filter($data, static function ($value): bool {
+            return null !== $value && '' !== $value;
+        });
     }
 
     /**

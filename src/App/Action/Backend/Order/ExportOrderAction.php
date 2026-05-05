@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
@@ -107,7 +108,7 @@ class ExportOrderAction extends AbstractOrderAction
             return $this->exportShipments($orders);
         }
 
-        if (AccountSettings::getOrderModeVersion() >= 2) {
+        if (AccountSettings::getOrderModeVersion() >= AccountFeaturesServiceInterface::ORDER_MODE_V2) {
             return $orders;
         }
 
