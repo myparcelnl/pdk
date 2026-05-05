@@ -30,7 +30,7 @@ class WhoamiService extends AbstractIamApiService
 
     public function __construct()
     {
-        $this->iamApi = new DefaultApi(null, $this->getApiConfig());
+        $this->iamApi = new DefaultApi($this->createGuzzleClient(), $this->getApiConfig());
     }
 
     /**

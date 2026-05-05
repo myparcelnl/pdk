@@ -7,8 +7,10 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use MyParcelNL\Pdk\Account\Collection\ShopCollection;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
@@ -87,6 +89,28 @@ final class TestBootstrapper
         factory(AccountSettings::class)
             ->withApiKey($apiKey)
             ->store();
+    }
+
+    /**
+     * Layer subscription features onto the currently stored account.
+     * If no account exists yet, a default one is created via {@see hasAccount()} so callers
+     * can use this in isolation without worrying about ordering.
+     *
+     * @param  string[] $features IAM whoami feature keys; see PdkAccountFeaturesService::FEATURE_*
+     */
+    public static function hasSubscriptionFeatures(array $features): void
+    {
+        /** @var PdkAccountRepositoryInterface $repo */
+        $repo    = Pdk::get(PdkAccountRepositoryInterface::class);
+        $account = $repo->getAccount();
+
+        if (null === $account) {
+            self::hasAccount();
+            $account = $repo->getAccount();
+        }
+
+        $account->subscriptionFeatures = new Collection($features);
+        $repo->store($account);
     }
 
     public static function hasShippingMethods(): void

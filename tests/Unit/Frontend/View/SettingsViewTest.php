@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\View;
 
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePrinterGroupIdResponse;
@@ -29,6 +30,8 @@ it('gets settings view', function (string $class) {
 })->with('settingsViews');
 
 it('loads and shows printer groups', function (?array $groups, $bah = false) {
+    TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_DIRECT_PRINTING]);
+
     MockApi::enqueue(new ExamplePrinterGroupIdResponse($groups));
 
     $view = Pdk::get(PrinterGroupIdView::class);

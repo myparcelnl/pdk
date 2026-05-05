@@ -3,12 +3,9 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Facade\AccountSettings;
-use MyParcelNL\Pdk\Facade\Config;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
-use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
