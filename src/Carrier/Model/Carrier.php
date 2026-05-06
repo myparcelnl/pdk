@@ -207,7 +207,7 @@ class Carrier extends SdkBackedModel
     /**
      * Single source of truth for the option allowlist applied across both serialization paths
      * — this method (used by Carrier::attributesToArray on contract-definition data) and
-     * FetchCapabilitiesAction (on contextual capabilities responses). Keeping the filter in one
+     * CapabilitiesAction (on contextual capabilities responses). Keeping the filter in one
      * place prevents drift between initial render and drill-down responses.
      *
      * @param  array<string, mixed> $options camelCase option keys → option metadata
