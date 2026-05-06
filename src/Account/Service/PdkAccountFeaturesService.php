@@ -24,33 +24,6 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
 {
     /**
-     * IAM feature key: order notes (create/edit/delete order notes).
-     */
-    public const FEATURE_ORDER_NOTES = AccountFeaturesServiceInterface::FEATURE_ORDER_NOTES;
-
-    /**
-     * IAM feature key: direct printing (print labels without download step).
-     */
-    public const FEATURE_DIRECT_PRINTING = AccountFeaturesServiceInterface::FEATURE_DIRECT_PRINTING;
-
-    /**
-     * IAM feature key: My Returns portal access.
-     * Not yet present in the IAM API; defaults to false until the API surfaces it.
-     */
-    public const FEATURE_MY_RETURNS = AccountFeaturesServiceInterface::FEATURE_MY_RETURNS;
-
-    /**
-     * IAM feature key: Order management v2 (Vasco/Order v2 platform).
-     * When present, Order v2 behaviour applies. Wins over LEGACY_ORDER_MANAGEMENT.
-     */
-    public const FEATURE_ORDER_MANAGEMENT = AccountFeaturesServiceInterface::FEATURE_ORDER_MANAGEMENT;
-
-    /**
-     * IAM feature key: Order management v1 (legacy order mode).
-     */
-    public const FEATURE_LEGACY_ORDER_MANAGEMENT = AccountFeaturesServiceInterface::FEATURE_LEGACY_ORDER_MANAGEMENT;
-
-    /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
     private $accountRepository;
