@@ -137,11 +137,15 @@ class CapabilitiesValidationService
     }
 
     /**
-     * Get the highest max weight across all carriers in a capabilities response.
+     * Get the highest defined max weight across all carriers in a capabilities response.
+     *
+     * Carriers without a defined max weight are skipped — they don't cap the result,
+     * but other carriers' defined maxes still contribute. Returns null only when no
+     * carrier in the response defines a max weight at all.
      *
      * @param  array $capabilities
      *
-     * @return null|int Max weight in grams, or null if no weight constraint is defined
+     * @return null|int Max weight in grams, or null if no carrier defines a max weight
      */
     private function getHighestMaxWeight(array $capabilities): ?int
     {
@@ -151,7 +155,7 @@ class CapabilitiesValidationService
             $props = $capability->getPhysicalProperties();
 
             if (! $props || ! $props->getWeight() || ! $props->getWeight()->getMax()) {
-                return null;
+                continue;
             }
 
             $carrierMax = (int) $props->getWeight()->getMax()->getValue();
