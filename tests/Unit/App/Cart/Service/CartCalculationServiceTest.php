@@ -273,3 +273,32 @@ it('calculates shipping method in cart', function (array $lines, array $result) 
         ],
     ],
 ]);
+
+it('resolves cart package types from merged settings so child products inherit parent package type', function () {
+    /** @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $service */
+    $service = Pdk::get(CartCalculationServiceInterface::class);
+
+    $cart = new PdkCart([
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'isDeliverable' => true,
+                    'weight'        => 1,
+                    'settings'      => [
+                        'packageType' => TriStateService::INHERIT,
+                    ],
+                    'parent'        => [
+                        'isDeliverable' => true,
+                        'weight'        => 1,
+                        'settings'      => [
+                            'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ]);
+
+    expect($service->getCartPackageTypes($cart))->toBe([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+});

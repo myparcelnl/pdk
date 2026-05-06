@@ -106,7 +106,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         CountryServiceInterface          $countryService,
         CurrencyServiceInterface         $currencyService,
         DropOffServiceInterface          $dropOffService,
-        TaxServiceInterface              $taxService,
+        TaxServiceInterface              $taxService
     ) {
         $this->cartCalculationService  = $cartCalculationService;
         $this->capabilitiesValidation  = $capabilitiesValidation;

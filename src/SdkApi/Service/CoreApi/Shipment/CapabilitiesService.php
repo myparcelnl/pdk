@@ -78,15 +78,15 @@ class CapabilitiesService extends AbstractShipmentApiService
      * This is useful for building checkout flows with dynamic delivery options.
      *
      * @param array $parameters Array of shipment parameters including:
-     *                          - carrier: string- Carrier identifier
      *                          - recipient: array (required) - Recipient address details (cc, postal_code, etc.)
-     *                          - sender: array - Sender address details
-     *                          - package_type: string - Package type (package, mailbox, letter, etc.)
-     *                          - physical_properties: array - Weight, dimensions
-     *                          - options: array - Requested shipment options
-     *                          - delivery_type: string - Delivery type (standard, morning, evening)
-     *                          - direction: string - Direction (outbound, inbound)
-     *                          - pickup: array - Pickup location details
+     *                          - carrier: string (optional) - Carrier identifier
+     *                          - sender: array (optional) - Sender address details
+     *                          - package_type: string (optional) - Package type (package, mailbox, letter, etc.)
+     *                          - physical_properties: array (optional) - Weight, dimensions
+     *                          - options: array (optional) - Requested shipment options
+     *                          - delivery_type: string (optional) - Delivery type (standard, morning, evening)
+     *                          - direction: string (optional) - Direction (outbound, inbound)
+     *                          - pickup: array (optional) - Pickup location details
      *
      * @return RefCapabilitiesResponseCapabilityV2[] The capabilities response with available options
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException On API errors

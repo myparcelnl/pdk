@@ -129,7 +129,9 @@ class CartCalculationService implements CartCalculationServiceInterface
     /**
      * Get the unique package types requested by products in the cart.
      *
-     * Resolves INHERIT to the default package type. Returns deduplicated values.
+     * Reads from mergedSettings so child variants inherit their parent product's
+     * package type. INHERIT (no parent or parent also INHERIT) resolves to the
+     * default package type.
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
@@ -138,7 +140,7 @@ class CartCalculationService implements CartCalculationServiceInterface
     public function getCartPackageTypes(PdkCart $cart): array
     {
         return $cart->lines
-            ->pluck('product.settings.packageType')
+            ->pluck('product.mergedSettings.packageType')
             ->map(static function ($packageType) {
                 if ((new TriStateService())->cast($packageType) === TriStateService::INHERIT) {
                     return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;

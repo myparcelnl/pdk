@@ -58,13 +58,14 @@ class PdkShippingMethod extends Model
     /**
      * Resolve allowed package types from checkout settings for this shipping method.
      *
-     * The allowedShippingMethods setting maps shipping method IDs to their configured
-     * package type: off (not in map), INHERIT (dynamic from product settings), or a
-     * specific package type name (fixed).
+     * The allowedShippingMethods setting maps each key (a package type name or
+     * TriStateService::INHERIT) to a list of shipping method IDs assigned to it.
+     * A single shipping method may appear under multiple keys — all matches contribute.
      *
-     * - Not configured: all carrier-supported package types
-     * - INHERIT: all carrier-supported package types
-     * - Specific type: only that package type
+     * - Setting empty (unconfigured): all carrier-supported package types (legacy default)
+     * - Configured but method not in any list: empty collection (off)
+     * - Method assigned to INHERIT (alone or alongside specific types): all carrier-supported package types
+     * - Method assigned to one or more specific package types: each of those package types
      *
      * @return \MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection
      */
@@ -73,19 +74,39 @@ class PdkShippingMethod extends Model
         $allowedShippingMethods = Settings::get(
             CheckoutSettings::ALLOWED_SHIPPING_METHODS,
             CheckoutSettings::ID
-        );
+        ) ?? [];
 
-        $configured = $allowedShippingMethods[$this->id] ?? null;
-
-        // Not configured or INHERIT: all carrier-supported package types.
-        if (! $configured || TriStateService::INHERIT === $configured) {
+        if (empty($allowedShippingMethods)) {
             return $this->getAllCarrierPackageTypes();
         }
 
-        // Specific package type configured for this shipping method.
-        $id = DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$configured] ?? null;
+        $matchedKeys = [];
 
-        return new PackageTypeCollection($id ? [['name' => $configured, 'id' => $id]] : []);
+        foreach ($allowedShippingMethods as $key => $shippingMethodIds) {
+            if (is_array($shippingMethodIds) && in_array((string) $this->id, $shippingMethodIds, true)) {
+                $matchedKeys[] = (string) $key;
+            }
+        }
+
+        if (empty($matchedKeys)) {
+            return new PackageTypeCollection();
+        }
+
+        if (in_array((string) TriStateService::INHERIT, $matchedKeys, true)) {
+            return $this->getAllCarrierPackageTypes();
+        }
+
+        $packageTypes = [];
+
+        foreach ($matchedKeys as $matchedKey) {
+            $id = DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$matchedKey] ?? null;
+
+            if (null !== $id) {
+                $packageTypes[] = ['name' => $matchedKey, 'id' => $id];
+            }
+        }
+
+        return new PackageTypeCollection($packageTypes);
     }
 
     /**
