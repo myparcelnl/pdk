@@ -95,8 +95,9 @@ class CapabilitiesAction implements ActionInterface
         $body = json_decode($request->getContent(), true);
 
         if (is_array($body)) {
-            $wrapped  = $body['data']['capabilities'] ?? null;
-            $bodyData = is_array($wrapped) ? $wrapped : ($body['data'] ?? $body);
+            $data    = $body['data'] ?? null;
+            $wrapped = is_array($data) ? ($data['capabilities'] ?? null) : null;
+            $bodyData = is_array($wrapped) ? $wrapped : (is_array($data) ? $data : $body);
         } else {
             $bodyData = [];
         }
