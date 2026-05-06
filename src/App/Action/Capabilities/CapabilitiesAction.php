@@ -70,7 +70,10 @@ class CapabilitiesAction implements ActionInterface
      */
     private function prepareSdkArgs(array $payload): array
     {
-        $shouldFilterOptions = ! empty($payload['filterOptions']);
+        $filterOptions        = $payload['filterOptions'] ?? false;
+        $shouldFilterOptions  = is_bool($filterOptions)
+            ? $filterOptions
+            : filter_var($filterOptions, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
         unset($payload['filterOptions']);
 
         $camelToSnake = array_flip(CapabilitiesPostCapabilitiesRequestV2::attributeMap());
