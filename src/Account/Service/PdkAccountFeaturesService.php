@@ -41,7 +41,7 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function canUseOrderNotes(): bool
     {
-        return $this->hasFeature(AccountFeaturesServiceInterface::FEATURE_ORDER_NOTES);
+        return $this->hasFeature(self::FEATURE_ORDER_NOTES);
     }
 
     /**
@@ -49,7 +49,7 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function canUseDirectPrinting(): bool
     {
-        return $this->hasFeature(AccountFeaturesServiceInterface::FEATURE_DIRECT_PRINTING);
+        return $this->hasFeature(self::FEATURE_DIRECT_PRINTING);
     }
 
     /**
@@ -57,7 +57,7 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function canUseMyReturns(): bool
     {
-        return $this->hasFeature(AccountFeaturesServiceInterface::FEATURE_MY_RETURNS);
+        return $this->hasFeature(self::FEATURE_MY_RETURNS);
     }
 
     /**
@@ -78,15 +78,15 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
      */
     public function getOrderModeVersion(): int
     {
-        if ($this->hasFeature(AccountFeaturesServiceInterface::FEATURE_ORDER_MANAGEMENT)) {
-            return AccountFeaturesServiceInterface::ORDER_MODE_V2;
+        if ($this->hasFeature(self::FEATURE_ORDER_MANAGEMENT)) {
+            return self::ORDER_MODE_V2;
         }
 
-        if ($this->hasFeature(AccountFeaturesServiceInterface::FEATURE_LEGACY_ORDER_MANAGEMENT)) {
-            return AccountFeaturesServiceInterface::ORDER_MODE_V1;
+        if ($this->hasFeature(self::FEATURE_LEGACY_ORDER_MANAGEMENT)) {
+            return self::ORDER_MODE_V1;
         }
 
-        return AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS;
+        return self::ORDER_MODE_SHIPMENTS;
     }
 
     /**
