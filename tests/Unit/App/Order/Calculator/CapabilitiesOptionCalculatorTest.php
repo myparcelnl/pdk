@@ -16,8 +16,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
 use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
@@ -79,13 +77,6 @@ function calculateOrder(string $carrier, array $shipmentOptions = []): PdkOrder
     return $service->calculate($order);
 }
 
-function resetCache(): void
-{
-    /** @var MockMemoryCacheStorage $storage */
-    $storage = Pdk::get(StorageInterface::class);
-    $storage->reset();
-}
-
 it('forces isRequired option to ENABLED', function () {
     $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
 
@@ -94,8 +85,6 @@ it('forces isRequired option to ENABLED', function () {
     factory(Carrier::class)
         ->withAllCapabilities($carrier)
         ->store();
-
-    resetCache();
 
     factory(Settings::class)
         ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
@@ -127,8 +116,6 @@ it('applies requires: when option A is enabled and requires B, B is forced ENABL
     factory(Carrier::class)
         ->withAllCapabilities($carrier)
         ->store();
-
-    resetCache();
 
     factory(Settings::class)
         ->withCarrier($carrier, [
@@ -174,8 +161,6 @@ it('applies excludes: when option A is enabled and excludes B, B is forced DISAB
         ->withAllCapabilities($carrier)
         ->store();
 
-    resetCache();
-
     factory(Settings::class)
         ->withCarrier($carrier, [
             CarrierSettings::ALLOW_SIGNATURE      => true,
@@ -220,8 +205,6 @@ it('forces DISABLED for options not present in capabilities response', function 
         ->withAllCapabilities($carrier)
         ->store();
 
-    resetCache();
-
     factory(Settings::class)
         ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
         ->store();
@@ -246,8 +229,6 @@ it('cascades requires: A requires B, B requires C, all get enabled', function ()
     factory(Carrier::class)
         ->withAllCapabilities($carrier)
         ->store();
-
-    resetCache();
 
     factory(Settings::class)
         ->withCarrier($carrier, [
@@ -303,8 +284,6 @@ it('sets contract ID from capabilities on delivery options', function () {
         ->withAllCapabilities($carrier)
         ->store();
 
-    resetCache();
-
     factory(Settings::class)
         ->withCarrier($carrier)
         ->store();
@@ -329,7 +308,6 @@ it('keeps option DISABLED when carrier settings allowX is false, even if capabil
         ->withAllCapabilities($carrier)
         ->store();
 
-    resetCache();
 
     // Merchant explicitly disabled signature in carrier settings.
     factory(Settings::class)
@@ -363,8 +341,6 @@ it('allows option when carrier settings allow it and capabilities include it', f
         ->withAllCapabilities($carrier)
         ->store();
 
-    resetCache();
-
     factory(Settings::class)
         ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
         ->store();
@@ -397,7 +373,6 @@ it('disables every shipment option when the carrier capability is missing for th
         ->withAllCapabilities($carrier)
         ->store();
 
-    resetCache();
 
     // Permissive carrier settings — but capabilities will say "no support" anyway.
     factory(Settings::class)

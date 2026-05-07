@@ -6,8 +6,10 @@ namespace MyParcelNL\Pdk\Tests\Uses;
 
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
+use Symfony\Contracts\Service\ResetInterface;
 
 /**
  * Pest hook that resets the SdkApi MockHandler around each test and enables
@@ -23,6 +25,7 @@ class UsesSdkApiMock implements BaseMock
     public function beforeEach(): void
     {
         MockSdkApiHandler::reset();
+        $this->resetStorage();
 
         $repo = Pdk::get(CarrierCapabilitiesRepository::class);
 
@@ -34,11 +37,25 @@ class UsesSdkApiMock implements BaseMock
     public function afterEach(): void
     {
         MockSdkApiHandler::reset();
+        $this->resetStorage();
 
         $repo = Pdk::get(CarrierCapabilitiesRepository::class);
 
         if ($repo instanceof MockCarrierCapabilitiesRepository) {
             $repo->disablePassthrough();
+        }
+    }
+
+    /**
+     * Clear cached capabilities/contract-definitions between tests so newly enqueued
+     * MockSdkApiHandler responses are actually used (the PDK instance is shared per file).
+     */
+    private function resetStorage(): void
+    {
+        $storage = Pdk::get(StorageInterface::class);
+
+        if ($storage instanceof ResetInterface) {
+            $storage->reset();
         }
     }
 }

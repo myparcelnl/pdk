@@ -18,8 +18,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
 use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
@@ -59,13 +57,6 @@ function pkgCapabilityResult(
     ];
 }
 
-function resetStorageCache(): void
-{
-    /** @var MockMemoryCacheStorage $storage */
-    $storage = Pdk::get(StorageInterface::class);
-    $storage->reset();
-}
-
 it('keeps package type when it is available in capabilities', function () {
     $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
 
@@ -79,8 +70,6 @@ it('keeps package type when it is available in capabilities', function () {
                     ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX']))
         )
         ->store();
-
-    resetStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier)
@@ -123,8 +112,6 @@ it('falls back to next available type when selected type is not in capabilities'
                     ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX']))
         )
         ->store();
-
-    resetStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier)
@@ -181,8 +168,6 @@ it('keeps international mailbox when allowInternationalMailbox is enabled', func
         )
         ->store();
 
-    resetStorageCache();
-
     factory(Settings::class)
         ->withCarrier($carrier, [CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX => true])
         ->store();
@@ -224,8 +209,6 @@ it('falls back when international mailbox is blocked by merchant setting', funct
                     ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX']))
         )
         ->store();
-
-    resetStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier, [CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX => false])
@@ -298,8 +281,6 @@ it('falls back to default when no capabilities match at all', function () {
                     ->withCapabilityPackageTypes(['PACKAGE']))
         )
         ->store();
-
-    resetStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier)

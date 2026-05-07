@@ -16,8 +16,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockMemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
 use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
@@ -54,13 +52,6 @@ function deliveryTypeCapabilityResult(string $carrier, array $deliveryTypes): ar
     ];
 }
 
-function resetDeliveryTypeStorageCache(): void
-{
-    /** @var MockMemoryCacheStorage $storage */
-    $storage = Pdk::get(StorageInterface::class);
-    $storage->reset();
-}
-
 it('keeps delivery type when it is supported by the carrier capability', function () {
     $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
 
@@ -74,8 +65,6 @@ it('keeps delivery type when it is supported by the carrier capability', functio
                     ->withCapabilityPackageTypes(['PACKAGE']))
         )
         ->store();
-
-    resetDeliveryTypeStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier)
@@ -117,8 +106,6 @@ it('resets to standard when current delivery type is not supported', function ()
                     ->withCapabilityPackageTypes(['PACKAGE']))
         )
         ->store();
-
-    resetDeliveryTypeStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier)
@@ -162,8 +149,6 @@ it('falls back to first available type when standard is not supported', function
         )
         ->store();
 
-    resetDeliveryTypeStorageCache();
-
     factory(Settings::class)
         ->withCarrier($carrier)
         ->store();
@@ -205,8 +190,6 @@ it('resets to standard when carrier capability is missing entirely', function ()
                     ->withCapabilityPackageTypes(['PACKAGE']))
         )
         ->store();
-
-    resetDeliveryTypeStorageCache();
 
     factory(Settings::class)
         ->withCarrier($carrier)
