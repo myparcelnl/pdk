@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesPackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -92,6 +93,7 @@ it('keeps package type when it is available in capabilities', function () {
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withPhysicalProperties(factory(PdkPhysicalProperties::class)->withManualWeight(1000))
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
@@ -148,6 +150,7 @@ it('falls back to next available type when selected type is not in capabilities'
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withPhysicalProperties(factory(PdkPhysicalProperties::class)->withManualWeight(1000))
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
@@ -191,6 +194,7 @@ it('keeps international mailbox when allowInternationalMailbox is enabled', func
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('BE'))
+        ->withPhysicalProperties(factory(PdkPhysicalProperties::class)->withManualWeight(1000))
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
@@ -263,6 +267,7 @@ it('falls back when international mailbox is blocked by merchant setting', funct
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('BE'))
+        ->withPhysicalProperties(factory(PdkPhysicalProperties::class)->withManualWeight(1000))
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
@@ -316,6 +321,7 @@ it('falls back to default when no capabilities match at all', function () {
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withPhysicalProperties(factory(PdkPhysicalProperties::class)->withManualWeight(1000))
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)

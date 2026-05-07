@@ -121,7 +121,7 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
             ],
             'physicalProperties' => [
                 'weight' => [
-                    'min' => ['value' => 1, 'unit' => 'g'],
+                    'min' => ['value' => 0, 'unit' => 'g'],
                     'max' => ['value' => 30000, 'unit' => 'g'],
                 ],
             ],

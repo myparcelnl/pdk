@@ -39,24 +39,6 @@ class CapabilitiesValidationService
     }
 
     /**
-     * Fetch capabilities for a specific country + package type, indexed by carrier name.
-     *
-     * @param  string $cc            ISO 3166-1 alpha-2 country code
-     * @param  string $v2PackageType V2 package type name (e.g. 'PACKAGE', 'MAILBOX')
-     *
-     * @return array<string, RefCapabilitiesResponseCapabilityV2>
-     */
-    public function getCapabilitiesForPackageType(string $cc, string $v2PackageType): array
-    {
-        return $this->indexByCarrier(
-            $this->capabilitiesRepository->getCapabilities([
-                'recipient'    => ['cc' => $cc],
-                'package_type' => $v2PackageType,
-            ])
-        );
-    }
-
-    /**
      * Index a capabilities response array by carrier name.
      *
      * @param  RefCapabilitiesResponseCapabilityV2[] $capabilities
@@ -88,7 +70,12 @@ class CapabilitiesValidationService
         $weights = [];
 
         foreach ($allowedTypes as $packageTypeName => $v2PackageType) {
-            $capabilities = $this->getCapabilitiesForPackageType($cc, $v2PackageType);
+            $capabilities = $this->indexByCarrier(
+                $this->capabilitiesRepository->getCapabilities([
+                    'recipient'    => ['country_code' => $cc],
+                    'package_type' => $v2PackageType,
+                ])
+            );
             $weights[$packageTypeName] = $this->getHighestMaxWeight($capabilities);
         }
 
@@ -96,7 +83,10 @@ class CapabilitiesValidationService
     }
 
     /**
-     * Check whether a capability's weight constraints allow the given weight.
+     * Whether the given weight (grams) fits within the capability's weight constraints.
+     *
+     * Min and max are both checked when present. Capabilities without a weight constraint
+     * accept any weight.
      *
      * @param  RefCapabilitiesResponseCapabilityV2 $capability
      * @param  int                                 $weight Weight in grams

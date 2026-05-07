@@ -387,10 +387,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         string $v2PackageType,
         int $weight
     ) {
-        // Fetch capabilities for this specific country + package type combination.
-        // Cached per cc+packageType — accurate weight limits per package type.
+        // Cache key: cc+package_type — shareable across orders with different weights.
+        // Carrier presence and weight constraints are evaluated client-side per carrier.
         $capabilitiesByCarrier = $cc
-            ? $this->capabilitiesValidation->getCapabilitiesForPackageType($cc, $v2PackageType)
+            ? $this->capabilitiesValidation->indexByCarrier(
+                $this->capabilitiesValidation->getRepository()->getCapabilities([
+                    'recipient'    => ['country_code' => $cc],
+                    'package_type' => $v2PackageType,
+                ])
+            )
             : [];
 
         return $allCarriers->filter(

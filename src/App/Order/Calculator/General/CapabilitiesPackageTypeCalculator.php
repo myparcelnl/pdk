@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 
 /**
  * Validates the order's package type against carrier capabilities and falls back
@@ -55,20 +56,26 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
             return;
         }
 
-        $capabilities = $this->capabilitiesService->getCapabilitiesForPackageType($cc, $v2CurrentType);
-        $capability   = $capabilities[$carrier->carrier] ?? null;
+        $weight = (int) $this->order->physicalProperties->totalWeight;
 
-        // International mailbox: capabilities determine availability, but the merchant must also enable it.
-        if ($this->isInternationalMailboxBlocked($currentType, $cc, $carrier)) {
-            $capability = null;
-        }
+        // Cache key: cc+package_type — shareable across orders/carriers and reused
+        // by getPackageTypeWeights in fallback. Carrier and weight are filtered client-side.
+        $currentCapability = $this->capabilitiesService->indexByCarrier(
+            $this->capabilitiesService->getRepository()->getCapabilities([
+                'recipient'    => ['country_code' => $cc],
+                'package_type' => $v2CurrentType,
+            ])
+        )[$carrier->carrier] ?? null;
 
-        // Current type supported for this context — no change needed.
-        if ($capability) {
+        $supported = $currentCapability
+            && $this->capabilitiesService->capabilitySupportsWeight($currentCapability, $weight)
+            && ! $this->isInternationalMailboxBlocked($currentType, $cc, $carrier);
+
+        if ($supported) {
             return;
         }
 
-        $this->fallbackToNextAvailableType($cc, $carrier);
+        $this->fallbackToNextAvailableType($cc, $carrier, $weight);
     }
 
     /**
@@ -96,44 +103,61 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
     }
 
     /**
-     * Fall back to the next available package type based on capabilities weight ordering.
-     *
-     * @param  string                              $cc
-     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
-     *
-     * @return void
+     * Fall back to the next available package type, sorted by this carrier's max
+     * weight per type ascending — picks the smallest type that still fits.
      */
-    private function fallbackToNextAvailableType(string $cc, Carrier $carrier): void
+    private function fallbackToNextAvailableType(string $cc, Carrier $carrier, int $weight): void
     {
-        $allV2Types   = DeliveryOptions::PACKAGE_TYPES_V2_MAP;
-        $typeWeights  = $this->capabilitiesService->getPackageTypeWeights($cc, $allV2Types);
+        // Collect (pdkName => capability) for types this carrier supports at this weight.
+        $availableByType = [];
 
-        // Filter to types that have capabilities for this carrier and are not blocked.
-        $availableTypes = [];
-
-        foreach ($allV2Types as $pdkName => $v2Name) {
+        foreach (DeliveryOptions::PACKAGE_TYPES_V2_MAP as $pdkName => $v2Name) {
             if ($this->isInternationalMailboxBlocked($pdkName, $cc, $carrier)) {
                 continue;
             }
 
-            $capabilities = $this->capabilitiesService->getCapabilitiesForPackageType($cc, $v2Name);
+            $capability = $this->capabilitiesService->indexByCarrier(
+                $this->capabilitiesService->getRepository()->getCapabilities([
+                    'recipient'    => ['country_code' => $cc],
+                    'package_type' => $v2Name,
+                ])
+            )[$carrier->carrier] ?? null;
 
-            if (isset($capabilities[$carrier->carrier])) {
-                $availableTypes[] = $pdkName;
+            if ($capability && $this->capabilitiesService->capabilitySupportsWeight($capability, $weight)) {
+                $availableByType[$pdkName] = $capability;
             }
         }
 
-        // Sort available types by weight (from capabilities data) ascending.
-        usort($availableTypes, static function (string $a, string $b) use ($typeWeights): int {
-            $weightA = $typeWeights[$a] ?? null;
-            $weightB = $typeWeights[$b] ?? null;
-
-            return Utils::compareNullableInts($weightA, $weightB);
+        $typeNames = array_keys($availableByType);
+        usort($typeNames, static function (string $a, string $b) use ($availableByType): int {
+            return Utils::compareNullableInts(
+                self::extractMaxWeight($availableByType[$a]),
+                self::extractMaxWeight($availableByType[$b])
+            );
         });
 
-        // Pick the first available type, or fall back to the default.
-        $this->order->deliveryOptions->packageType = ! empty($availableTypes)
-            ? $availableTypes[0]
+        $this->order->deliveryOptions->packageType = ! empty($typeNames)
+            ? $typeNames[0]
             : DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
+    }
+
+    /**
+     * Extract the max weight constraint (grams) from a capability, or null when unconstrained.
+     */
+    private static function extractMaxWeight(RefCapabilitiesResponseCapabilityV2 $capability): ?int
+    {
+        $physicalProperties = $capability->getPhysicalProperties();
+        if (! $physicalProperties) { // @phpstan-ignore-line SDK declares non-nullable but API may omit
+            return null;
+        }
+
+        $weightConstraint = $physicalProperties->getWeight();
+        if (! $weightConstraint) {
+            return null;
+        }
+
+        $max = $weightConstraint->getMax();
+
+        return $max ? (int) $max->getValue() : null; // @phpstan-ignore-line SDK declares non-nullable but API may omit
     }
 }
