@@ -42,7 +42,7 @@ class GetOrdersResponse extends ApiResponseWithBody
         // Convert carrier ID to name
         $carrierName = Utils::convertToName($data['carrier_id'] ?? null, Carrier::CARRIER_NAME_ID_MAP);
 
-        $shipment = \array_merge($data['shipment'], ['carrier' => $carrierName]);
+        $shipment = \array_merge($data['shipment'] ?? [], ['carrier' => $carrierName]);
 
         return new Order([
             'uuid'                        => $data['uuid'] ?? null,
