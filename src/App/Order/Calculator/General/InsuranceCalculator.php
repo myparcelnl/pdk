@@ -9,11 +9,13 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -28,14 +30,20 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private $currencyService;
 
     /**
+     * @var \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService
+     */
+    private $capabilitiesService;
+
+    /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
     public function __construct(PdkOrder $order)
     {
         parent::__construct($order);
 
-        $this->countryService  = Pdk::get(CountryServiceInterface::class);
-        $this->currencyService = Pdk::get(CurrencyServiceInterface::class);
+        $this->countryService      = Pdk::get(CountryServiceInterface::class);
+        $this->currencyService     = Pdk::get(CurrencyServiceInterface::class);
+        $this->capabilitiesService = Pdk::get(CapabilitiesValidationService::class);
     }
 
     /**
@@ -51,7 +59,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * Given the insurance amount, calculate the final insurance value.
      *
-     * The result always falls within the carrier's [min, max] insurance range:
+     * Bounds (min/max/default) come from the per-shipment capability for the
+     * resolved carrier+country+package_type+delivery_type combination — these can
+     * narrow below the carrier-wide contract range. Tier resolution and clamping
+     * use those shipment-specific bounds.
+     *
      * - NULL or DISABLED (0): use carrier minimum.
      * - INHERIT (-1): fall back to settings; if settings do not enable insurance, use carrier default.
      * - Explicit amount: resolve to nearest valid tier.
@@ -63,9 +75,9 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private function calculateInsurance(?int $amount): int
     {
         $carrier          = $this->order->deliveryOptions->carrier;
-        $carrierInsurance = $carrier->options ? $carrier->options->getInsurance() : null;
+        $carrierInsurance = $this->fetchShipmentInsurance($carrier);
 
-        // No insurance possible? Return 0
+        // No insurance possible for this shipment context.
         if (null === $carrierInsurance) {
             return 0;
         }
@@ -84,11 +96,48 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $this->calculateFromSettings($carrier, $carrierMin, $carrierMax, $carrierDefault);
         }
 
-        // Explicit amount: resolve to nearest valid tier, clamp to carrier range.
-        $allowedAmounts = $this->resolveAllowedInsuranceAmounts($carrier);
+        // Explicit amount: resolve to nearest valid tier, clamp to shipment range.
+        $allowedAmounts = CapabilitiesValidationService::buildInsuranceTiers($carrierMin, $carrierMax);
         $validated      = $this->getMinimumInsuranceAmount($allowedAmounts, $amount);
 
         return $this->clampToCarrierRange($validated, $carrierMin, $carrierMax);
+    }
+
+    /**
+     * Fetch the insurance option from the shipment-context capability.
+     *
+     * @return null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2
+     */
+    private function fetchShipmentInsurance(Carrier $carrier): ?RefCapabilitiesResponseOptionsInsuranceOptionV2
+    {
+        $deliveryOptions = $this->order->deliveryOptions;
+        $cc              = $this->order->shippingAddress->cc;
+        $v2PackageType   = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$deliveryOptions->packageType] ?? null;
+        $v2DeliveryType  = DeliveryOptions::DELIVERY_TYPES_V2_MAP[$deliveryOptions->deliveryType] ?? null;
+
+        if (! $v2PackageType) {
+            return null;
+        }
+
+        $args = [
+            'carrier'      => $carrier->carrier,
+            'recipient'    => ['country_code' => $cc],
+            'package_type' => $v2PackageType,
+        ];
+
+        if ($v2DeliveryType) {
+            $args['delivery_type'] = $v2DeliveryType;
+        }
+
+        $capability = $this->capabilitiesService->getRepository()->getCapabilities($args)[0] ?? null;
+
+        if (! $capability) {
+            return null;
+        }
+
+        $options = $capability->getOptions();
+
+        return $options ? $options->getInsurance() : null; // @phpstan-ignore-line SDK declares non-nullable but API may omit
     }
 
     /**
@@ -121,7 +170,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $carrierMin;
         }
 
-        $allowedAmounts = $this->resolveAllowedInsuranceAmounts($carrier);
+        $allowedAmounts = CapabilitiesValidationService::buildInsuranceTiers($carrierMin, $carrierMax);
         $validated      = $this->getMinimumInsuranceAmount($allowedAmounts, $orderAmount);
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
@@ -172,23 +221,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         }
 
         return CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW;
-    }
-
-    /**
-     * Resolve the list of allowed insurance tier amounts for the given carrier.
-     *
-     * Tiers are derived from the carrier's capabilities data (min/max insurance range),
-     * producing steps from min to max based on the range size.
-     *
-     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
-     *
-     * @return int[]
-     */
-    private function resolveAllowedInsuranceAmounts(Carrier $carrier): array
-    {
-        $carrierSchema = Pdk::get(CarrierSchema::class)->setCarrier($carrier);
-
-        return $carrierSchema->getAllowedInsuranceAmounts();
     }
 
     /**

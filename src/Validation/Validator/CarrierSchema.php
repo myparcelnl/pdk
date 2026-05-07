@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Validation\Contract\DeliveryOptionsValidatorInterface;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
@@ -159,23 +160,16 @@ class CarrierSchema implements DeliveryOptionsValidatorInterface
 
     public function getAllowedInsuranceAmounts(): array
     {
-        $hasOption = $this->canHaveShipmentOption(InsuranceDefinition::class);
-
-        // Take the min and max from the insurance shipment option and return a range in between them
-        // Note: The amount is currently in cents (EUR * 100)
-        if ($hasOption) {
-            $max = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMax()->getAmount();
-            $min = $this->getCarrier()->options->getInsurance()->getInsuredAmount()->getMin()->getAmount();
-            // Determine whether the difference between min and max is smaller than 50.000 cents (500 EUR), if so, return a range with a step of 10.000 cents (100 EUR)
-            if ($max - $min <= 50_000) {
-                $step = 10_000;
-            } else {
-                $step = 50_000;
-            }
-
-            return range($min, $max, $step);
+        if (! $this->canHaveShipmentOption(InsuranceDefinition::class)) {
+            return [];
         }
-        return [];
+
+        $insured = $this->getCarrier()->options->getInsurance()->getInsuredAmount();
+
+        return CapabilitiesValidationService::buildInsuranceTiers(
+            $insured->getMin()->getAmount(),
+            $insured->getMax()->getAmount()
+        );
     }
 
     public function getAllowedPackageTypes(): array

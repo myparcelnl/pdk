@@ -117,6 +117,45 @@ class CapabilitiesValidationService
     }
 
     /**
+     * Build an insurance-tier ladder for a min/max range.
+     *
+     * Includes fine-grained floor tiers (€100, €250, €500) at the low end so that
+     * low-value orders can still be insured at realistic increments, then €500 steps
+     * for higher amounts. Mirrors the curated ladders that lived in the per-carrier
+     * JSON schemas before INT-1501.
+     *
+     * @param  int $min Minimum amount in cents
+     * @param  int $max Maximum amount in cents
+     *
+     * @return int[] Sorted, unique tier amounts in cents, including min and max
+     */
+    public static function buildInsuranceTiers(int $min, int $max): array
+    {
+        if ($min >= $max) {
+            return [$min];
+        }
+
+        $tiers = [$min];
+
+        // Floor tiers between min and max (exclusive bounds): €100, €250, €500.
+        foreach ([10_000, 25_000, 50_000] as $tier) {
+            if ($tier > $min && $tier < $max) {
+                $tiers[] = $tier;
+            }
+        }
+
+        // €500 steps from the next round €500 boundary up to (but excluding) max.
+        $stepStart = max($min, 50_000) + 50_000;
+        for ($t = $stepStart; $t < $max; $t += 50_000) {
+            $tiers[] = $t;
+        }
+
+        $tiers[] = $max;
+
+        return array_values(array_unique($tiers));
+    }
+
+    /**
      * Pick the heaviest package type among the given types, based on capabilities weight data.
      *
      * null weight = unconstrained = heavier than any defined weight.

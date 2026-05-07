@@ -110,7 +110,13 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                 'sameDayDelivery'             => $option,
                 'saturdayDelivery'            => $option,
                 'tracked'                     => $option,
-                'insurance'                   => $option,
+                'insurance'                   => array_merge($option, [
+                    'insuredAmount' => [
+                        'default' => ['currency' => 'EUR', 'amount' => 0],
+                        'min'     => ['currency' => 'EUR', 'amount' => 0],
+                        'max'     => ['currency' => 'EUR', 'amount' => 500000],
+                    ],
+                ]),
                 'priorityDelivery'            => $option,
                 'requiresReceiptCode'         => $option,
                 'scheduledCollection'         => $option,
