@@ -206,9 +206,24 @@ class Carrier extends SdkBackedModel
             return $result;
         }
 
-        $result['options'] = array_intersect_key($result['options'], self::getRegisteredCapabilitiesKeys());
+        $result['options'] = self::filterRegisteredOptions($result['options']);
 
         return $result;
+    }
+
+    /**
+     * Single source of truth for the option allowlist applied across both serialization paths
+     * — this method (used by Carrier::attributesToArray on contract-definition data) and
+     * CapabilitiesAction (on contextual capabilities responses). Keeping the filter in one
+     * place prevents drift between initial render and drill-down responses.
+     *
+     * @param  array<string, mixed> $options camelCase option keys → option metadata
+     *
+     * @return array<string, mixed>
+     */
+    public static function filterRegisteredOptions(array $options): array
+    {
+        return array_intersect_key($options, self::getRegisteredCapabilitiesKeys());
     }
 
     /**
