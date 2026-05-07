@@ -1,77 +1,80 @@
 {
-  "checkout": {
-    "strings": {
-      "morning": "Ochtend"
-    },
-    "settings": {
-      "actions": {
-        "baseUrl": "FRONTEND_URL",
-        "endpoints": {
-          "fetchCheckoutContext": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "fetchCheckoutContext"
+    "checkout": {
+        "strings": {
+            "morning": "Ochtend"
+        },
+        "settings": {
+            "actions": {
+                "baseUrl": "FRONTEND_URL",
+                "endpoints": {
+                    "fetchCheckoutContext": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "fetchCheckoutContext"
+                        },
+                        "path": "",
+                        "property": "context",
+                        "responseProperty": null
+                    },
+                    "proxyAddressList": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "proxyAddressList"
+                        },
+                        "path": "",
+                        "property": "addresses",
+                        "responseProperty": null
+                    },
+                    "proxyAddressValidate": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "proxyAddressValidate"
+                        },
+                        "path": "",
+                        "property": "validate",
+                        "responseProperty": null
+                    },
+                    "fetchContext": {
+                        "body": null,
+                        "headers": [],
+                        "method": "GET",
+                        "parameters": {
+                            "action": "fetchContext"
+                        },
+                        "path": "",
+                        "property": "context",
+                        "responseProperty": null
+                    },
+                    "proxyCapabilities": {
+                        "body": null,
+                        "headers": [],
+                        "method": "POST",
+                        "parameters": {
+                            "action": "proxyCapabilities"
+                        },
+                        "path": "",
+                        "property": "capabilities",
+                        "responseProperty": null
+                    }
+                }
             },
-            "path": "",
-            "property": "context",
-            "responseProperty": null
-          },
-          "proxyAddressList": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyAddressList"
-            },
-            "path": "",
-            "property": "addresses",
-            "responseProperty": null
-          },
-          "proxyAddressValidate": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyAddressValidate"
-            },
-            "path": "",
-            "property": "validate",
-            "responseProperty": null
-          },
-          "proxyCapabilities": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "proxyCapabilities"
-            },
-            "path": "",
-            "property": "capabilities",
-            "responseProperty": null
-          },
-          "fetchContext": {
-            "body": null,
-            "headers": [],
-            "method": "GET",
-            "parameters": {
-              "action": "fetchContext"
-            },
-            "path": "",
-            "property": "context",
-            "responseProperty": null
-          }
-        }
-      },
-      "allowedShippingMethods": [],
-      "hasDeliveryOptions": true,
-      "hiddenInputName": "pest_checkout_data",
-      "checkoutAddressHiddenInputName": "pest_checkout_address",
-      "countriesWithSeparateAddressFields": ["NL", "BE"],
-      "carriersWithTaxFields": [],
-      "hasAddressWidget": false
-    },
-    "endpoints": []
-  }
+            "allowedShippingMethods": [],
+            "hasDeliveryOptions": true,
+            "hiddenInputName": "pest_checkout_data",
+            "checkoutAddressHiddenInputName": "pest_checkout_address",
+            "countriesWithSeparateAddressFields": [
+                "NL",
+                "BE"
+            ],
+            "carriersWithTaxFields": [],
+            "hasAddressWidget": false
+        },
+        "endpoints": []
+    }
 }
