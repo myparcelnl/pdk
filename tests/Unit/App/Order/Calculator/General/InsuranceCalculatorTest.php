@@ -85,7 +85,7 @@ it('calculates insurance', function (array $input, int $result) {
     $reset();
 })
     ->with([
-        'amount passed in manually via delivery options' => [
+        'amount passed in manually via delivery options -> nearest tier 12345 → 25000' => [
             [
                 'deliveryOptions' => [
                     'shipmentOptions' => [
@@ -93,7 +93,7 @@ it('calculates insurance', function (array $input, int $result) {
                     ],
                 ],
             ],
-            'result' => 50000,
+            'result' => 25000,
         ],
 
         'manual amount respects capabilities but ignores export settings limit' => [
@@ -107,14 +107,14 @@ it('calculates insurance', function (array $input, int $result) {
                     CarrierSettings::EXPORT_INSURANCE_UP_TO => 0,
                 ],
             ],
-            'result' => 50000,
+            'result' => 10000,
         ],
 
-        'value € 44.81 -> rounded up to € 500' => [
+        'value € 44.81 -> rounded up to € 100' => [
             [
                 'orderPrice' => 4481,
             ],
-            'result' => 50000,
+            'result' => 10000,
         ],
 
         'value € 0 -> € 0' => [
@@ -131,18 +131,18 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 0,
         ],
 
-        'value € 1 -> rounded up to € 500' => [
+        'value € 1 -> rounded up to € 100' => [
             [
                 'orderPrice' => 1,
             ],
-            'result' => 50000,
+            'result' => 10000,
         ],
 
-        'value € 150.50 -> rounded up to € 500' => [
+        'value € 150.50 -> rounded up to € 250' => [
             [
                 'orderPrice' => 15050,
             ],
-            'result' => 50000,
+            'result' => 25000,
         ],
 
         'value € 1000 -> matches 100000' => [
@@ -195,12 +195,12 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 0,
         ],
 
-        'value € 100, insured from € 100 -> rounded up to € 500' => [
+        'value € 100, insured from € 100 -> rounded up to € 100' => [
             [
                 'orderPrice' => 10000,
                 'settings'   => [CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT => 100],
             ],
-            'result' => 50000,
+            'result' => 10000,
         ],
 
         'value € 3100, insured up to € 3000 -> € 3000' => [
@@ -219,12 +219,12 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 300000,
         ],
 
-        'value € 310, percentage 50 -> rounded up to € 500' => [
+        'value € 310, percentage 50 -> rounded up to € 250' => [
             [
                 'orderPrice' => 31000,
                 'settings'   => [CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 50],
             ],
-            'result' => 50000,
+            'result' => 25000,
         ],
 
         'value € 550, percentage 90 -> rounded up to € 500' => [
@@ -303,9 +303,10 @@ it('calculates insurance', function (array $input, int $result) {
             'result' => 0,
         ],
 
-        'country DE: with EU insurance' => [
+        'country DE: with EU insurance cap below tier' => [
+            // orderPrice 25000 (€250) → tier 25000, capped to settings UP_TO_EU 20000.
             [
-                'orderPrice' => 5000,
+                'orderPrice' => 25000,
                 'country'    => 'DE',
                 'settings'   => [
                     CarrierSettings::EXPORT_INSURANCE_UP_TO_EU => 20000,
@@ -358,7 +359,7 @@ it('calculates insurance', function (array $input, int $result) {
                 'orderPrice' => 10000,
                 'carrier'    => RefCapabilitiesSharedCarrierV2::GLS,
             ],
-            'result' => 50000,
+            'result' => 10000,
         ],
     ]);
 

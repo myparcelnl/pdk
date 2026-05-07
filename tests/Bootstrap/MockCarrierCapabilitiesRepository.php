@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\ObjectSerializer;
+use Throwable;
 
 /**
  * Test double for CarrierCapabilitiesRepository that returns permissive defaults
@@ -111,11 +115,7 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                 'saturdayDelivery'            => $option,
                 'tracked'                     => $option,
                 'insurance'                   => array_merge($option, [
-                    'insuredAmount' => [
-                        'default' => ['currency' => 'EUR', 'amount' => 0],
-                        'min'     => ['currency' => 'EUR', 'amount' => 0],
-                        'max'     => ['currency' => 'EUR', 'amount' => 500000],
-                    ],
+                    'insuredAmount' => $this->resolveInsuredAmountFromCarrier($carrierName),
                 ]),
                 'priorityDelivery'            => $option,
                 'requiresReceiptCode'         => $option,
@@ -148,5 +148,48 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
             $json->results,
             '\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2[]'
         );
+    }
+
+    /**
+     * Read the carrier's insurance bounds from the stored carrier model so test fixtures
+     * using `factory(Carrier::class)->withInsurance($default, $min, $max)` keep working
+     * after the calculator switched to per-shipment capability bounds.
+     *
+     * Falls back to a permissive 0–500000 range when the carrier or its insurance option
+     * is not configured.
+     *
+     * @return array<string, array<string, int|string>>
+     */
+    private function resolveInsuredAmountFromCarrier(string $carrierName): array
+    {
+        try {
+            $shop     = Pdk::get(AccountSettingsServiceInterface::class)->getShop();
+            $carriers = $shop ? $shop->carriers : null;
+            $carrier  = $carriers
+                ? $carriers->first(static function (Carrier $c) use ($carrierName): bool {
+                    return $c->carrier === $carrierName;
+                })
+                : null;
+
+            $insured = $carrier && $carrier->options
+                ? $carrier->options->getInsurance()->getInsuredAmount() // @phpstan-ignore-line SDK declares non-nullable but may be missing
+                : null;
+
+            if ($insured) {
+                return [
+                    'default' => ['currency' => 'EUR', 'amount' => $insured->getDefault()->getAmount()],
+                    'min'     => ['currency' => 'EUR', 'amount' => $insured->getMin()->getAmount()],
+                    'max'     => ['currency' => 'EUR', 'amount' => $insured->getMax()->getAmount()],
+                ];
+            }
+        } catch (Throwable $e) {
+            // Fall through to default — tests without an account/carrier setup get the permissive default.
+        }
+
+        return [
+            'default' => ['currency' => 'EUR', 'amount' => 0],
+            'min'     => ['currency' => 'EUR', 'amount' => 0],
+            'max'     => ['currency' => 'EUR', 'amount' => 500000],
+        ];
     }
 }
