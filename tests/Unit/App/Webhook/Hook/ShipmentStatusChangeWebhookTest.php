@@ -6,16 +6,24 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Webhook\Hook;
 
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
+use MyParcelNL\Pdk\App\Webhook\Service\ShipmentWebhookService;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetShipmentsResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachCron;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
@@ -30,7 +38,22 @@ uses()->group('webhook');
 
 usesShared(new UsesMockPdkInstance(), new UsesMockEachCron(), new UsesMockEachLogger(), new UsesAccountMock());
 
-function dispatchWebhook(array $hookBody): array
+class TrackingWebhookPdkOrderRepository extends MockPdkOrderRepository
+{
+    /**
+     * @var int
+     */
+    public $apiIdentifierLookups = 0;
+
+    public function getByApiIdentifier(string $uuid): ?PdkOrder
+    {
+        $this->apiIdentifierLookups++;
+
+        return parent::getByApiIdentifier($uuid);
+    }
+}
+
+function dispatchWebhook(array $hookBody, bool $enqueueShipmentResponse = true, int $apiStatus = 2): array
 {
     /** @var PdkWebhooksRepositoryInterface $repository */
     $repository = Pdk::get(PdkWebhooksRepositoryInterface::class);
@@ -48,7 +71,15 @@ function dispatchWebhook(array $hookBody): array
         'hook' => WebhookSubscription::SHIPMENT_STATUS_CHANGE,
         'url'  => $repository->getHashedUrl(),
     ]]));
-    MockApi::enqueue(new ExampleGetShipmentsResponse());
+
+    if ($enqueueShipmentResponse) {
+        MockApi::enqueue(new ExampleGetShipmentsResponse([
+            array_replace(ExampleGetShipmentsResponse::DEFAULT_SHIPMENT_DATA, [
+                'id'     => getWebhookShipmentId($hookBody) ?? 192031595,
+                'status' => $apiStatus,
+            ]),
+        ]));
+    }
 
     $request = Request::create(
         $repository->getHashedUrl(),
@@ -75,8 +106,49 @@ function dispatchWebhook(array $hookBody): array
     ];
 }
 
+function getWebhookShipmentId(array $hookBody): ?int
+{
+    $content = isset($hookBody['shipment']) && is_array($hookBody['shipment'])
+        ? array_replace($hookBody, $hookBody['shipment'])
+        : $hookBody;
 
-function validHookBody($orderId = 'api-uuid-string', $referenceIdentifier = null)
+    foreach (['shipment_id', 'shipmentId', 'id'] as $key) {
+        if (isset($content[$key]) && is_numeric($content[$key])) {
+            return (int) $content[$key];
+        }
+    }
+
+    return null;
+}
+
+function setWebhookAccountFeatures(array $features): void
+{
+    /** @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $accountRepository */
+    $accountRepository = Pdk::get(PdkAccountRepositoryInterface::class);
+    $account           = $accountRepository->getAccount();
+
+    $account->subscriptionFeatures = new Collection($features);
+    $accountRepository->store($account);
+}
+
+function useTrackingWebhookOrderRepository(): TrackingWebhookPdkOrderRepository
+{
+    $repository = new TrackingWebhookPdkOrderRepository(Pdk::get(StorageInterface::class));
+    $webhookService = new ShipmentWebhookService(
+        Pdk::get(\MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface::class),
+        $repository
+    );
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
+    $pdk = Pdk::get(PdkInterface::class);
+    $pdk->set(PdkOrderRepositoryInterface::class, $repository);
+    $pdk->set(ShipmentWebhookService::class, $webhookService);
+    $pdk->set(ShipmentStatusChangeWebhook::class, new ShipmentStatusChangeWebhook($webhookService));
+
+    return $repository;
+}
+
+function validHookBody($orderId = 'api-uuid-string', $referenceIdentifier = null): array
 {
     $body = [
         'shipment_id' => 192031595,
@@ -97,26 +169,130 @@ function validHookBody($orderId = 'api-uuid-string', $referenceIdentifier = null
     return $body;
 }
 
+it('dispatches update action when order_id is valid for order v1', function () {
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
 
-it('dispatches update action when order_id is valid', function () {
     $result = dispatchWebhook(validHookBody('api-uuid-string'));
+    $call = $result['actions']->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS);
 
-    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
-        ->toBeTrue();
+    expect($call['parameters']['orderIds'])
+        ->toBe(['197'])
+        ->and($call['parameters']['shipmentIds'])
+        ->toBe([192031595])
+        ->and($call['parameters']['useShipmentStatusForOrderStatus'])
+        ->toBeTrue()
+        ->and($call['parameters'])
+        ->not->toHaveKey('orderStatus');
 });
 
+it('dispatches update action when shipment_reference_identifier is valid for shipments mode', function () {
+    $body = validHookBody(null, 'REF-123');
+    unset($body['shipment_id']);
+    $body['shipmentId'] = 192031595;
 
-it('dispatches update action when shipment_reference_identifier is valid', function () {
-    $result = dispatchWebhook(validHookBody(null, 'REF-123'));
+    $result = dispatchWebhook($body);
+    $call = $result['actions']->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS);
 
-    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
-        ->toBeTrue();
+    expect($call['parameters']['orderIds'])
+        ->toBe(['REF-123'])
+        ->and($call['parameters']['shipmentIds'])
+        ->toBe([192031595]);
 });
 
+it('chooses the order identifier by order mode', function (array $features, array $body, array $expectedOrderIds) {
+    setWebhookAccountFeatures($features);
+
+    $result = dispatchWebhook($body);
+    $call = $result['actions']->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS);
+
+    expect($call['parameters']['orderIds'])->toBe($expectedOrderIds);
+})->with([
+    'shipments only uses shipment_reference_identifier' => [
+        [],
+        validHookBody('api-uuid-string', 'REF-123'),
+        ['REF-123'],
+    ],
+    'order v1 uses order_id' => [
+        [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT],
+        validHookBody('api-uuid-string', 'REF-123'),
+        ['197'],
+    ],
+    'order v2 uses shipment_reference_identifier' => [
+        [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT],
+        validHookBody('api-uuid-string', '197'),
+        ['197'],
+    ],
+]);
+
+it('does not resolve order v2 webhooks by legacy api identifier', function () {
+    $repository = useTrackingWebhookOrderRepository();
+
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
+
+    dispatchWebhook(validHookBody('legacy-api-uuid', '197'));
+
+    expect($repository->apiIdentifierLookups)->toBe(0);
+});
+
+it('skips order v2 webhook when only the legacy order_id is present', function () {
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
+
+    $result = dispatchWebhook(validHookBody('api-uuid-string'), false);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeFalse()
+        ->and($result['logger']->getLogs('debug'))
+        ->toContain([
+            'level'   => 'debug',
+            'message' => '[PDK]: Skipping shipment status change webhook without a valid order identifier',
+            'context' => [
+                'shipment_id'                   => 192031595,
+                'order_id'                      => 'api-uuid-string',
+                'shipment_reference_identifier' => null,
+            ],
+        ]);
+});
+
+it('skips shipment updates when the shipment id is missing', function () {
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
+
+    $body = validHookBody('api-uuid-string');
+    unset($body['shipment_id']);
+
+    $result = dispatchWebhook($body, false);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeFalse()
+        ->and($result['logger']->getLogs('debug'))
+        ->toContain([
+            'level'   => 'debug',
+            'message' => '[PDK]: Skipping shipment webhook without a shipment id',
+            'context' => [
+                'shipment_id'                   => null,
+                'order_id'                      => 'api-uuid-string',
+                'shipment_reference_identifier' => null,
+            ],
+        ]);
+});
+
+it('uses the fetched shipment status for order status updates instead of the webhook status', function () {
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
+
+    $body = validHookBody();
+    $body['status'] = 9;
+
+    $result = dispatchWebhook($body, true, 5);
+
+    $statusLog = (new Collection($result['logger']->getLogs()))
+        ->filter(fn(array $log) => str_starts_with($log['message'], '[PDK]: Update status'))
+        ->first();
+
+    expect($statusLog['context']['status'])->toBe(OrderSettings::STATUS_WHEN_LABEL_SCANNED);
+});
 
 it('skips webhook when identifiers are missing or empty', function ($orderId, $referenceIdentifier) {
     $hookBody = validHookBody($orderId, $referenceIdentifier);
-    $result   = dispatchWebhook($hookBody);
+    $result   = dispatchWebhook($hookBody, false);
 
     expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
         ->toBeFalse()
@@ -139,26 +315,9 @@ it('skips webhook when identifiers are missing or empty', function ($orderId, $r
     'both whitespace'                              => ['  ', '  '],
 ]);
 
-it('maps shipment status to correct order status', function (int $status, string $expectedStatus) {
-    $body = validHookBody();
-    $body['status'] = $status;
-    $result = dispatchWebhook($body);
-
-    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
-        ->toBeTrue();
-
-    $statusLog = (new Collection($result['logger']->getLogs()))
-        ->filter(fn(array $log) => str_starts_with($log['message'], '[PDK]: Update status'))
-        ->first();
-
-    expect($statusLog['context']['status'])->toBe($expectedStatus);
-})->with([
-    'status 2 - label created'  => [2, OrderSettings::STATUS_ON_LABEL_CREATE],
-    'status 5 - label scanned'  => [5, OrderSettings::STATUS_WHEN_LABEL_SCANNED],
-    'status 9 - delivered'      => [9, OrderSettings::STATUS_WHEN_DELIVERED],
-]);
-
 it('logs webhook received and processed', function () {
+    setWebhookAccountFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
+
     $result = dispatchWebhook(validHookBody());
 
     $logs = (new Collection($result['logger']->getLogs()))

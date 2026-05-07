@@ -58,14 +58,14 @@ it('returns 2 when ORDER_MANAGEMENT (v2) is present', function () {
     TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
     $service = Pdk::get(AccountFeaturesServiceInterface::class);
 
-    expect($service->getOrderModeVersion())->toBe(2);
+    expect($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_V2);
 });
 
 it('returns 1 when only LEGACY_ORDER_MANAGEMENT (v1) is present', function () {
     TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
     $service = Pdk::get(AccountFeaturesServiceInterface::class);
 
-    expect($service->getOrderModeVersion())->toBe(1);
+    expect($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_V1);
 });
 
 it('returns 2 (v2 wins) when both ORDER_MANAGEMENT and LEGACY_ORDER_MANAGEMENT are present', function () {
@@ -75,21 +75,21 @@ it('returns 2 (v2 wins) when both ORDER_MANAGEMENT and LEGACY_ORDER_MANAGEMENT a
     ]);
     $service = Pdk::get(AccountFeaturesServiceInterface::class);
 
-    expect($service->getOrderModeVersion())->toBe(2);
+    expect($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_V2);
 });
 
 it('returns 0 (shipments fallback) when neither order management feature is present', function () {
     TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_NOTES]);
     $service = Pdk::get(AccountFeaturesServiceInterface::class);
 
-    expect($service->getOrderModeVersion())->toBe(0);
+    expect($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS);
 });
 
 it('returns 0 (shipments fallback) when account has no features at all', function () {
     TestBootstrapper::hasSubscriptionFeatures([]);
     $service = Pdk::get(AccountFeaturesServiceInterface::class);
 
-    expect($service->getOrderModeVersion())->toBe(0);
+    expect($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS);
 });
 
 // usesOrderMode
@@ -117,5 +117,5 @@ it('returns false for all features when no account is set', function () {
         ->and($service->canUseDirectPrinting())->toBeFalse()
         ->and($service->canUseMyReturns())->toBeFalse()
         ->and($service->usesOrderMode())->toBeFalse()
-        ->and($service->getOrderModeVersion())->toBe(0);
+        ->and($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS);
 });
