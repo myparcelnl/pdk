@@ -44,7 +44,7 @@ class ShipmentUpdateService
     /**
      * @param  \MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection    $orders
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection     $shipments
-     * @param  string                                                     $orderStatus
+     * @param  null|string                                                $orderStatus
      * @param  bool                                                       $linkFirstShipmentToFirstOrder
      *
      * @return void
@@ -52,7 +52,7 @@ class ShipmentUpdateService
     public function update(
         PdkOrderCollection $orders,
         ShipmentCollection $shipments,
-        string             $orderStatus = OrderSettings::STATUS_ON_LABEL_CREATE,
+        ?string            $orderStatus = OrderSettings::STATUS_ON_LABEL_CREATE,
         bool               $linkFirstShipmentToFirstOrder = false
     ): void {
         if ($linkFirstShipmentToFirstOrder && $orders->isNotEmpty() && $shipments->isNotEmpty()) {
@@ -111,21 +111,23 @@ class ShipmentUpdateService
 
     /**
      * @param  \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection $shipments
-     * @param  string                                                 $status
+     * @param  null|string                                            $status
      *
      * @return void
      */
-    private function updateOrderStatus(ShipmentCollection $shipments, string $status): void
+    private function updateOrderStatus(ShipmentCollection $shipments, ?string $status): void
     {
         $shipments
             ->each(function (Shipment $shipment) use ($status) {
+                $resolvedStatus = $status ?? OrderSettings::getStatus((int) $shipment->status);
+
                 Logger::debug('Update status', [
                     'orderId' => $shipment->orderId,
-                    'status'  => $status,
+                    'status'  => $resolvedStatus,
                 ]);
                 Actions::execute(PdkBackendActions::UPDATE_ORDER_STATUS, [
                     'orderIds' => [$shipment->orderId],
-                    'setting'  => $status,
+                    'setting'  => $resolvedStatus,
                 ]);
             });
     }

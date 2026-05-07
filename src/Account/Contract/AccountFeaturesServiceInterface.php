@@ -6,16 +6,6 @@ namespace MyParcelNL\Pdk\Account\Contract;
 
 interface AccountFeaturesServiceInterface
 {
-    public const FEATURE_ORDER_NOTES = 'ORDER_NOTES';
-
-    public const FEATURE_DIRECT_PRINTING = 'DIRECT_PRINTING';
-
-    public const FEATURE_MY_RETURNS = 'MY_RETURNS';
-
-    public const FEATURE_ORDER_MANAGEMENT = 'ORDER_MANAGEMENT';
-
-    public const FEATURE_LEGACY_ORDER_MANAGEMENT = 'LEGACY_ORDER_MANAGEMENT';
-
     public const ORDER_MODE_SHIPMENTS = 0;
 
     public const ORDER_MODE_V1        = 1;

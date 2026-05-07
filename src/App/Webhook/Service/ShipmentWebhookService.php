@@ -6,15 +6,9 @@ namespace MyParcelNL\Pdk\App\Webhook\Service;
 
 use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\App\Shipment\Service\ShipmentUpdateService;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
-use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
-use MyParcelNL\Pdk\Shipment\Model\Shipment;
 
 class ShipmentWebhookService
 {
@@ -29,23 +23,15 @@ class ShipmentWebhookService
     private $pdkOrderRepository;
 
     /**
-     * @var \MyParcelNL\Pdk\App\Shipment\Service\ShipmentUpdateService
-     */
-    private $shipmentUpdateService;
-
-    /**
      * @param  \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface $accountFeaturesService
      * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface   $pdkOrderRepository
-     * @param  \MyParcelNL\Pdk\App\Shipment\Service\ShipmentUpdateService       $shipmentUpdateService
      */
     public function __construct(
         AccountFeaturesServiceInterface $accountFeaturesService,
-        PdkOrderRepositoryInterface     $pdkOrderRepository,
-        ShipmentUpdateService           $shipmentUpdateService
+        PdkOrderRepositoryInterface     $pdkOrderRepository
     ) {
         $this->accountFeaturesService = $accountFeaturesService;
         $this->pdkOrderRepository     = $pdkOrderRepository;
-        $this->shipmentUpdateService  = $shipmentUpdateService;
     }
 
     /**
@@ -57,15 +43,7 @@ class ShipmentWebhookService
     {
         $orderModeVersion = (int) $this->accountFeaturesService->getOrderModeVersion();
 
-        if (AccountFeaturesServiceInterface::ORDER_MODE_V2 === $orderModeVersion) {
-            $this->updateOrderV2Shipment($content, true, $this->getStatusSettingFromWebhook($content));
-
-            return;
-        }
-
-        $orderIds = AccountFeaturesServiceInterface::ORDER_MODE_V1 === $orderModeVersion
-            ? $this->getOrderIdsForOrderV1($content)
-            : $this->getOrderIdsFromShipmentReference($content);
+        $orderIds = $this->getOrderIds($content, $orderModeVersion);
 
         if (empty($orderIds)) {
             $this->logSkippedWebhook(
@@ -92,7 +70,33 @@ class ShipmentWebhookService
             return;
         }
 
-        $this->updateOrderV2Shipment($content, false, OrderSettings::STATUS_ON_LABEL_CREATE, true);
+        $orderIds = $this->getOrderIdsFromShipmentReference($content);
+
+        if (empty($orderIds)) {
+            $this->logSkippedWebhook(
+                'Skipping order v2 shipment webhook without a shipment reference identifier',
+                $content
+            );
+
+            return;
+        }
+
+        $this->updateShipmentsFromApi($orderIds, $content);
+    }
+
+    /**
+     * @param  array $content
+     * @param  int   $orderModeVersion
+     *
+     * @return string[]
+     */
+    private function getOrderIds(array $content, int $orderModeVersion): array
+    {
+        if (AccountFeaturesServiceInterface::ORDER_MODE_V1 === $orderModeVersion) {
+            return $this->getOrderIdsForOrderV1($content);
+        }
+
+        return $this->getOrderIdsFromShipmentReference($content);
     }
 
     /**
@@ -104,11 +108,12 @@ class ShipmentWebhookService
     {
         $apiIdentifier = $this->getTrimmedValue($content, 'order_id');
 
-        if ('' === $apiIdentifier) {
+        if ('' === $apiIdentifier || ! method_exists($this->pdkOrderRepository, 'getByApiIdentifier')) {
             return [];
         }
 
-        $order = $this->pdkOrderRepository->getByApiIdentifier($apiIdentifier);
+        /** @var null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder $order */
+        $order = call_user_func([$this->pdkOrderRepository, 'getByApiIdentifier'], $apiIdentifier);
 
         if (! $order || ! $order->externalIdentifier) {
             return [];
@@ -131,105 +136,6 @@ class ShipmentWebhookService
 
     /**
      * @param  array  $content
-     * @param  bool   $requireExistingShipment
-     * @param  string $orderStatus
-     * @param  bool   $preserveExistingStatus
-     *
-     * @return null|\MyParcelNL\Pdk\App\Order\Model\PdkOrder
-     */
-    private function updateOrderV2Shipment(
-        array $content,
-        bool $requireExistingShipment,
-        string $orderStatus,
-        bool $preserveExistingStatus = false
-    ): ?PdkOrder {
-        $orderId = $this->getTrimmedValue($content, 'shipment_reference_identifier');
-
-        if ('' === $orderId) {
-            $this->logSkippedWebhook(
-                'Skipping order v2 shipment webhook without a shipment reference identifier',
-                $content
-            );
-
-            return null;
-        }
-
-        $shipmentId = Shipment::getIdFromWebhookPayload($content);
-
-        if (null === $shipmentId) {
-            $this->logSkippedWebhook('Skipping order v2 shipment webhook without a shipment id', $content);
-
-            return null;
-        }
-
-        $order = $this->pdkOrderRepository->find($orderId);
-
-        if (! $order) {
-            $this->logSkippedWebhook('Skipping order v2 shipment webhook for unknown order', $content);
-
-            return null;
-        }
-
-        if (! $order->externalIdentifier) {
-            $this->logSkippedWebhook(
-                'Skipping order v2 shipment webhook for an order without external identifier',
-                $content
-            );
-
-            return null;
-        }
-
-        $existingShipment = $this->getShipmentFromOrder($order, $shipmentId);
-
-        if ($requireExistingShipment && ! $existingShipment) {
-            $this->logSkippedWebhook('Skipping order v2 shipment status webhook for unknown shipment', $content);
-
-            return null;
-        }
-
-        $shipment = Shipment::fromWebhookPayload(
-            $content,
-            $order->externalIdentifier,
-            $existingShipment,
-            $preserveExistingStatus
-        );
-
-        $this->shipmentUpdateService->update(
-            new PdkOrderCollection([$order]),
-            new ShipmentCollection([$shipment]),
-            $orderStatus
-        );
-
-        return $order;
-    }
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     * @param  int                                      $shipmentId
-     *
-     * @return null|\MyParcelNL\Pdk\Shipment\Model\Shipment
-     */
-    private function getShipmentFromOrder(PdkOrder $order, int $shipmentId): ?Shipment
-    {
-        return $order->shipments->first(function (Shipment $shipment) use ($shipmentId) {
-            return (int) $shipment->id === $shipmentId;
-        });
-    }
-
-    /**
-     * @param  array $content
-     *
-     * @return string
-     */
-    private function getStatusSettingFromWebhook(array $content): string
-    {
-        $shipmentContent = Shipment::getWebhookShipmentContent($content);
-
-        return OrderSettings::getStatus((int) ($shipmentContent['status'] ?? null));
-    }
-
-    /**
-     * @param  array  $content
      * @param  string $key
      *
      * @return string
@@ -247,7 +153,7 @@ class ShipmentWebhookService
      */
     private function updateShipmentsFromApi(array $orderIds, array $content): void
     {
-        $shipmentId = Shipment::getIdFromWebhookPayload($content);
+        $shipmentId = $this->getShipmentId($content);
 
         if (null === $shipmentId) {
             $this->logSkippedWebhook('Skipping shipment webhook without a shipment id', $content);
@@ -256,11 +162,43 @@ class ShipmentWebhookService
         }
 
         Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [
-            'orderIds'                      => $orderIds,
-            'shipmentIds'                   => [$shipmentId],
-            'orderStatus'                   => $this->getStatusSettingFromWebhook($content),
-            'linkFirstShipmentToFirstOrder' => true,
+            'orderIds'                        => $orderIds,
+            'shipmentIds'                     => [$shipmentId],
+            'useShipmentStatusForOrderStatus' => true,
+            'linkFirstShipmentToFirstOrder'   => true,
         ]);
+    }
+
+    /**
+     * @param  array $content
+     *
+     * @return null|int
+     */
+    private function getShipmentId(array $content): ?int
+    {
+        $content = $this->getShipmentContent($content);
+
+        foreach (['shipment_id', 'shipmentId', 'id'] as $key) {
+            $value = $this->getTrimmedValue($content, $key);
+
+            if ('' !== $value && is_numeric($value)) {
+                return (int) $value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array $content
+     *
+     * @return array
+     */
+    private function getShipmentContent(array $content): array
+    {
+        return isset($content['shipment']) && is_array($content['shipment'])
+            ? array_replace($content, $content['shipment'])
+            : $content;
     }
 
     /**

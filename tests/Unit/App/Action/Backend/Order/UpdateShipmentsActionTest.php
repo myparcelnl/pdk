@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
+use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -114,4 +115,57 @@ it('updates barcode in note', function () {
             ->and($notes->first()->barcode)
             ->toBe($order->shipments->first()->barcode);
     });
+});
+
+it('uses label created order status by default', function () {
+    MockApi::enqueue(
+        new ExampleGetShipmentsResponse([
+            array_replace(ExampleGetShipmentsResponse::DEFAULT_SHIPMENT_DATA, [
+                'id'     => 123,
+                'status' => 5,
+            ]),
+        ])
+    );
+
+    Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [
+        'orderIds'                      => ['263'],
+        'shipmentIds'                   => [123],
+        'linkFirstShipmentToFirstOrder' => true,
+    ]);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionsService $actions */
+    $actions = Pdk::get(PdkActionsServiceInterface::class);
+    $call    = $actions->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_ORDER_STATUS);
+
+    expect($call['parameters'])->toBe([
+        'orderIds' => ['263'],
+        'setting'  => OrderSettings::STATUS_ON_LABEL_CREATE,
+    ]);
+});
+
+it('can map order status from the fetched shipment status', function () {
+    MockApi::enqueue(
+        new ExampleGetShipmentsResponse([
+            array_replace(ExampleGetShipmentsResponse::DEFAULT_SHIPMENT_DATA, [
+                'id'     => 123,
+                'status' => 5,
+            ]),
+        ])
+    );
+
+    Actions::execute(PdkBackendActions::UPDATE_SHIPMENTS, [
+        'orderIds'                        => ['263'],
+        'shipmentIds'                     => [123],
+        'useShipmentStatusForOrderStatus' => true,
+        'linkFirstShipmentToFirstOrder'   => true,
+    ]);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkActionsService $actions */
+    $actions = Pdk::get(PdkActionsServiceInterface::class);
+    $call    = $actions->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_ORDER_STATUS);
+
+    expect($call['parameters'])->toBe([
+        'orderIds' => ['263'],
+        'setting'  => OrderSettings::STATUS_WHEN_LABEL_SCANNED,
+    ]);
 });

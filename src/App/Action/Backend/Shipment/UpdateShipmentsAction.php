@@ -50,10 +50,19 @@ class UpdateShipmentsAction extends AbstractOrderAction
         $orders    = $this->pdkOrderRepository->getMany($this->getOrderIds($request));
         $shipments = $this->shipmentRepository->getShipments($this->getShipmentIds($request, $orders));
 
+        $useShipmentStatusForOrderStatus = filter_var(
+            $request->get('useShipmentStatusForOrderStatus'),
+            FILTER_VALIDATE_BOOLEAN
+        );
+
+        $orderStatus = $useShipmentStatusForOrderStatus
+            ? null
+            : $request->get('orderStatus', OrderSettings::STATUS_ON_LABEL_CREATE);
+
         $this->shipmentUpdateService->update(
             $orders,
             $shipments,
-            $request->get('orderStatus', OrderSettings::STATUS_ON_LABEL_CREATE),
+            $orderStatus,
             (bool) $request->get('linkFirstShipmentToFirstOrder')
         );
 

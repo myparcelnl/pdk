@@ -16,12 +16,12 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property AccountGeneralSettings $generalSettings
  * @property ShopCollection         $shops
  * @property int                    $status
- * @property array                  $subscriptionFeatures
+ * @property Collection             $subscriptionFeatures
  */
 class Account extends Model
 {
     /**
-     * @deprecated Use \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface::FEATURE_ORDER_NOTES instead.
+     * @deprecated Use \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature::ORDER_NOTES instead.
      */
     public const FEATURE_ORDER_NOTES = 'ORDER_NOTES';
 
