@@ -299,7 +299,9 @@ it('sets contract ID from capabilities on delivery options', function () {
     $reset();
 });
 
-it('keeps option DISABLED when carrier settings allowX is false, even if capabilities says isRequired', function () {
+it('forces option ENABLED when capabilities says isRequired, even if merchant allowX is false', function () {
+    // Merchant `allow*` flags only affect checkout display (DeliveryOptionsService);
+    // at order-processing time capabilities have final say so the order remains exportable.
     $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
 
     $reset = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
@@ -308,8 +310,6 @@ it('keeps option DISABLED when carrier settings allowX is false, even if capabil
         ->withAllCapabilities($carrier)
         ->store();
 
-
-    // Merchant explicitly disabled signature in carrier settings.
     factory(Settings::class)
         ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => false])
         ->store();
@@ -325,9 +325,9 @@ it('keeps option DISABLED when carrier settings allowX is false, even if capabil
         ]),
     ]));
 
-    $order = calculateOrder($carrier, ['signature' => TriStateService::ENABLED]);
+    $order = calculateOrder($carrier, ['signature' => TriStateService::DISABLED]);
 
-    expect($order->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::DISABLED);
+    expect($order->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);
 
     $reset();
 });

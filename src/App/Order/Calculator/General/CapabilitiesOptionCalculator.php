@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
@@ -56,15 +55,14 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
         $this->setContractId($capability);
 
-        $options         = $capability->getOptions();
-        $carrierSettings = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
+        $options = $capability->getOptions();
 
         // Index definitions by capabilities key for requires/excludes lookups.
         $definitionsByCapKey = $this->indexDefinitionsByCapabilitiesKey($definitions);
 
-        // First pass: apply carrier settings and capabilities constraints.
+        // First pass: apply per-option capabilities constraints (isRequired, presence in response).
         foreach ($definitions as $definition) {
-            $this->applyDefinition($definition, $options, $carrierSettings);
+            $this->applyDefinition($definition, $options);
         }
 
         // Second pass: propagate requires/excludes for enabled options.
@@ -135,32 +133,27 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
     }
 
     /**
-     * Apply carrier settings and capabilities constraints for a single definition.
+     * Apply capabilities constraints for a single definition.
+     *
+     * Merchant `allow*` flags are intentionally NOT consulted here — they're a
+     * checkout-display concern (filtered by {@see DeliveryOptionsService}). At order
+     * processing time capabilities have final say: forcing an option DISABLED because
+     * the merchant disallowed it would produce orders the API rejects when capabilities
+     * say the option is required for the chosen shipment context.
      *
      * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface                    $definition
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2 $options
-     * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings                                        $carrierSettings
      *
      * @return void
      */
     private function applyDefinition(
         OrderOptionDefinitionInterface $definition,
-        RefCapabilitiesResponseOptionsOptionsV2 $options,
-        CarrierSettings $carrierSettings
+        RefCapabilitiesResponseOptionsOptionsV2 $options
     ): void {
         $shipmentKey     = $definition->getShipmentOptionsKey();
         $capabilitiesKey = $definition->getCapabilitiesOptionsKey();
 
         if (! $shipmentKey || ! $capabilitiesKey) {
-            return;
-        }
-
-        // Carrier settings take precedence: merchant's allowX toggle overrides everything.
-        $allowKey = $definition->getAllowSettingsKey();
-
-        if ($allowKey && $carrierSettings->getAttribute($allowKey) === false) {
-            $this->forceOption($shipmentKey, TriStateService::DISABLED);
-
             return;
         }
 
