@@ -28,7 +28,7 @@ abstract class AbstractIamApiService extends AbstractSdkApiService
     /**
      * The IAM acceptance host URL.
      */
-    private const IAM_URL_ACCEPTANCE = 'https://iam.acceptance.api.myparcel.nl';
+    private const IAM_URL_ACCEPTANCE = 'https://iam.api.acceptance.myparcel.nl';
 
     /**
      * Get a configured IAM API configuration object.
