@@ -387,3 +387,38 @@ it('allows option when carrier settings allow it and capabilities include it', f
 
     $reset();
 });
+
+it('disables every shipment option when the carrier capability is missing for the combination', function () {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $reset = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    resetCache();
+
+    // Permissive carrier settings — but capabilities will say "no support" anyway.
+    factory(Settings::class)
+        ->withCarrier($carrier, [
+            CarrierSettings::ALLOW_SIGNATURE      => true,
+            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+        ])
+        ->store();
+
+    // Empty capabilities response — carrier doesn't support this carrier+package_type+delivery_type.
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
+
+    $order = calculateOrder($carrier, [
+        'signature'     => TriStateService::ENABLED,
+        'onlyRecipient' => TriStateService::ENABLED,
+        'ageCheck'      => TriStateService::ENABLED,
+    ]);
+
+    expect($order->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::DISABLED)
+        ->and($order->deliveryOptions->shipmentOptions->onlyRecipient)->toBe(TriStateService::DISABLED)
+        ->and($order->deliveryOptions->shipmentOptions->ageCheck)->toBe(TriStateService::DISABLED);
+
+    $reset();
+});
