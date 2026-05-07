@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property AccountGeneralSettings $generalSettings
  * @property ShopCollection         $shops
  * @property int                    $status
- * @property array                  $subscriptionFeatures
+ * @property Collection             $subscriptionFeatures
  */
 class Account extends Model
 {
