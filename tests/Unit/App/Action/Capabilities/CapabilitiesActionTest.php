@@ -172,7 +172,14 @@ it('filters options to registered keys when filterOptions=true is in the body', 
     }
 });
 
-it('translates capabilities-API camelCase top-level keys to SDK-PHP snake_case before calling the SDK', function () {
+it('passes the payload through to the service unchanged (key conversion happens in the service)', function () {
+    $bodyShape = [
+        'recipient'          => ['countryCode' => 'NL'],
+        'physicalProperties' => ['weight' => ['value' => 2000, 'unit' => 'g']],
+        'packageType'        => 'PACKAGE',
+        'deliveryType'       => 'STANDARD',
+    ];
+
     $request = Request::create(
         '/',
         'POST',
@@ -180,22 +187,14 @@ it('translates capabilities-API camelCase top-level keys to SDK-PHP snake_case b
         [],
         [],
         ['CONTENT_TYPE' => 'application/json'],
-        '{"recipient":{"countryCode":"NL"},"physicalProperties":{"weight":{"value":2000,"unit":"g"}},"packageType":"PACKAGE","deliveryType":"STANDARD"}'
+        json_encode($bodyShape)
     );
 
     /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService $mockService */
     $mockService = Mockery::mock(CapabilitiesService::class);
     $mockService->shouldReceive('getCapabilities')
         ->once()
-        ->withArgs(function (array $payload) {
-            return ! array_key_exists('packageType', $payload)
-                && ! array_key_exists('deliveryType', $payload)
-                && ! array_key_exists('physicalProperties', $payload)
-                && ($payload['package_type'] ?? null) === 'PACKAGE'
-                && ($payload['delivery_type'] ?? null) === 'STANDARD'
-                && ($payload['physical_properties']['weight'] ?? null) === ['value' => 2000, 'unit' => 'g']
-                && ($payload['recipient']['countryCode'] ?? null) === 'NL';
-        })
+        ->with($bodyShape)
         ->andReturn([]);
 
     /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Handler\CorsHandler $mockCorsHandler */
