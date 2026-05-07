@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
+use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesDeliveryTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesPackageTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
@@ -94,6 +95,8 @@ return [
             CapabilitiesPackageTypeCalculator::class,
             // Resolve tri-state values from settings/product/carrier chain.
             TriStateOptionCalculator::class,
+            // Validate delivery type against the carrier+package_type capability; reset to standard when invalid.
+            CapabilitiesDeliveryTypeCalculator::class,
             // Apply capabilities constraints (requires/excludes/isRequired) on the resolved values.
             CapabilitiesOptionCalculator::class,
             // Exception: null delivery date for carriers that don't support it (API doesn't implement this yet).

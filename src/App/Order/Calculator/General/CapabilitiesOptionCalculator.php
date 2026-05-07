@@ -43,7 +43,14 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
     {
         $capability = $this->getCarrierCapabilities();
 
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        // No capability for this carrier+package_type+delivery_type combination —
+        // none of the shipment options are supported, drop them all.
         if (! $capability) {
+            $this->disableAllOptions($definitions);
+
             return;
         }
 
@@ -51,9 +58,6 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
         $options         = $capability->getOptions();
         $carrierSettings = CarrierSettings::fromCarrier($this->order->deliveryOptions->carrier);
-
-        /** @var OrderOptionDefinitionInterface[] $definitions */
-        $definitions = Pdk::get('orderOptionDefinitions');
 
         // Index definitions by capabilities key for requires/excludes lookups.
         $definitionsByCapKey = $this->indexDefinitionsByCapabilitiesKey($definitions);
@@ -65,6 +69,23 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
         // Second pass: propagate requires/excludes for enabled options.
         $this->propagateConstraints($definitions, $options, $definitionsByCapKey);
+    }
+
+    /**
+     * Disable every shipment option that has a definition. Used when the carrier
+     * has no capability for the current shipment context — nothing is supported.
+     *
+     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[] $definitions
+     */
+    private function disableAllOptions(array $definitions): void
+    {
+        foreach ($definitions as $definition) {
+            $shipmentKey = $definition->getShipmentOptionsKey();
+
+            if ($shipmentKey) {
+                $this->forceOption($shipmentKey, TriStateService::DISABLED);
+            }
+        }
     }
 
     /**
@@ -92,11 +113,9 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
             $args['delivery_type'] = $v2DeliveryType;
         }
 
-        $capabilities = $this->capabilitiesService->indexByCarrier(
-            $this->capabilitiesService->getRepository()->getCapabilities($args)
-        );
+        $capabilities = $this->capabilitiesService->getRepository()->getCapabilities($args);
 
-        return $capabilities[$carrierName] ?? null;
+        return $capabilities[0] ?? null;
     }
 
     /**
