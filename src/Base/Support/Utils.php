@@ -286,6 +286,29 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
     }
 
     /**
+     * Compare two nullable integers. null is treated as greater than any value.
+     *
+     * @param  null|int $a
+     * @param  null|int $b
+     *
+     * @return int Negative if $a < $b, positive if $a > $b, zero if equal
+     */
+    public static function compareNullableInts(?int $a, ?int $b): int
+    {
+        if ($a === null && $b === null) {
+            return 0;
+        }
+        if ($a === null) {
+            return 1;
+        }
+        if ($b === null) {
+            return -1;
+        }
+
+        return $a - $b;
+    }
+
+    /**
      * @param  null|int $flags
      *
      * @return string
