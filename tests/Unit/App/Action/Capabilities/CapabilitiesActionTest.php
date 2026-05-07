@@ -292,6 +292,44 @@ it('does not forward filterOptions to the SDK args (control flag must be strippe
     expect($response->getStatusCode())->toBe(200);
 });
 
+it('drops capabilities for carriers this PDK version does not support', function () {
+    $request = Request::create(
+        '/',
+        'POST',
+        [],
+        [],
+        [],
+        ['CONTENT_TYPE' => 'application/json'],
+        '{"cc":"NL"}'
+    );
+
+    $fakeResults = [
+        ['carrier' => 'POSTNL', 'package_types' => ['PACKAGE']],
+        ['carrier' => 'UNSUPPORTED_FUTURE_CARRIER', 'package_types' => ['PACKAGE']],
+        ['carrier' => 'DHL_FOR_YOU', 'package_types' => ['PACKAGE']],
+    ];
+
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService $mockService */
+    $mockService = Mockery::mock(CapabilitiesService::class);
+    $mockService->shouldReceive('getCapabilities')->once()->andReturn($fakeResults);
+
+    /** @var \Mockery\MockInterface&\MyParcelNL\Pdk\Api\Handler\CorsHandler $mockCorsHandler */
+    $mockCorsHandler = Mockery::mock(CorsHandler::class);
+    $mockCorsHandler->shouldReceive('addCorsHeaders')
+        ->once()
+        ->andReturnUsing(static fn($_request, $response) => $response);
+
+    mockPdkProperty(CorsHandler::class, $mockCorsHandler);
+
+    $action   = new CapabilitiesAction($mockService);
+    $response = $action->handle($request);
+    $payload  = json_decode($response->getContent(), true);
+
+    expect($response->getStatusCode())->toBe(200)
+        ->and(array_column($payload['results'], 'carrier'))
+        ->toEqual(['POSTNL', 'DHL_FOR_YOU']);
+});
+
 it('passes through sdk core api error response', function () {
     $request = Request::create('/?foo=bar', 'POST', [], [], [], [], '{"invalid":true}');
 

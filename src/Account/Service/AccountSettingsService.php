@@ -48,6 +48,11 @@ class AccountSettingsService implements AccountSettingsServiceInterface
 
     /**
      * Return the carriers saved for the current shop.
+     *
+     * Filters out carriers this PDK version does not support so a server-side
+     * proposition update cannot expose an unsupported carrier to the admin UI.
+     * @see Carrier::isSupported()
+     *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection
@@ -58,7 +63,12 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             return new CarrierCollection();
         }
 
-        return $shop->carriers;
+        // The SDK already rejects unknown V2 carriers at hydration time, leaving the
+        // failed entries as raw arrays in the collection. Drop those alongside any
+        // Carriers whose name our local map doesn't recognise.
+        return $shop->carriers->filter(static function ($carrier): bool {
+            return $carrier instanceof Carrier && Carrier::isSupported($carrier->carrier);
+        })->values();
     }
 
     /**

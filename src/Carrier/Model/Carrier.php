@@ -154,6 +154,23 @@ class Carrier extends SdkBackedModel
         RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => RefTypesCarrier::POSTE_ITALIANE,
     ];
 
+    /**
+     * Whether a carrier name is supported by this PDK version.
+     *
+     * Carriers absent from this set are filtered out at the boundary
+     * ({@see \MyParcelNL\Pdk\Account\Service\AccountSettingsService::getCarriers},
+     * {@see \MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction}'s response)
+     * so a server-side proposition update introducing a new carrier cannot expose
+     * it to admin or checkout, which would otherwise lead to encode-side throws
+     * during export.
+     *
+     * Currently backed by {@see self::CARRIER_NAME_ID_MAP}; switch to an
+     * SDK-provided definition when INT-1441 lands so call sites stay unchanged.
+     */
+    public static function isSupported(string $carrierName): bool
+    {
+        return array_key_exists($carrierName, self::CARRIER_NAME_ID_MAP);
+    }
 
     /**
      * Any attributes here extend/overwrite the data from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.

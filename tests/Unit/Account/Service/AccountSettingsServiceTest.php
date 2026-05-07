@@ -74,6 +74,41 @@ it('gets carriers in the same order as stored', function () {
         ]);
 });
 
+it('filters out carriers this PDK version does not support', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
+    $repository = Pdk::get(PdkAccountRepositoryInterface::class);
+
+    $repository->store(
+        new Account([
+            'id'         => '7654321',
+            'platformId' => 1,
+            'status'     => 2,
+            'shops'      => [
+                [
+                    'id'         => '555',
+                    'accountId'  => '7654321',
+                    'platformId' => 1,
+                    'name'       => 'MixedShop',
+                    'carriers'   => [
+                        ['carrier' => RefCapabilitiesSharedCarrierV2::POSTNL],
+                        ['carrier' => 'UNSUPPORTED_FUTURE_CARRIER'],
+                        ['carrier' => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU],
+                    ],
+                ],
+            ],
+        ])
+    );
+
+    /** @var AccountSettingsServiceInterface $service */
+    $service = Pdk::get(AccountSettingsServiceInterface::class);
+
+    expect($service->getCarriers()->pluck('carrier')->all())
+        ->toEqual([
+            RefCapabilitiesSharedCarrierV2::POSTNL,
+            RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
+        ]);
+});
+
 it('checks subscription features in non-existent account', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
     $repository = Pdk::get(PdkAccountRepositoryInterface::class);
