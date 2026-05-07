@@ -82,9 +82,10 @@ class CapabilitiesService extends AbstractShipmentApiService
      * so that attributeMap-driven serialization produces V2-correct wire keys
      * (e.g. {@see CapabilitiesRecipientV2}'s `country_code` property → wire `countryCode`).
      *
-     * @param array $parameters Array of shipment parameters. Keys and nested keys must match
-     *                          the property names declared in the corresponding V2 model's
-     *                          `openAPITypes` (snake_case), not the wire keys:
+     * @param array $parameters Array of shipment parameters. Keys may be either the SDK property
+     *                          names (snake_case from `openAPITypes`) or the API wire keys
+     *                          (camelCase from `attributeMap`). Conversion happens at every
+     *                          nesting level. Documented as snake_case for clarity:
      *                          - recipient: array (required) - {country_code, postal_code, is_business}
      *                          - carrier: string (optional) - Carrier identifier
      *                          - sender: array (optional) - Sender address details
@@ -111,13 +112,12 @@ class CapabilitiesService extends AbstractShipmentApiService
     }
 
     /**
-     * Recursively wrap nested array data into the typed SDK model the schema expects,
-     * so the SDK's attributeMap-driven serialization produces V2-correct wire keys.
+     * Recursively normalize an input array into a typed SDK model, in a single walk:
+     *  - Convert API-style camelCase keys to SDK-input snake_case using the model's `attributeMap`.
+     *  - Wrap nested arrays whose declared type is a `ModelInterface` subclass into typed models.
      *
-     * Walks `openAPITypes` and instantiates any property whose declared type is a
-     * `ModelInterface` subclass when the input value is still a raw array. Already-typed
-     * model instances are passed through untouched. Primitives, enums, and arrays-of-scalars
-     * are left alone.
+     * Already-snake_case keys and already-typed model instances pass through. Primitives,
+     * enums, and arrays-of-scalars are left alone.
      *
      * @param  class-string<ModelInterface> $modelClass
      * @param  array                        $data
@@ -126,19 +126,25 @@ class CapabilitiesService extends AbstractShipmentApiService
      */
     private function hydrateModel(string $modelClass, array $data): ModelInterface
     {
-        foreach ($modelClass::openAPITypes() as $property => $type) {
-            if (! is_array($data[$property] ?? null)) {
-                continue;
+        $camelToSnake = array_flip($modelClass::attributeMap());
+        $openAPITypes = $modelClass::openAPITypes();
+        $normalized   = [];
+
+        foreach ($data as $key => $value) {
+            $property    = $camelToSnake[$key] ?? $key;
+            $nestedClass = ltrim((string) ($openAPITypes[$property] ?? ''), '\\');
+
+            if (is_array($value)
+                && class_exists($nestedClass)
+                && is_subclass_of($nestedClass, ModelInterface::class)
+            ) {
+                $value = $this->hydrateModel($nestedClass, $value);
             }
 
-            $nestedClass = ltrim((string) $type, '\\');
-
-            if (class_exists($nestedClass) && is_subclass_of($nestedClass, ModelInterface::class)) {
-                $data[$property] = $this->hydrateModel($nestedClass, $data[$property]);
-            }
+            $normalized[$property] = $value;
         }
 
-        return new $modelClass($data);
+        return new $modelClass($normalized);
     }
 
     /**

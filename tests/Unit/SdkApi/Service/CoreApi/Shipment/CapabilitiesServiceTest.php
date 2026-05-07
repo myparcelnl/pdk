@@ -120,6 +120,32 @@ it('getCapabilities serializes nested arrays to V2 wire keys via SDK attributeMa
         ->toMatchArray(['value' => 1500, 'unit' => 'g']);
 });
 
+it('getCapabilities accepts API-style camelCase keys at every nesting level and produces correct V2 wire format', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    // Same shape the JS-PDK / checkout posts to the proxy: camelCase at every level.
+    $service->getCapabilities([
+        'recipient'          => ['countryCode' => 'NL'],
+        'physicalProperties' => ['weight' => ['value' => 3000, 'unit' => 'g']],
+        'carrier'            => 'POSTNL',
+        'packageType'        => 'PACKAGE',
+        'deliveryType'       => 'STANDARD_DELIVERY',
+    ]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body)
+        ->toHaveKey('packageType', 'PACKAGE')
+        ->toHaveKey('deliveryType', 'STANDARD_DELIVERY')
+        ->and($body['recipient'])
+        ->toMatchArray(['countryCode' => 'NL'])
+        ->and($body['physicalProperties']['weight'])
+        ->toMatchArray(['value' => 3000, 'unit' => 'g']);
+});
+
 it('getCapabilities silently drops legacy V1 recipient.cc input under V2', function () {
     TestBootstrapper::hasApiKey('test-key');
 
