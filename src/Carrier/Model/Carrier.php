@@ -102,6 +102,16 @@ class Carrier extends SdkBackedModel
     public const CARRIER_TRUNKRS_LEGACY_NAME   = 'trunkrs';
 
     /**
+     * @deprecated use RefCapabilitiesSharedCarrierV2::INPOST
+     */
+    public const CARRIER_INPOST_LEGACY_NAME    = 'inpost';
+
+    /**
+     * @deprecated use RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE
+     */
+    public const CARRIER_POSTE_ITALIANE_LEGACY_NAME = 'posteitaliane';
+
+    /**
      * Legacy names as used by delivery options and internal storage.
      *
      * @deprecated use new carrier names directly
@@ -119,6 +129,8 @@ class Carrier extends SdkBackedModel
         RefCapabilitiesSharedCarrierV2::GLS                => self::CARRIER_GLS_LEGACY_NAME,
         RefCapabilitiesSharedCarrierV2::BRT                => self::CARRIER_BRT_LEGACY_NAME,
         RefCapabilitiesSharedCarrierV2::TRUNKRS            => self::CARRIER_TRUNKRS_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::INPOST             => self::CARRIER_INPOST_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => self::CARRIER_POSTE_ITALIANE_LEGACY_NAME,
     ];
 
     /**
@@ -136,23 +148,12 @@ class Carrier extends SdkBackedModel
         RefCapabilitiesSharedCarrierV2::GLS                => RefTypesCarrier::GLS,
         RefCapabilitiesSharedCarrierV2::UPS_STANDARD       => RefTypesCarrier::UPS_STANDARD,
         RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER  => RefTypesCarrier::UPS_EXPRESS_SAVER,
+        RefCapabilitiesSharedCarrierV2::BRT                => RefTypesCarrier::BRT,
         RefCapabilitiesSharedCarrierV2::TRUNKRS            => RefTypesCarrier::TRUNKRS,
+        RefCapabilitiesSharedCarrierV2::INPOST             => RefTypesCarrier::INPOST,
+        RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => RefTypesCarrier::POSTE_ITALIANE,
     ];
 
-    /**
-     * @deprecated use mapping functionality from the SDK when available
-     * @see CARRIER_NAME_ID_MAP
-     */
-    public const CARRIER_LEGACY_NAME_ID_MAP = [
-        self::CARRIER_BPOST_LEGACY_NAME      => RefTypesCarrier::BPOST,
-        self::CARRIER_CHEAP_CARGO_LEGACY_NAME => RefTypesCarrier::CHEAP_CARGO,
-        self::CARRIER_DHL_EUROPLUS_LEGACY_NAME => RefTypesCarrier::DHL_EUROPLUS,
-        self::CARRIER_DHL_FOR_YOU_LEGACY_NAME => RefTypesCarrier::DHL_FOR_YOU,
-        self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => RefTypesCarrier::DHL_PARCEL_CONNECT,
-        self::CARRIER_DPD_LEGACY_NAME        => RefTypesCarrier::DPD,
-        self::CARRIER_POSTNL_LEGACY_NAME     => RefTypesCarrier::POSTNL,
-        self::CARRIER_TRUNKRS_LEGACY_NAME    => RefTypesCarrier::TRUNKRS,
-    ];
 
     /**
      * Any attributes here extend/overwrite the data from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.
