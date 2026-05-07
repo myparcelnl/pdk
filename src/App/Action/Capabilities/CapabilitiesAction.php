@@ -110,13 +110,28 @@ class CapabilitiesAction implements ActionInterface
     {
         $body = json_decode(json_encode(['results' => $results]), true);
 
-        if ($filterOptions && isset($body['results']) && is_array($body['results'])) {
-            $body['results'] = array_map(static function (array $capability): array {
-                if (isset($capability['options']) && is_array($capability['options'])) {
-                    $capability['options'] = Carrier::filterRegisteredOptions($capability['options']);
+        if (isset($body['results']) && is_array($body['results'])) {
+            // Drop capabilities for carriers this PDK version does not support so
+            // that a server-side proposition update cannot expose a new carrier
+            // to the checkout widget. @see Carrier::isSupported()
+            $body['results'] = array_values(array_filter(
+                $body['results'],
+                static function ($capability): bool {
+                    return is_array($capability)
+                        && isset($capability['carrier'])
+                        && is_string($capability['carrier'])
+                        && Carrier::isSupported($capability['carrier']);
                 }
-                return $capability;
-            }, $body['results']);
+            ));
+
+            if ($filterOptions) {
+                $body['results'] = array_map(static function (array $capability): array {
+                    if (isset($capability['options']) && is_array($capability['options'])) {
+                        $capability['options'] = Carrier::filterRegisteredOptions($capability['options']);
+                    }
+                    return $capability;
+                }, $body['results']);
+            }
         }
 
         return new Response(
