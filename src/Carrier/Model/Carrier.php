@@ -29,6 +29,13 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
  */
 class Carrier extends SdkBackedModel
 {
+    /**
+     * Transient contract ID from capabilities response. Not persisted.
+     *
+     * @var int|null
+     */
+    public $contractId;
+
     /*
      * Inherit all getters and setters from this model.
      */
