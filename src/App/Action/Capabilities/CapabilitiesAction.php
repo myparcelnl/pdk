@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException as CoreApiException;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -57,12 +56,9 @@ class CapabilitiesAction implements ActionInterface
     }
 
     /**
-     * Pull the action's control parameter ($filterOptions) out of the payload and translate the
-     * incoming top-level keys from the actual capabilities API shape (camelCase, e.g.
-     * `physicalProperties`, `packageType`) to the SDK PHP model's local names (snake_case, e.g.
-     * `physical_properties`, `package_type`). The mapping is read from
-     * `CapabilitiesPostCapabilitiesRequestV2::attributeMap()` so it stays in sync with the SDK
-     * automatically — no hardcoded field list to maintain. Already-snake_case keys pass through.
+     * Pull the action's control parameter ($filterOptions) out of the payload. The remaining
+     * payload is passed through unchanged — `CapabilitiesService::getCapabilities` accepts
+     * either API-style camelCase or SDK-input snake_case keys at every nesting level.
      *
      * @param  array $payload
      *
@@ -76,14 +72,7 @@ class CapabilitiesAction implements ActionInterface
             : filter_var($filterOptions, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
         unset($payload['filterOptions']);
 
-        $camelToSnake = array_flip(CapabilitiesPostCapabilitiesRequestV2::attributeMap());
-        $translated   = [];
-
-        foreach ($payload as $key => $value) {
-            $translated[$camelToSnake[$key] ?? $key] = $value;
-        }
-
-        return [$translated, $shouldFilterOptions];
+        return [$payload, $shouldFilterOptions];
     }
 
     /**
