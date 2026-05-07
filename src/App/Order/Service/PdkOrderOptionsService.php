@@ -74,6 +74,7 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
             // Enforce isRequired: if the carrier capability requires this option, force ENABLED
             $capabilitiesKey = $definition->getCapabilitiesOptionsKey();
 
+            // @phpstan-ignore booleanAnd.rightAlwaysTrue
             if ($capabilitiesKey && $carrier) {
                 $option = $carrier->getOptionMetadata($capabilitiesKey);
 

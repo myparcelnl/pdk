@@ -71,6 +71,15 @@ return [
             'request' => FetchContextEndpointRequest::class,
             'action'  => FetchContextAction::class,
         ],
+
+        /**
+         * Capabilities microservice proxy. Shared because both checkout (frontend) and the
+         * admin order-edit form drive contextual capability lookups against the same action.
+         */
+        PdkCapabilitiesActions::PROXY_CAPABILITIES => [
+            'request' => CapabilitiesEndpointRequest::class,
+            'action'  => CapabilitiesAction::class,
+        ],
     ],
 
     PdkEndpoint::CONTEXT_FRONTEND => [
@@ -92,11 +101,6 @@ return [
         PdkAddressActions::PROXY_ADDRESSES_VALIDATE => [
             'request' => AddressesValidateEndpointRequest::class,
             'action'  => AddressesValidateAction::class,
-        ],
-
-        PdkCapabilitiesActions::PROXY_CAPABILITIES => [
-            'request' => CapabilitiesEndpointRequest::class,
-            'action'  => CapabilitiesAction::class,
         ],
     ],
 
