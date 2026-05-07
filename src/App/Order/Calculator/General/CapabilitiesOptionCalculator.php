@@ -99,7 +99,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         $v2PackageType   = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$deliveryOptions->packageType] ?? null;
         $v2DeliveryType  = DeliveryOptions::DELIVERY_TYPES_V2_MAP[$deliveryOptions->deliveryType] ?? null;
 
-        if (! $v2PackageType) {
+        if (! $cc || ! $v2PackageType) {
             return null;
         }
 
@@ -113,9 +113,11 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
             $args['delivery_type'] = $v2DeliveryType;
         }
 
-        $capabilities = $this->capabilitiesService->getRepository()->getCapabilities($args);
+        $capabilities = $this->capabilitiesService->indexByCarrier(
+            $this->capabilitiesService->getRepository()->getCapabilities($args)
+        );
 
-        return $capabilities[0] ?? null;
+        return $capabilities[$carrierName] ?? null;
     }
 
     /**
