@@ -40,6 +40,8 @@ final class ExcludeParcelLockersCalculator extends AbstractPdkOrderOptionCalcula
         $definition = new ExcludeParcelLockersDefinition();
 
         if (! $definition->validate($this->carrierSchema)) {
+            $this->order->deliveryOptions->shipmentOptions->excludeParcelLockers = TriStateService::DISABLED;
+
             return;
         }
 

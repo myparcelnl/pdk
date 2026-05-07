@@ -36,7 +36,7 @@ it('returns capabilities for a given recipient country', function () {
         $mockService
     );
 
-    $result = $repository->getCapabilitiesForRecipientCountry('NL');
+    $result = $repository->getCapabilities(['recipient' => ['country_code' => 'NL']]);
 
     expect($result)->toBeArray()
         ->and($result)->toHaveCount(1);
@@ -63,8 +63,8 @@ it('caches capabilities by recipient country', function () {
         $mockService
     );
 
-    $first  = $repository->getCapabilitiesForRecipientCountry('NL');
-    $second = $repository->getCapabilitiesForRecipientCountry('NL');
+    $first = $repository->getCapabilities(['recipient' => ['country_code' => 'NL']]);
+    $second = $repository->getCapabilities(['recipient' => ['country_code' => 'NL']]);
 
     // Both calls return the same data
     expect($first)->toBe($second)

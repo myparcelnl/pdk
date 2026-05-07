@@ -1935,6 +1935,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -1996,6 +2004,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -2061,6 +2077,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -2122,6 +2146,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -3557,6 +3589,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -3618,6 +3658,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -3683,6 +3731,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -3744,6 +3800,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -5179,6 +5243,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -5240,6 +5312,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -5305,6 +5385,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -5366,6 +5454,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -6801,6 +6897,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -6862,6 +6966,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -6927,6 +7039,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -6988,6 +7108,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -8423,6 +8551,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -8484,6 +8620,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -8549,6 +8693,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -8610,6 +8762,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -10045,6 +10205,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -10106,6 +10274,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -10171,6 +10347,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -10232,6 +10416,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -11667,6 +11859,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -11728,6 +11928,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -11793,6 +12001,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -11854,6 +12070,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -13289,6 +13513,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -13350,6 +13582,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -13415,6 +13655,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -13476,6 +13724,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -14911,6 +15167,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -14972,6 +15236,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -15037,6 +15309,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -15098,6 +15378,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -16533,6 +16821,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -16594,6 +16890,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -16659,6 +16963,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -16720,6 +17032,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -18155,6 +18475,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -18216,6 +18544,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -18281,6 +18617,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -18342,6 +18686,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -19828,6 +20180,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -19889,6 +20249,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -19954,6 +20322,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -20015,6 +20391,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -21450,6 +21834,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -21511,6 +21903,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -21576,6 +21976,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -21637,6 +22045,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -23072,6 +23488,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -23133,6 +23557,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,
@@ -23198,6 +23630,14 @@
                                     "plainLabel": "\u20ac 0,00"
                                 },
                                 {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
+                                },
+                                {
                                     "value": 50000,
                                     "plainLabel": "\u20ac 500,00"
                                 },
@@ -23259,6 +23699,14 @@
                                 {
                                     "value": 0,
                                     "plainLabel": "\u20ac 0,00"
+                                },
+                                {
+                                    "value": 10000,
+                                    "plainLabel": "\u20ac 100,00"
+                                },
+                                {
+                                    "value": 25000,
+                                    "plainLabel": "\u20ac 250,00"
                                 },
                                 {
                                     "value": 50000,

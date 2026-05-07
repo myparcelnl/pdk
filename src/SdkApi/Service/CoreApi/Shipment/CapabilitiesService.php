@@ -8,6 +8,7 @@ use GuzzleHttp\HandlerStack;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ModelInterface;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
 use Psr\Http\Message\RequestInterface;
@@ -27,7 +28,7 @@ use Psr\Http\Message\RequestInterface;
  * // Get dynamic capabilities for a specific shipment
  * $capabilities = $service->getCapabilities([
  *     'carrier' => 'POSTNL',
- *     'recipient' => ['cc' => 'NL', 'postal_code' => '2132WT'],
+ *     'recipient' => ['country_code' => 'NL', 'postal_code' => '2132WT'],
  *     'package_type' => 'PACKAGE',
  * ]);
  *
@@ -77,12 +78,18 @@ class CapabilitiesService extends AbstractShipmentApiService
      * based on shipment details like sender, recipient, carrier, package type, etc.
      * This is useful for building checkout flows with dynamic delivery options.
      *
-     * @param array $parameters Array of shipment parameters including:
-     *                          - recipient: array (required) - Recipient address details (cc, postal_code, etc.)
+     * Nested arrays are wrapped into the typed SDK models the schema declares,
+     * so that attributeMap-driven serialization produces V2-correct wire keys
+     * (e.g. {@see CapabilitiesRecipientV2}'s `country_code` property → wire `countryCode`).
+     *
+     * @param array $parameters Array of shipment parameters. Keys and nested keys must match
+     *                          the property names declared in the corresponding V2 model's
+     *                          `openAPITypes` (snake_case), not the wire keys:
+     *                          - recipient: array (required) - {country_code, postal_code, is_business}
      *                          - carrier: string (optional) - Carrier identifier
      *                          - sender: array (optional) - Sender address details
-     *                          - package_type: string (optional) - Package type (package, mailbox, letter, etc.)
-     *                          - physical_properties: array (optional) - Weight, dimensions
+     *                          - package_type: string (optional) - Package type (PACKAGE, MAILBOX, LETTER, ...)
+     *                          - physical_properties: array (optional) - {weight, height, width, length}
      *                          - options: array (optional) - Requested shipment options
      *                          - delivery_type: string (optional) - Delivery type (standard, morning, evening)
      *                          - direction: string (optional) - Direction (outbound, inbound)
@@ -94,13 +101,44 @@ class CapabilitiesService extends AbstractShipmentApiService
      */
     public function getCapabilities(array $parameters): array
     {
+        /** @var CapabilitiesPostCapabilitiesRequestV2 $request */
+        $request = $this->hydrateModel(CapabilitiesPostCapabilitiesRequestV2::class, $parameters);
+
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
-        $response = $this->shipmentApi->postCapabilities(
-            $this->getUserAgent(),
-            new CapabilitiesPostCapabilitiesRequestV2($parameters)
-        );
+        $response = $this->shipmentApi->postCapabilities($this->getUserAgent(), $request);
 
         return $response->getResults();
+    }
+
+    /**
+     * Recursively wrap nested array data into the typed SDK model the schema expects,
+     * so the SDK's attributeMap-driven serialization produces V2-correct wire keys.
+     *
+     * Walks `openAPITypes` and instantiates any property whose declared type is a
+     * `ModelInterface` subclass when the input value is still a raw array. Already-typed
+     * model instances are passed through untouched. Primitives, enums, and arrays-of-scalars
+     * are left alone.
+     *
+     * @param  class-string<ModelInterface> $modelClass
+     * @param  array                        $data
+     *
+     * @return ModelInterface
+     */
+    private function hydrateModel(string $modelClass, array $data): ModelInterface
+    {
+        foreach ($modelClass::openAPITypes() as $property => $type) {
+            if (! is_array($data[$property] ?? null)) {
+                continue;
+            }
+
+            $nestedClass = ltrim((string) $type, '\\');
+
+            if (class_exists($nestedClass) && is_subclass_of($nestedClass, ModelInterface::class)) {
+                $data[$property] = $this->hydrateModel($nestedClass, $data[$property]);
+            }
+        }
+
+        return new $modelClass($data);
     }
 
     /**

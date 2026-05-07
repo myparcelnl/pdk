@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Contract;
 
+use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 
 interface WeightServiceInterface
@@ -50,6 +51,20 @@ interface WeightServiceInterface
      * @return int
      */
     public function addEmptyPackageWeight(int $weight, PackageType $packageType): int;
+
+    /**
+     * Resolve the effective shipping weight for a given package type, applying the
+     * empty-weight fallback only when the merchant has not manually set a weight on
+     * the order. Mirrors the rules used by {@see \MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator}
+     * so capability checks performed before WeightCalculator runs see the same value
+     * the export will eventually use.
+     *
+     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties $physicalProperties
+     * @param  \MyParcelNL\Pdk\Shipment\Model\PackageType            $packageType
+     *
+     * @return int
+     */
+    public function getEffectiveWeight(PdkPhysicalProperties $physicalProperties, PackageType $packageType): int;
 
     /**
      * Convert a weight into a digital stamp range.
