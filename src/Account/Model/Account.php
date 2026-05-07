@@ -21,7 +21,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 class Account extends Model
 {
     /**
-     * @deprecated Use PdkAccountFeaturesService::FEATURE_ORDER_NOTES instead.
+     * @deprecated Use \MyParcelNL\Sdk\Client\Generated\IamApi\Model\Feature::ORDER_NOTES instead.
      */
     public const FEATURE_ORDER_NOTES = 'ORDER_NOTES';
 

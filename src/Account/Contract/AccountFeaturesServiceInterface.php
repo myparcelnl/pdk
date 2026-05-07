@@ -6,6 +6,12 @@ namespace MyParcelNL\Pdk\Account\Contract;
 
 interface AccountFeaturesServiceInterface
 {
+    public const ORDER_MODE_SHIPMENTS = 0;
+
+    public const ORDER_MODE_V1        = 1;
+
+    public const ORDER_MODE_V2        = 2;
+
     /**
      * @return bool
      */
@@ -32,9 +38,9 @@ interface AccountFeaturesServiceInterface
      * The order management version in use.
      *
      * Returns:
-     *   0 — no order mode; shop uses shipments (fallback)
-     *   1 — Order v1 (LEGACY_ORDER_MANAGEMENT)
-     *   2 — Order v2 (ORDER_MANAGEMENT); wins over v1 when both present
+     *   self::ORDER_MODE_SHIPMENTS — no order mode; shop uses shipments (fallback)
+     *   self::ORDER_MODE_V1 — Order v1 (LEGACY_ORDER_MANAGEMENT)
+     *   self::ORDER_MODE_V2 — Order v2 (ORDER_MANAGEMENT); wins over v1 when both present
      *
      * @return int
      */
