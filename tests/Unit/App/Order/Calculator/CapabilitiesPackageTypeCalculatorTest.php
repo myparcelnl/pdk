@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
@@ -315,6 +316,59 @@ it('falls back to default when no capabilities match at all', function () {
     $newOrder = $service->calculate($order);
 
     expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME);
+
+    $reset();
+});
+
+it('passes effective weight (raw + empty-weight setting) to the capability check when manualWeight is INHERIT', function () {
+    // An order with totalWeight = 0 would normally fail a min-weight constraint, but the
+    // empty-weight setting per package type provides the realistic export weight that the
+    // shipment will eventually carry. Capability checks must use that effective value, otherwise
+    // valid package types are rejected at calculator time and the user gets a surprising fallback.
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $reset = mockPdkProperty('orderCalculators', [CapabilitiesPackageTypeCalculator::class]);
+
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)
+                    ->withCarrier($carrier)
+                    ->withCapabilityPackageTypes(['MAILBOX']))
+        )
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier($carrier)
+        ->store();
+
+    // Set OrderSettings AFTER Settings so the empty-weight setting isn't overwritten
+    // when Settings::store() persists its (default) order sub-model.
+    factory(OrderSettings::class)
+        ->withEmptyMailboxWeight(2500)
+        ->store();
+
+    // MAILBOX capability requires weight in [2000, 2500] — order weight 0 alone would fail
+    // min=2000, but the configured emptyMailboxWeight=2500 brings effective weight to 2500.
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        pkgCapabilityResult($carrier, ['MAILBOX'], 2000, 2500),
+    ]));
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+        )
+        ->make();
+
+    /** @var PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
+
+    // Mailbox stays selected — without the empty-weight fallback this would falsely fall through.
+    expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
 
     $reset();
 });

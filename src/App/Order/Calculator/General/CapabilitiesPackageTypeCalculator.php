@@ -7,12 +7,14 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 
 /**
@@ -32,6 +34,11 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
     private $countryService;
 
     /**
+     * @var \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface
+     */
+    private $weightService;
+
+    /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
     public function __construct(PdkOrder $order)
@@ -40,6 +47,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
 
         $this->capabilitiesService = Pdk::get(CapabilitiesValidationService::class);
         $this->countryService      = Pdk::get(CountryServiceInterface::class);
+        $this->weightService       = Pdk::get(WeightServiceInterface::class);
     }
 
     /**
@@ -56,10 +64,8 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
             return;
         }
 
-        $weight = (int) $this->order->physicalProperties->totalWeight;
-
-        // Cache key: cc+package_type — shareable across orders/carriers and reused
-        // by getPackageTypeWeights in fallback. Carrier and weight are filtered client-side.
+        // Cache key: cc+package_type — shareable across orders/carriers. Carrier and
+        // weight are filtered client-side so the cache stays warm regardless of order weight.
         $currentCapability = $this->capabilitiesService->indexByCarrier(
             $this->capabilitiesService->getRepository()->getCapabilities([
                 'recipient'    => ['country_code' => $cc],
@@ -67,15 +73,20 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
             ])
         )[$carrier->carrier] ?? null;
 
+        // Use the weight that the export will actually send: raw order weight plus the
+        // configured empty-weight fallback for THIS package type, but only when the
+        // merchant didn't manually set a weight (mirrors WeightCalculator's rules).
+        $weightForCurrent = $this->effectiveWeightFor($currentType);
+
         $supported = $currentCapability
-            && $this->capabilitiesService->capabilitySupportsWeight($currentCapability, $weight)
+            && $this->capabilitiesService->capabilitySupportsWeight($currentCapability, $weightForCurrent)
             && ! $this->isInternationalMailboxBlocked($currentType, $cc, $carrier);
 
         if ($supported) {
             return;
         }
 
-        $this->fallbackToNextAvailableType($cc, $carrier, $weight);
+        $this->fallbackToNextAvailableType($cc, $carrier);
     }
 
     /**
@@ -104,11 +115,13 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
 
     /**
      * Fall back to the next available package type, sorted by this carrier's max
-     * weight per type ascending — picks the smallest type that still fits.
+     * weight per type ascending — picks the smallest type that still fits. Each
+     * candidate is evaluated against ITS OWN effective weight (raw order weight +
+     * the empty-weight setting configured for that type), so capability min/max
+     * checks match what the export will actually submit.
      */
-    private function fallbackToNextAvailableType(string $cc, Carrier $carrier, int $weight): void
+    private function fallbackToNextAvailableType(string $cc, Carrier $carrier): void
     {
-        // Collect (pdkName => capability) for types this carrier supports at this weight.
         $availableByType = [];
 
         foreach (DeliveryOptions::PACKAGE_TYPES_V2_MAP as $pdkName => $v2Name) {
@@ -123,7 +136,9 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
                 ])
             )[$carrier->carrier] ?? null;
 
-            if ($capability && $this->capabilitiesService->capabilitySupportsWeight($capability, $weight)) {
+            $effectiveWeight = $this->effectiveWeightFor($pdkName);
+
+            if ($capability && $this->capabilitiesService->capabilitySupportsWeight($capability, $effectiveWeight)) {
                 $availableByType[$pdkName] = $capability;
             }
         }
@@ -139,6 +154,18 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
         $this->order->deliveryOptions->packageType = ! empty($typeNames)
             ? $typeNames[0]
             : DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
+    }
+
+    /**
+     * Effective shipping weight if the order were exported as the given package type.
+     * Delegates to the same rule WeightCalculator uses (mind manualWeight tristate).
+     */
+    private function effectiveWeightFor(string $pdkPackageTypeName): int
+    {
+        return $this->weightService->getEffectiveWeight(
+            $this->order->physicalProperties,
+            new PackageType(['name' => $pdkPackageTypeName])
+        );
     }
 
     /**
