@@ -81,11 +81,65 @@ it('getCapabilities returns array of results from API response', function () {
 
     $result = $service->getCapabilities([
         'carrier'      => 'POSTNL',
-        'recipient'    => ['cc' => 'NL', 'postal_code' => '2132WT'],
+        'recipient'    => ['country_code' => 'NL', 'postal_code' => '2132WT'],
         'package_type' => 'PACKAGE',
     ]);
 
     expect($result)->toBeArray();
+});
+
+it('getCapabilities serializes nested arrays to V2 wire keys via SDK attributeMap', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities([
+        'carrier'             => 'POSTNL',
+        'recipient'           => ['country_code' => 'NL', 'postal_code' => '2132WT'],
+        'package_type'        => 'PACKAGE',
+        'physical_properties' => ['weight' => ['value' => 1500, 'unit' => 'g']],
+    ]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body)
+        // Top-level snake_case property names get translated to camelCase wire keys.
+        ->toHaveKey('packageType', 'PACKAGE')
+        ->toHaveKey('physicalProperties')
+        ->not->toHaveKey('package_type')
+        ->not->toHaveKey('physical_properties')
+        // Nested recipient: `country_code` property → `countryCode` wire key via CapabilitiesRecipientV2::attributeMap.
+        ->and($body['recipient'])
+        ->toMatchArray(['countryCode' => 'NL', 'postalCode' => '2132WT'])
+        ->not->toHaveKey('country_code')
+        ->not->toHaveKey('postal_code')
+        ->not->toHaveKey('cc')
+        // Nested physical_properties.weight: untranslated leaf keys (value/unit) match V2 schema as-is.
+        ->and($body['physicalProperties']['weight'])
+        ->toMatchArray(['value' => 1500, 'unit' => 'g']);
+});
+
+it('getCapabilities silently drops legacy V1 recipient.cc input under V2', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    // Regression guard: the V2 CapabilitiesRecipientV2 model only knows country_code,
+    // so a legacy `cc` key is silently dropped. Callers must use `country_code`.
+    $service->getCapabilities([
+        'carrier'      => 'POSTNL',
+        'recipient'    => ['cc' => 'NL'],
+        'package_type' => 'PACKAGE',
+    ]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'] ?? [])
+        ->not->toHaveKey('cc')
+        ->not->toHaveKey('countryCode')
+        ->not->toHaveKey('country_code');
 });
 
 it('getCapabilities rejects incorrect parameter types before making a request', function () {
@@ -99,7 +153,7 @@ it('getCapabilities rejects incorrect parameter types before making a request', 
     // so no HTTP request is made and no mock handler is needed.
     expect(fn() => $service->getCapabilities([
         'carrier'      => 2, // Invalid: must be a string enum value
-        'recipient'    => ['cc' => 'NL', 'postal_code' => '2132WT'],
+        'recipient'    => ['country_code' => 'NL', 'postal_code' => '2132WT'],
         'package_type' => 'PACKAGE',
     ]))->toThrow(
         \InvalidArgumentException::class,
@@ -232,7 +286,7 @@ it('sets version-2 Accept header for all capabilities endpoints', function () {
 
     $service->getCapabilities([
         'carrier'      => 'POSTNL',
-        'recipient'    => ['cc' => 'NL', 'postal_code' => '2132WT'],
+        'recipient'    => ['country_code' => 'NL', 'postal_code' => '2132WT'],
         'package_type' => 'PACKAGE',
     ]);
 

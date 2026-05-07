@@ -31,23 +31,25 @@ class CapabilitiesValidationService
     }
 
     /**
-     * Fetch capabilities for a specific country + package type, indexed by carrier name.
+     * @return \MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository
+     */
+    public function getRepository(): CarrierCapabilitiesRepository
+    {
+        return $this->capabilitiesRepository;
+    }
+
+    /**
+     * Index a capabilities response array by carrier name.
      *
-     * @param  string $cc            ISO 3166-1 alpha-2 country code
-     * @param  string $v2PackageType V2 package type name (e.g. 'PACKAGE', 'MAILBOX')
+     * @param  RefCapabilitiesResponseCapabilityV2[] $capabilities
      *
      * @return array<string, RefCapabilitiesResponseCapabilityV2>
      */
-    public function getCapabilitiesForPackageType(string $cc, string $v2PackageType): array
+    public function indexByCarrier(array $capabilities): array
     {
-        $capabilities = $this->capabilitiesRepository->getCapabilities([
-            'recipient'    => ['cc' => $cc],
-            'package_type' => $v2PackageType,
-        ]);
-
         $indexed = [];
         foreach ($capabilities as $capability) {
-            $indexed[$capability->getCarrier()] = $capability;
+            $indexed[$capability->getCarrier()] = $capability; // @phpstan-ignore-line SDK declares enum type but returns string
         }
 
         return $indexed;
@@ -68,7 +70,12 @@ class CapabilitiesValidationService
         $weights = [];
 
         foreach ($allowedTypes as $packageTypeName => $v2PackageType) {
-            $capabilities = $this->getCapabilitiesForPackageType($cc, $v2PackageType);
+            $capabilities = $this->indexByCarrier(
+                $this->capabilitiesRepository->getCapabilities([
+                    'recipient'    => ['country_code' => $cc],
+                    'package_type' => $v2PackageType,
+                ])
+            );
             $weights[$packageTypeName] = $this->getHighestMaxWeight($capabilities);
         }
 
@@ -76,7 +83,10 @@ class CapabilitiesValidationService
     }
 
     /**
-     * Check whether a capability's weight constraints allow the given weight.
+     * Whether the given weight (grams) fits within the capability's weight constraints.
+     *
+     * Min and max are both checked when present. Capabilities without a weight constraint
+     * accept any weight.
      *
      * @param  RefCapabilitiesResponseCapabilityV2 $capability
      * @param  int                                 $weight Weight in grams
@@ -85,10 +95,11 @@ class CapabilitiesValidationService
      */
     public function capabilitySupportsWeight($capability, int $weight): bool
     {
-        // @TODO: PHP 8.0+ — replace nested null checks with nullsafe operator: ?->
+        // Defensive null checks: the SDK PHPDoc declares these as non-nullable, but the API
+        // may omit fields at runtime. PHPStan warnings are suppressed for this reason.
         $physicalProperties = $capability->getPhysicalProperties();
 
-        if (! $physicalProperties) {
+        if (! $physicalProperties) { // @phpstan-ignore-line
             return true;
         }
 
@@ -98,11 +109,50 @@ class CapabilitiesValidationService
             return true;
         }
 
-        $min = $weightConstraint->getMin() ? (int) $weightConstraint->getMin()->getValue() : null;
-        $max = $weightConstraint->getMax() ? (int) $weightConstraint->getMax()->getValue() : null;
+        $min = $weightConstraint->getMin() ? (int) $weightConstraint->getMin()->getValue() : null; // @phpstan-ignore-line
+        $max = $weightConstraint->getMax() ? (int) $weightConstraint->getMax()->getValue() : null; // @phpstan-ignore-line
 
-        return ($max === null || $weight <= $max)
-            && ($min === null || $weight >= $min);
+        return ($max === null || $weight <= $max) // @phpstan-ignore-line
+            && ($min === null || $weight >= $min); // @phpstan-ignore-line
+    }
+
+    /**
+     * Build an insurance-tier ladder for a min/max range.
+     *
+     * Includes fine-grained floor tiers (€100, €250, €500) at the low end so that
+     * low-value orders can still be insured at realistic increments, then €500 steps
+     * for higher amounts. Mirrors the curated ladders that lived in the per-carrier
+     * JSON schemas before INT-1501.
+     *
+     * @param  int $min Minimum amount in cents
+     * @param  int $max Maximum amount in cents
+     *
+     * @return int[] Sorted, unique tier amounts in cents, including min and max
+     */
+    public static function buildInsuranceTiers(int $min, int $max): array
+    {
+        if ($min >= $max) {
+            return [$min];
+        }
+
+        $tiers = [$min];
+
+        // Floor tiers between min and max (exclusive bounds): €100, €250, €500.
+        foreach ([10_000, 25_000, 50_000] as $tier) {
+            if ($tier > $min && $tier < $max) {
+                $tiers[] = $tier;
+            }
+        }
+
+        // €500 steps from the next round €500 boundary up to (but excluding) max.
+        $stepStart = max($min, 50_000) + 50_000;
+        for ($t = $stepStart; $t < $max; $t += 50_000) {
+            $tiers[] = $t;
+        }
+
+        $tiers[] = $max;
+
+        return array_values(array_unique($tiers));
     }
 
     /**

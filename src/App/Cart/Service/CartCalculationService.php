@@ -27,7 +27,8 @@ class CartCalculationService implements CartCalculationServiceInterface
     public function calculateMailboxPercentage(PdkCart $cart): float
     {
         if ($cart->lines->where('product.mergedSettings.fitInMailbox', 0)
-                ->count() > 0) {
+            ->count() > 0
+        ) {
             return INF;
         }
 
@@ -115,7 +116,7 @@ class CartCalculationService implements CartCalculationServiceInterface
             if (! is_object($line) || ! $line->product || ! $line->product->carrier || ! $line->product->carrier->id) {
                 return false;
             }
-            
+
             return Settings::get(
                 CarrierSettings::EXPORT_AGE_CHECK,
                 CarrierSettings::ID . '.' . $line->product->carrier->id,

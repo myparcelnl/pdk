@@ -24,7 +24,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
@@ -89,7 +88,6 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private $taxService;
 
-
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $cartCalculationService
      * @param  \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService     $capabilitiesValidation
@@ -142,7 +140,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         ];
 
         foreach ($carriers as $carrier) {
-            if (null === $carrier->carrier) { continue; }
+            if (null === $carrier->carrier) {
+                continue;
+            }
             // Use the legacy identifier for the delivery options, as that endpoint does not yet support the new identifiers.
             $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
             $settings['carrierSettings'][$identifier] = array_merge(
@@ -387,10 +387,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         string $v2PackageType,
         int $weight
     ) {
-        // Fetch capabilities for this specific country + package type combination.
-        // Cached per cc+packageType — accurate weight limits per package type.
+        // Cache key: cc+package_type — shareable across orders with different weights.
+        // Carrier presence and weight constraints are evaluated client-side per carrier.
         $capabilitiesByCarrier = $cc
-            ? $this->capabilitiesValidation->getCapabilitiesForPackageType($cc, $v2PackageType)
+            ? $this->capabilitiesValidation->indexByCarrier(
+                $this->capabilitiesValidation->getRepository()->getCapabilities([
+                    'recipient'    => ['country_code' => $cc],
+                    'package_type' => $v2PackageType,
+                ])
+            )
             : [];
 
         return $allCarriers->filter(
