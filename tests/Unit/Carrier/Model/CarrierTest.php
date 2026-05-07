@@ -215,3 +215,9 @@ it('returns correct metadata when option isSelectedByDefault is true', function 
     expect($option->getIsRequired())->not->toBeTrue()
         ->and($option->getIsSelectedByDefault())->toBeTrue();
 });
+
+it('reports support only for carriers known to this PDK version', function () {
+    expect(Carrier::isSupported(RefCapabilitiesSharedCarrierV2::POSTNL))->toBeTrue()
+        ->and(Carrier::isSupported('UNSUPPORTED_FUTURE_CARRIER'))->toBeFalse()
+        ->and(Carrier::isSupported(''))->toBeFalse();
+});
