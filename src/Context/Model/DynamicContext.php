@@ -80,7 +80,7 @@ class DynamicContext extends Model
      */
     private function ensureAllCarriersHaveSettings(): void
     {
-        /** @var Settings $settings */
+        /** @var Settings|null $settings */
         $settings = $this->attributes['pluginSettings'];
 
         if (! $settings) {
@@ -119,9 +119,10 @@ class DynamicContext extends Model
      */
     private function resolveCarrierCapabilities(): void
     {
-        /** @var Settings $settings */
+        /** @var Settings|null $settings */
         $settings = $this->attributes['pluginSettings'];
 
+        // @phpstan-ignore booleanNot.alwaysFalse
         if (! $settings || ! $settings->carrier) {
             return;
         }
