@@ -125,7 +125,13 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                     'max' => ['value' => 30000, 'unit' => 'g'],
                 ],
             ],
-            'deliveryTypes'      => ['STANDARD_DELIVERY'],
+            'deliveryTypes'      => [
+                'STANDARD_DELIVERY',
+                'MORNING_DELIVERY',
+                'EVENING_DELIVERY',
+                'PICKUP_DELIVERY',
+                'EXPRESS_DELIVERY',
+            ],
             'transactionTypes'   => [],
             'collo'              => ['max' => 1],
         ];
