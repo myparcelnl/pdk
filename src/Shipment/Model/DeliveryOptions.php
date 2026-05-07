@@ -22,6 +22,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
 /**
  * @property Carrier                $carrier
+ * @property null|int               $contractId
  * @property null|DateTimeInterface $date
  * @property null|string            $deliveryType
  * @property int                    $labelAmount
@@ -37,6 +38,7 @@ class DeliveryOptions extends Model
      * Attributes
      */
     public const CARRIER          = 'carrier';
+    public const CONTRACT_ID      = 'contractId';
     public const DATE             = 'date';
     public const DELIVERY_TYPE    = 'deliveryType';
     public const LABEL_AMOUNT     = 'labelAmount';
@@ -148,6 +150,7 @@ class DeliveryOptions extends Model
 
     protected $attributes = [
         self::CARRIER          => null,
+        self::CONTRACT_ID      => null,
         self::DATE             => null,
         self::LABEL_AMOUNT     => 1,
         self::PICKUP_LOCATION  => null,
@@ -158,6 +161,7 @@ class DeliveryOptions extends Model
 
     protected $casts      = [
         // Note: carrier attribute is not using the cast system as we do not want to store a carrier instance internally, only resolve it on demand via the getter (see getCarrierAttribute).
+        self::CONTRACT_ID      => 'int',
         self::DATE             => DateTime::class,
         self::LABEL_AMOUNT     => 'int',
         self::PICKUP_LOCATION  => RetailLocation::class,
