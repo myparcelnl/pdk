@@ -13,5 +13,5 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  */
 interface FrontendDataAdapterInterface
 {
-    public function getLegacyCarrierIdentifier(string $externalIdentifier): string;
+    public function getLegacyCarrierIdentifier(string $carrierIdentifier): string;
 }

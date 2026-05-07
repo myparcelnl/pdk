@@ -108,6 +108,9 @@ function assertOnlyOptionEnabled(array $options, string $targetKey): void
 /**
  * Sets up a generic all-capabilities carrier, stores the given settings, fires the export and
  * returns the API request body.
+ *
+ * All allow toggles are set to true so the CapabilitiesOptionCalculator does not
+ * gate options. Tests focus on export settings, not delivery options availability.
  */
 function exportWithSetting(bool $orderMode, CarrierSettingsFactory $carrierSettingsFactory): array
 {
@@ -119,6 +122,11 @@ function exportWithSetting(bool $orderMode, CarrierSettingsFactory $carrierSetti
         ->withCarrier('POSTNL') // Carrier needs to actually exist in the maps to ID, so lets use POSTNL as a default here
         ->withAllCapabilities()
         ->make();
+
+    $carrierSettingsFactory = $carrierSettingsFactory
+        ->withAllowSignature(true)
+        ->withAllowOnlyRecipient(true)
+        ->withAllowPriorityDelivery(true);
 
     factory(Settings::class)
         ->withCarrier($fakeCarrier->carrier, $carrierSettingsFactory)
@@ -230,21 +238,10 @@ it('exports order with age check setting enabled', function (bool $orderMode) {
     $body    = exportWithSetting($orderMode, factory(CarrierSettings::class)->withExportAgeCheck(true));
     $options = getRequestOptions($body, $orderMode);
 
-    // age_check forces only_recipient and signature on via calculator cascade
-    expect($options['age_check'])->toBe(1)
-        ->and($options['only_recipient'])->toBe(1)
-        ->and($options['signature'])->toBe(1);
-
-    $cascadeKeys = ['age_check', 'only_recipient', 'signature'];
-    $excluded    = ['delivery_type', 'package_type', 'delivery_date', 'label_description', 'insurance'];
-    foreach ($options as $key => $value) {
-        if (in_array($key, $cascadeKeys, true) || in_array($key, $excluded, true)) {
-            continue;
-        }
-        if (is_int($value)) {
-            expect($value)->toBe(0, "Expected option '{$key}' to be 0 when age_check is enabled");
-        }
-    }
+    // Age check is enabled via export setting.
+    // Cascade behavior (age_check requires signature + only_recipient) is now driven
+    // by the capabilities API requires field, tested in CapabilitiesOptionCalculatorTest.
+    expect($options['age_check'])->toBe(1);
 })
     ->with('order mode toggle');
 
@@ -450,8 +447,7 @@ it('does not include exclude_parcel_lockers when carrier lacks the capability', 
         expect($options)->not->toHaveKey('exclude_parcel_lockers');
     } else {
         if (array_key_exists('exclude_parcel_lockers', $options)) {
-            expect($options['exclude_parcel_lockers'])->toBe(
-                0,
+            expect($options['exclude_parcel_lockers'])->toBe(0,
                 'exclude_parcel_lockers should be 0 when carrier lacks the capability'
             );
         }
@@ -531,7 +527,14 @@ it('exports order with return large format setting enabled without adding option
  * configured on each order. Carrier capabilities come from the default shop setup.
  */
 it('exports multiple orders in a batch with per-shipment option resolution', function () {
-    factory(Settings::class)->store();
+    // Enable allow toggles so CapabilitiesOptionCalculator does not gate export options.
+    factory(Settings::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL, factory(CarrierSettings::class)
+            ->withAllowSignature(true)
+            ->withAllowOnlyRecipient(true))
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU, factory(CarrierSettings::class)
+            ->withAllowSignature(true))
+        ->store();
 
     $orderFactory = factory(PdkOrderCollection::class)
         ->push(
@@ -1176,30 +1179,9 @@ it(
             },
         ],
 
-        'mailbox filtered when account lacks small package contract' => [
-            function () {
-                return factory(PdkOrderCollection::class)->push(
-                    factory(PdkOrder::class)
-                        ->toGermany()
-                        ->withDeliveryOptions(
-                            factory(DeliveryOptions::class)
-                                ->withCarrier(
-                                    factory(Carrier::class)
-                                        ->fromPostNL()
-                                        ->withPackageTypes([RefShipmentPackageTypeV2::MAILBOX])
-                                )
-                                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
-                        )
-                );
-            },
-            'accountHasCarrierSmallPackageContract' => false,
-            'carrierHasInternationalMailboxAllowed' => true,
-            // Carrier supports mailbox and settings allow it, but account has no small package contract — mailbox must be filtered out
-            'assertions'                            => function () {
-                return function (array $shipment) {
-                    expect($shipment['options']['package_type'])->not->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID);
-                };
-            },
-        ],
+        // @TODO: "mailbox filtered when account lacks small package contract" scenario removed.
+        // This filtering is now driven by the capabilities API response (which won't include MAILBOX
+        // when the account lacks the contract). Tested via CapabilitiesPackageTypeCalculatorTest with
+        // explicit mock API responses.
     ])
     ->with('order mode toggle');

@@ -14,7 +14,7 @@ interface CartCalculationServiceInterface
      *
      * @return float
      */
-    public function calculateMailboxPercentage(PdkCart $cart);
+    public function calculateMailboxPercentage(PdkCart $cart): float;
 
     /**
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
