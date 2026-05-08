@@ -16,7 +16,7 @@
         "symfony/http-foundation": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0",
         "alcohol/iso4217": "^4.3",
         "symfony/psr-http-message-bridge": "^2.3",
-        "league/openapi-psr7-validator": "^0.22.0"
+        "league/openapi-psr7-validator": "^0.22.0 || ^0.24"
     },
     "platform": {
         "php": "7.4"
