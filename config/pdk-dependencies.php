@@ -39,7 +39,7 @@ return [
      *
      * @see https://github.com/myparcelnl/delivery-options/releases
      */
-    'deliveryOptionsVersion'    => value('6'),
+    'deliveryOptionsVersion'    => value('7'),
 
     /**
      * The version of vue in the delivery options.
