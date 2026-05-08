@@ -41,12 +41,16 @@ class CapabilitiesAction implements ActionInterface
             return $corsHandler->handlePreflightRequest($request) ?? new Response();
         }
 
-        $body = json_decode($request->getContent(), true);
-        $shouldFilter = $request->query->getBoolean('filterSupported', false);
-
         try {
-            $results  = $this->capabilitiesService->getCapabilities($body, $shouldFilter);
-            $response = $this->createSymfonyResponse($results);
+            $body = json_decode($request->getContent(), true);
+
+            if (! is_array($body)) {
+                throw new \InvalidArgumentException('Request body must be a JSON object', 400);
+            }
+
+            $shouldFilter = $request->query->getBoolean('filterSupported', false);
+            $results      = $this->capabilitiesService->getCapabilities($body, $shouldFilter);
+            $response     = $this->createSymfonyResponse($results);
         } catch (Throwable $e) {
             $response = $this->createErrorResponse($e);
         }
@@ -56,11 +60,8 @@ class CapabilitiesAction implements ActionInterface
 
     /**
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2[] $results
-     * @param  bool                                                                                $filterOptions
-     *                                                                                                Apply the registered-options allowlist to each capability's options when true. Default false
-     *                                                                                                preserves the unfiltered SDK passthrough for existing callers.
      */
-    private function createSymfonyResponse(array $results, bool $filterOptions = false): Response
+    private function createSymfonyResponse(array $results): Response
     {
         return new Response(
             json_encode(['results' => $results]),

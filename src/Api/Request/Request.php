@@ -12,8 +12,9 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  * @property string                $method
  * @property array{string, string} $parameters
  * @property string                $path
- * @property string                $property
+ * @property string|null           $property
  * @property string|null           $responseProperty
+ * @property bool                  $useDataEnvelope
  */
 class Request implements RequestInterface
 {
@@ -43,7 +44,7 @@ class Request implements RequestInterface
     protected $path = '';
 
     /**
-     * @var string
+     * @var string|null
      */
     private $property;
 

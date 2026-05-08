@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Request\Capabilities;
 
 use MyParcelNL\Pdk\App\Request\AbstractEndpointRequest;
-use Override;
 
 class CapabilitiesEndpointRequest extends AbstractEndpointRequest
 {
