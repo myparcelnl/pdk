@@ -48,16 +48,20 @@ class DeliveryOptions extends Model
     /**
      * Values
      */
-    public const DELIVERY_TYPE_MORNING_ID    = RefTypesDeliveryType::MORNING;
-    public const DELIVERY_TYPE_MORNING_NAME  = 'morning';
-    public const DELIVERY_TYPE_EVENING_ID    = RefTypesDeliveryType::EVENING;
-    public const DELIVERY_TYPE_EVENING_NAME  = 'evening';
-    public const DELIVERY_TYPE_STANDARD_ID   = RefTypesDeliveryType::STANDARD;
-    public const DELIVERY_TYPE_STANDARD_NAME = 'standard';
-    public const DELIVERY_TYPE_PICKUP_ID     = RefTypesDeliveryType::PICKUP;
-    public const DELIVERY_TYPE_PICKUP_NAME   = 'pickup';
-    public const DELIVERY_TYPE_EXPRESS_ID    = RefTypesDeliveryType::EXPRESS;
-    public const DELIVERY_TYPE_EXPRESS_NAME  = 'express';
+    public const DELIVERY_TYPE_MORNING_ID         = RefTypesDeliveryType::MORNING;
+    public const DELIVERY_TYPE_MORNING_NAME       = 'morning';
+    public const DELIVERY_TYPE_EVENING_ID         = RefTypesDeliveryType::EVENING;
+    public const DELIVERY_TYPE_EVENING_NAME       = 'evening';
+    public const DELIVERY_TYPE_STANDARD_ID        = RefTypesDeliveryType::STANDARD;
+    public const DELIVERY_TYPE_STANDARD_NAME      = 'standard';
+    public const DELIVERY_TYPE_PICKUP_ID          = RefTypesDeliveryType::PICKUP;
+    public const DELIVERY_TYPE_PICKUP_NAME        = 'pickup';
+    public const DELIVERY_TYPE_EXPRESS_ID         = RefTypesDeliveryType::EXPRESS;
+    public const DELIVERY_TYPE_EXPRESS_NAME       = 'express';
+    public const DELIVERY_TYPE_SAME_DAY_ID        = RefTypesDeliveryType::SAME_DAY;
+    public const DELIVERY_TYPE_SAME_DAY_NAME      = 'same_day';
+    public const DELIVERY_TYPE_EARLY_MORNING_ID   = RefTypesDeliveryType::EARLY_MORNING;
+    public const DELIVERY_TYPE_EARLY_MORNING_NAME = 'early_morning';
     /**
      * @var int[]
      */
@@ -67,6 +71,8 @@ class DeliveryOptions extends Model
         self::DELIVERY_TYPE_EVENING_ID,
         self::DELIVERY_TYPE_PICKUP_ID,
         self::DELIVERY_TYPE_EXPRESS_ID,
+        self::DELIVERY_TYPE_SAME_DAY_ID,
+        self::DELIVERY_TYPE_EARLY_MORNING_ID,
     ];
     /**
      * @var string[]
@@ -77,24 +83,30 @@ class DeliveryOptions extends Model
         self::DELIVERY_TYPE_EVENING_NAME,
         self::DELIVERY_TYPE_PICKUP_NAME,
         self::DELIVERY_TYPE_EXPRESS_NAME,
+        self::DELIVERY_TYPE_SAME_DAY_NAME,
+        self::DELIVERY_TYPE_EARLY_MORNING_NAME,
     ];
     /**
      * @var array
      */
     public const DELIVERY_TYPES_NAMES_IDS_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME  => self::DELIVERY_TYPE_MORNING_ID,
-        self::DELIVERY_TYPE_STANDARD_NAME => self::DELIVERY_TYPE_STANDARD_ID,
-        self::DELIVERY_TYPE_EVENING_NAME  => self::DELIVERY_TYPE_EVENING_ID,
-        self::DELIVERY_TYPE_PICKUP_NAME   => self::DELIVERY_TYPE_PICKUP_ID,
-        self::DELIVERY_TYPE_EXPRESS_NAME  => self::DELIVERY_TYPE_EXPRESS_ID,
+        self::DELIVERY_TYPE_MORNING_NAME       => self::DELIVERY_TYPE_MORNING_ID,
+        self::DELIVERY_TYPE_STANDARD_NAME      => self::DELIVERY_TYPE_STANDARD_ID,
+        self::DELIVERY_TYPE_EVENING_NAME       => self::DELIVERY_TYPE_EVENING_ID,
+        self::DELIVERY_TYPE_PICKUP_NAME        => self::DELIVERY_TYPE_PICKUP_ID,
+        self::DELIVERY_TYPE_EXPRESS_NAME       => self::DELIVERY_TYPE_EXPRESS_ID,
+        self::DELIVERY_TYPE_SAME_DAY_NAME      => self::DELIVERY_TYPE_SAME_DAY_ID,
+        self::DELIVERY_TYPE_EARLY_MORNING_NAME => self::DELIVERY_TYPE_EARLY_MORNING_ID,
     ];
 
     public const DELIVERY_TYPES_V2_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME  => RefTypesDeliveryTypeV2::MORNING,
-        self::DELIVERY_TYPE_STANDARD_NAME => RefTypesDeliveryTypeV2::STANDARD,
-        self::DELIVERY_TYPE_EVENING_NAME  => RefTypesDeliveryTypeV2::EVENING,
-        self::DELIVERY_TYPE_PICKUP_NAME   => RefTypesDeliveryTypeV2::PICKUP,
-        self::DELIVERY_TYPE_EXPRESS_NAME  => RefTypesDeliveryTypeV2::EXPRESS,
+        self::DELIVERY_TYPE_MORNING_NAME       => RefTypesDeliveryTypeV2::MORNING,
+        self::DELIVERY_TYPE_STANDARD_NAME      => RefTypesDeliveryTypeV2::STANDARD,
+        self::DELIVERY_TYPE_EVENING_NAME       => RefTypesDeliveryTypeV2::EVENING,
+        self::DELIVERY_TYPE_PICKUP_NAME        => RefTypesDeliveryTypeV2::PICKUP,
+        self::DELIVERY_TYPE_EXPRESS_NAME       => RefTypesDeliveryTypeV2::EXPRESS,
+        self::DELIVERY_TYPE_SAME_DAY_NAME      => RefTypesDeliveryTypeV2::SAME_DAY,
+        self::DELIVERY_TYPE_EARLY_MORNING_NAME => RefTypesDeliveryTypeV2::EARLY_MORNING,
     ];
 
     public const DEFAULT_DELIVERY_TYPE_ID     = self::DELIVERY_TYPE_STANDARD_ID;
@@ -108,11 +120,15 @@ class DeliveryOptions extends Model
     public const  PACKAGE_TYPE_LETTER_ID          = RefShipmentPackageType::UNFRANKED;
     public const  PACKAGE_TYPE_DIGITAL_STAMP_ID   = RefShipmentPackageType::DIGITAL_STAMP;
     public const  PACKAGE_TYPE_PACKAGE_SMALL_ID   = RefShipmentPackageType::SMALL_PACKAGE;
+    public const  PACKAGE_TYPE_PALLET_ID          = RefShipmentPackageType::PALLET;
+    public const  PACKAGE_TYPE_ENVELOPE_ID        = RefShipmentPackageType::ENVELOPE;
     public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
     public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
     public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
     public const  PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
     public const  PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
+    public const  PACKAGE_TYPE_PALLET_NAME        = 'pallet';
+    public const  PACKAGE_TYPE_ENVELOPE_NAME      = 'envelope';
 
     public const PACKAGE_TYPES_IDS = [
         self::PACKAGE_TYPE_PACKAGE_ID,
@@ -120,6 +136,8 @@ class DeliveryOptions extends Model
         self::PACKAGE_TYPE_LETTER_ID,
         self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
         self::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+        self::PACKAGE_TYPE_PALLET_ID,
+        self::PACKAGE_TYPE_ENVELOPE_ID,
     ];
     public const PACKAGE_TYPES_NAMES = [
         self::PACKAGE_TYPE_PACKAGE_NAME,
@@ -127,6 +145,8 @@ class DeliveryOptions extends Model
         self::PACKAGE_TYPE_LETTER_NAME,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
         self::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+        self::PACKAGE_TYPE_PALLET_NAME,
+        self::PACKAGE_TYPE_ENVELOPE_NAME,
     ];
 
     public const PACKAGE_TYPES_NAMES_IDS_MAP     = [
@@ -135,6 +155,8 @@ class DeliveryOptions extends Model
         self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER_ID,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
         self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL_ID,
+        self::PACKAGE_TYPE_PALLET_NAME        => self::PACKAGE_TYPE_PALLET_ID,
+        self::PACKAGE_TYPE_ENVELOPE_NAME      => self::PACKAGE_TYPE_ENVELOPE_ID,
     ];
 
     public const PACKAGE_TYPES_V2_MAP = [
@@ -142,8 +164,35 @@ class DeliveryOptions extends Model
         self::PACKAGE_TYPE_MAILBOX_NAME       => RefShipmentPackageTypeV2::MAILBOX,
         self::PACKAGE_TYPE_LETTER_NAME        => RefShipmentPackageTypeV2::UNFRANKED,
         self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => RefShipmentPackageTypeV2::DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageTypeV2::SMALL_PACKAGE
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageTypeV2::SMALL_PACKAGE,
+        self::PACKAGE_TYPE_PALLET_NAME        => RefShipmentPackageTypeV2::PALLET,
+        self::PACKAGE_TYPE_ENVELOPE_NAME      => RefShipmentPackageTypeV2::ENVELOPE,
     ];
+
+    /**
+     * Whether a V2 delivery type is supported by this PDK version.
+     *
+     * Backed by {@see self::DELIVERY_TYPES_V2_MAP} — a value is "supported"
+     * when the PDK has a mapped legacy name (and therefore calculators and
+     * UI labels) for it. Used at the boundary (capabilities proxy, carrier
+     * serialization) so SDK enum values the PDK doesn't know about cannot
+     * reach the admin or checkout.
+     */
+    public static function isDeliveryTypeSupported(string $v2DeliveryType): bool
+    {
+        return in_array($v2DeliveryType, self::DELIVERY_TYPES_V2_MAP, true);
+    }
+
+    /**
+     * Whether a V2 package type is supported by this PDK version.
+     *
+     * Backed by {@see self::PACKAGE_TYPES_V2_MAP}; see
+     * {@see self::isDeliveryTypeSupported()} for the rationale.
+     */
+    public static function isPackageTypeSupported(string $v2PackageType): bool
+    {
+        return in_array($v2PackageType, self::PACKAGE_TYPES_V2_MAP, true);
+    }
 
     public const  DEFAULT_PACKAGE_TYPE_ID         = self::PACKAGE_TYPE_PACKAGE_ID;
     public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;

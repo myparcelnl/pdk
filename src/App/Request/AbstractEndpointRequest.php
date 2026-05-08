@@ -24,6 +24,7 @@ abstract class AbstractEndpointRequest extends Request implements Arrayable
             'path'             => $this->getPath(),
             'property'         => $this->getProperty(),
             'responseProperty' => $this->getResponseProperty(),
+            'useDataEnvelope'  => $this->getUseDataEnvelope(),
         ];
     }
 }

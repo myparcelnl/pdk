@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment;
 
 use GuzzleHttp\HandlerStack;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ModelInterface;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Support\Str;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -96,19 +101,101 @@ class CapabilitiesService extends AbstractShipmentApiService
      *                          - direction: string (optional) - Direction (outbound, inbound)
      *                          - pickup: array (optional) - Pickup location details
      *
+     * @param bool $filterSupported Whether to filter out carriers, delivery types, package types and options that are not supported by this PDK version.
+     * Defaults to return capabilities unfiltered.
+     *
      * @return RefCapabilitiesResponseCapabilityV2[] The capabilities response with available options
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException On API errors
      * @throws \InvalidArgumentException If required parameters are missing
      */
-    public function getCapabilities(array $parameters): array
+    public function getCapabilities(array $parameters, bool $filterSupported = false): array
     {
         /** @var CapabilitiesPostCapabilitiesRequestV2 $request */
         $request = $this->hydrateModel(CapabilitiesPostCapabilitiesRequestV2::class, $parameters);
 
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
         $response = $this->shipmentApi->postCapabilities($this->getUserAgent(), $request);
+        $results  = $response->getResults();
 
-        return $response->getResults();
+        return $filterSupported ? $this->filterSupportedCapabilities($results) : $results;
+    }
+
+    /**
+     * Drop carriers and capabilities this PDK version does not recognise, and narrow each surviving model's
+     * delivery types, package types and options to the PDK-supported subset.
+     *
+     * Mutates the passed-in SDK models in place. The two response models share an identical
+     * carrier/deliveryTypes/packageTypes/options surface area, so a union typehint avoids
+     * the generated-model template gymnastics phpstan would otherwise need.
+     *
+     * @param  array<int, RefCapabilitiesResponseCapabilityV2|RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2> $models
+     *
+     * @return array<int, RefCapabilitiesResponseCapabilityV2|RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2>
+     */
+    private function filterSupportedCapabilities(array $models): array
+    {
+        $supported = [];
+
+        foreach ($models as $model) {
+            /** @var string $carrierName */
+            $carrierName = $model->getCarrier();
+            if (! Carrier::isSupported($carrierName)) {
+                continue;
+            }
+
+            $model->setDeliveryTypes(array_values(array_filter(
+                // @phpstan-ignore nullCoalesce.expr (attribute can be null if model is manually constructed with missing fields, but API responses always include it as an array)
+                $model->getDeliveryTypes() ?? [],
+                // @phpstan-ignore argument.type (SDK enum values come back as plain strings)
+                static function (string $type): bool {
+                    return DeliveryOptions::isDeliveryTypeSupported($type);
+                }
+            )));
+
+            $model->setPackageTypes(array_values(array_filter(
+                // @phpstan-ignore nullCoalesce.expr (attribute can be null if model is manually constructed with missing fields, but API responses always include it as an array)
+                $model->getPackageTypes() ?? [],
+                // @phpstan-ignore argument.type (SDK enum values come back as plain strings)
+                static function (string $type): bool {
+                    return DeliveryOptions::isPackageTypeSupported($type);
+                }
+            )));
+
+            $options = $model->getOptions();
+            if ($options !== null) {
+                $model->setOptions($this->stripUnregisteredOptions($options));
+            }
+
+            $supported[] = $model;
+        }
+
+        return $supported;
+    }
+
+    /**
+     * Remove options whose camelCase key has no registered OrderOptionDefinition in this PDK.
+     *
+     * Uses {@see \ArrayAccess::offsetUnset()} on the SDK options model rather than the typed
+     * setters: many setters throw on null for non-nullable fields, but offsetUnset cleanly
+     * removes the property from the underlying container so the serializer skips it.
+     *
+     * @param RefCapabilitiesResponseOptionsOptionsV2|RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2 $options
+     * @return RefCapabilitiesResponseOptionsOptionsV2|RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2
+     */
+    private function stripUnregisteredOptions($options): object
+    {
+        $allowed      = Carrier::getRegisteredCapabilitiesKeys();
+
+        foreach ((array) $options->jsonSerialize() as $name => $option) {
+            if (! isset($allowed[$name])) {
+                // Convert name back to snake_case for the offset, as the SDK models store properties in snake_case but expose them as camelCase via attributeMap-driven getters/setters and jsonSerialize.
+                $snakeName = Str::snake($name);
+                // @phpstan-ignore unset.offset
+                unset($options[$snakeName]);
+            }
+        }
+
+        return $options;
     }
 
     /**
@@ -134,7 +221,8 @@ class CapabilitiesService extends AbstractShipmentApiService
             $property    = $camelToSnake[$key] ?? $key;
             $nestedClass = ltrim((string) ($openAPITypes[$property] ?? ''), '\\');
 
-            if (is_array($value)
+            if (
+                is_array($value)
                 && class_exists($nestedClass)
                 && is_subclass_of($nestedClass, ModelInterface::class)
             ) {
@@ -156,11 +244,13 @@ class CapabilitiesService extends AbstractShipmentApiService
      *
      * @param string|null $carrier The carrier identifier (e.g., 'POSTNL', 'DPD', 'DHL_FOR_YOU') to get a
      *                             specific carrier's contract definitions, or null to retrieve all.
+     * @param bool $filterSupported Whether to drop carriers, delivery types, package types and options
+     *                              that are not supported by this PDK version. Defaults to false.
      *
      * @return RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2[] An array of contract definitions per carrier.
      * @throws \MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException On API errors
      */
-    public function getContractDefinitions(?string $carrier): array
+    public function getContractDefinitions(?string $carrier, bool $filterSupported = false): array
     {
         // Set carrier explicitly as it otherwise does not validate via the constructor.
         $request = new CapabilitiesPostContractDefinitionsRequestV2();
@@ -172,7 +262,8 @@ class CapabilitiesService extends AbstractShipmentApiService
             $this->getUserAgent(),
             $request
         );
+        $items = $response->getItems();
 
-        return $response->getItems();
+        return $filterSupported ? $this->filterSupportedCapabilities($items) : $items;
     }
 }

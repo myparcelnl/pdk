@@ -42,7 +42,7 @@ class CarrierCapabilitiesRepository extends Repository
         $cacheKey = "contractDefinitions.$carrier";
 
         return $this->retrieve($cacheKey, function () use ($carrier) {
-            $contractDefinitions = $this->apiService->getContractDefinitions($carrier);
+            $contractDefinitions = $this->apiService->getContractDefinitions($carrier, true);
             // Convert contract definitions to an array so they can be cast into Carrier models
             // The SDK models serialize to nested stdClass objects, not associative arrays.
             // We need arrays for the PDK Model casting, so we roundtrip through JSON to deeply convert them.

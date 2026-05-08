@@ -53,6 +53,11 @@ class Request implements RequestInterface
     private $responseProperty;
 
     /**
+     * @var bool
+     */
+    private $useDataEnvelope = true;
+
+    /**
      * @param  array $config
      */
     public function __construct(array $config = [])
@@ -64,6 +69,7 @@ class Request implements RequestInterface
         $this->path             = $config['path'] ?? $this->path;
         $this->property         = $config['property'] ?? $this->property;
         $this->responseProperty = $config['responseProperty'] ?? $this->responseProperty;
+        $this->useDataEnvelope  = $config['useDataEnvelope'] ?? $this->useDataEnvelope;
     }
 
     /**
@@ -128,6 +134,14 @@ class Request implements RequestInterface
     public function getUniqueKey(): string
     {
         return sprintf('%s?%s:%s', $this->getPath(), $this->getQueryString(), http_build_query($this->getHeaders()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseDataEnvelope(): bool
+    {
+        return $this->useDataEnvelope;
     }
 
     /**

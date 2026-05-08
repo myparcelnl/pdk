@@ -17,7 +17,8 @@
                     "action": "deleteAccount"
                 },
                 "path": "",
-                "responseProperty": "context"
+                "responseProperty": "context",
+                "useDataEnvelope": true
             },
             "updateAccount": {
                 "headers": [],
@@ -27,7 +28,8 @@
                 },
                 "path": "",
                 "property": "account_settings",
-                "responseProperty": "context"
+                "responseProperty": "context",
+                "useDataEnvelope": true
             },
             "updateSubscriptionFeatures": {
                 "headers": [],
@@ -36,7 +38,8 @@
                     "action": "updateSubscriptionFeatures"
                 },
                 "path": "",
-                "responseProperty": "data"
+                "responseProperty": "data",
+                "useDataEnvelope": true
             },
             "synchronizeOrders": {
                 "headers": [],
@@ -45,7 +48,8 @@
                     "action": "synchronizeOrders"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "exportOrders": {
                 "headers": [],
@@ -54,7 +58,8 @@
                     "action": "exportOrders"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "postOrderNotes": {
                 "headers": [],
@@ -63,7 +68,8 @@
                     "action": "postOrderNotes"
                 },
                 "path": "",
-                "property": "orderNotes"
+                "property": "orderNotes",
+                "useDataEnvelope": true
             },
             "fetchOrders": {
                 "headers": [],
@@ -72,7 +78,8 @@
                     "action": "fetchOrders"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "printOrders": {
                 "headers": [],
@@ -81,7 +88,8 @@
                     "action": "printOrders"
                 },
                 "path": "",
-                "property": "pdfs"
+                "property": "pdfs",
+                "useDataEnvelope": true
             },
             "updateOrders": {
                 "headers": [],
@@ -90,7 +98,8 @@
                     "action": "updateOrders"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "updateOrderStatus": {
                 "headers": [],
@@ -99,7 +108,8 @@
                     "action": "updateOrderStatus"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "updateShipments": {
                 "headers": [],
@@ -108,7 +118,8 @@
                     "action": "updateShipments"
                 },
                 "path": "",
-                "property": "shipments"
+                "property": "shipments",
+                "useDataEnvelope": true
             },
             "deleteShipments": {
                 "headers": [],
@@ -117,7 +128,8 @@
                     "action": "deleteShipments"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "printShipments": {
                 "headers": [],
@@ -126,7 +138,8 @@
                     "action": "printShipments"
                 },
                 "path": "",
-                "property": "pdfs"
+                "property": "pdfs",
+                "useDataEnvelope": true
             },
             "updatePluginSettings": {
                 "headers": [],
@@ -135,7 +148,8 @@
                     "action": "updatePluginSettings"
                 },
                 "path": "",
-                "property": "plugin_settings"
+                "property": "plugin_settings",
+                "useDataEnvelope": true
             },
             "updateProductSettings": {
                 "headers": [],
@@ -144,7 +158,8 @@
                     "action": "updateProductSettings"
                 },
                 "path": "",
-                "property": "product_settings"
+                "property": "product_settings",
+                "useDataEnvelope": true
             },
             "exportReturn": {
                 "headers": [],
@@ -153,7 +168,8 @@
                     "action": "exportReturn"
                 },
                 "path": "",
-                "property": "orders"
+                "property": "orders",
+                "useDataEnvelope": true
             },
             "createWebhooks": {
                 "headers": [],
@@ -162,7 +178,8 @@
                     "action": "createWebhooks"
                 },
                 "path": "",
-                "property": "webhooks"
+                "property": "webhooks",
+                "useDataEnvelope": true
             },
             "deleteWebhooks": {
                 "headers": [],
@@ -171,7 +188,8 @@
                     "action": "deleteWebhooks"
                 },
                 "path": "",
-                "property": "webhooks"
+                "property": "webhooks",
+                "useDataEnvelope": true
             },
             "fetchWebhooks": {
                 "headers": [],
@@ -180,7 +198,8 @@
                     "action": "fetchWebhooks"
                 },
                 "path": "",
-                "property": "webhooks"
+                "property": "webhooks",
+                "useDataEnvelope": true
             },
             "downloadLogs": {
                 "headers": {
@@ -190,7 +209,8 @@
                 "parameters": {
                     "action": "downloadLogs"
                 },
-                "path": ""
+                "path": "",
+                "useDataEnvelope": true
             },
             "switchToAcceptanceApi": {
                 "headers": {
@@ -200,7 +220,8 @@
                 "parameters": {
                     "action": "switchToAcceptanceApi"
                 },
-                "path": ""
+                "path": "",
+                "useDataEnvelope": true
             },
             "switchToProductionApi": {
                 "headers": {
@@ -210,7 +231,8 @@
                 "parameters": {
                     "action": "switchToProductionApi"
                 },
-                "path": ""
+                "path": "",
+                "useDataEnvelope": true
             },
             "fetchContext": {
                 "headers": [],
@@ -219,7 +241,8 @@
                     "action": "fetchContext"
                 },
                 "path": "",
-                "property": "context"
+                "property": "context",
+                "useDataEnvelope": true
             },
             "proxyCapabilities": {
                 "headers": [],
@@ -228,7 +251,7 @@
                     "action": "proxyCapabilities"
                 },
                 "path": "",
-                "property": "capabilities"
+                "useDataEnvelope": false
             }
         },
         "eventPing": "myparcel_pdk_ping",
