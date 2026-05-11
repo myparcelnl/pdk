@@ -34,8 +34,15 @@ uses()->group('checkout');
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock());
 
 // Enqueue capabilities responses for tests that set a recipient country.
-// The default account setup (UsesAccountMock) creates carriers with ALL package types.
-// getPackageTypeWeights() makes one capabilities call per allowed package type (5 mapped types).
+//
+// getPackageTypeWeights() makes one capabilities call per package type the shipping
+// method allows. The default account (UsesAccountMock) uses CarrierFactory's
+// withAllCapabilities, which declares every SDK V2 package type on the carrier;
+// the shipping method INHERITs those — so allowedPackageTypes ends up equal to
+// PACKAGE_TYPES_V2_MAP in this fixture. We loop over the map to size the queue
+// because the carrier mirrors it; tests using a narrower carrier should size
+// their own queue to that carrier's packageTypes count.
+//
 // Tests without cc won't consume these; UsesSdkApiMock::afterEach() cleans up leftovers.
 beforeEach(function () {
     $responseData = [
@@ -56,8 +63,7 @@ beforeEach(function () {
         ],
     ];
 
-    // Enqueue one response per allowed package type (5 mapped V2 types from carrier contract definitions).
-    for ($i = 0; $i < 5; $i++) {
+    foreach (DeliveryOptions::PACKAGE_TYPES_V2_MAP as $_) {
         MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($responseData));
     }
 });
