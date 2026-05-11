@@ -205,53 +205,16 @@ class Carrier extends SdkBackedModel
     private static $registeredCapabilitiesKeys;
 
     /**
-     * The capabilities API may return options that don't have a corresponding OrderOptionDefinition
-     * in the PDK yet. Without filtering, the frontend would render UI for these unimplemented options,
-     * but the PDK wouldn't know how to calculate, store, or export them — leading to broken behavior.
+     * Allowlist of camelCase option keys that have a registered OrderOptionDefinition in this PDK.
      *
-     * This override ensures only options backed by a registered definition are included in the
-     * serialized output, making the definitions the single gatekeeper for which options are available.
-     *
-     * @param  null|int $flags
-     *
-     * @return array
-     */
-    public function attributesToArray(?int $flags = null): array
-    {
-        $result = parent::attributesToArray($flags);
-
-        if (! isset($result['options']) || ! is_array($result['options'])) {
-            return $result;
-        }
-
-        $result['options'] = self::filterRegisteredOptions($result['options']);
-
-        return $result;
-    }
-
-    /**
-     * Single source of truth for the option allowlist applied across both serialization paths
-     * — this method (used by Carrier::attributesToArray on contract-definition data) and
-     * CapabilitiesAction (on contextual capabilities responses). Keeping the filter in one
-     * place prevents drift between initial render and drill-down responses.
-     *
-     * @param  array<string, mixed> $options camelCase option keys → option metadata
-     *
-     * @return array<string, mixed>
-     */
-    public static function filterRegisteredOptions(array $options): array
-    {
-        return array_intersect_key($options, self::getRegisteredCapabilitiesKeys());
-    }
-
-    /**
-     * Build and cache the allowlist of capabilities keys that have a registered definition.
-     * Cached as a static property because definitions don't change at runtime, and this method
-     * is called on every Carrier serialization (potentially many times per request).
+     * Capabilities responses may carry options the PDK has no calculator/UI label for; those
+     * are stripped at the SDK boundary so they never reach the admin or checkout. Keys are
+     * camelCase to match the SDK options model's attributeMap. Cached because definitions
+     * don't change at runtime.
      *
      * @return array<string, true>
      */
-    private static function getRegisteredCapabilitiesKeys(): array
+    public static function getRegisteredCapabilitiesKeys(): array
     {
         if (self::$registeredCapabilitiesKeys === null) {
             /** @var OrderOptionDefinitionInterface[] $definitions */

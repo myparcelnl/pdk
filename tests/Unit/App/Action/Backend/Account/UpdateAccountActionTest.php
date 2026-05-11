@@ -145,20 +145,12 @@ it('saves carrier capabilities as account->shop->carriers correctly', function (
     expect($options->getRecipientOnlyDelivery()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getRecipientOnlyDelivery()->getIsRequired())->toBeFalse();
 
-    expect($options->getPrintReturnLabelAtDropOff()->getIsSelectedByDefault())->toBeFalse();
-    expect($options->getPrintReturnLabelAtDropOff()->getIsRequired())->toBeFalse();
-
     expect($options->getPriorityDelivery()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getPriorityDelivery()->getIsRequired())->toBeFalse();
 
     expect($options->getReturnOnFirstFailedDelivery()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getReturnOnFirstFailedDelivery()->getIsRequired())->toBeFalse();
 
-    expect($options->getNoTracking()->getIsSelectedByDefault())->toBeFalse();
-    expect($options->getNoTracking()->getIsRequired())->toBeFalse();
-
-    // @TODO: tracked is currently dropped during SDK deserialization because it is missing from the attributeMap
-    // of RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2 — fix the SDK model and this assertion should pass
     expect($options->getTracked()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getTracked()->getIsRequired())->toBeFalse();
 

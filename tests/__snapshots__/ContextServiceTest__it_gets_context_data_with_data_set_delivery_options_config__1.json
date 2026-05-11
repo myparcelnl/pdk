@@ -16,7 +16,8 @@
                         },
                         "path": "",
                         "property": "context",
-                        "responseProperty": null
+                        "responseProperty": null,
+                        "useDataEnvelope": true
                     },
                     "proxyAddressList": {
                         "body": null,
@@ -27,7 +28,8 @@
                         },
                         "path": "",
                         "property": "addresses",
-                        "responseProperty": null
+                        "responseProperty": null,
+                        "useDataEnvelope": true
                     },
                     "proxyAddressValidate": {
                         "body": null,
@@ -38,7 +40,8 @@
                         },
                         "path": "",
                         "property": "validate",
-                        "responseProperty": null
+                        "responseProperty": null,
+                        "useDataEnvelope": true
                     },
                     "fetchContext": {
                         "body": null,
@@ -49,7 +52,8 @@
                         },
                         "path": "",
                         "property": "context",
-                        "responseProperty": null
+                        "responseProperty": null,
+                        "useDataEnvelope": true
                     },
                     "proxyCapabilities": {
                         "body": null,
@@ -59,8 +63,9 @@
                             "action": "proxyCapabilities"
                         },
                         "path": "",
-                        "property": "capabilities",
-                        "responseProperty": null
+                        "property": null,
+                        "responseProperty": null,
+                        "useDataEnvelope": false
                     }
                 }
             },

@@ -221,3 +221,4 @@ it('reports support only for carriers known to this PDK version', function () {
         ->and(Carrier::isSupported('UNSUPPORTED_FUTURE_CARRIER'))->toBeFalse()
         ->and(Carrier::isSupported(''))->toBeFalse();
 });
+
