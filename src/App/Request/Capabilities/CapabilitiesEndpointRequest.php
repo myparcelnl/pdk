@@ -12,12 +12,8 @@ class CapabilitiesEndpointRequest extends AbstractEndpointRequest
     {
         return 'POST';
     }
-
-    /**
-     * @return string
-     */
-    public function getProperty(): string
+    public function getUseDataEnvelope(): bool
     {
-        return 'capabilities';
+        return false;
     }
 }

@@ -119,13 +119,20 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
      * candidate is evaluated against ITS OWN effective weight (raw order weight +
      * the empty-weight setting configured for that type), so capability min/max
      * checks match what the export will actually submit.
+     *
+     * Only iterates types the carrier itself declares support for via its contract
+     * definitions; querying capability data for types the carrier never supports
+     * would be wasted API calls.
      */
     private function fallbackToNextAvailableType(string $cc, Carrier $carrier): void
     {
         $availableByType = [];
+        $v2ToPdkName     = array_flip(DeliveryOptions::PACKAGE_TYPES_V2_MAP);
 
-        foreach (DeliveryOptions::PACKAGE_TYPES_V2_MAP as $pdkName => $v2Name) {
-            if ($this->isInternationalMailboxBlocked($pdkName, $cc, $carrier)) {
+        foreach (($carrier->packageTypes ?? []) as $v2Name) {
+            $pdkName = $v2ToPdkName[$v2Name] ?? null;
+
+            if ($pdkName === null || $this->isInternationalMailboxBlocked($pdkName, $cc, $carrier)) {
                 continue;
             }
 

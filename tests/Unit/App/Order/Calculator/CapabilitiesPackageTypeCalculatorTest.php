@@ -118,23 +118,16 @@ it('falls back to next available type when selected type is not in capabilities'
         ->withCarrier($carrier)
         ->store();
 
-    // Repository caches per unique (cc + package_type), so 5 total API calls:
-    // 1. MAILBOX + NL (initial check) → empty
-    // 2. PACKAGE + NL (from getPackageTypeWeights) → carrier present
-    // 3. UNFRANKED + NL → empty
-    // 4. DIGITAL_STAMP + NL → empty
-    // 5. SMALL_PACKAGE + NL → empty
-    // All subsequent lookups are cached.
-
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-
+    // The repository caches per unique (cc + package_type). The calculator iterates
+    // over the carrier's declared package types only — here ['PACKAGE', 'MAILBOX'] —
+    // so we expect:
+    //   1. MAILBOX + NL (initial check in calculate()) → empty
+    //   2. PACKAGE + NL (first fallback iteration) → carrier present
+    //   - MAILBOX + NL on second fallback iteration is a cache hit, no fresh call.
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([])); // MAILBOX
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
         pkgCapabilityResult($carrier, ['PACKAGE'], 1, 23000),
-    ]));
-
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
+    ])); // PACKAGE
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
@@ -215,39 +208,17 @@ it('falls back when international mailbox is blocked by merchant setting', funct
         ->withCarrier($carrier, [CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX => false])
         ->store();
 
-    // The repository caches responses per unique args, so each unique
-    // (cc + package_type) combination only triggers one API call.
-    //
-    // Call sequence:
-    // 1. Initial check: MAILBOX + BE → API call (cached)
-    // 2. getPackageTypeWeights iterates all 5 types:
-    //    - PACKAGE + BE → API call (new)
-    //    - MAILBOX + BE → cached from (1)
-    //    - UNFRANKED + BE → API call (new)
-    //    - DIGITAL_STAMP + BE → API call (new)
-    //    - SMALL_PACKAGE + BE → API call (new)
-    // 3. Carrier availability check: all cached from (1)+(2)
-    //
-    // Total: 5 API calls in order: MAILBOX, PACKAGE, UNFRANKED, DIGITAL_STAMP, SMALL_PACKAGE.
-
-    // 1. MAILBOX — initial check (carrier present but blocked by setting)
+    // The repository caches per (cc + package_type). The fallback iteration walks the
+    // carrier's declared types only — here ['PACKAGE', 'MAILBOX'] — so:
+    //   1. MAILBOX + BE (initial check) → carrier present but blocked by merchant setting
+    //   2. PACKAGE + BE (fallback iteration) → carrier present
+    //   - MAILBOX + BE on second fallback iteration is a cache hit, no fresh call.
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
         pkgCapabilityResult($carrier, ['MAILBOX'], 1, 2000),
-    ]));
-
-    // 2. PACKAGE — from getPackageTypeWeights (carrier present)
+    ])); // MAILBOX
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
         pkgCapabilityResult($carrier, ['PACKAGE'], 1, 23000),
-    ]));
-
-    // 3. UNFRANKED (letter) — empty
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-
-    // 4. DIGITAL_STAMP — empty
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-
-    // 5. SMALL_PACKAGE — empty
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
+    ])); // PACKAGE
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('BE'))
@@ -287,19 +258,11 @@ it('falls back to default when no capabilities match at all', function () {
         ->withCarrier($carrier)
         ->store();
 
-    // Repository caches per unique (cc + package_type), so 5 total API calls:
-    // 1. MAILBOX + NL (initial check) → empty
-    // 2. PACKAGE + NL → empty
-    // 3. UNFRANKED + NL → empty
-    // 4. DIGITAL_STAMP + NL → empty
-    // 5. SMALL_PACKAGE + NL → empty
-    // All subsequent lookups are cached.
-
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
-    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
+    // The fallback iteration walks the carrier's declared types only — here ['PACKAGE'].
+    //   1. MAILBOX + NL (initial check) → empty
+    //   2. PACKAGE + NL (only fallback iteration) → empty
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([])); // MAILBOX
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([])); // PACKAGE
 
     $order = factory(PdkOrder::class)
         ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))

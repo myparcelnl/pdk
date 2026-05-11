@@ -148,11 +148,19 @@ final class CarrierFactory extends AbstractModelFactory
      */
     public function withAllCapabilities(string $carrier = RefCapabilitiesSharedCarrierV2::POSTNL): self
     {
+        // Match real (post-service-filter) data: only options the PDK has a registered
+        // OrderOptionDefinition for, which is the same set the boundary filter keeps.
+        $registeredKeys       = Carrier::getRegisteredCapabilitiesKeys();
         $shipmentOptionsTypes = RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::openAPITypes();
         $allShipmentOptions   = [];
 
         foreach ($shipmentOptionsTypes as $key => $model) {
             $optionKey = Str::camel($key);
+
+            if (! isset($registeredKeys[$optionKey])) {
+                continue;
+            }
+
             // Insurance requires a populated insuredAmount; all other options can be empty arrays.
             // openAPITypes() returns class names with a leading backslash, while ::class does not — trim before comparing.
             if (ltrim($model, '\\') === RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2::class) {

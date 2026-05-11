@@ -187,6 +187,86 @@ it('getCapabilities rejects incorrect parameter types before making a request', 
     );
 });
 
+// Tests for filterSupported behaviour on getCapabilities()
+it('getCapabilities returns API results unfiltered by default', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode([
+        'results' => [
+            [
+                'carrier'       => RefCapabilitiesSharedCarrierV2::POSTNL,
+                'deliveryTypes' => ['STANDARD_DELIVERY', 'SAME_DAY_DELIVERY'],
+                'packageTypes'  => ['PACKAGE', 'PALLET'],
+            ],
+        ],
+    ])));
+
+    $results = $service->getCapabilities([
+        'carrier'      => 'POSTNL',
+        'recipient'    => ['country_code' => 'NL', 'postal_code' => '2132WT'],
+        'package_type' => 'PACKAGE',
+    ]);
+
+    expect($results)->toHaveCount(1)
+        ->and($results[0]->getDeliveryTypes())->toEqual(['STANDARD_DELIVERY', 'SAME_DAY_DELIVERY'])
+        ->and($results[0]->getPackageTypes())->toEqual(['PACKAGE', 'PALLET']);
+});
+
+it('getCapabilities strips unregistered options from each capability when filterSupported is true', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    // `requiresSignature` has a registered OrderOptionDefinition (FEATURE_SIGNATURE);
+    // `customLabelText` does not — should be dropped entirely from the response.
+    $service->mockHandler->append(new Response(200, [], json_encode([
+        'results' => [
+            [
+                'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
+                'options' => [
+                    'requiresSignature' => ['default' => false, 'isRequired' => false],
+                    'customLabelText'   => ['default' => null, 'isRequired' => false],
+                ],
+            ],
+        ],
+    ])));
+
+    $results = $service->getCapabilities(
+        [
+            'carrier'      => 'POSTNL',
+            'recipient'    => ['country_code' => 'NL', 'postal_code' => '2132WT'],
+            'package_type' => 'PACKAGE',
+        ],
+        true
+    );
+
+    $serialised = json_decode(json_encode($results[0]), true);
+
+    expect($serialised['options'])->toHaveKey('requiresSignature')
+        ->and($serialised['options'])->not->toHaveKey('customLabelText');
+});
+
+it('getContractDefinitions returns API items unfiltered by default', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode([
+        'items' => [
+            [
+                'carrier'       => RefCapabilitiesSharedCarrierV2::POSTNL,
+                'deliveryTypes' => ['STANDARD_DELIVERY', 'SAME_DAY_DELIVERY'],
+                'packageTypes'  => ['PACKAGE', 'PALLET'],
+            ],
+        ],
+    ])));
+
+    $items = $service->getContractDefinitions(null);
+
+    expect($items)->toHaveCount(1)
+        ->and($items[0]->getDeliveryTypes())->toEqual(['STANDARD_DELIVERY', 'SAME_DAY_DELIVERY'])
+        ->and($items[0]->getPackageTypes())->toEqual(['PACKAGE', 'PALLET']);
+});
+
 // Tests for getContractDefinitions()
 it('getContractDefinitions returns array of items from API response', function () {
     TestBootstrapper::hasApiKey('valid-key');
