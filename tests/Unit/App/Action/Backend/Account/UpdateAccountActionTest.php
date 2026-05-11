@@ -151,11 +151,6 @@ it('saves carrier capabilities as account->shop->carriers correctly', function (
     expect($options->getReturnOnFirstFailedDelivery()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getReturnOnFirstFailedDelivery()->getIsRequired())->toBeFalse();
 
-    // printReturnLabelAtDropOff and noTracking have no registered OrderOptionDefinition,
-    // so the service strips them when CarrierCapabilitiesRepository asks for the
-    // PDK-supported subset. @see CapabilitiesService::filterSupportedCapabilities()
-    // @TODO: tracked is currently dropped during SDK deserialization because it is missing from the attributeMap
-    // of RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2 — fix the SDK model and this assertion should pass
     expect($options->getTracked()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getTracked()->getIsRequired())->toBeFalse();
 

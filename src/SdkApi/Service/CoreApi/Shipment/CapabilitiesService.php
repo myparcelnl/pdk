@@ -190,8 +190,9 @@ class CapabilitiesService extends AbstractShipmentApiService
             if (! isset($allowed[$name])) {
                 // Convert name back to snake_case for the offset, as the SDK models store properties in snake_case but expose them as camelCase via attributeMap-driven getters/setters and jsonSerialize.
                 $snakeName = Str::snake($name);
-                // @phpstan-ignore unset.offset
-                unset($options[$snakeName]);
+                // Set the properties to null, this is how the SDK models handles properties that would be omitted from the incoming request body.
+                // @phpstan-ignore argument.type
+                $options->offsetSet($snakeName, null);
             }
         }
 
