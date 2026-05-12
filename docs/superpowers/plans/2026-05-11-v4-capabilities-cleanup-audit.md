@@ -8,7 +8,7 @@
 
 **Branching:** All work for this audit lives on branch `chore/v4-capabilities-cleanup-audit`, branched off `v4-capabilities`. The spec is already committed there. The findings doc commit lands on the same branch. Do **not** commit directly on `v4-capabilities`.
 
-**PR timing:** This plan pushes the branch but does **not** open a PR. The PR is opened later, after all five downstream per-pattern cleanup plans have been written and committed on the same branch. The PR stays in **draft** until cleanup code from those plans lands.
+**PR timing:** This plan pushes the branch but does **not** open a PR. The PR is opened later, after all per-pattern cleanup plan docs have been written and committed on the same branch. The PR stays in **draft** while implementation code lands directly on the same branch — one umbrella PR for plans + code.
 
 **Human review gates:**
 
@@ -749,7 +749,7 @@ rm -rf tmp/audit-2026-05-11/
 
 - None (git operations only)
 
-The PR is **deliberately deferred**. It is opened only after all five per-pattern cleanup plans have been written and committed on this same branch (see "Downstream" below). Even when opened, the PR stays in draft until cleanup code from those plans lands.
+The PR is **deliberately deferred**. It is opened only after all per-pattern cleanup plan docs have been written and committed on this same branch (see "Downstream" below). When opened, the PR stays in draft while implementation code accumulates on this branch — one umbrella PR for plans + code.
 
 - [ ] **Step 1: Confirm branch state**
 
@@ -777,21 +777,13 @@ The PR is opened later, in a separate workflow, after the five downstream plans 
 
 ## Downstream: per-pattern cleanup plans
 
-After this audit completes, five separate `superpowers:writing-plans` invocations produce the per-pattern cleanup plans on this same branch:
-
-- `docs/superpowers/plans/2026-05-…-platform-cleanup.md`
-- `docs/superpowers/plans/2026-05-…-carrier-cleanup.md`
-- `docs/superpowers/plans/2026-05-…-schema-cleanup.md`
-- `docs/superpowers/plans/2026-05-…-validation-cleanup.md`
-- `docs/superpowers/plans/2026-05-…-calculator-cleanup.md`
-
-Each plan reads the `Plan: <pattern> cleanup` line of the findings doc to know its scope. Each plan's commit-readiness should itself include a per-item Q&A gate (mirroring Gate A in this plan), so the user reviews item scoping before the plan is written into a final form.
+After this audit completes, separate `superpowers:writing-plans` invocations produce the per-pattern cleanup plans on this same branch. Each plan reads the `Plan: <pattern> cleanup` line of the findings doc to know its scope, and each plan's commit-readiness should itself include a per-item Q&A gate (mirroring Gate A in this plan) so the user reviews item scoping before the plan is written into final form.
 
 ### PR opening (later)
 
-Once all five per-pattern plans are committed on `chore/v4-capabilities-cleanup-audit`:
+Once all per-pattern plan docs are committed on `chore/v4-capabilities-cleanup-audit`:
 
 1. Open a **draft** PR with `gh pr create --draft --base v4-capabilities --head chore/v4-capabilities-cleanup-audit`.
-2. The PR description lists: the audit spec, the findings doc, and the five cleanup plans.
-3. The PR stays in draft while the per-pattern cleanup CODE is implemented (potentially on separate child branches per pattern, merging back into this branch).
+2. The PR description lists: the audit spec, the findings doc, and the per-pattern cleanup plans.
+3. The PR stays in draft while **the per-pattern cleanup CODE is implemented directly on this branch** (no child branches per pattern; everything accumulates on the audit branch alongside the plan docs).
 4. Only when all cleanup code has landed and tests pass does the PR move out of draft and become reviewable for merge into `v4-capabilities`.

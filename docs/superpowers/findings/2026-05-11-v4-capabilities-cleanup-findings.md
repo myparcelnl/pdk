@@ -25,6 +25,19 @@
 - PHPStan output was empty (composer analyse passed 0 errors); cross-check rests on agent rg evidence.
 - All items below passed Gate A (per-finding human curation).
 
+## Plan-execution adjustments (post-curation corrections)
+
+After this findings doc was committed, two corrections surfaced while drafting the per-pattern cleanup plans:
+
+1. **The deprecated-const count was undercounted.** The Schema/Shipment const migration plan (`docs/superpowers/plans/2026-05-11-schema-shipment-const-migration.md`) covers **53 deprecated consts**, not the 36 the agent originally flagged. The audit missed:
+
+   - 4 already-`@deprecated` `ALLOW_*` consts on `CarrierSettings` (`ALLOW_ONLY_RECIPIENT`, `ALLOW_PRIORITY_DELIVERY`, `ALLOW_SAME_DAY_DELIVERY`, `ALLOW_SATURDAY_DELIVERY`).
+   - 11 already-`@deprecated` `EXPORT_*` consts on `ProductSettings` (the agent missed `ProductSettings` entirely).
+   - 2 alias-only deprecated consts on `CarrierSettings` (`ALLOW_PICKUP_LOCATIONS`, `ALLOW_DELIVERY_TYPE_EXPRESS`).
+     The const migration plan is the authoritative source for the full 53-const scope.
+
+2. **Shipment B-2 (inline `RetailLocationType`) is closed as not-applicable.** Per user feedback: `RetailLocationType` is the PHP 7.4 validator-as-enum substitute — `RetailLocation::casts['type']` casts via `RetailLocationType::class`, and the Model framework instantiates the class during hydration to run its `ALL_TYPES` constructor validation. The "never instantiated via `new`" evidence was a static-analysis false positive; the class earns its place as defensive type safety. Re-evaluate when PHP 7.4 support is dropped (convert to a backed enum at that point).
+
 ## Deliverables produced alongside this findings doc
 
 - [`2026-05-11-six-unused-definitions-overview.md`](2026-05-11-six-unused-definitions-overview.md) — Schema A-1..A-6 per-item analysis
