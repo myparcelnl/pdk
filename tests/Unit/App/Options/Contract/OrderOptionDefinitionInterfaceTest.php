@@ -55,7 +55,7 @@ it('snapshots all definitions', function () use ($definitions) {
     assertMatchesJsonSnapshot(json_encode((new Collection($items))->toArrayWithoutNull()));
 });
 
-it('can validate', function () use ($definitions) {
+it('is supported by a POSTNL carrier with all capabilities', function () use ($definitions) {
     $fakeCarrier = factory(Carrier::class)
         ->withCarrier('POSTNL')
         ->withAllCapabilities()
@@ -68,6 +68,6 @@ it('can validate', function () use ($definitions) {
         /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $instance */
         $instance = new $definition();
 
-        \PHPUnit\Framework\Assert::assertTrue($instance->validate($carrierSchema), "Definition {$definition} failed validation");
+        \PHPUnit\Framework\Assert::assertTrue($carrierSchema->canHaveShipmentOption($instance), "Definition {$definition} is not supported by the carrier schema");
     }
 });

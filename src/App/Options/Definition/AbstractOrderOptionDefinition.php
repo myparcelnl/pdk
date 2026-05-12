@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInterface
 {
@@ -123,17 +122,5 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     public function getShipmentOptionsDefault()
     {
         return TriStateService::INHERIT;
-    }
-
-    /**
-     * Validates whether this option is available for the given carrier.
-     * Default: checks if the capabilities key exists in the carrier's options.
-     *
-     * Override to provide custom validation logic, or to always return true for options
-     * that are universally available regardless of carrier capabilities.
-     */
-    public function validate(CarrierSchema $carrierSchema): bool
-    {
-        return $carrierSchema->canHaveShipmentOption($this);
     }
 }

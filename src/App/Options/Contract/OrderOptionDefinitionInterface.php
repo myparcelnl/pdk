@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Contract;
 
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
-
 interface OrderOptionDefinitionInterface
 {
     /**
@@ -64,13 +62,4 @@ interface OrderOptionDefinitionInterface
      * @return mixed
      */
     public function getShipmentOptionsDefault();
-
-    /**
-     * Validates if the option is allowed for the current carrier.
-     *
-     * @param  \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $carrierSchema
-     *
-     * @return bool
-     */
-    public function validate(CarrierSchema $carrierSchema): bool;
 }
