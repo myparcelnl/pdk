@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -267,6 +268,20 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         $getter = 'get' . ucfirst($capabilitiesKey);
 
         if (! method_exists($options, $getter)) {
+            Logger::warning(
+                sprintf(
+                    'No getter %s() on %s for capabilities key "%s"; check the OptionDefinition\'s getCapabilitiesOptionsKey().',
+                    $getter,
+                    RefCapabilitiesResponseOptionsOptionsV2::class,
+                    $capabilitiesKey
+                ),
+                [
+                    'capabilitiesKey' => $capabilitiesKey,
+                    'expectedGetter'  => $getter,
+                    'optionsClass'    => RefCapabilitiesResponseOptionsOptionsV2::class,
+                ]
+            );
+
             return null;
         }
 
