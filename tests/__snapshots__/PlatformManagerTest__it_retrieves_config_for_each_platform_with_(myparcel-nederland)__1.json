@@ -718,7 +718,12 @@
         "packageTypes": [],
         "shipmentOptions": []
       },
-      "deliveryOptions": []
+      "deliveryOptions": {
+        "addressFields": [],
+        "unsupportedParameters": [],
+        "availableFeatures": [],
+        "allowFakeDelivery": true
+      }
     },
     {
       "externalIdentifier": "trunkrs",

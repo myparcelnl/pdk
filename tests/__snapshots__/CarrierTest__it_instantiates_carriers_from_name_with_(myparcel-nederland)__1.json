@@ -309,7 +309,12 @@
         "insuranceOptions": [50000]
       }
     },
-    "deliveryOptions": []
+    "deliveryOptions": {
+      "addressFields": [],
+      "unsupportedParameters": [],
+      "availableFeatures": [],
+      "allowFakeDelivery": true
+    }
   },
   {
     "externalIdentifier": "TRUNKRS",
