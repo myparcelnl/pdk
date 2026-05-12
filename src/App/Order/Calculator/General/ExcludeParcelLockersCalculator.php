@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -12,7 +13,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
@@ -71,7 +71,7 @@ final class ExcludeParcelLockersCalculator extends AbstractPdkOrderOptionCalcula
             }
 
             return Settings::get(
-                CarrierSettings::EXPORT_AGE_CHECK,
+                (new AgeCheckDefinition())->getCarrierSettingsKey(),
                 CarrierSettings::ID . '.' . $orderLine->product->carrier->id,
                 false
             );

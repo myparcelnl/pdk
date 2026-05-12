@@ -5,6 +5,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Base\Support;
 
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+
 use function expect;
 
 it('builds an allow-key with capitalised suffix', function () {
@@ -36,4 +39,21 @@ it('builds a pricePackageType-key with capitalised suffix', function () {
     expect(SettingKey::pricePackageType('mailbox'))->toBe('pricePackageTypeMailbox')
         ->and(SettingKey::pricePackageType('packageSmall'))->toBe('pricePackageTypePackageSmall')
         ->and(SettingKey::pricePackageType('digitalStamp'))->toBe('pricePackageTypeDigitalStamp');
+});
+
+it('accepts SDK V2 SCREAMING_SNAKE_CASE consts and normalises them', function () {
+    expect(SettingKey::allow(RefTypesDeliveryTypeV2::EVENING))->toBe('allowEveningDelivery')
+        ->and(SettingKey::allow(RefTypesDeliveryTypeV2::PICKUP))->toBe('allowPickupLocations')
+        ->and(SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY))->toBe('priceDeliveryTypeSameDay')
+        ->and(SettingKey::pricePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP))->toBe('pricePackageTypeDigitalStamp');
+});
+
+it('maps SDK V2 SMALL_PACKAGE to the legacy packageSmall attribute name', function () {
+    expect(SettingKey::pricePackageType(RefShipmentPackageTypeV2::SMALL_PACKAGE))
+        ->toBe('pricePackageTypePackageSmall');
+});
+
+it('handles all-caps single-word inputs (PACKAGE, MAILBOX)', function () {
+    expect(SettingKey::pricePackageType(RefShipmentPackageTypeV2::MAILBOX))->toBe('pricePackageTypeMailbox')
+        ->and(SettingKey::pricePackageType(RefShipmentPackageTypeV2::PACKAGE))->toBe('pricePackageTypePackage');
 });

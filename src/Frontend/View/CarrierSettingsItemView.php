@@ -28,6 +28,7 @@ use MyParcelNL\Pdk\Frontend\Form\SettingsDivider;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
@@ -163,16 +164,18 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function createInternationalMailboxFields(): array
     {
+        $allowInternationalMailboxKey = SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX);
+
         $fields = $this->createSettingWithPriceFields(
-            CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX,
-            CarrierSettings::PRICE_INTERNATIONAL_MAILBOX
+            $allowInternationalMailboxKey,
+            SettingKey::price(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX)
         );
 
         // Add tracked toggle for carriers with custom mailbox contract, only visible when international mailbox is enabled
         if ($this->carrierValidationService->supportsShipmentOption($this->carrier, TrackedDefinition::class) && AccountSettings::hasCarrierSmallPackageContract()) {
-            $trackedElement = (new InteractiveElement(CarrierSettings::EXPORT_TRACKED, Components::INPUT_TOGGLE))
-                ->builder(function (FormOperationBuilder $builder) {
-                    $builder->visibleWhen(CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX);
+            $trackedElement = (new InteractiveElement((new TrackedDefinition())->getCarrierSettingsKey(), Components::INPUT_TOGGLE))
+                ->builder(function (FormOperationBuilder $builder) use ($allowInternationalMailboxKey) {
+                    $builder->visibleWhen($allowInternationalMailboxKey);
                 });
             $this->makeReadOnlyWhenRequired($trackedElement, 'tracked');
             $fields[] = $trackedElement;
@@ -400,7 +403,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED);
             },
             new SettingsDivider($this->createGenericLabel('delivery_options_delivery'), SettingsDivider::LEVEL_3),
-            new InteractiveElement(CarrierSettings::ALLOW_DELIVERY_OPTIONS, Components::INPUT_TOGGLE)
+            new InteractiveElement(SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME), Components::INPUT_TOGGLE)
         );
 
         // At home delivery options configuration (when enabled)
@@ -443,7 +446,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $elements[] = $this->withOperation(
             function (FormOperationBuilder $builder) {
                 $builder->visibleWhen(CarrierSettings::DELIVERY_OPTIONS_ENABLED)
-                    ->and(CarrierSettings::ALLOW_DELIVERY_OPTIONS); // "allow home delivery" toggle
+                    ->and(SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME)); // "allow home delivery" toggle
             },
             ...$homeDeliveryOptionsConfig
         );
@@ -457,8 +460,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $pickupDeliveryOptionsConfig = array_merge(
                 $pickupDeliveryOptionsConfig,
                 $this->createSettingWithPriceFields(
-                    SettingKey::allow('pickupDelivery'),
-                    SettingKey::priceDeliveryType('pickup')
+                    SettingKey::allow(RefTypesDeliveryTypeV2::PICKUP),
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::PICKUP)
                 )
             );
 
@@ -485,8 +488,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         return array_merge(
             $this->createSettingWithPriceFields(
-                CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-                CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY
+                (new SameDayDeliveryDefinition())->getAllowSettingsKey(),
+                SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY)
             ),
             [new InteractiveElement(CarrierSettings::CUTOFF_TIME_SAME_DAY, Components::INPUT_TIME)]
         );
@@ -502,8 +505,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         return $this->createSettingWithPriceFields(
-            CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-            CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY
+            (new SaturdayDeliveryDefinition())->getAllowSettingsKey(),
+            SettingKey::priceDeliveryType(DeliveryOptions::DELIVERY_OPTION_SATURDAY)
         );
     }
 
@@ -517,8 +520,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         return $this->createSettingWithPriceFields(
-            CarrierSettings::ALLOW_MONDAY_DELIVERY,
-            CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY
+            SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_MONDAY),
+            SettingKey::priceDeliveryType(DeliveryOptions::DELIVERY_OPTION_MONDAY)
         );
     }
 
@@ -549,14 +552,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 continue;
             }
 
-            // Capabilities deliver V2 SCREAMING_SNAKE_CASE; settings keys use camelCase.
-            $key = Str::camel(strtolower($deliveryType));
-
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
-                    SettingKey::allow($key),
-                    SettingKey::priceDeliveryType($key)
+                    SettingKey::allow($deliveryType),
+                    SettingKey::priceDeliveryType($deliveryType)
                 )
             );
         }
@@ -611,12 +611,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
             return [];
         }
 
+        $exportInsuranceKey = (new InsuranceDefinition())->getCarrierSettingsKey();
+
         return [
-            new InteractiveElement(CarrierSettings::EXPORT_INSURANCE, Components::INPUT_TOGGLE),
+            new InteractiveElement($exportInsuranceKey, Components::INPUT_TOGGLE),
 
             $this->withOperation(
-                function (FormOperationBuilder $builder) {
-                    $builder->visibleWhen(CarrierSettings::EXPORT_INSURANCE);
+                function (FormOperationBuilder $builder) use ($exportInsuranceKey) {
+                    $builder->visibleWhen($exportInsuranceKey);
                 },
                 new InteractiveElement(CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT, Components::INPUT_NUMBER),
                 $this->createInsuranceElement(CarrierSettings::EXPORT_INSURANCE_UP_TO),
@@ -682,14 +684,14 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         if (in_array(RefShipmentPackageTypeV2::SMALL_PACKAGE, $allowedPackageTypes, true)) {
             $fields[] = new InteractiveElement(
-                CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL,
+                SettingKey::pricePackageType(RefShipmentPackageTypeV2::SMALL_PACKAGE),
                 Components::INPUT_CURRENCY
             );
         }
 
         if (in_array(RefShipmentPackageTypeV2::MAILBOX, $allowedPackageTypes, true)) {
             $fields[] = new InteractiveElement(
-                CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
+                SettingKey::pricePackageType(RefShipmentPackageTypeV2::MAILBOX),
                 Components::INPUT_CURRENCY
             );
 
@@ -698,7 +700,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
 
         if (in_array(RefShipmentPackageTypeV2::DIGITAL_STAMP, $allowedPackageTypes, true)) {
             $fields[] = new InteractiveElement(
-                CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
+                SettingKey::pricePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP),
                 Components::INPUT_CURRENCY
             );
         }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\App\Order\Calculator;
 
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
@@ -46,7 +47,7 @@ it('calculates insurance', function (array $input, int $result) {
         ->withCarrier(
             $carrier,
             array_replace([
-                CarrierSettings::EXPORT_INSURANCE                  => true,
+                (new InsuranceDefinition())->getCarrierSettingsKey()                  => true,
                 CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
                 CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
                 CarrierSettings::EXPORT_INSURANCE_UP_TO            => 500000,
@@ -384,7 +385,7 @@ it('calculates insurance for fixed insurance amount when insurance is disabled',
         ->withCarrier(
             RefCapabilitiesSharedCarrierV2::DPD,
             [
-                CarrierSettings::EXPORT_INSURANCE => false,
+                (new InsuranceDefinition())->getCarrierSettingsKey() => false,
             ]
         )
         ->store();
@@ -424,7 +425,7 @@ it('returns capabilities default amount when no insurance is set on the order', 
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE => false,
+            (new InsuranceDefinition())->getCarrierSettingsKey() => false,
         ])
         ->store();
 
@@ -463,7 +464,7 @@ it('capabilities fallback: order price rounds up to the nearest tier', function 
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE                  => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()                  => true,
             CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
             CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
             CarrierSettings::EXPORT_INSURANCE_UP_TO            => 200000,
@@ -507,7 +508,7 @@ it('capabilities fallback: order price exceeding capabilities max is capped at c
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE                  => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()                  => true,
             CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
             CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
             CarrierSettings::EXPORT_INSURANCE_UP_TO            => 500000,
@@ -549,7 +550,7 @@ it('carrier bounds: settings upTo below carrier min is raised to carrier min', f
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE                  => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()                  => true,
             CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
             CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
             CarrierSettings::EXPORT_INSURANCE_UP_TO            => 0,
@@ -590,7 +591,7 @@ it('carrier bounds: settings percentage result below carrier min is raised to ca
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE                  => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()                  => true,
             CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 0,
             CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 10,
             CarrierSettings::EXPORT_INSURANCE_UP_TO            => 200000,
@@ -695,7 +696,7 @@ it('carrier bounds: inherit with insurance disabled and carrier min > 0 uses def
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE => false,
+            (new InsuranceDefinition())->getCarrierSettingsKey() => false,
         ])
         ->store();
 
@@ -733,7 +734,7 @@ it('carrier bounds: settings fromAmount threshold still returns carrier min, not
 
     factory(Settings::class)
         ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
-            CarrierSettings::EXPORT_INSURANCE                  => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()                  => true,
             CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT      => 100,
             CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE => 100,
             CarrierSettings::EXPORT_INSURANCE_UP_TO            => 200000,

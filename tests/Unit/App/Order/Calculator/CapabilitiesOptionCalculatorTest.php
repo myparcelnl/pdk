@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\App\Order\Calculator;
 
 use MyParcelNL\Pdk\App\Options\Definition\AbstractOrderOptionDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -104,7 +106,7 @@ it('forces isRequired option to ENABLED', function () {
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
@@ -136,8 +138,8 @@ it('applies requires: when option A is enabled and requires B, B is forced ENABL
 
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -180,8 +182,8 @@ it('applies excludes: when option A is enabled and excludes B, B is forced DISAB
 
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -223,7 +225,7 @@ it('forces DISABLED for options not present in capabilities response', function 
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     // Capabilities response has no options at all
@@ -249,8 +251,8 @@ it('cascades requires: A requires B, B requires C, all get enabled', function ()
 
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -328,7 +330,7 @@ it('forces option ENABLED when capabilities says isRequired, even if merchant al
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => false])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => false])
         ->store();
 
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
@@ -359,7 +361,7 @@ it('allows option when carrier settings allow it and capabilities include it', f
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
@@ -394,8 +396,8 @@ it('disables every shipment option when the carrier capability is missing for th
     // Permissive carrier settings — but capabilities will say "no support" anyway.
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -426,7 +428,7 @@ it('logs a warning when a definition references a capabilities key that has no S
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     // Capabilities response with at least one option present, so $capability->getOptions()

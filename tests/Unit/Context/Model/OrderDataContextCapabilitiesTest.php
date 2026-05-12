@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -34,7 +35,7 @@ it('inherited delivery options enforce isRequired', function () {
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -95,7 +96,7 @@ it('inherited delivery options respect carrier setting over isSelectedByDefault'
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -125,7 +126,7 @@ it('isRequired overrides even explicit carrier settings in inherited delivery op
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
