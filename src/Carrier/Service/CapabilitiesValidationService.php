@@ -6,6 +6,8 @@ namespace MyParcelNL\Pdk\Carrier\Service;
 
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
+use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 
@@ -60,14 +62,26 @@ class CapabilitiesValidationService
      *
      * Returns null for types where the API does not define a max weight constraint.
      *
-     * @param  string $cc           ISO 3166-1 alpha-2 country code
-     * @param  array  $allowedTypes PDK name => V2 name
+     * By default, only carriers with delivery options enabled in shop settings
+     * contribute to the per-type aggregation — disabled carriers are not available
+     * in checkout and should not affect package-type ordering. Pass
+     * $filterByEnabledCarriers = false for use cases that need the raw API view
+     * across all carriers the merchant has access to.
+     *
+     * @param  string $cc                       ISO 3166-1 alpha-2 country code
+     * @param  array  $allowedTypes             PDK name => V2 name
+     * @param  bool   $filterByEnabledCarriers  When true, exclude carriers without
+     *                                          CarrierSettings::DELIVERY_OPTIONS_ENABLED
      *
      * @return array<string, null|int> PDK package type name => max weight in grams, or null if unconstrained
      */
-    public function getPackageTypeWeights(string $cc, array $allowedTypes): array
-    {
-        $weights = [];
+    public function getPackageTypeWeights(
+        string $cc,
+        array $allowedTypes,
+        bool $filterByEnabledCarriers = true
+    ): array {
+        $enabledCarriers = $filterByEnabledCarriers ? $this->getEnabledCarrierNames() : null;
+        $weights         = [];
 
         foreach ($allowedTypes as $packageTypeName => $v2PackageType) {
             $capabilities = $this->indexByCarrier(
@@ -76,10 +90,34 @@ class CapabilitiesValidationService
                     'package_type' => $v2PackageType,
                 ])
             );
+
+            if ($enabledCarriers !== null) {
+                $capabilities = array_intersect_key($capabilities, array_flip($enabledCarriers));
+            }
+
             $weights[$packageTypeName] = $this->getHighestMaxWeight($capabilities);
         }
 
         return $weights;
+    }
+
+    /**
+     * V2 carrier names for which delivery options are enabled in shop settings.
+     *
+     * @return string[]
+     */
+    private function getEnabledCarrierNames(): array
+    {
+        $carrierSettings = Settings::get(CarrierSettings::ID) ?? [];
+
+        return array_keys(
+            array_filter(
+                $carrierSettings,
+                static function ($settings): bool {
+                    return ! empty($settings[CarrierSettings::DELIVERY_OPTIONS_ENABLED]);
+                }
+            )
+        );
     }
 
     /**
