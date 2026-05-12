@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
@@ -15,7 +16,6 @@ use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 class PostReturnShipmentsRequest extends Request
 {
@@ -82,13 +82,12 @@ class PostReturnShipmentsRequest extends Request
         $returnShipments = [];
 
         foreach ($this->collection as $shipment) {
-            $shipment = $this->ensureReturnCapabilities($shipment);
-
-            // Get the original recipient data
             $recipient = $shipment->recipient;
-            if (!$recipient) {
+            if (! $recipient) {
                 throw new \RuntimeException('Recipient data is required for return shipments');
             }
+
+            $shipment = $this->ensureReturnCapabilities($shipment, $recipient->cc);
 
             $carrierId = Utils::convertToId($shipment->carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
             if (! $carrierId) {
@@ -118,20 +117,19 @@ class PostReturnShipmentsRequest extends Request
     }
 
     /**
-     * If the carrier cannot handle return shipments, the carrier will be set to the platform default carrier.
-     * In that case a notification is emitted.
+     * If the carrier cannot handle return shipments to the destination, swap to the
+     * platform default carrier and emit a notification.
      *
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     * @param  string                                  $destinationCc ISO 3166-1 alpha-2 destination country code
      *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      */
-    private function ensureReturnCapabilities(Shipment $shipment): Shipment
+    private function ensureReturnCapabilities(Shipment $shipment, string $destinationCc): Shipment
     {
-        $schema = Pdk::get(CarrierSchema::class);
+        $capabilitiesValidationService = Pdk::get(CapabilitiesValidationService::class);
 
-        $schema->setCarrier($shipment->carrier);
-
-        if (!$schema->hasReturnCapabilities()) {
+        if (! $capabilitiesValidationService->supportsReturns($shipment->carrier, $destinationCc)) {
             $carrierName        = $shipment->carrier->carrier;
             $propositionService = Pdk::get(PropositionService::class);
             $defaultCarrier     = $propositionService->getDefaultCarrier();

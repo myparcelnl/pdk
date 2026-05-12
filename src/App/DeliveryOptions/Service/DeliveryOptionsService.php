@@ -416,7 +416,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     return false;
                 }
 
-                if (! $this->capabilitiesValidation->capabilitySupportsWeight($capability, $weight)) {
+                if (! $this->capabilitiesValidation->supportsWeight($capability, $weight)) {
                     return false;
                 }
 

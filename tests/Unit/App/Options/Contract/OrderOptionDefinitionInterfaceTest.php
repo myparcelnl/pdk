@@ -17,9 +17,9 @@ use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -61,13 +61,15 @@ it('is supported by a POSTNL carrier with all capabilities', function () use ($d
         ->withAllCapabilities()
         ->make();
 
-    $carrierSchema = Pdk::get(CarrierSchema::class);
-    $carrierSchema->setCarrier($fakeCarrier);
+    $carrierValidationService = Pdk::get(CarrierValidationService::class);
 
     foreach ($definitions as $definition) {
         /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $instance */
         $instance = new $definition();
 
-        \PHPUnit\Framework\Assert::assertTrue($carrierSchema->canHaveShipmentOption($instance), "Definition {$definition} is not supported by the carrier schema");
+        \PHPUnit\Framework\Assert::assertTrue(
+            $carrierValidationService->supportsShipmentOption($fakeCarrier, $instance),
+            "Definition {$definition} is not supported by the carrier validation service"
+        );
     }
 });

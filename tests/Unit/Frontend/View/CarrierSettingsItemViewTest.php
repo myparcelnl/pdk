@@ -11,9 +11,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
@@ -26,10 +24,6 @@ uses()->group('frontend', 'settings');
 
 function getViewSettings(CarrierFactory $carrierFactory): array
 {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema $carrierSchema */
-    $carrierSchema = Pdk::get(MockCarrierSchema::class);
-    $carrierSchema->reset();
-
     $carrier = $carrierFactory->make();
 
     $view = new CarrierSettingsItemView($carrier);

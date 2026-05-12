@@ -16,7 +16,7 @@ use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
 
 class PostShipmentsRequest extends Request
 {
@@ -117,11 +117,11 @@ class PostShipmentsRequest extends Request
      */
     private function encodeSecondaryShipments(Shipment $shipment): ?array
     {
-        $schema = Pdk::get(CarrierSchema::class);
+        $carrierValidationService = Pdk::get(CarrierValidationService::class);
 
-        $schema->setCarrier($shipment->deliveryOptions->carrier);
-
-        $secondaryShipmentsAmount = $schema->canHaveMultiCollo() ? $shipment->deliveryOptions->labelAmount - 1 : 0;
+        $secondaryShipmentsAmount = $carrierValidationService->supportsMultiCollo($shipment->deliveryOptions->carrier)
+            ? $shipment->deliveryOptions->labelAmount - 1
+            : 0;
         $secondaryShipments       = [];
 
         for ($i = 0; $i < $secondaryShipmentsAmount; $i++) {
