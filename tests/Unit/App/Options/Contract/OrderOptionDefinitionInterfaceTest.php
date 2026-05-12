@@ -7,25 +7,17 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Contract;
 
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\PackageTypeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Model\CarrierCapabilities;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Model\PropositionCarrierFeatures;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
@@ -37,17 +29,11 @@ usesShared(new UsesEachMockPdkInstance());
 
 $definitions = [
     AgeCheckDefinition::class,
-    CountryOfOriginDefinition::class,
-    CustomsCodeDefinition::class,
     DirectReturnDefinition::class,
-    DisableDeliveryOptionsDefinition::class,
-    FitInDigitalStampDefinition::class,
-    FitInMailboxDefinition::class,
     HideSenderDefinition::class,
     InsuranceDefinition::class,
     LargeFormatDefinition::class,
     OnlyRecipientDefinition::class,
-    PackageTypeDefinition::class,
     PriorityDeliveryDefinition::class,
     SameDayDeliveryDefinition::class,
     SignatureDefinition::class,
