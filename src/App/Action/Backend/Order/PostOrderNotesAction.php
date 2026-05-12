@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
-use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
@@ -50,7 +50,7 @@ class PostOrderNotesAction extends AbstractOrderAction
      */
     public function handle(Request $request): Response
     {
-        if (! AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES)) {
+        if (! AccountSettings::hasSubscriptionFeature(PdkAccountFeaturesService::FEATURE_ORDER_NOTES)) {
             return $this->getFetchOrdersResponse($request);
         }
 

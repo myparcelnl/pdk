@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInterface
@@ -48,7 +49,7 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         $key = $this->getShipmentOptionsKey();
 
-        return $key ? 'export' . ucfirst($key) : null;
+        return $key ? SettingKey::export($key) : null;
     }
 
     /**
@@ -80,7 +81,7 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         $key = $this->getShipmentOptionsKey();
 
-        return $key ? 'allow' . ucfirst($key) : null;
+        return $key ? SettingKey::allow($key) : null;
     }
 
     /**
@@ -95,7 +96,7 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         $key = $this->getShipmentOptionsKey();
 
-        return $key ? 'price' . ucfirst($key) : null;
+        return $key ? SettingKey::price($key) : null;
     }
 
     /**

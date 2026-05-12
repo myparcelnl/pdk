@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
 use MyParcelNL\Pdk\Facade\AccountSettings;
@@ -456,8 +457,8 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $pickupDeliveryOptionsConfig = array_merge(
                 $pickupDeliveryOptionsConfig,
                 $this->createSettingWithPriceFields(
-                    CarrierSettings::ALLOW_PICKUP_LOCATIONS,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP
+                    SettingKey::allow('pickupDelivery'),
+                    SettingKey::priceDeliveryType('pickup')
                 )
             );
 
@@ -543,29 +544,19 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         foreach ($this->carrier->deliveryTypes as $deliveryType) {
-            // Ignore unsupported types and pickup (pickup is handled in a separate section in getDeliveryOptionsFields())
+            // Pickup has its own section in getDeliveryOptionsFields(), so skip it here.
             if ($deliveryType === RefTypesDeliveryTypeV2::PICKUP) {
                 continue;
             }
 
-            // @TODO: in the future, make this fully dynamic by also allowing custom delivery types from carriers and not relying on predefined constants
-            if (\defined(CarrierSettings::class . "::ALLOW_" . strtoupper($deliveryType))) {
-                $typeAllowedSetting = constant(CarrierSettings::class . "::ALLOW_" . strtoupper($deliveryType));
-            } else {
-                continue;
-            }
-
-            if (\defined(CarrierSettings::class . "::PRICE_DELIVERY_TYPE_" . strtoupper($deliveryType))) {
-                $typePriceSetting = constant(CarrierSettings::class . "::PRICE_DELIVERY_TYPE_" . strtoupper($deliveryType));
-            } else {
-                continue;
-            }
+            // Capabilities deliver V2 SCREAMING_SNAKE_CASE; settings keys use camelCase.
+            $key = Str::camel(strtolower($deliveryType));
 
             $settings = array_merge(
                 $settings,
                 $this->createSettingWithPriceFields(
-                    $typeAllowedSetting,
-                    $typePriceSetting
+                    SettingKey::allow($key),
+                    SettingKey::priceDeliveryType($key)
                 )
             );
         }

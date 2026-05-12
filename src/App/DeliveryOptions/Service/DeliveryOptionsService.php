@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -24,34 +25,11 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    /**
-     * Settings map for non-shipment-option entries (delivery types, package types, etc.)
-     * that are not covered by OrderOptionDefinitions. Shipment option allow/price keys
-     * are built dynamically from definitions in getCarrierSettingsMap().
-     */
-    private const NON_DEFINITION_CARRIER_SETTINGS_MAP = [
-        'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
-        'allowStandardDelivery'        => CarrierSettings::ALLOW_STANDARD_DELIVERY,
-        'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
-        'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
-        'allowMorningDelivery'         => CarrierSettings::ALLOW_MORNING_DELIVERY,
-        'allowPickupLocations'         => CarrierSettings::ALLOW_PICKUP_DELIVERY,
-        'allowExpressDelivery'         => CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
-        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY,
-        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY,
-        'pricePackageTypeDigitalStamp' => CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
-        'pricePackageTypeMailbox'      => CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
-        'pricePackageTypePackageSmall' => CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL,
-        'pricePickup'                  => CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP,
-        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY,
-        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY,
-        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY,
-        'excludeParcelLockers'         => CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
-    ];
 
     /**
      * @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface
@@ -224,7 +202,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     : $value;
 
                 // For pickup price, ensure it doesn't exceed shipping costs
-                if ($key === CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP) {
+                if ($key === SettingKey::priceDeliveryType('pickup')) {
                     $shippingCost = $this->currencyService->convertToEuros($cart->shipmentPrice);
                     $subtotal     = max(-$shippingCost, $value);
                 }
@@ -443,13 +421,45 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     }
 
     /**
-     * Build the full carrier settings map by merging definition-derived allow/price keys
-     * with the static non-definition entries.
+     * Build the settings map exposed to the Delivery Options checkout widget.
+     *
+     * The delivery- and package-type lists below are hand-curated to match the
+     * fields the widget currently understands — they are NOT yet driven from
+     * the carrier's capabilities. Adding a new type means updating these lists
+     * AND making the widget render the new field. When the widget becomes
+     * fully capability-driven, this hand-curation collapses into iteration
+     * over $carrier->deliveryTypes / packageTypes directly.
      *
      * @return array<string, string>
      */
     private static function getCarrierSettingsMap(): array
     {
+        $allowDeliveryTypes  = [
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::STANDARD)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::EVENING)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::MORNING)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::PICKUP)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::EXPRESS)),
+            'mondayDelivery', // No SDK V2 const; legacy carrier-settings-only toggle.
+        ];
+
+        $priceDeliveryTypes  = [
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::EVENING)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::MORNING)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::SAME_DAY)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::STANDARD)),
+            Str::camel(strtolower(RefTypesDeliveryTypeV2::EXPRESS)),
+        ];
+
+        // PDK PACKAGE_TYPE_*_NAME consts are used here because their casing
+        // matches the CarrierSettings attribute names ('packageSmall'); the
+        // SDK V2 form is 'SMALL_PACKAGE' → 'smallPackage' which diverges.
+        $pricePackageTypes = [
+            Str::camel(DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME),
+            Str::camel(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME),
+            Str::camel(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME),
+        ];
+
         /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[] $definitions */
         $definitions = Pdk::get('orderOptionDefinitions');
         $map         = [];
@@ -468,7 +478,28 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             }
         }
 
-        return array_merge($map, self::NON_DEFINITION_CARRIER_SETTINGS_MAP);
+        foreach ($allowDeliveryTypes as $type) {
+            $key       = SettingKey::allow($type);
+            $map[$key] = $key;
+        }
+
+        foreach ($priceDeliveryTypes as $type) {
+            $map[SettingKey::price($type)] = SettingKey::priceDeliveryType($type);
+        }
+
+        foreach ($pricePackageTypes as $type) {
+            $key       = SettingKey::pricePackageType($type);
+            $map[$key] = $key;
+        }
+
+        // Special-case overrides — the widget exposes these under JS field
+        // names that don't follow the formula:
+        $map[SettingKey::allow('deliveryOptions')] = SettingKey::allow('deliveryOptions'); // master toggle
+        $map['allowExpressDelivery']               = CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS; // JS field is clean ('allowExpressDelivery') but storage attr is legacy ('allowDeliveryTypeExpress'); Plan 7 will resolve caller-by-caller
+        $map['pricePickup']                        = SettingKey::priceDeliveryType('pickup'); // JS field uses short form
+        $map['excludeParcelLockers']               = CheckoutSettings::EXCLUDE_PARCEL_LOCKERS; // different settings class
+
+        return $map;
     }
 
     /**
