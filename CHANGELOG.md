@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/myparcelnl/pdk/compare/v3.5.0...v3.5.1) (2026-05-12)
+
+
+### :bug: Bug Fixes
+
+* **proposition:** enable GLS fakedelivery  ([#464](https://github.com/myparcelnl/pdk/issues/464)) ([feaaad8](https://github.com/myparcelnl/pdk/commit/feaaad83994118244143be23bd9125a945c69062))
+
 ## [3.5.0](https://github.com/myparcelnl/pdk/compare/v3.4.2...v3.5.0) (2026-04-30)
 
 
