@@ -87,6 +87,19 @@ class PostReturnShipmentsRequest extends Request
                 throw new \RuntimeException('Recipient data is required for return shipments');
             }
 
+            if (! $recipient->cc) {
+                Notifications::warning(
+                    "Cannot determine return capabilities for {$shipment->carrier->name}",
+                    'Skipping return shipment: destination country code is missing',
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                continue;
+            }
+
             $shipment = $this->ensureReturnCapabilities($shipment, $recipient->cc);
 
             $carrierId = Utils::convertToId($shipment->carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
