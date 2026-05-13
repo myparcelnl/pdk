@@ -18,7 +18,8 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabil
  * type has the highest weight limit?" using data from the capabilities API.
  *
  * Reusable across checkout, order export, and admin UI — does not depend on
- * cart, settings, or frontend concerns.
+ * cart or frontend state. Reads CarrierSettings to skip carriers without
+ * delivery options enabled when aggregating per-package-type weights.
  */
 class CapabilitiesValidationService
 {
