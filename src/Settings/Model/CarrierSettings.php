@@ -135,11 +135,6 @@ class CarrierSettings extends AbstractSettingsModel
     protected $casts      = [
         self::CARRIER_NAME => 'string',
 
-        // Legacy storage attribute paired with the clean 'allowExpressDelivery'
-        // default produced by initializeResolvesOptionAttributes(); kept here so
-        // reads of the legacy attribute still cast to bool.
-        'allowDeliveryTypeExpress'                    => 'bool',
-
         self::CUTOFF_TIME                             => 'string',
         self::CUTOFF_TIME_SAME_DAY                    => 'string',
         self::DEFAULT_PACKAGE_TYPE                    => 'string',

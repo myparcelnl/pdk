@@ -33,7 +33,8 @@ final class SettingKey
      * @var array<string, string>
      */
     private const ALLOW_EXCEPTIONS = [
-        'pickupDelivery' => 'allowPickupLocations',
+        'pickupDelivery'  => 'allowPickupLocations',
+        'expressDelivery' => 'allowDeliveryTypeExpress',
     ];
 
     /**

@@ -2388,17 +2388,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -2422,6 +2411,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -3084,7 +3084,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -3104,8 +3104,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -3114,7 +3114,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -4104,17 +4104,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -4138,6 +4127,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -4800,7 +4800,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -4820,8 +4820,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -4830,7 +4830,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -5820,17 +5820,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -5854,6 +5843,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -6516,7 +6516,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -6536,8 +6536,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -6546,7 +6546,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -7536,17 +7536,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -7570,6 +7559,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -8232,7 +8232,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -8252,8 +8252,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -8262,7 +8262,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -9252,17 +9252,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -9286,6 +9275,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -9948,7 +9948,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -9968,8 +9968,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -9978,7 +9978,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -10968,17 +10968,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -11002,6 +10991,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -11664,7 +11664,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -11684,8 +11684,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -11694,7 +11694,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -12684,17 +12684,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -12718,6 +12707,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -13380,7 +13380,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -13400,8 +13400,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -13410,7 +13410,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -14400,17 +14400,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -14434,6 +14423,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -15096,7 +15096,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -15116,8 +15116,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -15126,7 +15126,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -16116,17 +16116,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -16150,6 +16139,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -16812,7 +16812,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -16832,8 +16832,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -16842,7 +16842,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -17832,17 +17832,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -17866,6 +17855,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -18528,7 +18528,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -18548,8 +18548,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -18558,7 +18558,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -19548,17 +19548,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -19582,6 +19571,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -20295,7 +20295,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -20315,8 +20315,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -20325,7 +20325,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -21315,17 +21315,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -21349,6 +21338,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -22011,7 +22011,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -22031,8 +22031,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -22041,7 +22041,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -23031,17 +23031,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -23065,6 +23054,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -23727,7 +23727,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -23747,8 +23747,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -23757,7 +23757,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [
@@ -24747,17 +24747,6 @@
                                         {
                                             "$setValue": {
                                                 "$value": 0,
-                                                "$target": "allowDeliveryTypeExpress",
-                                                "$if": [
-                                                    {
-                                                        "$eq": 0
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "$setValue": {
-                                                "$value": 0,
                                                 "$target": "allowEarlyMorningDelivery",
                                                 "$if": [
                                                     {
@@ -24781,6 +24770,17 @@
                                             "$setValue": {
                                                 "$value": 0,
                                                 "$target": "allowDeliveryOptions",
+                                                "$if": [
+                                                    {
+                                                        "$eq": 0
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "$setValue": {
+                                                "$value": 0,
+                                                "$target": "allowDeliveryTypeExpress",
                                                 "$if": [
                                                     {
                                                         "$eq": 0
@@ -25443,7 +25443,7 @@
                             "description": "settings_carrier_price_delivery_type_same_day_description"
                         },
                         {
-                            "name": "allowExpressDelivery",
+                            "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
                                     "$visibleWhen": {
@@ -25463,8 +25463,8 @@
                                 }
                             ],
                             "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_express_delivery",
-                            "description": "settings_carrier_allow_express_delivery_description"
+                            "label": "settings_carrier_allow_delivery_type_express",
+                            "description": "settings_carrier_allow_delivery_type_express_description"
                         },
                         {
                             "name": "priceDeliveryTypeExpress",
@@ -25473,7 +25473,7 @@
                                     "$visibleWhen": {
                                         "$if": [
                                             {
-                                                "$target": "allowExpressDelivery"
+                                                "$target": "allowDeliveryTypeExpress"
                                             },
                                             {
                                                 "$and": [

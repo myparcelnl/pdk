@@ -493,7 +493,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         // Special-case overrides — the widget exposes these under JS field
         // names that don't follow the formula:
         $map[SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME)] = SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME); // master toggle
-        $map['allowExpressDelivery'] = 'allowDeliveryTypeExpress'; // JS field is clean; storage attr is legacy
+        // Express is stored under the legacy 'allowDeliveryTypeExpress' attribute (via
+        // SettingKey ALLOW_EXCEPTIONS) but exposed to the widget under the clean
+        // JS field 'allowExpressDelivery'. Swap the loop's entry for the JS-clean key.
+        $expressStorageKey = SettingKey::allow(RefTypesDeliveryTypeV2::EXPRESS);
+        unset($map[$expressStorageKey]);
+        $map['allowExpressDelivery'] = $expressStorageKey;
         // Pickup is exposed under the short JS field 'pricePickup' (not 'pricePickupDelivery'
         // produced by the auto-derive loop). Drop the loop's entry to avoid two JS fields
         // pointing at the same storage attribute.
