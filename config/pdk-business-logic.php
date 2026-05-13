@@ -25,7 +25,6 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesPackageTypeCalculato
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomsDeclarationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\DeliveryDateExceptionCalculator;
-use MyParcelNL\Pdk\App\Order\Calculator\General\ExcludeParcelLockersCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
@@ -106,7 +105,6 @@ return [
             WeightCalculator::class,
             CustomerInformationCalculator::class,
             CustomsDeclarationCalculator::class,
-            ExcludeParcelLockersCalculator::class,
         ];
     }),
 

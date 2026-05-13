@@ -28,7 +28,6 @@ use MyParcelNL\Sdk\Support\Arr;
  * @property int<-1|0|1>         $signature
  * @property int<-1|0|1>         $tracked
  * @property int<-1|0|1>         $collect
- * @property int<-1|0|1>         $excludeParcelLockers
  * @property int<-1|0|1>         $freshFood
  * @property int<-1|0|1>         $frozen
  * @property int<-1|0|1>         $saturdayDelivery

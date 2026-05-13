@@ -1181,12 +1181,6 @@
             "description": "settings_product_export_tracked_description"
         },
         {
-            "name": "excludeParcelLockers",
-            "$component": "TriStateInput",
-            "label": "settings_product_exclude_parcel_lockers",
-            "description": "settings_product_exclude_parcel_lockers_description"
-        },
-        {
             "name": "exportFreshFood",
             "$component": "TriStateInput",
             "label": "settings_product_export_fresh_food",

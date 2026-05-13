@@ -1,168 +1,183 @@
 {
-  "multiCollo": true,
-  "id": 23001,
-  "shopId": 67890,
-  "referenceIdentifier": "my-multicollo-set",
-  "externalIdentifier": "3SMYPA060119130",
-  "barcode": "3SMYPA123456789",
-  "carrier": {
-    "carrier": "DHL_FOR_YOU",
-    "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
-    "options": {
-      "cooledDelivery": [],
-      "freshFood": [],
-      "frozen": [],
-      "hideSender": [],
-      "oversizedPackage": [],
-      "priorityDelivery": [],
-      "recipientOnlyDelivery": [],
-      "requiresAgeVerification": [],
-      "requiresReceiptCode": [],
-      "requiresSignature": [],
-      "returnOnFirstFailedDelivery": [],
-      "sameDayDelivery": [],
-      "saturdayDelivery": [],
-      "scheduledCollection": [],
-      "tracked": [],
-      "insurance": {
-        "insuredAmount": {
-          "default": {
-            "currency": "EUR",
-            "amount": 0
-          },
-          "min": {
-            "currency": "EUR",
-            "amount": 0
-          },
-          "max": {
-            "currency": "EUR",
-            "amount": 500000
-          }
-        }
-      }
-    },
-    "deliveryTypes": [
-      "MORNING_DELIVERY",
-      "STANDARD_DELIVERY",
-      "EVENING_DELIVERY",
-      "PICKUP_DELIVERY",
-      "SAME_DAY_DELIVERY",
-      "EXPRESS_DELIVERY",
-      "EARLY_MORNING_DELIVERY"
-    ],
-    "collo": {
-      "max": 10
-    }
-  },
-  "contractId": "10932623",
-  "delayed": false,
-  "delivered": false,
-  "deliveryOptions": {
+    "multiCollo": true,
+    "id": 23001,
+    "shopId": 67890,
+    "referenceIdentifier": "my-multicollo-set",
+    "externalIdentifier": "3SMYPA060119130",
+    "barcode": "3SMYPA123456789",
     "carrier": {
-      "carrier": "DHL_FOR_YOU",
-      "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
-      "options": {
-        "cooledDelivery": [],
-        "freshFood": [],
-        "frozen": [],
-        "hideSender": [],
-        "oversizedPackage": [],
-        "priorityDelivery": [],
-        "recipientOnlyDelivery": [],
-        "requiresAgeVerification": [],
-        "requiresReceiptCode": [],
-        "requiresSignature": [],
-        "returnOnFirstFailedDelivery": [],
-        "sameDayDelivery": [],
-        "saturdayDelivery": [],
-        "scheduledCollection": [],
-        "tracked": [],
-        "insurance": {
-          "insuredAmount": {
-            "default": {
-              "currency": "EUR",
-              "amount": 0
-            },
-            "min": {
-              "currency": "EUR",
-              "amount": 0
-            },
-            "max": {
-              "currency": "EUR",
-              "amount": 500000
+        "carrier": "DHL_FOR_YOU",
+        "packageTypes": [
+            "PACKAGE",
+            "MAILBOX",
+            "UNFRANKED",
+            "DIGITAL_STAMP",
+            "PALLET",
+            "SMALL_PACKAGE",
+            "ENVELOPE"
+        ],
+        "options": {
+            "cooledDelivery": [],
+            "freshFood": [],
+            "frozen": [],
+            "hideSender": [],
+            "oversizedPackage": [],
+            "priorityDelivery": [],
+            "recipientOnlyDelivery": [],
+            "requiresAgeVerification": [],
+            "requiresReceiptCode": [],
+            "requiresSignature": [],
+            "returnOnFirstFailedDelivery": [],
+            "sameDayDelivery": [],
+            "saturdayDelivery": [],
+            "scheduledCollection": [],
+            "tracked": [],
+            "insurance": {
+                "insuredAmount": {
+                    "default": {
+                        "currency": "EUR",
+                        "amount": 0
+                    },
+                    "min": {
+                        "currency": "EUR",
+                        "amount": 0
+                    },
+                    "max": {
+                        "currency": "EUR",
+                        "amount": 500000
+                    }
+                }
             }
-          }
+        },
+        "deliveryTypes": [
+            "MORNING_DELIVERY",
+            "STANDARD_DELIVERY",
+            "EVENING_DELIVERY",
+            "PICKUP_DELIVERY",
+            "SAME_DAY_DELIVERY",
+            "EXPRESS_DELIVERY",
+            "EARLY_MORNING_DELIVERY"
+        ],
+        "collo": {
+            "max": 10
         }
-      },
-      "deliveryTypes": [
-        "MORNING_DELIVERY",
-        "STANDARD_DELIVERY",
-        "EVENING_DELIVERY",
-        "PICKUP_DELIVERY",
-        "SAME_DAY_DELIVERY",
-        "EXPRESS_DELIVERY",
-        "EARLY_MORNING_DELIVERY"
-      ],
-      "collo": {
-        "max": 10
-      }
     },
-    "labelAmount": 1,
-    "shipmentOptions": {
-      "ageCheck": -1,
-      "return": -1,
-      "hideSender": -1,
-      "insurance": 0,
-      "largeFormat": -1,
-      "onlyRecipient": -1,
-      "priorityDelivery": -1,
-      "sameDayDelivery": -1,
-      "saturdayDelivery": -1,
-      "signature": -1,
-      "tracked": -1,
-      "receiptCode": -1,
-      "collect": -1,
-      "excludeParcelLockers": -1,
-      "freshFood": -1,
-      "frozen": -1,
-      "cooledDelivery": -1
+    "contractId": "10932623",
+    "delayed": false,
+    "delivered": false,
+    "deliveryOptions": {
+        "carrier": {
+            "carrier": "DHL_FOR_YOU",
+            "packageTypes": [
+                "PACKAGE",
+                "MAILBOX",
+                "UNFRANKED",
+                "DIGITAL_STAMP",
+                "PALLET",
+                "SMALL_PACKAGE",
+                "ENVELOPE"
+            ],
+            "options": {
+                "cooledDelivery": [],
+                "freshFood": [],
+                "frozen": [],
+                "hideSender": [],
+                "oversizedPackage": [],
+                "priorityDelivery": [],
+                "recipientOnlyDelivery": [],
+                "requiresAgeVerification": [],
+                "requiresReceiptCode": [],
+                "requiresSignature": [],
+                "returnOnFirstFailedDelivery": [],
+                "sameDayDelivery": [],
+                "saturdayDelivery": [],
+                "scheduledCollection": [],
+                "tracked": [],
+                "insurance": {
+                    "insuredAmount": {
+                        "default": {
+                            "currency": "EUR",
+                            "amount": 0
+                        },
+                        "min": {
+                            "currency": "EUR",
+                            "amount": 0
+                        },
+                        "max": {
+                            "currency": "EUR",
+                            "amount": 500000
+                        }
+                    }
+                }
+            },
+            "deliveryTypes": [
+                "MORNING_DELIVERY",
+                "STANDARD_DELIVERY",
+                "EVENING_DELIVERY",
+                "PICKUP_DELIVERY",
+                "SAME_DAY_DELIVERY",
+                "EXPRESS_DELIVERY",
+                "EARLY_MORNING_DELIVERY"
+            ],
+            "collo": {
+                "max": 10
+            }
+        },
+        "labelAmount": 1,
+        "shipmentOptions": {
+            "ageCheck": -1,
+            "return": -1,
+            "hideSender": -1,
+            "insurance": 0,
+            "largeFormat": -1,
+            "onlyRecipient": -1,
+            "priorityDelivery": -1,
+            "sameDayDelivery": -1,
+            "saturdayDelivery": -1,
+            "signature": -1,
+            "tracked": -1,
+            "receiptCode": -1,
+            "collect": -1,
+            "freshFood": -1,
+            "frozen": -1,
+            "cooledDelivery": -1
+        },
+        "deliveryType": "standard",
+        "packageType": "package"
     },
-    "deliveryType": "standard",
-    "packageType": "package"
-  },
-  "hidden": false,
-  "isReturn": false,
-  "linkConsumerPortal": "https://demo.myparcel.me/track-trace/demo",
-  "multiColloMainShipmentId": "23001",
-  "partnerTrackTraces": [],
-  "physicalProperties": [],
-  "price": {
-    "amount": 625,
-    "currency": "EUR"
-  },
-  "recipient": {
-    "cc": "NL",
-    "city": "Hoofddorp",
-    "number": "31",
-    "postalCode": "2132JE",
-    "street": "Antareslaan",
-    "person": "Jaap Krekel"
-  },
-  "sender": {
-    "cc": "NL",
-    "city": "Hoofddorp",
-    "number": "31",
-    "postalCode": "2132 JE",
-    "street": "Antareslaan",
-    "email": "spam@myparcel.nl",
-    "phone": "0612345678",
-    "person": "Bye Felicia",
-    "company": "MyParcel"
-  },
-  "shipmentType": 3,
-  "status": 2,
-  "created": "2022-07-25 15:16:31",
-  "createdBy": 145,
-  "modified": "2022-07-25 15:16:31",
-  "modifiedBy": 145
+    "hidden": false,
+    "isReturn": false,
+    "linkConsumerPortal": "https:\/\/demo.myparcel.me\/track-trace\/demo",
+    "multiColloMainShipmentId": "23001",
+    "partnerTrackTraces": [],
+    "physicalProperties": [],
+    "price": {
+        "amount": 625,
+        "currency": "EUR"
+    },
+    "recipient": {
+        "cc": "NL",
+        "city": "Hoofddorp",
+        "number": "31",
+        "postalCode": "2132JE",
+        "street": "Antareslaan",
+        "person": "Jaap Krekel"
+    },
+    "sender": {
+        "cc": "NL",
+        "city": "Hoofddorp",
+        "number": "31",
+        "postalCode": "2132 JE",
+        "street": "Antareslaan",
+        "email": "spam@myparcel.nl",
+        "phone": "0612345678",
+        "person": "Bye Felicia",
+        "company": "MyParcel"
+    },
+    "shipmentType": 3,
+    "status": 2,
+    "created": "2022-07-25 15:16:31",
+    "createdBy": 145,
+    "modified": "2022-07-25 15:16:31",
+    "modifiedBy": 145
 }
