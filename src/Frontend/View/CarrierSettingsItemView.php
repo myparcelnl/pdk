@@ -682,27 +682,26 @@ class CarrierSettingsItemView extends AbstractSettingsView
             ]),
         ];
 
-        if (in_array(RefShipmentPackageTypeV2::SMALL_PACKAGE, $allowedPackageTypes, true)) {
+        foreach ($allowedPackageTypes as $packageType) {
+            // Default package type's price is the carrier's basePrice, not a surcharge.
+            if ($packageType === DeliveryOptions::DEFAULT_PACKAGE_TYPE_V2) {
+                continue;
+            }
+
+            // Skip V2 values the PDK has no mapping for; their settings attrs do not exist.
+            if (! DeliveryOptions::isPackageTypeSupported($packageType)) {
+                continue;
+            }
+
             $fields[] = new InteractiveElement(
-                SettingKey::pricePackageType(RefShipmentPackageTypeV2::SMALL_PACKAGE),
+                SettingKey::pricePackageType($packageType),
                 Components::INPUT_CURRENCY
             );
-        }
 
-        if (in_array(RefShipmentPackageTypeV2::MAILBOX, $allowedPackageTypes, true)) {
-            $fields[] = new InteractiveElement(
-                SettingKey::pricePackageType(RefShipmentPackageTypeV2::MAILBOX),
-                Components::INPUT_CURRENCY
-            );
-
-            $fields[] = $this->createInternationalMailboxFields();
-        }
-
-        if (in_array(RefShipmentPackageTypeV2::DIGITAL_STAMP, $allowedPackageTypes, true)) {
-            $fields[] = new InteractiveElement(
-                SettingKey::pricePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP),
-                Components::INPUT_CURRENCY
-            );
+            // Mailbox carries an extra international-mailbox configuration sibling.
+            if ($packageType === RefShipmentPackageTypeV2::MAILBOX) {
+                $fields[] = $this->createInternationalMailboxFields();
+            }
         }
 
         return $fields;

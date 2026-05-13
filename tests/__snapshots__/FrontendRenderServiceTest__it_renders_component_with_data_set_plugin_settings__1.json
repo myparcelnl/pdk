@@ -2530,30 +2530,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -2629,6 +2605,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -2651,6 +2651,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -4246,30 +4318,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -4345,6 +4393,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -4367,6 +4439,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -5962,30 +6106,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -6061,6 +6181,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -6083,6 +6227,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -7678,30 +7894,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -7777,6 +7969,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -7799,6 +8015,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -9394,30 +9682,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -9493,6 +9757,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -9515,6 +9803,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -11110,30 +11470,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -11209,6 +11545,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -11231,6 +11591,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -12826,30 +13258,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -12925,6 +13333,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -12947,6 +13379,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -14542,30 +15046,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -14641,6 +15121,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -14663,6 +15167,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -16258,30 +16834,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -16357,6 +16909,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -16379,6 +16955,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -17974,30 +18622,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -18073,6 +18697,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -18095,6 +18743,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -19690,30 +20410,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -19789,6 +20485,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -19811,6 +20531,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -21457,30 +22249,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -21556,6 +22324,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -21578,6 +22370,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -23173,30 +24037,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -23272,6 +24112,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -23294,6 +24158,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
@@ -24889,30 +25825,6 @@
                             "description": "settings_carrier_default_package_type_description"
                         },
                         {
-                            "name": "pricePackageTypePackageSmall",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_package_type_package_small",
-                            "description": "settings_carrier_price_package_type_package_small_description"
-                        },
-                        {
                             "name": "pricePackageTypeMailbox",
                             "$builders": [
                                 {
@@ -24988,6 +25900,30 @@
                             "description": "settings_carrier_price_international_mailbox_description"
                         },
                         {
+                            "name": "pricePackageTypeUnfranked",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_unfranked",
+                            "description": "settings_carrier_price_package_type_unfranked_description"
+                        },
+                        {
                             "name": "pricePackageTypeDigitalStamp",
                             "$builders": [
                                 {
@@ -25010,6 +25946,78 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_package_type_digital_stamp",
                             "description": "settings_carrier_price_package_type_digital_stamp_description"
+                        },
+                        {
+                            "name": "pricePackageTypePallet",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_pallet",
+                            "description": "settings_carrier_price_package_type_pallet_description"
+                        },
+                        {
+                            "name": "pricePackageTypePackageSmall",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_package_small",
+                            "description": "settings_carrier_price_package_type_package_small_description"
+                        },
+                        {
+                            "name": "pricePackageTypeEnvelope",
+                            "$builders": [
+                                {
+                                    "$visibleWhen": {
+                                        "$if": [
+                                            {
+                                                "$and": [
+                                                    {
+                                                        "$target": "deliveryOptionsEnabled"
+                                                    },
+                                                    {
+                                                        "$target": "allowDeliveryOptions"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "$component": "CurrencyInput",
+                            "label": "settings_carrier_price_package_type_envelope",
+                            "description": "settings_carrier_price_package_type_envelope_description"
                         },
                         {
                             "name": "deliveryDaysWindow",
