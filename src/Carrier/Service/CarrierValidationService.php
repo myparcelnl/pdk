@@ -39,9 +39,15 @@ class CarrierValidationService
             ? $definition
             : new $definition();
 
+        $capabilitiesKey = $resolved->getCapabilitiesOptionsKey();
+
+        if ($capabilitiesKey === null) {
+            return false;
+        }
+
         $options = $carrier->toArray()['options'] ?? [];
 
-        return array_key_exists($resolved->getCapabilitiesOptionsKey(), $options);
+        return array_key_exists($capabilitiesKey, $options);
     }
 
     /**
