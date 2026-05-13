@@ -22,7 +22,8 @@ final class InsuranceTierMath
      * @param  int $min Minimum amount in cents
      * @param  int $max Maximum amount in cents
      *
-     * @return int[] Sorted, unique tier amounts in cents, including min and max
+     * @return int[] Sorted, unique tier amounts in cents. Includes max when
+     *               min < max; degenerate ranges (min >= max) return [min] only.
      */
     public static function buildTiers(int $min, int $max): array
     {
