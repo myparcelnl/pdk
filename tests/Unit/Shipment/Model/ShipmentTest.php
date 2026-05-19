@@ -88,7 +88,7 @@ it('throws RuntimeException when carrier attribute is unset and shop has no defa
 
 // HasCarrierAttribute: when carrier attribute is set explicitly, that value wins; shop is not consulted.
 it('uses explicitly set carrier without reading shop default', function () {
-    // Shop has no default carrier — if HasCarrierAttribute reads it, a RuntimeException would be thrown.
+    // Explicit carrier on the model wins over the shop default; HasCarrierAttribute does not consult the shop when a carrier is already set.
     $carrier  = factory(Carrier::class)->withCarrier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU)->make();
     $shipment = new Shipment(['carrier' => $carrier]);
 

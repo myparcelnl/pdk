@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Concern;
 
 use InvalidArgumentException;
-use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use RuntimeException;
 
@@ -36,11 +36,15 @@ trait HasCarrierAttribute
         $carrierName = $this->attributes['carrier'] ?? null;
 
         if (! $carrierName) {
-            $shop    = Pdk::get(AccountSettingsServiceInterface::class)->getShop();
+            $shop    = AccountSettings::getShop();
             $default = $shop ? $shop->defaultCarrierModel : null;
 
             if ($default === null) {
-                throw new RuntimeException('No default carrier available; shop has no default carrier set');
+                throw new RuntimeException(
+                    $shop && $shop->defaultCarrier
+                        ? sprintf('Default carrier "%s" is not available in the repository', $shop->defaultCarrier)
+                        : 'No default carrier available; shop has no default carrier set'
+                );
             }
 
             return $default;

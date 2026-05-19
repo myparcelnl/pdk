@@ -5,7 +5,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Repository;
 
-use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -17,25 +16,12 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
 usesShared(new UsesEachMockPdkInstance(), new UsesAccountMock());
 
-beforeEach(function () {
-    // These tests construct Shipments with partial carrier arrays (id only) that produce no carrier name.
-    // The HasCarrierAttribute fallback now reads from the shop's defaultCarrier instead of PropositionService.
-    // Mutate the shop set up by UsesAccountMock to include a defaultCarrier.
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repo */
-    $repo    = Pdk::get(PdkAccountRepositoryInterface::class);
-    $account = $repo->getAccount();
-    if ($account && $account->shops->first()) {
-        $account->shops->first()->defaultCarrier = RefCapabilitiesSharedCarrierV2::POSTNL;
-        $repo->store($account);
-    }
-});
 
 const INPUT_RECIPIENT = [
     'cc'         => 'NL',

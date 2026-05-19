@@ -8,14 +8,14 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
-use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
+use RuntimeException;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
-use RuntimeException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
@@ -328,11 +328,15 @@ class DeliveryOptions extends Model
         $carrierName = $this->attributes[self::CARRIER];
 
         if (! $carrierName) {
-            $shop    = Pdk::get(AccountSettingsServiceInterface::class)->getShop();
+            $shop    = AccountSettings::getShop();
             $default = $shop ? $shop->defaultCarrierModel : null;
 
             if ($default === null) {
-                throw new RuntimeException('No default carrier available; shop has no default carrier set');
+                throw new RuntimeException(
+                    $shop && $shop->defaultCarrier
+                        ? sprintf('Default carrier "%s" is not available in the repository', $shop->defaultCarrier)
+                        : 'No default carrier available; shop has no default carrier set'
+                );
             }
 
             return $default;

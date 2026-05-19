@@ -131,7 +131,7 @@ class PostReturnShipmentsRequest extends Request
 
     /**
      * If the carrier cannot handle return shipments to the destination, swap to the
-     * platform default carrier and emit a notification.
+     * shop's default carrier and emit a notification.
      *
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
      * @param  string                                  $destinationCc ISO 3166-1 alpha-2 destination country code
