@@ -244,25 +244,7 @@
     "returns": "https://www.myparcel.nl/blog/retourneren/jouw-retourservice-optimaal-inrichten-bij-myparcel"
   },
   "contracts": {
-    "enablePostNLCustomContract": true,
-    "inbound": {
-      "default": {
-        "carrier": {
-          "id": 1,
-          "name": "POSTNL"
-        },
-        "id": 1
-      }
-    },
-    "outbound": {
-      "default": {
-        "carrier": {
-          "id": 1,
-          "name": "POSTNL"
-        },
-        "id": 1
-      }
-    }
+    "enablePostNLCustomContract": true
   },
   "collectTrip": {
     "enabled": true,
