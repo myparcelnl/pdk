@@ -9,6 +9,8 @@ use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use MyParcelNL\Pdk\App\Endpoint\Handler\GetDeliveryOptionsEndpoint;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -222,14 +224,16 @@ $openApiValidator = (new ValidatorBuilder())
     ->getResponseValidator();
 
 it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) use ($openApiValidator) {
+    $signatureKey       = (new SignatureDefinition())->getShipmentOptionsKey();
     $allShipmentOptions = [];
-    foreach (ShipmentOptions::ALL_SHIPMENT_OPTIONS as $option) {
-        if ($option === ShipmentOptions::SIGNATURE) {
-            // Value should be insured amount
-            $allShipmentOptions[$option] = 1000;
-        } else {
-            $allShipmentOptions[$option] = true;
+
+    foreach (Pdk::get('orderOptionDefinitions') as $definition) {
+        $option = $definition->getShipmentOptionsKey();
+        if (! $option) {
+            continue;
         }
+        // Signature carries the insured-amount value; all other options are boolean toggles.
+        $allShipmentOptions[$option] = $option === $signatureKey ? 1000 : true;
     }
 
     // Create and store a mock order with all shipment options, a date and a pickup location to fully test the schema
@@ -335,7 +339,7 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
 
     factory(Settings::class)
         ->withCarrier('POSTNL', [
-            CarrierSettings::EXPORT_INSURANCE        => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()        => true,
             CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
         ])
         ->store();
@@ -362,7 +366,7 @@ it('insurance: omits insurance from the response when exportInsurance is disable
 
     factory(Settings::class)
         ->withCarrier('POSTNL', [
-            CarrierSettings::EXPORT_INSURANCE        => false,
+            (new InsuranceDefinition())->getCarrierSettingsKey()        => false,
             CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
         ])
         ->store();
@@ -390,7 +394,7 @@ it('insurance: preserves an explicit monetary amount already set on the order sh
 
     factory(Settings::class)
         ->withCarrier('POSTNL', [
-            CarrierSettings::EXPORT_INSURANCE        => true,
+            (new InsuranceDefinition())->getCarrierSettingsKey()        => true,
             CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
         ])
         ->store();

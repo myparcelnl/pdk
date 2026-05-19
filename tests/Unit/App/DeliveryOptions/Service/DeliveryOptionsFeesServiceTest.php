@@ -6,12 +6,18 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
@@ -23,19 +29,19 @@ usesShared(
             ->constructorParameter('settings', [
                 CarrierSettings::ID => [
                     'POSTNL' => [
-                        CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY  => 1.3,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY => 4.5,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY  => 3,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY   => 1.5,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY => 8.2,
-                        CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP   => 0.5,
+                        SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::MORNING)  => 1.3,
+                        SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::STANDARD) => 4.5,
+                        SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::EVENING)  => 3,
+                        SettingKey::priceDeliveryType(DeliveryOptions::DELIVERY_OPTION_MONDAY)   => 1.5,
+                        SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY)  => 8.2,
+                        SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::PICKUP)           => 0.5,
 
-                        CarrierSettings::PRICE_ONLY_RECIPIENT => 0.7,
-                        CarrierSettings::PRICE_SIGNATURE      => 1.1,
-                        CarrierSettings::PRICE_PRIORITY_DELIVERY => 2.2,
+                        (new OnlyRecipientDefinition())->getPriceSettingsKey() => 0.7,
+                        (new SignatureDefinition())->getPriceSettingsKey()      => 1.1,
+                        (new PriorityDeliveryDefinition())->getPriceSettingsKey() => 2.2,
 
-                        CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP => 3.6,
-                        CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX       => 4.8,
+                        SettingKey::pricePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP) => 3.6,
+                        SettingKey::pricePackageType(RefShipmentPackageTypeV2::MAILBOX)      => 4.8,
                     ],
                 ],
             ]),
@@ -111,7 +117,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     'only recipient' => [
         'input'       => [
             'shipmentOptions' => [
-                ShipmentOptions::ONLY_RECIPIENT => true,
+                (new OnlyRecipientDefinition())->getShipmentOptionsKey() => true,
             ],
         ],
         'expectation' => [
@@ -131,7 +137,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     'signature' => [
         'input'       => [
             'shipmentOptions' => [
-                ShipmentOptions::SIGNATURE => true,
+                (new SignatureDefinition())->getShipmentOptionsKey() => true,
             ],
         ],
         'expectation' => [
@@ -151,7 +157,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     'priority delivery' => [
         'input'       => [
             'shipmentOptions' => [
-                ShipmentOptions::PRIORITY_DELIVERY => true,
+                (new PriorityDeliveryDefinition())->getShipmentOptionsKey() => true,
             ],
         ],
         'expectation' => [
@@ -171,7 +177,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     'same day delivery' => [
         'input'       => [
             'shipmentOptions' => [
-                ShipmentOptions::SAME_DAY_DELIVERY => true,
+                (new SameDayDeliveryDefinition())->getShipmentOptionsKey() => true,
             ],
         ],
         'expectation' => [

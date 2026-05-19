@@ -115,7 +115,7 @@ it('checks subscription features in non-existent account', function () {
 
     $repository->store(null);
 
-    $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
+    $result = AccountSettings::hasSubscriptionFeature(PdkAccountFeaturesService::FEATURE_ORDER_NOTES);
 
     expect($result)->toBeFalse();
 });
@@ -125,11 +125,11 @@ it('checks subscription features in account', function () {
 
     factory(Account::class)
         ->withSubscriptionFeatures([
-            Account::FEATURE_ORDER_NOTES,
+            PdkAccountFeaturesService::FEATURE_ORDER_NOTES,
         ])
         ->store();
 
-    $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
+    $result = AccountSettings::hasSubscriptionFeature(PdkAccountFeaturesService::FEATURE_ORDER_NOTES);
 
     expect($result)->toBeTrue();
 });

@@ -7,15 +7,9 @@ namespace MyParcelNL\Pdk\Tests\Datasets;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\PackageTypeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 
@@ -37,18 +31,6 @@ function getAllShipmentOptions(): array
     ]);
 }
 
-function getProductOptions(): array
-{
-    return array_merge(getAllShipmentOptions(), [
-        'country of origin'        => new CountryOfOriginDefinition(),
-        'customs code'             => new CustomsCodeDefinition(),
-        'disable delivery options' => new DisableDeliveryOptionsDefinition(),
-        'fit in digital stamp'     => new FitInDigitalStampDefinition(),
-        'fit in mailbox'           => new FitInMailboxDefinition(),
-        'package type'             => new PackageTypeDefinition(),
-    ]);
-}
-
 function getShipmentOptionsWithProductSettings(): array
 {
     return array_filter(
@@ -62,4 +44,3 @@ function getShipmentOptionsWithProductSettings(): array
 dataset('frontend shipment options', function () { return getFrontendShipmentOptions(); });
 dataset('all shipment options', function () { return getAllShipmentOptions(); });
 dataset('shipment options with product settings', function () { return getShipmentOptionsWithProductSettings(); });
-dataset('product options', function () { return getProductOptions(); });

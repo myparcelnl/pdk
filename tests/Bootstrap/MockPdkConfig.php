@@ -39,7 +39,6 @@ use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Psr\Log\LoggerInterface;
 use function DI\factory;
 use function DI\get;
@@ -79,7 +78,6 @@ class MockPdkConfig
             AuditServiceInterface::class                => get(AuditService::class),
             PdkAuditRepositoryInterface::class          => get(MockPdkAuditRepository::class),
             BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
-            CarrierSchema::class                        => get(MockCarrierSchema::class),
             ClientAdapterInterface::class               => get(Guzzle7ClientAdapter::class),
             ConfigInterface::class                      => get(MockConfig::class),
             CronServiceInterface::class                 => get(MockCronService::class),

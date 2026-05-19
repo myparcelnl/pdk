@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Cart\Service;
 
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -118,7 +119,7 @@ class CartCalculationService implements CartCalculationServiceInterface
             }
 
             return Settings::get(
-                CarrierSettings::EXPORT_AGE_CHECK,
+                (new AgeCheckDefinition())->getCarrierSettingsKey(),
                 CarrierSettings::ID . '.' . $line->product->carrier->id,
                 false
             );

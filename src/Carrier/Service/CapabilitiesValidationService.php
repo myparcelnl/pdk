@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Service;
 
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 
 /**
@@ -132,7 +134,7 @@ class CapabilitiesValidationService
      *
      * @return bool
      */
-    public function capabilitySupportsWeight($capability, int $weight): bool
+    public function supportsWeight($capability, int $weight): bool
     {
         // Defensive null checks: the SDK PHPDoc declares these as non-nullable, but the API
         // may omit fields at runtime. PHPStan warnings are suppressed for this reason.
@@ -156,42 +158,26 @@ class CapabilitiesValidationService
     }
 
     /**
-     * Build an insurance-tier ladder for a min/max range.
+     * Whether the carrier supports inbound (return) shipments to the given destination.
      *
-     * Includes fine-grained floor tiers (€100, €250, €500) at the low end so that
-     * low-value orders can still be insured at realistic increments, then €500 steps
-     * for higher amounts. Mirrors the curated ladders that lived in the per-carrier
-     * JSON schemas before INT-1501.
+     * The capabilities endpoint requires a destination country code to answer this
+     * question; "does carrier X support returns at all?" is an API gap (contract
+     * definitions do not advertise return support carrier-wide).
      *
-     * @param  int $min Minimum amount in cents
-     * @param  int $max Maximum amount in cents
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     * @param  string                                $countryCode ISO 3166-1 alpha-2 destination country code
      *
-     * @return int[] Sorted, unique tier amounts in cents, including min and max
+     * @return bool
      */
-    public static function buildInsuranceTiers(int $min, int $max): array
+    public function supportsReturns(Carrier $carrier, string $countryCode): bool
     {
-        if ($min >= $max) {
-            return [$min];
-        }
+        $capabilities = $this->capabilitiesRepository->getCapabilities([
+            'carrier'   => $carrier->carrier,
+            'direction' => CapabilitiesPostCapabilitiesRequestV2::DIRECTION_INBOUND,
+            'recipient' => ['country_code' => $countryCode],
+        ]);
 
-        $tiers = [$min];
-
-        // Floor tiers between min and max (exclusive bounds): €100, €250, €500.
-        foreach ([10_000, 25_000, 50_000] as $tier) {
-            if ($tier > $min && $tier < $max) {
-                $tiers[] = $tier;
-            }
-        }
-
-        // €500 steps from the next round €500 boundary up to (but excluding) max.
-        $stepStart = max($min, 50_000) + 50_000;
-        for ($t = $stepStart; $t < $max; $t += 50_000) {
-            $tiers[] = $t;
-        }
-
-        $tiers[] = $max;
-
-        return array_values(array_unique($tiers));
+        return ! empty($capabilities);
     }
 
     /**

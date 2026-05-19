@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
@@ -12,6 +24,8 @@ use MyParcelNL\Pdk\Settings\SettingsManager;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
 use function DI\factory;
 use function DI\value;
@@ -28,24 +42,60 @@ return [
         return [
             CarrierSettings::ID => [
                 SettingsManager::KEY_ALL => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS                  => true,
-                    CarrierSettings::ALLOW_EVENING_DELIVERY                  => true,
-                    CarrierSettings::ALLOW_MONDAY_DELIVERY                   => true,
-                    CarrierSettings::ALLOW_MORNING_DELIVERY                  => true,
-                    CarrierSettings::ALLOW_ONLY_RECIPIENT                    => true,
-                    CarrierSettings::ALLOW_PICKUP_LOCATIONS                  => true,
-                    CarrierSettings::ALLOW_SAME_DAY_DELIVERY                 => true,
-                    CarrierSettings::ALLOW_SATURDAY_DELIVERY                 => true,
-                    CarrierSettings::ALLOW_SIGNATURE                         => true,
-                    CarrierSettings::CUTOFF_TIME                             => '17:00',
-                    CarrierSettings::CUTOFF_TIME_SAME_DAY                    => '09:00',
-                    CarrierSettings::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-                    CarrierSettings::DELIVERY_DAYS_WINDOW                    => 7,
-                    CarrierSettings::DELIVERY_OPTIONS_ENABLED                => true,
-                    CarrierSettings::DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS => false,
-                    CarrierSettings::DIGITAL_STAMP_DEFAULT_WEIGHT            => 0,
-                    CarrierSettings::DROP_OFF_DELAY                          => 0,
-                    CarrierSettings::DROP_OFF_POSSIBILITIES                  => [
+                    // ----- Delivery types -----
+                    SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME)                                     => true, // master toggle
+                    SettingKey::allow(RefTypesDeliveryTypeV2::EVENING)                       => true,
+                    SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_MONDAY)               => true,
+                    SettingKey::allow(RefTypesDeliveryTypeV2::MORNING)                       => true,
+                    SettingKey::allow(RefTypesDeliveryTypeV2::PICKUP)                        => true,
+                    (new SameDayDeliveryDefinition())->getAllowSettingsKey()                 => true,
+                    (new SaturdayDeliveryDefinition())->getAllowSettingsKey()                => true,
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::EVENING)            => 0,
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::EXPRESS)            => 0,
+                    SettingKey::priceDeliveryType(DeliveryOptions::DELIVERY_OPTION_MONDAY)    => 0,
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::MORNING)            => 0,
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::PICKUP)             => 0,
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY)           => 0,
+                    SettingKey::priceDeliveryType(DeliveryOptions::DELIVERY_OPTION_SATURDAY)  => 0,
+                    SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::STANDARD)           => 0,
+
+                    // ----- Package types -----
+                    SettingKey::pricePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP)     => 0,
+                    SettingKey::pricePackageType(RefShipmentPackageTypeV2::MAILBOX)           => 0,
+
+                    // ----- Shipment options -----
+                    (new AgeCheckDefinition())->getCarrierSettingsKey()                       => false,
+                    (new DirectReturnDefinition())->getCarrierSettingsKey()                   => false,
+                    (new FreshFoodDefinition())->getCarrierSettingsKey()                      => false,
+                    (new FrozenDefinition())->getCarrierSettingsKey()                         => false,
+                    (new InsuranceDefinition())->getCarrierSettingsKey()                      => false,
+                    CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT                             => 0,
+                    CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE                        => 100,
+                    CarrierSettings::EXPORT_INSURANCE_UP_TO                                   => 0,
+                    CarrierSettings::EXPORT_INSURANCE_UP_TO_EU                                => 0,
+                    CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW                               => 0,
+                    CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE                            => 0,
+                    (new LargeFormatDefinition())->getCarrierSettingsKey()                    => false,
+                    (new OnlyRecipientDefinition())->getAllowSettingsKey()                    => true,
+                    (new OnlyRecipientDefinition())->getCarrierSettingsKey()                  => false,
+                    (new OnlyRecipientDefinition())->getPriceSettingsKey()                    => 0,
+                    (new ReceiptCodeDefinition())->getCarrierSettingsKey()                    => false,
+                    CarrierSettings::EXPORT_RETURN_LARGE_FORMAT                               => false,
+                    CarrierSettings::EXPORT_RETURN_PACKAGE_TYPE                               => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+                    (new SignatureDefinition())->getAllowSettingsKey()                        => true,
+                    (new SignatureDefinition())->getCarrierSettingsKey()                      => false,
+                    (new SignatureDefinition())->getPriceSettingsKey()                        => 0,
+
+                    // ----- Other carrier-level settings -----
+                    CarrierSettings::CUTOFF_TIME                                              => '17:00',
+                    CarrierSettings::CUTOFF_TIME_SAME_DAY                                     => '09:00',
+                    CarrierSettings::DEFAULT_PACKAGE_TYPE                                     => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+                    CarrierSettings::DELIVERY_DAYS_WINDOW                                     => 7,
+                    CarrierSettings::DELIVERY_OPTIONS_ENABLED                                 => true,
+                    CarrierSettings::DELIVERY_OPTIONS_ENABLED_FOR_BACKORDERS                  => false,
+                    CarrierSettings::DIGITAL_STAMP_DEFAULT_WEIGHT                             => 0,
+                    CarrierSettings::DROP_OFF_DELAY                                           => 0,
+                    CarrierSettings::DROP_OFF_POSSIBILITIES                                   => [
                         'dropOffDays'           => array_map(static function (int $weekday) {
                             return [
                                 'cutoffTime'        => '17:00:00',
@@ -56,35 +106,6 @@ return [
                         }, DropOffDay::WEEKDAYS),
                         'dropOffDaysDeviations' => [],
                     ],
-                    CarrierSettings::EXPORT_AGE_CHECK                        => false,
-                    CarrierSettings::EXPORT_RECEIPT_CODE                     => false,
-                    CarrierSettings::EXPORT_INSURANCE                        => false,
-                    CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT            => 0,
-                    CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 100,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO                  => 0,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO_EU               => 0,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO_ROW              => 0,
-                    CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
-                    CarrierSettings::EXPORT_LARGE_FORMAT                     => false,
-                    CarrierSettings::EXPORT_ONLY_RECIPIENT                   => false,
-                    CarrierSettings::EXPORT_RETURN                           => false,
-                    CarrierSettings::EXPORT_RETURN_LARGE_FORMAT              => false,
-                    CarrierSettings::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-                    CarrierSettings::EXPORT_SIGNATURE                        => false,
-                    CarrierSettings::EXPORT_FROZEN                           => false,
-                    CarrierSettings::EXPORT_FRESH_FOOD                       => false,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY             => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY             => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY              => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY             => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP              => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY            => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY            => 0,
-                    CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY            => 0,
-                    CarrierSettings::PRICE_ONLY_RECIPIENT                    => 0,
-                    CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
-                    CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
-                    CarrierSettings::PRICE_SIGNATURE                         => 0,
                 ],
             ],
             OrderSettings::ID   => [

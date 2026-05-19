@@ -7,13 +7,23 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Frontend\View;
 
 use MyParcelNL\Pdk\Account\Model\AccountGeneralSettings;
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
-use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
@@ -26,10 +36,6 @@ uses()->group('frontend', 'settings');
 
 function getViewSettings(CarrierFactory $carrierFactory): array
 {
-    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockCarrierSchema $carrierSchema */
-    $carrierSchema = Pdk::get(MockCarrierSchema::class);
-    $carrierSchema->reset();
-
     $carrier = $carrierFactory->make();
 
     $view = new CarrierSettingsItemView($carrier);
@@ -55,8 +61,8 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withDeliveryTypes([RefTypesDeliveryTypeV2::STANDARD]);
         },
         [
-            CarrierSettings::ALLOW_STANDARD_DELIVERY,
-            CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY,
+            SettingKey::allow(RefTypesDeliveryTypeV2::STANDARD),
+            SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::STANDARD),
         ],
     ],
 
@@ -66,8 +72,8 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withDeliveryTypes([RefTypesDeliveryTypeV2::MORNING]);
         },
         [
-            CarrierSettings::ALLOW_MORNING_DELIVERY,
-            CarrierSettings::PRICE_DELIVERY_TYPE_MORNING_DELIVERY,
+            SettingKey::allow(RefTypesDeliveryTypeV2::MORNING),
+            SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::MORNING),
         ],
     ],
 
@@ -77,8 +83,8 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withDeliveryTypes([RefTypesDeliveryTypeV2::EVENING]);
         },
         [
-            CarrierSettings::ALLOW_EVENING_DELIVERY,
-            CarrierSettings::PRICE_DELIVERY_TYPE_EVENING_DELIVERY,
+            SettingKey::allow(RefTypesDeliveryTypeV2::EVENING),
+            SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::EVENING),
         ],
     ],
 
@@ -87,7 +93,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withPackageTypes([RefShipmentPackageTypeV2::MAILBOX]);
         },
-        [CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX],
+        [SettingKey::pricePackageType(RefShipmentPackageTypeV2::MAILBOX)],
     ],
 
     'package type: digital stamp' => [
@@ -95,7 +101,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withPackageTypes([RefShipmentPackageTypeV2::DIGITAL_STAMP]);
         },
-        [CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP],
+        [SettingKey::pricePackageType(RefShipmentPackageTypeV2::DIGITAL_STAMP)],
     ],
 
     'package type: package_small' => [
@@ -103,7 +109,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withPackageTypes([RefShipmentPackageTypeV2::SMALL_PACKAGE]);
         },
-        [CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL],
+        [SettingKey::pricePackageType(RefShipmentPackageTypeV2::SMALL_PACKAGE)],
     ],
 
 
@@ -113,9 +119,9 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withOptions(['recipientOnlyDelivery' => ['enabled' => true]]);
         },
         [
-            CarrierSettings::EXPORT_ONLY_RECIPIENT,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT,
-            CarrierSettings::PRICE_ONLY_RECIPIENT,
+            (new OnlyRecipientDefinition())->getCarrierSettingsKey(),
+            (new OnlyRecipientDefinition())->getAllowSettingsKey(),
+            (new OnlyRecipientDefinition())->getPriceSettingsKey(),
         ],
     ],
 
@@ -125,8 +131,8 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withOptions(['priorityDelivery' => ['enabled' => true]]);
         },
         [
-            CarrierSettings::ALLOW_PRIORITY_DELIVERY,
-            CarrierSettings::PRICE_PRIORITY_DELIVERY,
+            (new PriorityDeliveryDefinition())->getAllowSettingsKey(),
+            (new PriorityDeliveryDefinition())->getPriceSettingsKey(),
         ],
     ],
 
@@ -136,9 +142,9 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withOptions(['requiresSignature' => ['enabled' => true]]);
         },
         [
-            CarrierSettings::EXPORT_SIGNATURE,
-            CarrierSettings::ALLOW_SIGNATURE,
-            CarrierSettings::PRICE_SIGNATURE,
+            (new SignatureDefinition())->getCarrierSettingsKey(),
+            (new SignatureDefinition())->getAllowSettingsKey(),
+            (new SignatureDefinition())->getPriceSettingsKey(),
         ],
     ],
 
@@ -147,7 +153,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withOptions(['requiresAgeVerification' => ['enabled' => true]]);
         },
-        [CarrierSettings::EXPORT_AGE_CHECK],
+        [(new AgeCheckDefinition())->getCarrierSettingsKey()],
     ],
 
     'shipment option: hide sender' => [
@@ -155,7 +161,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withOptions(['hideSender' => ['enabled' => true]]);
         },
-        [CarrierSettings::EXPORT_HIDE_SENDER],
+        [(new HideSenderDefinition())->getCarrierSettingsKey()],
     ],
 
     'shipment option: direct return' => [
@@ -163,7 +169,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withOptions(['returnOnFirstFailedDelivery' => ['enabled' => true]]);
         },
-        [CarrierSettings::EXPORT_RETURN],
+        [(new DirectReturnDefinition())->getCarrierSettingsKey()],
     ],
 
     'shipment option: large format' => [
@@ -172,7 +178,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withOptions(['oversizedPackage' => ['enabled' => true]]);
         },
         [
-            CarrierSettings::EXPORT_LARGE_FORMAT,
+            (new LargeFormatDefinition())->getCarrierSettingsKey(),
             CarrierSettings::EXPORT_RETURN_LARGE_FORMAT,
         ],
     ],
@@ -183,8 +189,8 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withOptions(['sameDayDelivery' => ['enabled' => true]]);
         },
         [
-            CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-            CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY,
+            (new SameDayDeliveryDefinition())->getAllowSettingsKey(),
+            SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY),
             CarrierSettings::CUTOFF_TIME_SAME_DAY,
         ],
     ],
@@ -195,7 +201,7 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withInsurance(0, 0, 10000);
         },
         [
-            CarrierSettings::EXPORT_INSURANCE,
+            (new InsuranceDefinition())->getCarrierSettingsKey(),
             CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT,
             CarrierSettings::EXPORT_INSURANCE_UP_TO,
             CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE,
@@ -209,14 +215,14 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
             return factory(Carrier::class)
                 ->withOptions(['freshFood' => ['enabled' => true]]);
         },
-        [CarrierSettings::EXPORT_FRESH_FOOD],
+        [(new FreshFoodDefinition())->getCarrierSettingsKey()],
     ],
     'shipment option: frozen' => [
         function () {
             return factory(Carrier::class)
                 ->withOptions(['frozen' => ['enabled' => true]]);
         },
-        [CarrierSettings::EXPORT_FROZEN],
+        [(new FrozenDefinition())->getCarrierSettingsKey()],
     ],
 ]);
 
