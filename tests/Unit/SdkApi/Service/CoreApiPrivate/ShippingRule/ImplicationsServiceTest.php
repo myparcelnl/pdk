@@ -10,7 +10,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Mockery;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Http\Message\RequestInterface;
@@ -33,7 +33,7 @@ class MockableImplicationsService extends ImplicationsService
     /** @var RequestInterface[] */
     public $capturedRequests = [];
 
-    public function __construct(CarrierRepository $carrierRepository)
+    public function __construct(CarrierRepositoryInterface $carrierRepository)
     {
         $this->mockHandler = new MockHandler();
         parent::__construct($carrierRepository);
@@ -94,7 +94,7 @@ function emptyImplResponse(): string
 it('returns the V2 carrier name when implications contain a known carrier id', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepository::class);
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldReceive('findByLegacyId')
         ->once()
         ->with(1)
@@ -110,7 +110,7 @@ it('returns the V2 carrier name when implications contain a known carrier id', f
 it('returns null when the implications array is empty', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepository::class);
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldNotReceive('findByLegacyId');
 
     $service = new MockableImplicationsService($carrierRepository);
@@ -123,7 +123,7 @@ it('returns null when the implications array is empty', function () {
 it('returns null when the first implication has no carrier_id', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepository::class);
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldNotReceive('findByLegacyId');
 
     // Omit carrier_id so the deserialized model has null for that field.
@@ -139,7 +139,7 @@ it('returns null when the carrier id is not found in the carrier repository', fu
 
     // Use a valid SDK enum value (2 = BPOST) that is not present in this shop's carriers.
     // findByLegacyId returns null when the carrier is not in the account's carrier list.
-    $carrierRepository = Mockery::mock(CarrierRepository::class);
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldReceive('findByLegacyId')
         ->once()
         ->with(2)
@@ -155,7 +155,7 @@ it('returns null when the carrier id is not found in the carrier repository', fu
 it('returns null when the API returns a non-2xx response', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepository::class);
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldNotReceive('findByLegacyId');
 
     $service = new MockableImplicationsService($carrierRepository);
@@ -168,7 +168,7 @@ it('returns null when the API returns a non-2xx response', function () {
 it('passes shop_id through unchanged and does not add extra query params', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepository::class);
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldReceive('findByLegacyId')->andReturn(new Carrier(['carrier' => 'POSTNL']));
 
     $service = new MockableImplicationsService($carrierRepository);

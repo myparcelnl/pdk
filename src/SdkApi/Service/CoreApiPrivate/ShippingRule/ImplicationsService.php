@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule;
 
-use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\AbstractCoreApiPrivateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Api\ShippingRuleApi;
 use Throwable;
@@ -20,14 +20,14 @@ class ImplicationsService extends AbstractCoreApiPrivateService
     private $api;
 
     /**
-     * @var CarrierRepository
+     * @var CarrierRepositoryInterface
      */
     private $carrierRepository;
 
     /**
-     * @param  CarrierRepository $carrierRepository
+     * @param  CarrierRepositoryInterface $carrierRepository
      */
-    public function __construct(CarrierRepository $carrierRepository)
+    public function __construct(CarrierRepositoryInterface $carrierRepository)
     {
         $this->api               = new ShippingRuleApi($this->createGuzzleClient(), $this->getApiConfig());
         $this->carrierRepository = $carrierRepository;
