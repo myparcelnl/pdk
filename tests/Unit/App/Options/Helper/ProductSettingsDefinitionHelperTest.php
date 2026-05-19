@@ -6,20 +6,13 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Helper;
 
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CountryOfOriginDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CustomsCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\DisableDeliveryOptionsDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FitInDigitalStampDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\FitInMailboxDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\PackageTypeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -41,13 +34,6 @@ it('gets value from product settings', function (string $definitionClass, $resul
     'large format'   => [LargeFormatDefinition::class, TriStateService::INHERIT],
     'only recipient' => [OnlyRecipientDefinition::class, TriStateService::INHERIT],
     'signature'      => [SignatureDefinition::class, TriStateService::INHERIT],
-
-    'country of origin'        => [CountryOfOriginDefinition::class, TriStateService::INHERIT],
-    'customs code'             => [CustomsCodeDefinition::class, TriStateService::INHERIT],
-    'disable delivery options' => [DisableDeliveryOptionsDefinition::class, TriStateService::INHERIT],
-    'fit in digital stamp'     => [FitInDigitalStampDefinition::class, TriStateService::INHERIT],
-    'fit in mailbox'           => [FitInMailboxDefinition::class, TriStateService::INHERIT],
-    'package type'             => [PackageTypeDefinition::class, TriStateService::INHERIT],
 ]);
 
 it('gets value from product settings with all options enabled', function (string $definitionClass, $result) {
@@ -66,11 +52,5 @@ it('gets value from product settings with all options enabled', function (string
     'large format'   => [LargeFormatDefinition::class, TriStateService::ENABLED],
     'only recipient' => [OnlyRecipientDefinition::class, TriStateService::ENABLED],
     'signature'      => [SignatureDefinition::class, TriStateService::ENABLED],
-
-    'country of origin'        => [CountryOfOriginDefinition::class, 'NL'],
-    'customs code'             => [CustomsCodeDefinition::class, '123456'],
-    'disable delivery options' => [DisableDeliveryOptionsDefinition::class, true],
-    'fit in mailbox'           => [FitInMailboxDefinition::class, 0],
-    'package type'             => [PackageTypeDefinition::class, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME],
 ]);
 

@@ -23,7 +23,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         return [
             MockAbstractLanguageService::class,
-            MockCarrierSchema::class,
             MockLanguageService::class,
             MockMemoryCacheStorage::class,
             MockOrderStatusService::class,

@@ -9,53 +9,51 @@ namespace MyParcelNL\Pdk\App\Options;
 use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
-use ReflectionClass;
+use ReflectionMethod;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 /**
- * Phase 2 guardrail: proves that NON_DEFINITION_CARRIER_SETTINGS_MAP contains only
- * delivery-type, package-type, and other non-shipment-option entries. Shipment option
- * allow/price keys must NOT appear in this constant — they are built dynamically from
- * OrderOptionDefinitions via getCarrierSettingsMap().
+ * Guardrail: proves the hand-curated portion of getCarrierSettingsMap() does
+ * not shadow keys already produced by OrderOptionDefinitions. Shipment-option
+ * allow/price keys must come from definitions; non-shipment-option entries
+ * (delivery types, package types, etc.) live in the hand-curated lists.
  */
 
 usesShared(new UsesEachMockPdkInstance());
 
-it('documents which NON_DEFINITION_CARRIER_SETTINGS_MAP entries are backed by definitions', function () {
-    $definitions = Pdk::get('orderOptionDefinitions');
-
-    $definitionAllowKeys = [];
-    $definitionPriceKeys = [];
+it('hand-curated overrides do not shadow definition-derived allow or price keys', function () {
+    $definitions    = Pdk::get('orderOptionDefinitions');
+    $definitionKeys = [];
 
     foreach ($definitions as $definition) {
         $allowKey = $definition->getAllowSettingsKey();
         $priceKey = $definition->getPriceSettingsKey();
 
         if ($allowKey) {
-            $definitionAllowKeys[] = $allowKey;
+            $definitionKeys[] = $allowKey;
         }
 
         if ($priceKey) {
-            $definitionPriceKeys[] = $priceKey;
+            $definitionKeys[] = $priceKey;
         }
     }
 
-    $reflection = new ReflectionClass(DeliveryOptionsService::class);
-    $constants  = $reflection->getConstants();
+    $method = new ReflectionMethod(DeliveryOptionsService::class, 'getCarrierSettingsMap');
+    $method->setAccessible(true);
+    $map = $method->invoke(null);
 
-    // @TODO: PHP 8.0+: use $reflection->getReflectionConstant('NON_DEFINITION_CARRIER_SETTINGS_MAP')
-    $map = $constants['NON_DEFINITION_CARRIER_SETTINGS_MAP'];
-
-    // No allow* or price* shipment option keys backed by a definition should exist in this constant.
-    // If they appear here, they should be moved to the definitions instead.
     foreach ($map as $frontendKey => $settingsValue) {
-        $inDefinitions = in_array($settingsValue, $definitionAllowKeys, true)
-            || in_array($settingsValue, $definitionPriceKeys, true);
+        // Skip rows that came from the definitions loop (key === value === a known definition key).
+        $isDefinitionRow = in_array($frontendKey, $definitionKeys, true) && $frontendKey === $settingsValue;
 
-        expect($inDefinitions)
+        if ($isDefinitionRow) {
+            continue;
+        }
+
+        expect(in_array($settingsValue, $definitionKeys, true))
             ->toBeFalse(
-                "Entry \"{$frontendKey} => {$settingsValue}\" is backed by a definition and should be removed from NON_DEFINITION_CARRIER_SETTINGS_MAP"
+                "Hand-curated entry \"{$frontendKey} => {$settingsValue}\" shadows a definition-derived key"
             );
     }
 });

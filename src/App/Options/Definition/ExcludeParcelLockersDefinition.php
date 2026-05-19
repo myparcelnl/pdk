@@ -8,7 +8,7 @@ final class ExcludeParcelLockersDefinition extends AbstractOrderOptionDefinition
 {
     public function getShipmentOptionsKey(): ?string
     {
-        return 'excludeParcelLockers';
+        return null;
     }
 
     public function getCapabilitiesOptionsKey(): ?string
