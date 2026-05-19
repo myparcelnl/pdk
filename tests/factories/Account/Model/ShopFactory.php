@@ -99,7 +99,9 @@ final class ShopFactory extends AbstractModelFactory
 
     protected function createDefault(): FactoryInterface
     {
-        return $this->withName('Test Shop')->withAllCarriers();
+        return $this->withName('Test Shop')
+            ->withAllCarriers()
+            ->withDefaultCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
     }
 
     /**

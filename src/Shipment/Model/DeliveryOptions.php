@@ -8,13 +8,14 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use RuntimeException;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
@@ -314,7 +315,7 @@ class DeliveryOptions extends Model
     /**
      * Always resolves a fresh Carrier from the repository so capability data is never stale.
      *
-     * - No carrier set → returns the proposition default carrier.
+     * - No carrier set → returns the shop's default carrier; throws when none is available.
      * - Carrier name set but not found in the repository → throws (repository findOrFail).
      *
      * Reads directly from $this->attributes to avoid re-entering getAttribute() which would
@@ -327,11 +328,17 @@ class DeliveryOptions extends Model
         $carrierName = $this->attributes[self::CARRIER];
 
         if (! $carrierName) {
-            return Pdk::get(PropositionService::class)->getDefaultCarrier();
+            $shop    = Pdk::get(AccountSettingsServiceInterface::class)->getShop();
+            $default = $shop ? $shop->defaultCarrierModel : null;
+
+            if ($default === null) {
+                throw new RuntimeException('No default carrier available; shop has no default carrier set');
+            }
+
+            return $default;
         }
 
-        $found = Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);
-        return $found;
+        return Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);
     }
 
     /**
@@ -381,7 +388,17 @@ class DeliveryOptions extends Model
      */
     public function toArray(?int $flags = null): array
     {
-        return Utils::filterNull([self::DATE => $this->getDateAsString()]) + parent::toArray($flags);
+        // parent::toArray() calls addMutatedAttributesToArray → getCarrierAttribute, which resolves
+        // the carrier via the repository and throws when no shop default is configured for a
+        // carrier-less DeliveryOptions (e.g. inside a Shipment constructor's changeArrayKeysCase).
+        // To avoid this, we exclude the carrier from parent array conversion and set it from the
+        // raw stored attribute directly — matching the pattern used by toStorableArray().
+        $array = Utils::filterNull([self::DATE => $this->getDateAsString()])
+            + $this->except(self::CARRIER, $flags);
+
+        $array[self::CARRIER] = $this->attributes[self::CARRIER];
+
+        return $array;
     }
 
     public function toStorableArray(): array

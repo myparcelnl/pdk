@@ -5,24 +5,25 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Carrier\Concern;
 
 use InvalidArgumentException;
+use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use RuntimeException;
 
 /**
  * Provides a normalising setter and a repository-backed getter for a single "carrier" attribute.
  *
  * The raw attribute is always stored as a plain carrier-name string (or null).
  * The getter resolves the stored name to a full Carrier model on demand, falling back
- * to the proposition default carrier when no name is stored.
+ * to the shop's default carrier when no name is stored.
  */
 trait HasCarrierAttribute
 {
     /**
      * Always resolves a fresh Carrier from the repository so capability data is never stale.
      *
-     * - No carrier set → returns the proposition default carrier.
+     * - No carrier set → returns the shop's default carrier; throws when none is available.
      * - Carrier name set but not found in the repository → throws (repository findOrFail).
      *
      * Reads directly from $this->attributes to avoid re-entering getAttribute() which would
@@ -35,7 +36,14 @@ trait HasCarrierAttribute
         $carrierName = $this->attributes['carrier'] ?? null;
 
         if (! $carrierName) {
-            return Pdk::get(PropositionService::class)->getDefaultCarrier();
+            $shop    = Pdk::get(AccountSettingsServiceInterface::class)->getShop();
+            $default = $shop ? $shop->defaultCarrierModel : null;
+
+            if ($default === null) {
+                throw new RuntimeException('No default carrier available; shop has no default carrier set');
+            }
+
+            return $default;
         }
 
         return Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);

@@ -64,63 +64,6 @@
     "delayed": false,
     "delivered": false,
     "deliveryOptions": {
-        "carrier": {
-            "carrier": "DHL_FOR_YOU",
-            "packageTypes": [
-                "PACKAGE",
-                "MAILBOX",
-                "UNFRANKED",
-                "DIGITAL_STAMP",
-                "PALLET",
-                "SMALL_PACKAGE",
-                "ENVELOPE"
-            ],
-            "options": {
-                "cooledDelivery": [],
-                "freshFood": [],
-                "frozen": [],
-                "hideSender": [],
-                "oversizedPackage": [],
-                "priorityDelivery": [],
-                "recipientOnlyDelivery": [],
-                "requiresAgeVerification": [],
-                "requiresReceiptCode": [],
-                "requiresSignature": [],
-                "returnOnFirstFailedDelivery": [],
-                "sameDayDelivery": [],
-                "saturdayDelivery": [],
-                "scheduledCollection": [],
-                "tracked": [],
-                "insurance": {
-                    "insuredAmount": {
-                        "default": {
-                            "currency": "EUR",
-                            "amount": 0
-                        },
-                        "min": {
-                            "currency": "EUR",
-                            "amount": 0
-                        },
-                        "max": {
-                            "currency": "EUR",
-                            "amount": 500000
-                        }
-                    }
-                }
-            },
-            "deliveryTypes": [
-                "MORNING_DELIVERY",
-                "STANDARD_DELIVERY",
-                "EVENING_DELIVERY",
-                "PICKUP_DELIVERY",
-                "SAME_DAY_DELIVERY",
-                "EXPRESS_DELIVERY",
-                "EARLY_MORNING_DELIVERY"
-            ],
-            "collo": {
-                "max": 10
-            }
-        },
         "labelAmount": 1,
         "shipmentOptions": {
             "ageCheck": 1,
@@ -142,7 +85,8 @@
             "labelDescription": "Vliegtuig"
         },
         "deliveryType": "standard",
-        "packageType": "package"
+        "packageType": "package",
+        "carrier": "DHL_FOR_YOU"
     },
     "dropOffPoint": {
         "locationCode": "ed14eb91-7374-4dcc-a41d-34c0d3e45c01",

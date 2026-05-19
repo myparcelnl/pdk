@@ -299,20 +299,6 @@
                     "name": "Test Shop",
                     "hidden": false,
                     "billing": [],
-                    "deliveryAddress": {
-                        "cc": "NL",
-                        "city": "Hoofddorp",
-                        "number": "31",
-                        "postalCode": "2132 JE",
-                        "street": "Antareslaan",
-                        "email": "support@myparcel.nl",
-                        "person": "Felicia Parcel",
-                        "company": "MyParcel"
-                    },
-                    "generalSettings": [],
-                    "return": [],
-                    "shipmentOptions": [],
-                    "trackTrace": [],
                     "carriers": [
                         {
                             "carrier": "BPOST",
@@ -1112,7 +1098,22 @@
                                 "max": 10
                             }
                         }
-                    ]
+                    ],
+                    "defaultCarrier": "POSTNL",
+                    "deliveryAddress": {
+                        "cc": "NL",
+                        "city": "Hoofddorp",
+                        "number": "31",
+                        "postalCode": "2132 JE",
+                        "street": "Antareslaan",
+                        "email": "support@myparcel.nl",
+                        "person": "Felicia Parcel",
+                        "company": "MyParcel"
+                    },
+                    "generalSettings": [],
+                    "return": [],
+                    "shipmentOptions": [],
+                    "trackTrace": []
                 }
             ],
             "status": 2,
@@ -2977,20 +2978,6 @@
             "name": "Test Shop",
             "hidden": false,
             "billing": [],
-            "deliveryAddress": {
-                "cc": "NL",
-                "city": "Hoofddorp",
-                "number": "31",
-                "postalCode": "2132 JE",
-                "street": "Antareslaan",
-                "email": "support@myparcel.nl",
-                "person": "Felicia Parcel",
-                "company": "MyParcel"
-            },
-            "generalSettings": [],
-            "return": [],
-            "shipmentOptions": [],
-            "trackTrace": [],
             "carriers": [
                 {
                     "carrier": "BPOST",
@@ -3790,7 +3777,22 @@
                         "max": 10
                     }
                 }
-            ]
+            ],
+            "defaultCarrier": "POSTNL",
+            "deliveryAddress": {
+                "cc": "NL",
+                "city": "Hoofddorp",
+                "number": "31",
+                "postalCode": "2132 JE",
+                "street": "Antareslaan",
+                "email": "support@myparcel.nl",
+                "person": "Felicia Parcel",
+                "company": "MyParcel"
+            },
+            "generalSettings": [],
+            "return": [],
+            "shipmentOptions": [],
+            "trackTrace": []
         }
     }
 }

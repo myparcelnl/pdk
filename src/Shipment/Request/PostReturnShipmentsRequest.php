@@ -9,9 +9,9 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -143,19 +143,25 @@ class PostReturnShipmentsRequest extends Request
         $capabilitiesValidationService = Pdk::get(CapabilitiesValidationService::class);
 
         if (! $capabilitiesValidationService->supportsReturns($shipment->carrier, $destinationCc)) {
-            $carrierName        = $shipment->carrier->carrier;
-            $propositionService = Pdk::get(PropositionService::class);
-            $defaultCarrier     = $propositionService->getDefaultCarrier();
-            Notifications::warning(
-                "{$carrierName} has no return capabilities",
-                'Return shipment exported with default carrier ' . $defaultCarrier->carrier,
-                Notification::CATEGORY_ACTION,
-                [
-                    'action'   => PdkBackendActions::EXPORT_RETURN,
-                    'orderIds' => $shipment->referenceIdentifier,
-                ]
-            );
-            $shipment->carrier = $defaultCarrier;
+            $carrierName    = $shipment->carrier->carrier;
+            $shop           = AccountSettings::getShop();
+            $defaultCarrier = $shop ? $shop->defaultCarrierModel : null;
+
+            if ($defaultCarrier !== null) {
+                // Swap to the shop's default carrier and notify. When no default is available, keep
+                // the user's original carrier — the downstream export attempt will surface a more
+                // accurate error rather than silently switching to an unknown carrier.
+                Notifications::warning(
+                    "{$carrierName} has no return capabilities",
+                    'Return shipment exported with default carrier ' . $defaultCarrier->carrier,
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                $shipment->carrier = $defaultCarrier;
+            }
         }
 
         return $shipment;
