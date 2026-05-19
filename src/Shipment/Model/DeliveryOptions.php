@@ -8,7 +8,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
-use RuntimeException;
+use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
@@ -328,18 +328,7 @@ class DeliveryOptions extends Model
         $carrierName = $this->attributes[self::CARRIER];
 
         if (! $carrierName) {
-            $shop    = AccountSettings::getShop();
-            $default = $shop ? $shop->defaultCarrierModel : null;
-
-            if ($default === null) {
-                throw new RuntimeException(
-                    $shop && $shop->defaultCarrier
-                        ? sprintf('Default carrier "%s" is not available in the repository', $shop->defaultCarrier)
-                        : 'No default carrier available; shop has no default carrier set'
-                );
-            }
-
-            return $default;
+            return Shop::getDefaultCarrierOrThrow();
         }
 
         return Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);
@@ -392,17 +381,23 @@ class DeliveryOptions extends Model
      */
     public function toArray(?int $flags = null): array
     {
-        // parent::toArray() calls addMutatedAttributesToArray → getCarrierAttribute, which resolves
-        // the carrier via the repository and throws when no shop default is configured for a
-        // carrier-less DeliveryOptions (e.g. inside a Shipment constructor's changeArrayKeysCase).
-        // To avoid this, we exclude the carrier from parent array conversion and set it from the
-        // raw stored attribute directly — matching the pattern used by toStorableArray().
-        $array = Utils::filterNull([self::DATE => $this->getDateAsString()])
-            + $this->except(self::CARRIER, $flags);
+        // The default toArray() path resolves the carrier via the getter so downstream consumers
+        // (JS-PDK admin/checkout) receive the full Carrier model — including capabilities and
+        // options — in serialized form. The getter throws when no carrier is stored AND no shop
+        // default exists; detect that case upfront and emit the raw null attribute instead of
+        // throwing during serialization.
+        $hasStoredCarrier = (bool) $this->attributes[self::CARRIER];
+        $shop             = AccountSettings::getShop();
+        $hasShopDefault   = $shop && $shop->defaultCarrierModel;
 
-        $array[self::CARRIER] = $this->attributes[self::CARRIER];
+        if (! $hasStoredCarrier && ! $hasShopDefault) {
+            $array                = $this->except(self::CARRIER, $flags);
+            $array[self::CARRIER] = null;
 
-        return $array;
+            return Utils::filterNull([self::DATE => $this->getDateAsString()]) + $array;
+        }
+
+        return Utils::filterNull([self::DATE => $this->getDateAsString()]) + parent::toArray($flags);
     }
 
     public function toStorableArray(): array

@@ -4,6 +4,63 @@
             {
                 "externalIdentifier": "701",
                 "deliveryOptions": {
+                    "carrier": {
+                        "carrier": "POSTNL",
+                        "packageTypes": [
+                            "PACKAGE",
+                            "MAILBOX",
+                            "UNFRANKED",
+                            "DIGITAL_STAMP",
+                            "PALLET",
+                            "SMALL_PACKAGE",
+                            "ENVELOPE"
+                        ],
+                        "options": {
+                            "cooledDelivery": [],
+                            "freshFood": [],
+                            "frozen": [],
+                            "hideSender": [],
+                            "oversizedPackage": [],
+                            "priorityDelivery": [],
+                            "recipientOnlyDelivery": [],
+                            "requiresAgeVerification": [],
+                            "requiresReceiptCode": [],
+                            "requiresSignature": [],
+                            "returnOnFirstFailedDelivery": [],
+                            "sameDayDelivery": [],
+                            "saturdayDelivery": [],
+                            "scheduledCollection": [],
+                            "tracked": [],
+                            "insurance": {
+                                "insuredAmount": {
+                                    "default": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "min": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "max": {
+                                        "currency": "EUR",
+                                        "amount": 500000
+                                    }
+                                }
+                            }
+                        },
+                        "deliveryTypes": [
+                            "MORNING_DELIVERY",
+                            "STANDARD_DELIVERY",
+                            "EVENING_DELIVERY",
+                            "PICKUP_DELIVERY",
+                            "SAME_DAY_DELIVERY",
+                            "EXPRESS_DELIVERY",
+                            "EARLY_MORNING_DELIVERY"
+                        ],
+                        "collo": {
+                            "max": 10
+                        }
+                    },
                     "labelAmount": 1,
                     "shipmentOptions": {
                         "requiresAgeVerification": -1,
@@ -112,6 +169,63 @@
                         "delayed": false,
                         "delivered": false,
                         "deliveryOptions": {
+                            "carrier": {
+                                "carrier": "POSTNL",
+                                "packageTypes": [
+                                    "PACKAGE",
+                                    "MAILBOX",
+                                    "UNFRANKED",
+                                    "DIGITAL_STAMP",
+                                    "PALLET",
+                                    "SMALL_PACKAGE",
+                                    "ENVELOPE"
+                                ],
+                                "options": {
+                                    "cooledDelivery": [],
+                                    "freshFood": [],
+                                    "frozen": [],
+                                    "hideSender": [],
+                                    "oversizedPackage": [],
+                                    "priorityDelivery": [],
+                                    "recipientOnlyDelivery": [],
+                                    "requiresAgeVerification": [],
+                                    "requiresReceiptCode": [],
+                                    "requiresSignature": [],
+                                    "returnOnFirstFailedDelivery": [],
+                                    "sameDayDelivery": [],
+                                    "saturdayDelivery": [],
+                                    "scheduledCollection": [],
+                                    "tracked": [],
+                                    "insurance": {
+                                        "insuredAmount": {
+                                            "default": {
+                                                "currency": "EUR",
+                                                "amount": 0
+                                            },
+                                            "min": {
+                                                "currency": "EUR",
+                                                "amount": 0
+                                            },
+                                            "max": {
+                                                "currency": "EUR",
+                                                "amount": 500000
+                                            }
+                                        }
+                                    }
+                                },
+                                "deliveryTypes": [
+                                    "MORNING_DELIVERY",
+                                    "STANDARD_DELIVERY",
+                                    "EVENING_DELIVERY",
+                                    "PICKUP_DELIVERY",
+                                    "SAME_DAY_DELIVERY",
+                                    "EXPRESS_DELIVERY",
+                                    "EARLY_MORNING_DELIVERY"
+                                ],
+                                "collo": {
+                                    "max": 10
+                                }
+                            },
                             "labelAmount": 1,
                             "shipmentOptions": {
                                 "ageCheck": -1,
@@ -132,8 +246,7 @@
                                 "cooledDelivery": -1
                             },
                             "deliveryType": "standard",
-                            "packageType": "package",
-                            "carrier": "POSTNL"
+                            "packageType": "package"
                         },
                         "hidden": false,
                         "isReturn": false,
@@ -208,6 +321,63 @@
                         "delayed": false,
                         "delivered": false,
                         "deliveryOptions": {
+                            "carrier": {
+                                "carrier": "POSTNL",
+                                "packageTypes": [
+                                    "PACKAGE",
+                                    "MAILBOX",
+                                    "UNFRANKED",
+                                    "DIGITAL_STAMP",
+                                    "PALLET",
+                                    "SMALL_PACKAGE",
+                                    "ENVELOPE"
+                                ],
+                                "options": {
+                                    "cooledDelivery": [],
+                                    "freshFood": [],
+                                    "frozen": [],
+                                    "hideSender": [],
+                                    "oversizedPackage": [],
+                                    "priorityDelivery": [],
+                                    "recipientOnlyDelivery": [],
+                                    "requiresAgeVerification": [],
+                                    "requiresReceiptCode": [],
+                                    "requiresSignature": [],
+                                    "returnOnFirstFailedDelivery": [],
+                                    "sameDayDelivery": [],
+                                    "saturdayDelivery": [],
+                                    "scheduledCollection": [],
+                                    "tracked": [],
+                                    "insurance": {
+                                        "insuredAmount": {
+                                            "default": {
+                                                "currency": "EUR",
+                                                "amount": 0
+                                            },
+                                            "min": {
+                                                "currency": "EUR",
+                                                "amount": 0
+                                            },
+                                            "max": {
+                                                "currency": "EUR",
+                                                "amount": 500000
+                                            }
+                                        }
+                                    }
+                                },
+                                "deliveryTypes": [
+                                    "MORNING_DELIVERY",
+                                    "STANDARD_DELIVERY",
+                                    "EVENING_DELIVERY",
+                                    "PICKUP_DELIVERY",
+                                    "SAME_DAY_DELIVERY",
+                                    "EXPRESS_DELIVERY",
+                                    "EARLY_MORNING_DELIVERY"
+                                ],
+                                "collo": {
+                                    "max": 10
+                                }
+                            },
                             "labelAmount": 1,
                             "shipmentOptions": {
                                 "ageCheck": -1,
@@ -228,8 +398,7 @@
                                 "cooledDelivery": -1
                             },
                             "deliveryType": "morning",
-                            "packageType": "package",
-                            "carrier": "POSTNL"
+                            "packageType": "package"
                         },
                         "hidden": false,
                         "isReturn": false,
@@ -685,6 +854,63 @@
             {
                 "externalIdentifier": "247",
                 "deliveryOptions": {
+                    "carrier": {
+                        "carrier": "POSTNL",
+                        "packageTypes": [
+                            "PACKAGE",
+                            "MAILBOX",
+                            "UNFRANKED",
+                            "DIGITAL_STAMP",
+                            "PALLET",
+                            "SMALL_PACKAGE",
+                            "ENVELOPE"
+                        ],
+                        "options": {
+                            "cooledDelivery": [],
+                            "freshFood": [],
+                            "frozen": [],
+                            "hideSender": [],
+                            "oversizedPackage": [],
+                            "priorityDelivery": [],
+                            "recipientOnlyDelivery": [],
+                            "requiresAgeVerification": [],
+                            "requiresReceiptCode": [],
+                            "requiresSignature": [],
+                            "returnOnFirstFailedDelivery": [],
+                            "sameDayDelivery": [],
+                            "saturdayDelivery": [],
+                            "scheduledCollection": [],
+                            "tracked": [],
+                            "insurance": {
+                                "insuredAmount": {
+                                    "default": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "min": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "max": {
+                                        "currency": "EUR",
+                                        "amount": 500000
+                                    }
+                                }
+                            }
+                        },
+                        "deliveryTypes": [
+                            "MORNING_DELIVERY",
+                            "STANDARD_DELIVERY",
+                            "EVENING_DELIVERY",
+                            "PICKUP_DELIVERY",
+                            "SAME_DAY_DELIVERY",
+                            "EXPRESS_DELIVERY",
+                            "EARLY_MORNING_DELIVERY"
+                        ],
+                        "collo": {
+                            "max": 10
+                        }
+                    },
                     "labelAmount": 1,
                     "shipmentOptions": {
                         "requiresAgeVerification": -1,
@@ -705,8 +931,7 @@
                         "cooledDelivery": -1
                     },
                     "deliveryType": "EVENING_DELIVERY",
-                    "packageType": "PACKAGE",
-                    "carrier": "POSTNL"
+                    "packageType": "PACKAGE"
                 },
                 "billingAddress": {
                     "cc": "NL",

@@ -108,19 +108,18 @@ class UpdateAccountAction implements ActionInterface
             return;
         }
 
-        $defaultCarrier = $this->implicationsService->getDefaultCarrierName($shop->id);
+        $resolved = $this->implicationsService->getDefaultCarrierName($shop->id);
 
-        if ($defaultCarrier !== null) {
-            $shop->defaultCarrier = $defaultCarrier;
-            return;
+        if ($resolved === null) {
+            // Service returned null (transient error). Carry forward the previously persisted
+            // value when available so a single flaky call doesn't wipe the cached default.
+            $previousAccount = $this->pdkAccountRepository->getAccount();
+            $previousShop    = $previousAccount ? $previousAccount->shops->first() : null;
+            $resolved        = $previousShop ? $previousShop->defaultCarrier : null;
         }
 
-        // Service returned null (transient error). Preserve the previously stored value if any.
-        $previousAccount = $this->pdkAccountRepository->getAccount();
-        $previousShop    = $previousAccount ? $previousAccount->shops->first() : null;
-
-        if ($previousShop && $previousShop->defaultCarrier) {
-            $shop->defaultCarrier = $previousShop->defaultCarrier;
+        if ($resolved !== null) {
+            $shop->defaultCarrier = $resolved;
         }
     }
 

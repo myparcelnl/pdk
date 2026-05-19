@@ -8,7 +8,6 @@ use MyParcelNL\Pdk\App\Api\Contract\BackendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Request\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -78,17 +77,15 @@ class GlobalContext extends Model
             $propositionService = Pdk::get(PropositionService::class);
             $proposition        = $propositionService->getPropositionConfig();
 
-            $shop           = AccountSettings::getShop();
-            $defaultCarrier = $shop ? $shop->defaultCarrierModel : null;
-
-            // Build a new-format proposition payload (not legacy-mapped)
+            // Build a new-format proposition payload (not legacy-mapped). The default carrier is
+            // exposed on the shop attribute ($shop->defaultCarrier) — consumers should read it
+            // from there instead of duplicating it on the proposition.
             $this->attributes['proposition'] = [
-                'name'           => $proposition->proposition->key,
-                'human'          => $proposition->proposition->name,
-                'backofficeUrl'  => $proposition->applications['backoffice']['url'] ?? null,
-                'supportUrl'     => $proposition->applications['developerPortal']['url'] ?? null,
-                'localCountry'   => $proposition->countryCode,
-                'defaultCarrier' => $defaultCarrier ? $defaultCarrier->carrier : null, // CONSTANT_CASE name
+                'name'          => $proposition->proposition->key,
+                'human'         => $proposition->proposition->name,
+                'backofficeUrl' => $proposition->applications['backoffice']['url'] ?? null,
+                'supportUrl'    => $proposition->applications['developerPortal']['url'] ?? null,
+                'localCountry'  => $proposition->countryCode,
             ];
         } catch (\Throwable $throwable) {
             // Log and ignore, this may occur before setting an API key or when a new platform is not yet supported.
