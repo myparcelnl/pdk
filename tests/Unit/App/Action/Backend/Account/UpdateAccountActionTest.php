@@ -211,6 +211,8 @@ it('preserves the prior default carrier when ImplicationsService returns null', 
 
     $shop = AccountSettings::getAccount()->shops->first();
 
+    expect(MockImplicationsService::getCallCount())->toBe(1);
+
     // Service returned null → previously persisted value must be carried forward.
     expect($shop->defaultCarrier)->toBe('DHL_FOR_YOU');
 });
