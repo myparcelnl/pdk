@@ -127,11 +127,8 @@ it('returns null when the first implication has no carrier_id', function () {
     $carrierRepository->shouldNotReceive('findByLegacyId');
 
     // Omit carrier_id so the deserialized model has null for that field.
-    $body    = (string) json_encode(['data' => ['implications' => [
-        ['contract_id' => 1, 'shipment_options' => [], 'physical_properties' => []],
-    ]]]);
     $service = new MockableImplicationsService($carrierRepository);
-    $service->mockHandler->append(new Response(200, [], $body));
+    $service->mockHandler->append(new Response(200, [], implResponse()));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
 });
@@ -183,7 +180,7 @@ it('passes shop_id through unchanged and does not add extra query params', funct
 
     $uri = $service->capturedRequests[0]->getUri();
 
-    expect((string) $uri->getPath())->toContain('/shops/42/shipping_rules/implications')
+    expect((string) $uri->getPath())->toBe('/shops/42/shipping_rules/implications')
         ->and($uri->getQuery())->toBe('');
 });
 

@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierRepository;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\AbstractCoreApiPrivateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Api\ShippingRuleApi;
+use Throwable;
 
 /**
  * Retrieves shipping rule implications for a shop and extracts the default carrier name.
@@ -69,7 +70,7 @@ class ImplicationsService extends AbstractCoreApiPrivateService
             $carrier = $this->carrierRepository->findByLegacyId((int) $carrierId);
 
             return $carrier ? $carrier->carrier : null;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
