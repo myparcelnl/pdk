@@ -9,12 +9,13 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesNotificationsMock;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use MyParcelNL\Pdk\Facade\Notifications;
-use MyParcelNL\Pdk\Pdk;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function MyParcelNL\Pdk\Tests\mockPdkProperties;
@@ -213,20 +214,15 @@ it('updates order shipments by order ids', function () {
 });
 
 it('can generate return shipments', function () {
-    // Create a mock for CarrierSchema
-    $carrierSchema = new class() extends CarrierSchema {
-        public function setCarrier(Carrier $carrier): CarrierSchema
-        {
-            return $this;
-        }
-
-        public function hasReturnCapabilities(): bool
+    // Stub CapabilitiesValidationService::supportsReturns to always return true.
+    $capabilitiesValidationService = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+        public function supportsReturns(Carrier $carrier, string $countryCode): bool
         {
             return true;
         }
     };
 
-    mockPdkProperties([CarrierSchema::class => $carrierSchema]);
+    mockPdkProperties([CapabilitiesValidationService::class => $capabilitiesValidationService]);
 
     $pdkOrderCollection = new PdkOrderCollection([
         new PdkOrder([
@@ -235,6 +231,7 @@ it('can generate return shipments', function () {
                 [
                     'id'                  => 100020,
                     'carrier'             => ['name' => 'postnl'],
+                    'recipient'           => ['cc' => 'NL'],
                     'referenceIdentifier' => 'REF-1',
                     'isReturn'            => false,
                 ],
@@ -246,6 +243,7 @@ it('can generate return shipments', function () {
                 [
                     'id'                  => 100021,
                     'carrier'             => ['name' => 'postnl'],
+                    'recipient'           => ['cc' => 'NL'],
                     'referenceIdentifier' => 'REF-2',
                     'isReturn'            => false,
                 ],
@@ -264,20 +262,15 @@ it('can generate return shipments', function () {
 });
 
 it('skips shipments from carriers without return capabilities when generating return shipments', function () {
-    // Create a mock for CarrierSchema
-    $carrierSchema = new class() extends CarrierSchema {
-        public function setCarrier(Carrier $carrier): CarrierSchema
-        {
-            return $this;
-        }
-
-        public function hasReturnCapabilities(): bool
+    // Stub CapabilitiesValidationService::supportsReturns to always return false.
+    $capabilitiesValidationService = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+        public function supportsReturns(Carrier $carrier, string $countryCode): bool
         {
             return false;
         }
     };
 
-    mockPdkProperties([CarrierSchema::class => $carrierSchema]);
+    mockPdkProperties([CapabilitiesValidationService::class => $capabilitiesValidationService]);
 
     $pdkOrderCollection = new PdkOrderCollection([
         new PdkOrder([
@@ -286,6 +279,7 @@ it('skips shipments from carriers without return capabilities when generating re
                 [
                     'id'                  => 100020,
                     'carrier'             => ['name' => 'dhl', 'human' => 'DHL'],
+                    'recipient'           => ['cc' => 'NL'],
                     'referenceIdentifier' => 'REF-1',
                     'isReturn'            => false,
                 ],
@@ -301,6 +295,42 @@ it('skips shipments from carriers without return capabilities when generating re
     expect($returnShipments)
         ->toBeInstanceOf(ShipmentCollection::class)
         ->and($returnShipments->count())
+        ->toBe(1)
+        ->and($returnShipments->first()->isReturn)
+        ->toBeFalsy()
+        ->and($notifications->count())
+        ->toBeGreaterThan(0);
+});
+
+it('skips shipments without a destination country code when generating return shipments', function () {
+    // supportsReturns must NOT be invoked when the destination is unknown.
+    $capabilitiesValidationService = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+        public function supportsReturns(Carrier $carrier, string $countryCode): bool
+        {
+            throw new \LogicException('supportsReturns must not be called without a destination');
+        }
+    };
+
+    mockPdkProperties([CapabilitiesValidationService::class => $capabilitiesValidationService]);
+
+    $pdkOrderCollection = new PdkOrderCollection([
+        new PdkOrder([
+            'externalIdentifier' => 'MP-1',
+            'shipments'          => [
+                [
+                    'id'                  => 100020,
+                    'carrier'             => ['name' => 'postnl'],
+                    'referenceIdentifier' => 'REF-1',
+                    'isReturn'            => false,
+                ],
+            ],
+        ]),
+    ]);
+
+    $returnShipments = $pdkOrderCollection->generateReturnShipments();
+    $notifications   = Notifications::all();
+
+    expect($returnShipments->count())
         ->toBe(1)
         ->and($returnShipments->first()->isReturn)
         ->toBeFalsy()

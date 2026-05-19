@@ -19,8 +19,8 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 use function DI\value;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -140,39 +140,37 @@ it('resolves testFlowOption to DISABLED when no source sets a value', function (
     expect($newOrder->deliveryOptions->shipmentOptions->testFlowOption)->toBe(TriStateService::DISABLED);
 });
 
-it('canHaveShipmentOption checks the capabilities key against carrier options', function () {
+it('supportsShipmentOption checks the capabilities key against carrier options', function () {
     // The definition's getCapabilitiesOptionsKey() is 'testFlowCapability'.
-    // canHaveShipmentOption() uses that key to look up availability in the carrier schema.
+    // supportsShipmentOption() uses that key to look up availability on the carrier.
     // Since 'testFlowCapability' is not a real SDK capabilities key, it will not appear
     // in any carrier's options, so the result is always false for this fake definition.
     $carrier = factory(Carrier::class)
         ->withAllCapabilities()
         ->make();
 
-    /** @var CarrierSchema $carrierSchema */
-    $carrierSchema = Pdk::get(CarrierSchema::class);
-    $carrierSchema->setCarrier($carrier);
+    /** @var CarrierValidationService $carrierValidationService */
+    $carrierValidationService = Pdk::get(CarrierValidationService::class);
 
     $definition = new TestFlowOptionDefinition();
 
     // The key 'testFlowCapability' is not in the SDK capabilities model, so it is never available.
-    expect($carrierSchema->canHaveShipmentOption($definition))->toBeFalse();
+    expect($carrierValidationService->supportsShipmentOption($carrier, $definition))->toBeFalse();
 });
 
-it('canHaveShipmentOption uses the definition capabilities key, not the shipment options key', function () {
-    // Verify that canHaveShipmentOption() checks getCapabilitiesOptionsKey(), not getShipmentOptionsKey().
+it('supportsShipmentOption uses the definition capabilities key, not the shipment options key', function () {
+    // Verify that supportsShipmentOption() checks getCapabilitiesOptionsKey(), not getShipmentOptionsKey().
     // A carrier with NO options should return false for any definition.
     $carrier = factory(Carrier::class)
         ->withMinimalCapabilities()
         ->make();
 
-    /** @var CarrierSchema $carrierSchema */
-    $carrierSchema = Pdk::get(CarrierSchema::class);
-    $carrierSchema->setCarrier($carrier);
+    /** @var CarrierValidationService $carrierValidationService */
+    $carrierValidationService = Pdk::get(CarrierValidationService::class);
 
     $definition = new TestFlowOptionDefinition();
 
-    expect($carrierSchema->canHaveShipmentOption($definition))->toBeFalse();
+    expect($carrierValidationService->supportsShipmentOption($carrier, $definition))->toBeFalse();
 });
 
 it('toCapabilitiesDefinitions maps the shipment option key to the capabilities key', function () {

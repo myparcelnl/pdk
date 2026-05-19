@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Service;
 
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -37,7 +38,7 @@ it('forces ENABLED when isRequired is true even when all sources say DISABLED', 
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -67,7 +68,7 @@ it('does NOT force ENABLED when isRequired is false', function () {
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $order = factory(PdkOrder::class)
@@ -130,7 +131,7 @@ it('carrier settings override isSelectedByDefault', function () {
     $storage->delete('carrier:all');
 
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $order = factory(PdkOrder::class)

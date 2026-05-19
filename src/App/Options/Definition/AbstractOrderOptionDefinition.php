@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 
 abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInterface
 {
@@ -49,7 +49,7 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         $key = $this->getShipmentOptionsKey();
 
-        return $key ? 'export' . ucfirst($key) : null;
+        return $key ? SettingKey::export($key) : null;
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         $key = $this->getShipmentOptionsKey();
 
-        return $key ? 'allow' . ucfirst($key) : null;
+        return $key ? SettingKey::allow($key) : null;
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         $key = $this->getShipmentOptionsKey();
 
-        return $key ? 'price' . ucfirst($key) : null;
+        return $key ? SettingKey::price($key) : null;
     }
 
     /**
@@ -123,17 +123,5 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     public function getShipmentOptionsDefault()
     {
         return TriStateService::INHERIT;
-    }
-
-    /**
-     * Validates whether this option is available for the given carrier.
-     * Default: checks if the capabilities key exists in the carrier's options.
-     *
-     * Override to provide custom validation logic, or to always return true for options
-     * that are universally available regardless of carrier capabilities.
-     */
-    public function validate(CarrierSchema $carrierSchema): bool
-    {
-        return $carrierSchema->canHaveShipmentOption($this);
     }
 }

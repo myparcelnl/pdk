@@ -6,11 +6,14 @@ namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Base\Concern\ResolvesOptionAttributes;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
 /**
  * @property string               $id
@@ -86,47 +89,6 @@ class CarrierSettings extends AbstractSettingsModel
      * Settings in this category.
      * @TODO these settings need to be made generic based on available definitions in API spec
      */
-    public const  ALLOW_DELIVERY_OPTIONS                  = 'allowDeliveryOptions';
-    public const  ALLOW_STANDARD_DELIVERY                 = 'allowStandardDelivery';
-    public const  ALLOW_EVENING_DELIVERY                  = 'allowEveningDelivery';
-    public const  ALLOW_MONDAY_DELIVERY                   = 'allowMondayDelivery';
-    public const  ALLOW_MORNING_DELIVERY                  = 'allowMorningDelivery';
-    /**
-     * @deprecated now dynamically derived from OnlyRecipientDefinition::getAllowSettingsKey()
-     */
-    public const  ALLOW_ONLY_RECIPIENT                    = 'allowOnlyRecipient';
-    public const  ALLOW_EXPRESS_DELIVERY                  = 'allowExpressDelivery';
-
-    /**
-     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getAllowSettingsKey()
-     */
-    public const  ALLOW_PRIORITY_DELIVERY                 = 'allowPriorityDelivery';
-
-    /**
-     * @deprecated use ALLOW_PICKUP_DELIVERY instead
-     */
-    public const  ALLOW_PICKUP_LOCATIONS                  = 'allowPickupLocations';
-    public const  ALLOW_PICKUP_DELIVERY                   = 'allowPickupLocations';
-
-    /**
-     * @deprecated now dynamically derived from SameDayDeliveryDefinition::getAllowSettingsKey()
-     */
-    public const  ALLOW_SAME_DAY_DELIVERY                 = 'allowSameDayDelivery';
-
-    /**
-     * @deprecated now dynamically derived from SaturdayDeliveryDefinition::getAllowSettingsKey()
-     */
-    public const  ALLOW_SATURDAY_DELIVERY                 = 'allowSaturdayDelivery';
-
-    /**
-     * @deprecated now dynamically derived from SignatureDefinition::getAllowSettingsKey()
-     */
-    public const  ALLOW_SIGNATURE                         = 'allowSignature';
-
-    /**
-     * @deprecated use ALLOW_EXPRESS_DELIVERY instead
-     */
-    public const  ALLOW_DELIVERY_TYPE_EXPRESS             = 'allowDeliveryTypeExpress';
     public const  CUTOFF_TIME                             = 'cutoffTime';
     public const  CUTOFF_TIME_SAME_DAY                    = 'cutoffTimeSameDay';
     public const  DEFAULT_PACKAGE_TYPE                    = 'defaultPackageType';
@@ -137,123 +99,20 @@ class CarrierSettings extends AbstractSettingsModel
     public const  DIGITAL_STAMP_DEFAULT_WEIGHT            = 'digitalStampDefaultWeight';
     public const  DROP_OFF_DELAY                          = 'dropOffDelay';
     public const  DROP_OFF_POSSIBILITIES                  = 'dropOffPossibilities';
-    /**
-     * @deprecated now dynamically derived from AgeCheckDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_AGE_CHECK                        = 'exportAgeCheck';
-
-    /**
-     * @deprecated now dynamically derived from HideSenderDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_HIDE_SENDER                      = 'exportHideSender';
-
-    /**
-     * @deprecated now dynamically derived from InsuranceDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_INSURANCE                        = 'exportInsurance';
     public const  EXPORT_INSURANCE_FROM_AMOUNT            = 'exportInsuranceFromAmount';
     public const  EXPORT_INSURANCE_PRICE_PERCENTAGE       = 'exportInsurancePricePercentage';
     public const  EXPORT_INSURANCE_UP_TO                  = 'exportInsuranceUpTo';
     public const  EXPORT_INSURANCE_UP_TO_EU               = 'exportInsuranceUpToEu';
     public const  EXPORT_INSURANCE_UP_TO_ROW              = 'exportInsuranceUpToRow';
     public const  EXPORT_INSURANCE_UP_TO_UNIQUE           = 'exportInsuranceUpToUnique';
-
-    /**
-     * @deprecated now dynamically derived from LargeFormatDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_LARGE_FORMAT                     = 'exportLargeFormat';
-
-    /**
-     * @deprecated now dynamically derived from OnlyRecipientDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_ONLY_RECIPIENT                   = 'exportOnlyRecipient';
-
-    /**
-     * @deprecated now dynamically derived from ReceiptCodeDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_RECEIPT_CODE                     = 'exportReceiptCode';
-
-    /**
-     * @deprecated now dynamically derived from DirectReturnDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_RETURN                           = 'exportReturn';
     public const  EXPORT_RETURN_LARGE_FORMAT              = 'exportReturnLargeFormat';
     public const  EXPORT_RETURN_PACKAGE_TYPE              = 'exportReturnPackageType';
-
-    /**
-     * @deprecated now dynamically derived from SignatureDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_SIGNATURE                        = 'exportSignature';
-
-    /**
-     * @deprecated now dynamically derived from TrackedDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_TRACKED                          = 'exportTracked';
-
-    /**
-     * @deprecated now dynamically derived from CollectDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_COLLECT                          = 'exportCollect';
-
-    /**
-     * @deprecated now dynamically derived from FreshFoodDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_FRESH_FOOD                       = 'exportFreshFood';
-
-    /**
-     * @deprecated now dynamically derived from FrozenDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_FROZEN                           = 'exportFrozen';
-
-    /**
-     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getCarrierSettingsKey()
-     */
-    public const  EXPORT_PRIORITY_DELIVERY                = 'exportPriorityDelivery';
-    public const  PRICE_DELIVERY_TYPE_EVENING_DELIVERY    = 'priceDeliveryTypeEvening';
-    public const  PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     = 'priceDeliveryTypeMonday';
-    public const  PRICE_DELIVERY_TYPE_MORNING_DELIVERY    = 'priceDeliveryTypeMorning';
-    public const  PRICE_DELIVERY_TYPE_PICKUP              = 'priceDeliveryTypePickup';
-    public const  PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   = 'priceDeliveryTypeSameDay';
-    public const  PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   = 'priceDeliveryTypeSaturday';
-    public const  PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   = 'priceDeliveryTypeStandard';
-    public const  PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    = 'priceDeliveryTypeExpress';
-    /**
-     * @deprecated now dynamically derived from OnlyRecipientDefinition::getPriceSettingsKey()
-     */
-    public const  PRICE_ONLY_RECIPIENT                    = 'priceOnlyRecipient';
-    public const  PRICE_PACKAGE_TYPE_DIGITAL_STAMP        = 'pricePackageTypeDigitalStamp';
-    public const  PRICE_PACKAGE_TYPE_MAILBOX              = 'pricePackageTypeMailbox';
-    public const  PRICE_PACKAGE_TYPE_PACKAGE_SMALL        = 'pricePackageTypePackageSmall';
-
-    /**
-     * @deprecated now dynamically derived from SignatureDefinition::getPriceSettingsKey()
-     */
-    public const  PRICE_SIGNATURE                         = 'priceSignature';
-
-    /**
-     * @deprecated now dynamically derived from PriorityDeliveryDefinition::getPriceSettingsKey()
-     */
-    public const  PRICE_PRIORITY_DELIVERY                 = 'pricePriorityDelivery';
-    public const  ALLOW_INTERNATIONAL_MAILBOX             = 'allowInternationalMailbox';
-    public const  PRICE_INTERNATIONAL_MAILBOX             = 'priceInternationalMailbox';
-
-    /**
-     * @deprecated now dynamically derived from CollectDefinition::getPriceSettingsKey()
-     */
-    public const  PRICE_COLLECT                           = 'priceCollect';
 
 
     protected $attributes = [
         'id'               => self::ID,
         self::CARRIER_NAME => null,
 
-        self::ALLOW_DELIVERY_OPTIONS                  => false,
-        self::ALLOW_STANDARD_DELIVERY                 => false,
-        self::ALLOW_EVENING_DELIVERY                  => false,
-        self::ALLOW_MONDAY_DELIVERY                   => false,
-        self::ALLOW_MORNING_DELIVERY                  => false,
-        self::ALLOW_EXPRESS_DELIVERY                  => false,
-        self::ALLOW_PICKUP_DELIVERY                   => false,
         self::CUTOFF_TIME                             => '16:00',
         self::CUTOFF_TIME_SAME_DAY                    => '10:00',
         self::DEFAULT_PACKAGE_TYPE                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
@@ -271,31 +130,11 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 0,
         self::EXPORT_RETURN_LARGE_FORMAT              => -1,
         self::EXPORT_RETURN_PACKAGE_TYPE              => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
-        self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 0,
-        self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 0,
-        self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 0,
-        self::PRICE_DELIVERY_TYPE_PICKUP              => 0,
-        self::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   => 0,
-        self::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   => 0,
-        self::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   => 0,
-        self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 0,
-        self::PRICE_PACKAGE_TYPE_MAILBOX              => 0,
-        self::PRICE_PACKAGE_TYPE_PACKAGE_SMALL        => 0,
-        self::ALLOW_INTERNATIONAL_MAILBOX             => false,
-        self::PRICE_INTERNATIONAL_MAILBOX             => 0,
-        self::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    => 0,
     ];
 
     protected $casts      = [
         self::CARRIER_NAME => 'string',
 
-        self::ALLOW_DELIVERY_OPTIONS                  => 'bool',
-        self::ALLOW_STANDARD_DELIVERY                 => 'bool',
-        self::ALLOW_EVENING_DELIVERY                  => 'bool',
-        self::ALLOW_MONDAY_DELIVERY                   => 'bool',
-        self::ALLOW_MORNING_DELIVERY                  => 'bool',
-        self::ALLOW_DELIVERY_TYPE_EXPRESS             => 'bool',
-        self::ALLOW_PICKUP_DELIVERY                   => 'bool',
         self::CUTOFF_TIME                             => 'string',
         self::CUTOFF_TIME_SAME_DAY                    => 'string',
         self::DEFAULT_PACKAGE_TYPE                    => 'string',
@@ -314,30 +153,48 @@ class CarrierSettings extends AbstractSettingsModel
         self::EXPORT_INSURANCE_UP_TO_UNIQUE           => 'int',
         self::EXPORT_RETURN_LARGE_FORMAT              => TriStateService::TYPE_STRICT,
         self::EXPORT_RETURN_PACKAGE_TYPE              => 'string',
-        self::PRICE_DELIVERY_TYPE_EVENING_DELIVERY    => 'float',
-        self::PRICE_DELIVERY_TYPE_MONDAY_DELIVERY     => 'float',
-        self::PRICE_DELIVERY_TYPE_MORNING_DELIVERY    => 'float',
-        self::PRICE_DELIVERY_TYPE_PICKUP              => 'float',
-        self::PRICE_DELIVERY_TYPE_SAME_DAY_DELIVERY   => 'float',
-        self::PRICE_DELIVERY_TYPE_SATURDAY_DELIVERY   => 'float',
-        self::PRICE_DELIVERY_TYPE_STANDARD_DELIVERY   => 'float',
-        self::PRICE_PACKAGE_TYPE_DIGITAL_STAMP        => 'float',
-        self::PRICE_PACKAGE_TYPE_MAILBOX              => 'float',
-        self::PRICE_PACKAGE_TYPE_PACKAGE_SMALL        => 'float',
-        self::ALLOW_INTERNATIONAL_MAILBOX             => 'bool',
-        self::PRICE_INTERNATIONAL_MAILBOX             => 'float',
-        self::PRICE_DELIVERY_TYPE_EXPRESS_DELIVERY    => 'float',
     ];
 
     /**
-     * Populate attributes and casts dynamically from registered option definitions.
-     * Dynamic entries are added first so static definitions win on collision via array_merge.
+     * Populate attributes and casts dynamically from a handful of source schemas
+     * (option definitions, delivery types, package types, international-mailbox).
+     * Each source is one concern; merged here in declaration order. Static-class
+     * literals in $this->attributes / $this->casts win on collision via array_merge.
      */
     protected function initializeResolvesOptionAttributes(): void
     {
-        // Export settings (e.g. exportSignature): merchant-controlled default for shipment creation.
-        // Cast is definition-specific: most are tri-state (-1/0/1), but some like insurance use 'int'.
-        [$exportAttributes, $exportCasts] = $this->resolveOptionAttributes(
+        $dynamicAttributes = [];
+        $dynamicCasts      = [];
+
+        $sources = [
+            $this->resolveDefinitionExportSchema(),
+            $this->resolveDefinitionAllowSchema(),
+            $this->resolveDefinitionPriceSchema(),
+            $this->resolveDeliveryTypeAllowSchema(),
+            $this->resolveDeliveryTypePriceSchema(),
+            $this->resolvePackageTypePriceSchema(),
+            $this->resolveInternationalMailboxSchema(),
+        ];
+
+        foreach ($sources as [$attributes, $casts]) {
+            $dynamicAttributes = array_merge($dynamicAttributes, $attributes);
+            $dynamicCasts      = array_merge($dynamicCasts, $casts);
+        }
+
+        $this->attributes = array_merge($dynamicAttributes, $this->attributes);
+        $this->casts      = array_merge($dynamicCasts, $this->casts);
+    }
+
+    /**
+     * Export-settings schema (e.g. exportSignature): merchant-controlled default
+     * applied when exporting a shipment. Cast is definition-specific (tri-state
+     * for most options, 'int' for insurance, etc.).
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolveDefinitionExportSchema(): array
+    {
+        return $this->resolveOptionAttributes(
             static function (OrderOptionDefinitionInterface $definition): ?string {
                 return $definition->getCarrierSettingsKey();
             },
@@ -346,10 +203,17 @@ class CarrierSettings extends AbstractSettingsModel
                 return $definition->getShipmentOptionsCast();
             }
         );
+    }
 
-        // Allow settings (e.g. allowSignature): whether the consumer can toggle this option at checkout.
-        // Always boolean — the option is either shown or not in the delivery options widget.
-        [$allowAttributes, $allowCasts] = $this->resolveOptionAttributes(
+    /**
+     * Definition-derived allow-settings schema (e.g. allowSignature): whether the
+     * consumer can toggle this shipment option at checkout. Always boolean.
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolveDefinitionAllowSchema(): array
+    {
+        return $this->resolveOptionAttributes(
             static function (OrderOptionDefinitionInterface $definition): ?string {
                 return $definition->getAllowSettingsKey();
             },
@@ -358,10 +222,17 @@ class CarrierSettings extends AbstractSettingsModel
                 return 'bool';
             }
         );
+    }
 
-        // Price settings (e.g. priceSignature): surcharge added to shipping cost when option is active.
-        // Always float — represents a monetary value added to the base shipping price.
-        [$priceAttributes, $priceCasts] = $this->resolveOptionAttributes(
+    /**
+     * Definition-derived price-settings schema (e.g. priceSignature): surcharge
+     * added to shipping cost when the shipment option is active. Always float.
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolveDefinitionPriceSchema(): array
+    {
+        return $this->resolveOptionAttributes(
             static function (OrderOptionDefinitionInterface $definition): ?string {
                 return $definition->getPriceSettingsKey();
             },
@@ -370,12 +241,126 @@ class CarrierSettings extends AbstractSettingsModel
                 return 'float';
             }
         );
+    }
 
-        $dynamicAttributes = array_merge($exportAttributes, $allowAttributes, $priceAttributes);
-        $dynamicCasts      = array_merge($exportCasts, $allowCasts, $priceCasts);
+    /**
+     * Delivery-type allow-attrs (e.g. allowEveningDelivery). Auto-derived from
+     * the SDK V2 enum, filtered to PDK-supported types via
+     * {@see DeliveryOptions::isDeliveryTypeSupported()}, plus PDK-only consts
+     * for delivery options that have no SDK counterpart (Monday delivery and
+     * the master home-delivery toggle).
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolveDeliveryTypeAllowSchema(): array
+    {
+        $types = array_values(array_filter(
+            RefTypesDeliveryTypeV2::getAllowableEnumValues(),
+            static function (string $v2): bool {
+                return DeliveryOptions::isDeliveryTypeSupported($v2);
+            }
+        ));
+        $types[] = DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME;
+        $types[] = DeliveryOptions::DELIVERY_OPTION_MONDAY;
 
-        $this->attributes = array_merge($dynamicAttributes, $this->attributes);
-        $this->casts      = array_merge($dynamicCasts, $this->casts);
+        $attributes = [];
+        $casts      = [];
+
+        foreach ($types as $type) {
+            $key              = SettingKey::allow($type);
+            $attributes[$key] = false;
+            $casts[$key]      = 'bool';
+        }
+
+        return [$attributes, $casts];
+    }
+
+    /**
+     * Delivery-type price-attrs (e.g. priceDeliveryTypeEvening). Same auto-
+     * derivation as the allow-schema, plus PDK-only consts for Monday and
+     * Saturday (no SDK counterpart for either).
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolveDeliveryTypePriceSchema(): array
+    {
+        $types = array_values(array_filter(
+            RefTypesDeliveryTypeV2::getAllowableEnumValues(),
+            static function (string $v2): bool {
+                return DeliveryOptions::isDeliveryTypeSupported($v2);
+            }
+        ));
+        $types[] = DeliveryOptions::DELIVERY_OPTION_MONDAY;
+        $types[] = DeliveryOptions::DELIVERY_OPTION_SATURDAY;
+
+        $attributes = [];
+        $casts      = [];
+
+        foreach ($types as $type) {
+            $key              = SettingKey::priceDeliveryType($type);
+            $attributes[$key] = 0;
+            $casts[$key]      = 'float';
+        }
+
+        return [$attributes, $casts];
+    }
+
+    /**
+     * Package-type price-attrs (e.g. pricePackageTypeMailbox). Auto-derived
+     * from the SDK V2 enum, filtered to PDK-supported types via
+     * {@see DeliveryOptions::isPackageTypeSupported()}. The legacy
+     * 'SMALL_PACKAGE' ↔ 'packageSmall' asymmetry is absorbed by SettingKey's
+     * PRICE_PACKAGE_TYPE_EXCEPTIONS map.
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolvePackageTypePriceSchema(): array
+    {
+        // Default package type's price is the carrier's basePrice, not a
+        // surcharge. Excluded to avoid stacking semantics.
+        $types = array_filter(
+            RefShipmentPackageTypeV2::getAllowableEnumValues(),
+            static function (string $v2): bool {
+                return DeliveryOptions::isPackageTypeSupported($v2)
+                    && $v2 !== DeliveryOptions::DEFAULT_PACKAGE_TYPE_V2;
+            }
+        );
+
+        $attributes = [];
+        $casts      = [];
+
+        foreach ($types as $type) {
+            $key              = SettingKey::pricePackageType($type);
+            $attributes[$key] = 0;
+            $casts[$key]      = 'float';
+        }
+
+        return [$attributes, $casts];
+    }
+
+    /**
+     * International-mailbox consumer-toggle + surcharge pair. Not a delivery
+     * type — surfaces in CapabilitiesPackageTypeCalculator to gate mailbox
+     * shipments to non-local destinations, and in DeliveryOptionsService to
+     * override the regular mailbox price for those shipments.
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, string>}
+     */
+    private function resolveInternationalMailboxSchema(): array
+    {
+        $allowKey = SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX);
+        $priceKey = SettingKey::price(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX);
+
+        return [
+            [
+                $allowKey => false,
+                $priceKey => 0,
+            ],
+            [
+                $allowKey => 'bool',
+                $priceKey => 'float',
+            ],
+        ];
     }
 
     /**

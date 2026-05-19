@@ -65,6 +65,12 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
         $definitions = Pdk::get('orderOptionDefinitions');
 
         foreach ($definitions as $definition) {
+            $shipmentOptionsKey = $definition->getShipmentOptionsKey();
+
+            if ($shipmentOptionsKey === null) {
+                continue;
+            }
+
             $values = array_map(static function (OptionDefinitionHelperInterface $helper) use ($definition) {
                 return $helper->get($definition);
             }, $helpers);
@@ -83,7 +89,7 @@ class PdkOrderOptionsService implements PdkOrderOptionsServiceInterface
                 }
             }
 
-            $order->deliveryOptions->shipmentOptions->setAttribute($definition->getShipmentOptionsKey(), $value);
+            $order->deliveryOptions->shipmentOptions->setAttribute($shipmentOptionsKey, $value);
         }
 
         return $order;

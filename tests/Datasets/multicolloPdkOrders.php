@@ -16,7 +16,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 use function MyParcelNL\Pdk\Tests\factory;
 
 dataset('multicolloPdkOrders', [
-    // collo.max > 1 → CarrierSchema::canHaveMultiCollo() returns true → single shipment with secondary_shipments.
+    // collo.max > 1 → CarrierValidationService::supportsMultiCollo() returns true → single shipment with secondary_shipments.
     // The default account carrier (POSTNL with withAllCapabilities, collo max 10) is used as-is.
     'real multicollo order' => [
         'factory'                   => function () {
@@ -32,7 +32,7 @@ dataset('multicolloPdkOrders', [
         'expectedNumberOfShipments' => 1,
     ],
 
-    // collo.max <= 1 → CarrierSchema::canHaveMultiCollo() returns false → separate shipment per label.
+    // collo.max <= 1 → CarrierValidationService::supportsMultiCollo() returns false → separate shipment per label.
     // Directly updates the stored account's POSTNL carrier to have collo max 1, bypassing the factory
     // chain which would re-apply withAllCarriers() and reset collo to max 10.
     'fake multicollo' => [
