@@ -9,7 +9,9 @@ use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\Pdk;
 
 /**
  * @property int                    $id
@@ -18,12 +20,14 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
  * @property string                 $name
  * @property bool                   $hidden
  * @property array<string, mixed>   $billing
+ * @property CarrierCollection      $carriers
+ * @property string|null            $defaultCarrier
  * @property array<string, mixed>   $deliveryAddress
  * @property array<string, mixed>   $generalSettings
  * @property array<string, mixed>   $return
  * @property array<string, mixed>   $shipmentOptions
  * @property array<string, mixed>[] $trackTrace
- * @property CarrierCollection      $carriers
+ * @property-read Carrier|null      $defaultCarrierModel
  */
 class Shop extends Model
 {
@@ -34,12 +38,13 @@ class Shop extends Model
         'name'            => null,
         'hidden'          => false,
         'billing'         => [],
+        'carriers'        => CarrierCollection::class,
+        'defaultCarrier'  => null,
         'deliveryAddress' => [],
         'generalSettings' => [],
         'return'          => [],
         'shipmentOptions' => [],
         'trackTrace'      => [],
-        'carriers'        => CarrierCollection::class,
     ];
 
     protected $casts = [
@@ -49,11 +54,21 @@ class Shop extends Model
         'name'            => 'string',
         'hidden'          => 'bool',
         'billing'         => 'array',
+        'carriers'        => CarrierCollection::class,
+        'defaultCarrier'  => 'string',
         'deliveryAddress' => 'array',
         'generalSettings' => 'array',
         'return'          => 'array',
         'shipmentOptions' => 'array',
         'trackTrace'      => 'array',
-        'carriers'        => CarrierCollection::class,
     ];
+
+    public function getDefaultCarrierModelAttribute(): ?Carrier
+    {
+        if (! $this->defaultCarrier) {
+            return null;
+        }
+
+        return Pdk::get(CarrierRepositoryInterface::class)->find($this->defaultCarrier);
+    }
 }
