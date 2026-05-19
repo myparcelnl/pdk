@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
@@ -34,7 +35,7 @@ it('posts order notes if order has notes', function (
     TestBootstrapper::hasApiKey();
 
     (new FactoryCollection([
-        factory(Account::class)->withShops()->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES]),
+        factory(Account::class)->withShops()->withSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_NOTES]),
         $ordersFactory,
         $notesFactory,
     ]))->store();

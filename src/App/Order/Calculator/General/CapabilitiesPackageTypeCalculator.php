@@ -79,7 +79,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
         $weightForCurrent = $this->effectiveWeightFor($currentType);
 
         $supported = $currentCapability
-            && $this->capabilitiesService->capabilitySupportsWeight($currentCapability, $weightForCurrent)
+            && $this->capabilitiesService->supportsWeight($currentCapability, $weightForCurrent)
             && ! $this->isInternationalMailboxBlocked($currentType, $cc, $carrier);
 
         if ($supported) {
@@ -145,7 +145,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
 
             $effectiveWeight = $this->effectiveWeightFor($pdkName);
 
-            if ($capability && $this->capabilitiesService->capabilitySupportsWeight($capability, $effectiveWeight)) {
+            if ($capability && $this->capabilitiesService->supportsWeight($capability, $effectiveWeight)) {
                 $availableByType[$pdkName] = $capability;
             }
         }

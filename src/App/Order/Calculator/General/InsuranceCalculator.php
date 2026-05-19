@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
+use MyParcelNL\Pdk\Carrier\Util\InsuranceTierMath;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -97,7 +98,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
         }
 
         // Explicit amount: resolve to nearest valid tier, clamp to shipment range.
-        $allowedAmounts = CapabilitiesValidationService::buildInsuranceTiers($carrierMin, $carrierMax);
+        $allowedAmounts = InsuranceTierMath::buildTiers($carrierMin, $carrierMax);
         $validated      = $this->getMinimumInsuranceAmount($allowedAmounts, $amount);
 
         return $this->clampToCarrierRange($validated, $carrierMin, $carrierMax);
@@ -170,7 +171,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $carrierMin;
         }
 
-        $allowedAmounts = CapabilitiesValidationService::buildInsuranceTiers($carrierMin, $carrierMax);
+        $allowedAmounts = InsuranceTierMath::buildTiers($carrierMin, $carrierMax);
         $validated      = $this->getMinimumInsuranceAmount($allowedAmounts, $orderAmount);
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);

@@ -37,62 +37,6 @@ class ProductSettings extends AbstractSettingsModel
     public const CUSTOMS_CODE             = 'customsCode';
     public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
     public const DROP_OFF_DELAY           = 'dropOffDelay';
-
-    /**
-     * @deprecated now dynamically derived from AgeCheckDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_AGE_CHECK = 'exportAgeCheck';
-
-    /**
-     * @deprecated now dynamically derived from HideSenderDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_HIDE_SENDER = 'exportHideSender';
-
-    /**
-     * @deprecated now dynamically derived from InsuranceDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_INSURANCE = 'exportInsurance';
-
-    /**
-     * @deprecated now dynamically derived from LargeFormatDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_LARGE_FORMAT = 'exportLargeFormat';
-
-    /**
-     * @deprecated now dynamically derived from OnlyRecipientDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_ONLY_RECIPIENT = 'exportOnlyRecipient';
-
-    /**
-     * @deprecated now dynamically derived from DirectReturnDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_RETURN = 'exportReturn';
-
-    /**
-     * @deprecated now dynamically derived from SignatureDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_SIGNATURE = 'exportSignature';
-
-    /**
-     * @deprecated now dynamically derived from TrackedDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_TRACKED = 'exportTracked';
-
-    /**
-     * @deprecated now dynamically derived from FreshFoodDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_FRESH_FOOD = 'exportFreshFood';
-
-    /**
-     * @deprecated now dynamically derived from FrozenDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_FROZEN = 'exportFrozen';
-
-    /**
-     * @deprecated now dynamically derived from CooledDeliveryDefinition::getProductSettingsKey()
-     */
-    public const EXPORT_COOLED_DELIVERY = 'exportCooledDelivery';
-
     public const FIT_IN_DIGITAL_STAMP   = 'fitInDigitalStamp';
     public const FIT_IN_MAILBOX         = 'fitInMailbox';
     public const PACKAGE_TYPE           = 'packageType';

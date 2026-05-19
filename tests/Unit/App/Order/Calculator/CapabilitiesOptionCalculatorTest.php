@@ -6,12 +6,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Tests\App\Order\Calculator;
 
+use MyParcelNL\Pdk\App\Options\Definition\AbstractOrderOptionDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -20,16 +24,31 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
 use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Pdk\Tests\Uses\UsesMockEachLogger;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesSdkApiMock;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use Psr\Log\LogLevel;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
-usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock());
+usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock(), new UsesMockEachLogger());
+
+final class InvalidCapabilityKeyDefinition extends AbstractOrderOptionDefinition
+{
+    public function getShipmentOptionsKey(): ?string
+    {
+        return 'signature';
+    }
+
+    public function getCapabilitiesOptionsKey(): ?string
+    {
+        return 'nonExistentCapabilityKey';
+    }
+}
 
 /**
  * Build a capability result array for use with ExampleCapabilitiesResponse.
@@ -87,7 +106,7 @@ it('forces isRequired option to ENABLED', function () {
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
@@ -119,8 +138,8 @@ it('applies requires: when option A is enabled and requires B, B is forced ENABL
 
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -163,8 +182,8 @@ it('applies excludes: when option A is enabled and excludes B, B is forced DISAB
 
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -206,7 +225,7 @@ it('forces DISABLED for options not present in capabilities response', function 
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     // Capabilities response has no options at all
@@ -232,8 +251,8 @@ it('cascades requires: A requires B, B requires C, all get enabled', function ()
 
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -311,7 +330,7 @@ it('forces option ENABLED when capabilities says isRequired, even if merchant al
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => false])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => false])
         ->store();
 
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
@@ -342,7 +361,7 @@ it('allows option when carrier settings allow it and capabilities include it', f
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_SIGNATURE => true])
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
         ->store();
 
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
@@ -377,8 +396,8 @@ it('disables every shipment option when the carrier capability is missing for th
     // Permissive carrier settings — but capabilities will say "no support" anyway.
     factory(Settings::class)
         ->withCarrier($carrier, [
-            CarrierSettings::ALLOW_SIGNATURE      => true,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT => true,
+            (new SignatureDefinition())->getAllowSettingsKey()      => true,
+            (new OnlyRecipientDefinition())->getAllowSettingsKey() => true,
         ])
         ->store();
 
@@ -396,4 +415,49 @@ it('disables every shipment option when the carrier capability is missing for th
         ->and($order->deliveryOptions->shipmentOptions->ageCheck)->toBe(TriStateService::DISABLED);
 
     $reset();
+});
+
+it('logs a warning when a definition references a capabilities key that has no SDK getter', function () {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $resetCalculators = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+    $resetDefinitions = mockPdkProperty('orderOptionDefinitions', [new InvalidCapabilityKeyDefinition()]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier($carrier, [(new SignatureDefinition())->getAllowSettingsKey() => true])
+        ->store();
+
+    // Capabilities response with at least one option present, so $capability->getOptions()
+    // returns a non-null object and getCapabilityOption() is reached.
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, [
+            'requiresSignature' => [
+                'isRequired'          => false,
+                'isSelectedByDefault' => false,
+                'requires'            => [],
+                'excludes'            => [],
+            ],
+        ]),
+    ]));
+
+    calculateOrder($carrier, ['signature' => TriStateService::ENABLED]);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger      = Pdk::get(PdkLoggerInterface::class);
+    $warningLogs = $logger->getLogs(LogLevel::WARNING);
+
+    $matching = array_values(array_filter($warningLogs, static function (array $log) {
+        return strpos($log['message'], 'nonExistentCapabilityKey') !== false;
+    }));
+
+    expect($matching)->toHaveCount(1)
+        ->and($matching[0]['context']['capabilitiesKey'])->toBe('nonExistentCapabilityKey')
+        ->and($matching[0]['context']['expectedGetter'])->toBe('getNonExistentCapabilityKey');
+
+    $resetDefinitions();
+    $resetCalculators();
 });

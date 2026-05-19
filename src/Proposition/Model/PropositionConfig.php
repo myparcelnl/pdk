@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Proposition\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
-use MyParcelNL\Pdk\Proposition\Collection\PropositionWeightCategoriesCollection;
 
 /**
  * The proposition config is used to define individual MyParcel propositions
@@ -30,8 +29,8 @@ use MyParcelNL\Pdk\Proposition\Collection\PropositionWeightCategoriesCollection;
  * @property array $exampleDocuments
  * @property string[] $easyReturnServiceCountryCodes
  * @property string[] $allowedReturnCountryCodes
- * @property PropositionRulesConfig $rules
- * @property PropositionWeightCategoriesCollection $weightCategories
+ * @property array $rules
+ * @property array $weightCategories
  * @property bool $enablePalletSupport
  * @property bool $enablePrinterlessReturn
  * @property bool $enableLogoOnLabel
@@ -60,7 +59,7 @@ class PropositionConfig extends Model
         'applications' => null,
         'countryCode' => null,
         'subscriptions' => null,
-        'internationalization' => PropositionI18nConfig::class,
+        'internationalization' => null,
         'consumerPortal' => null,
         'retailLocations' => null,
         'billing' => null,
@@ -74,9 +73,9 @@ class PropositionConfig extends Model
         'allowedReturnCountryCodes' => [],
 
         // Rules for country- or packageType-specific requirements
-        'rules' => PropositionRulesConfig::class,
+        'rules' => null,
 
-        'weightCategories' => PropositionWeightCategoriesCollection::class,
+        'weightCategories' => null,
 
         // Proposition-level features
         'enablePalletSupport' => false,
@@ -118,7 +117,7 @@ class PropositionConfig extends Model
         'easyReturnServiceCountryCodes' => 'array',
         'allowedReturnCountryCodes' => 'array',
         // Rules are arrays of country-specific configurations
-        'rules' => PropositionRulesConfig::class,
+        'rules' => 'array',
         // Proposition-level features
         'enablePalletSupport' => 'boolean',
         'enablePrinterlessReturn' => 'boolean',
@@ -137,7 +136,7 @@ class PropositionConfig extends Model
         'integrations' => 'array',
         'content' => 'array',
         'abTesting' => 'array',
-        'weightCategories' => PropositionWeightCategoriesCollection::class,
+        'weightCategories' => 'array',
         'tools' => 'array',
     ];
 }

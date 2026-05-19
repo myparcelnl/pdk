@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -163,7 +164,7 @@ it('keeps international mailbox when allowInternationalMailbox is enabled', func
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX => true])
+        ->withCarrier($carrier, [SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX) => true])
         ->store();
 
     // Capabilities call for MAILBOX to non-local country: carrier supports it.
@@ -205,7 +206,7 @@ it('falls back when international mailbox is blocked by merchant setting', funct
         ->store();
 
     factory(Settings::class)
-        ->withCarrier($carrier, [CarrierSettings::ALLOW_INTERNATIONAL_MAILBOX => false])
+        ->withCarrier($carrier, [SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX) => false])
         ->store();
 
     // The repository caches per (cc + package_type). The fallback iteration walks the

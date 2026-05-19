@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Service;
 
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
@@ -195,4 +196,36 @@ it('includes weights from all carriers when filter is opted out', function () {
     $weights = $service->getPackageTypeWeights('NL', ['package' => 'PACKAGE'], false);
 
     expect($weights)->toBe(['package' => 23000]);
+});
+
+it('supportsReturns is true when /capabilities (direction: INBOUND) returns a non-empty result', function () {
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        [
+            'carrier'            => 'POSTNL',
+            'contract'           => ['id' => 1, 'type' => 'MAIN'],
+            'packageTypes'       => ['PACKAGE'],
+            'options'            => (object) [],
+            'deliveryTypes'      => ['STANDARD_DELIVERY'],
+            'transactionTypes'   => [],
+            'collo'              => ['max' => 1],
+        ],
+    ]));
+
+    $carrier = factory(Carrier::class)->withCarrier('POSTNL')->make();
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsReturns($carrier, 'NL'))->toBeTrue();
+});
+
+it('supportsReturns is false when /capabilities (direction: INBOUND) returns an empty result', function () {
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([]));
+
+    $carrier = factory(Carrier::class)->withCarrier('POSTNL')->make();
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsReturns($carrier, 'NL'))->toBeFalse();
 });

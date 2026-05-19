@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -144,7 +145,7 @@ it('dynamic context does not apply isSelectedByDefault for carrier with saved se
 
     // Carrier has saved settings with signature explicitly DISABLED
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => TriStateService::DISABLED])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => TriStateService::DISABLED])
         ->store();
 
     $context  = new DynamicContext();
@@ -167,7 +168,7 @@ it('dynamic context carrier settings forces ENABLED even when explicitly DISABLE
 
     // Explicitly DISABLE signature
     factory(Settings::class)
-        ->withCarrier('POSTNL', [CarrierSettings::EXPORT_SIGNATURE => 0])
+        ->withCarrier('POSTNL', [(new SignatureDefinition())->getCarrierSettingsKey() => 0])
         ->store();
 
     $context  = new DynamicContext();

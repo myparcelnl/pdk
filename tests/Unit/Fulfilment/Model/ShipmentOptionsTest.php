@@ -43,7 +43,6 @@ it('can create instance from pdk delivery options', function () {
         'signature'        => true,
         'receiptCode'      => true,
         'tracked'          => false,
-        'excludeParcelLockers' => false,
         'freshFood'        => false,
         'frozen'           => false,
     ]);

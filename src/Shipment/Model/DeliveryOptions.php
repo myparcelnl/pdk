@@ -62,6 +62,24 @@ class DeliveryOptions extends Model
     public const DELIVERY_TYPE_SAME_DAY_NAME      = 'same_day';
     public const DELIVERY_TYPE_EARLY_MORNING_ID   = RefTypesDeliveryType::EARLY_MORNING;
     public const DELIVERY_TYPE_EARLY_MORNING_NAME = 'early_morning';
+
+    /**
+     * Delivery-option toggle names that are NOT delivery types in the
+     * capabilities API (no V1 or V2 SDK enum entry). They exist purely as
+     * carrier-settings toggles — used as SettingKey input to derive the
+     * matching 'allow*' / 'price*' / 'priceDeliveryType*' attribute names.
+     *
+     *  - ALLOW_HOME:            consumer-side "allow home delivery" form toggle
+     *                           (paired with the backend-side
+     *                           CarrierSettings::DELIVERY_OPTIONS_ENABLED filter)
+     *  - INTERNATIONAL_MAILBOX: mailbox shipments to non-local destinations
+     *  - MONDAY / SATURDAY:     scheduling preferences ("deliver on Mondays")
+     */
+    public const DELIVERY_OPTION_ALLOW_HOME            = 'deliveryOptions';
+    public const DELIVERY_OPTION_INTERNATIONAL_MAILBOX = 'internationalMailbox';
+    public const DELIVERY_OPTION_MONDAY                = 'mondayDelivery';
+    public const DELIVERY_OPTION_SATURDAY              = 'saturdayDelivery';
+
     /**
      * @var int[]
      */
@@ -196,6 +214,7 @@ class DeliveryOptions extends Model
 
     public const  DEFAULT_PACKAGE_TYPE_ID         = self::PACKAGE_TYPE_PACKAGE_ID;
     public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
+    public const  DEFAULT_PACKAGE_TYPE_V2         = RefShipmentPackageTypeV2::PACKAGE;
 
     protected $attributes = [
         self::CARRIER          => null,
