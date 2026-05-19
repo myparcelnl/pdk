@@ -25,9 +25,16 @@ it('has a null defaultCarrier on a fresh Shop', function () {
     expect($shop->defaultCarrier)->toBeNull();
 });
 
-// Test 2: defaultCarrierModel returns null when defaultCarrier is unset
-it('returns null for defaultCarrierModel when defaultCarrier is not set', function () {
-    $shop = new Shop();
+// Test 2: defaultCarrierModel short-circuits on empty string without calling the repository
+it('returns null for defaultCarrierModel when defaultCarrier is an empty string', function () {
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
+    $carrierRepository->shouldNotReceive('find');
+
+    /** @var MockPdk $pdk */
+    $pdk = Pdk::get(PdkInterface::class);
+    $pdk->set(CarrierRepositoryInterface::class, $carrierRepository);
+
+    $shop = new Shop(['defaultCarrier' => '']);
 
     expect($shop->defaultCarrierModel)->toBeNull();
 });
