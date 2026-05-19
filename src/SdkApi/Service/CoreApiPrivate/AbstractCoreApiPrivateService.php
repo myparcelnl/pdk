@@ -10,36 +10,11 @@ use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Configuration as CoreApiPriva
 /**
  * Abstract base class for CoreAPI Private-specific services.
  *
- * This class extends the generic SDK service base with CoreAPI Private-specific configuration,
+ * Extends the generic SDK service base with CoreAPI Private-specific configuration,
  * providing a ready-to-use Configuration object for OpenAPI CoreAPI Private client classes.
  *
- * The CoreAPI Private namespace contains endpoints for:
- * - Shipping rules implications
- *
- * **Usage:**
  * Extend this class to create services for specific business domains within the CoreAPI Private.
  * Use {@see getApiConfig()} in your constructor when instantiating OpenAPI API classes.
- *
- * **Example:**
- * ```php
- * class ImplicationsService extends AbstractCoreApiPrivateService
- * {
- *     protected ImplicationsApi $implicationsApi;
- *
- *     public function __construct()
- *     {
- *         $this->implicationsApi = new ImplicationsApi(null, $this->getApiConfig());
- *     }
- *
- *     public function getImplications(array $rules): array
- *     {
- *         return $this->executeOperationWithErrorHandling(
- *             fn() => $this->implicationsApi->postShippingRulesImplications(...),
- *             'postShippingRulesImplications'
- *         );
- *     }
- * }
- * ```
  *
  * @see \MyParcelNL\Pdk\SdkApi\Service\AbstractSdkApiService
  * @see \MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Configuration
