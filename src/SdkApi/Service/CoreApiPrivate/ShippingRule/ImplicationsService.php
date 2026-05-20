@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule;
 
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\AbstractCoreApiPrivateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Api\ShippingRuleApi;
+use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException;
 use Throwable;
 
 /**
@@ -40,9 +42,6 @@ class ImplicationsService extends AbstractCoreApiPrivateService
      * it to a V2 carrier name via CarrierRepository. Returns null when the implications list
      * is empty, carrier_id is absent, the id is unmapped, or the API call fails.
      *
-     * Errors are intentionally not re-logged here: LoggingMiddleware already records all
-     * SDK request failures at the Guzzle transport layer before rethrowing.
-     *
      * @param  int $shopId
      *
      * @return null|string V2 carrier name (e.g. "POSTNL"), or null on any failure path.
@@ -70,7 +69,18 @@ class ImplicationsService extends AbstractCoreApiPrivateService
             $carrier = $this->carrierRepository->findByLegacyId((int) $carrierId);
 
             return $carrier ? $carrier->carrier : null;
+        } catch (ApiException $e) {
+            // Expected SDK request failure — LoggingMiddleware already logged the HTTP error
+            // at the Guzzle transport layer before the exception was rethrown.
+            return null;
         } catch (Throwable $e) {
+            // Unexpected error (TypeError on unexpected response shape, undefined offset, etc.).
+            // Log so programmer errors don't get silently masked.
+            Logger::error('Unexpected error fetching default carrier name', [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+            ]);
+
             return null;
         }
     }

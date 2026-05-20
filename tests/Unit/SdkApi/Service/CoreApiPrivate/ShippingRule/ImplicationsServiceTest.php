@@ -152,16 +152,67 @@ it('returns null when the carrier id is not found in the carrier repository', fu
 });
 
 // Test 5: returns null on API error response
-it('returns null when the API returns a non-2xx response', function () {
+it('returns null on ApiException without re-logging at the service layer', function () {
     TestBootstrapper::hasApiKey('test-key');
 
     $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
     $carrierRepository->shouldNotReceive('findByLegacyId');
 
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = \MyParcelNL\Pdk\Facade\Pdk::get(\MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface::class);
+    $logger->clear();
+
     $service = new MockableImplicationsService($carrierRepository);
     $service->mockHandler->append(new Response(500, [], '{"error":"internal server error"}'));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
+
+    // LoggingMiddleware logs the HTTP failure, but the service must NOT add its own
+    // "unexpected error" log for an expected SDK ApiException.
+    foreach ($logger->getLogs(\Psr\Log\LogLevel::ERROR) as $log) {
+        expect($log['message'] ?? '')->not->toContain('Unexpected error fetching default carrier name');
+    }
+});
+
+it('logs an unexpected error and returns null when a non-API exception bubbles up', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    // Force a TypeError out of CarrierRepository to simulate a programmer error somewhere
+    // inside the try block. The ApiException catch must NOT swallow this — the Throwable
+    // catch must log it before returning null so the bug is surfaced.
+    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
+    $carrierRepository->shouldReceive('findByLegacyId')
+        ->once()
+        ->andThrow(new \TypeError('unexpected boom'));
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = \MyParcelNL\Pdk\Facade\Pdk::get(\MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface::class);
+    $logger->clear();
+
+    $service = new MockableImplicationsService($carrierRepository);
+    $service->mockHandler->append(new Response(200, [], implResponse(1)));
+
+    expect($service->getDefaultCarrierName(42))->toBeNull();
+
+    $errors = $logger->getLogs(\Psr\Log\LogLevel::ERROR);
+
+    expect($errors)->not->toBeEmpty();
+
+    $hasUnexpectedLog = false;
+
+    foreach ($errors as $log) {
+        $message   = $log['message'] ?? '';
+        $exception = $log['context']['exception'] ?? '';
+
+        if (strpos($message, 'Unexpected error fetching default carrier name') !== false
+            && strpos($exception, 'TypeError') !== false) {
+            $hasUnexpectedLog = true;
+
+            break;
+        }
+    }
+
+    expect($hasUnexpectedLog)->toBeTrue();
 });
 
 // Test 6: shop_id is passed through unchanged in the request URI
