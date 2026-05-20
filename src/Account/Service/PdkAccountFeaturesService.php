@@ -117,6 +117,28 @@ class PdkAccountFeaturesService implements AccountFeaturesServiceInterface
     }
 
     /**
+     * The order management version the PDK should behave as.
+     *
+     * Use this from any code path that adapts behaviour to the order management mode —
+     * export dispatch, bulk actions, settings filtering, UI gating, webhook routing.
+     * Keep {@see self::getOrderModeVersion()} for code that genuinely needs the raw IAM
+     * feature value (display, diagnostics).
+     *
+     * In this phase the value is identical to the raw mode; the hybrid-V2 behaviour
+     * lives in the callers rather than here.
+     *
+     * @TODO INT-1590: downgrade ORDER_MODE_V2 to ORDER_MODE_SHIPMENTS when the
+     *       customer has no active sales channel, so manual shipment export keeps
+     *       working without callers needing per-mode branches.
+     *
+     * @return int
+     */
+    public function getEffectiveOrderMode(): int
+    {
+        return $this->getOrderModeVersion();
+    }
+
+    /**
      * @param  string $featureName
      *
      * @return bool

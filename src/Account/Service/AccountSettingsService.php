@@ -139,6 +139,21 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
+     * The order management version the PDK should behave as.
+     *
+     * Delegates to {@see AccountFeaturesServiceInterface::getEffectiveOrderMode()} —
+     * see there for intent and future evolution. Use this (or its facade
+     * {@see \MyParcelNL\Pdk\Facade\AccountSettings::getEffectiveOrderMode()}) for any
+     * code path that adapts behaviour to the order management mode.
+     *
+     * @return int
+     */
+    public function getEffectiveOrderMode(): int
+    {
+        return $this->featuresService->getEffectiveOrderMode();
+    }
+
+    /**
      * @return bool
      */
     public function usesOrderMode(): bool

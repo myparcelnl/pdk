@@ -509,7 +509,7 @@ it('exports orders and returns correct action response shape', function (
         ->toArray();
 
     TestBootstrapper::hasSubscriptionFeatures(
-        $orderMode ? [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT] : []
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
     );
 
     factory(Settings::class)
@@ -574,7 +574,7 @@ it('merges partial payload with existing order', function (
         ->toArray();
 
     TestBootstrapper::hasSubscriptionFeatures(
-        $orderMode ? [PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT] : []
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
     );
 
     factory(Settings::class)
@@ -822,6 +822,41 @@ it('exports order and directly returns barcode if concept shipments is off', fun
         ->toHaveLength(count($responseOrders))
         ->and($response->getStatusCode())
         ->toBe(200)
+        ->and($responseShipments)->each->toHaveLength(1)
+        ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
+});
+
+it('exports as shipments under order v2 (hybrid: V2 fulfilment continues externally, manual export creates shipments)', function () {
+    TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
+
+    factory(Settings::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->store();
+
+    $collection = factory(PdkOrderCollection::class, 1)
+        ->store()
+        ->make();
+
+    // Hybrid V2 takes the shipments-export path, so we enqueue a shipments response,
+    // not a fulfilment-orders one.
+    MockApi::enqueue(new ExamplePostShipmentsResponse());
+
+    $response = Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
+
+    $content           = json_decode($response->getContent(), true);
+    $responseOrders    = $content['data']['orders'];
+    $responseShipments = Arr::pluck($responseOrders, 'shipments');
+
+    $lastRequest = MockApi::ensureLastRequest();
+    $body        = json_decode($lastRequest->getBody()->getContents(), true);
+
+    expect($response->getStatusCode())->toBe(200)
+        // Shipments path was taken (data.shipments present, not data.orders[].shipment).
+        ->and($body['data'])->toHaveKey('shipments')
+        ->and($body['data'])->not->toHaveKey('orders')
+        // Each plugin order received a shipment from the shipments API.
         ->and($responseShipments)->each->toHaveLength(1)
         ->and(Arr::pluck($responseShipments[0], 'id'))->each->toBeInt();
 });

@@ -41,9 +41,9 @@ class ShipmentWebhookService
      */
     public function handleStatusChange(array $content): void
     {
-        $orderModeVersion = (int) $this->accountFeaturesService->getOrderModeVersion();
+        $effectiveMode = (int) $this->accountFeaturesService->getEffectiveOrderMode();
 
-        $orderIds = $this->getOrderIds($content, $orderModeVersion);
+        $orderIds = $this->getOrderIds($content, $effectiveMode);
 
         if (empty($orderIds)) {
             $this->logSkippedWebhook(
@@ -64,9 +64,14 @@ class ShipmentWebhookService
      */
     public function handleLabelCreated(array $content): void
     {
-        $orderModeVersion = (int) $this->accountFeaturesService->getOrderModeVersion();
+        $effectiveMode = (int) $this->accountFeaturesService->getEffectiveOrderMode();
 
-        if (AccountFeaturesServiceInterface::ORDER_MODE_V2 !== $orderModeVersion) {
+        // V1 has its own order-id flow via handleStatusChange and does not process
+        // label_created webhooks. V2 and SHIPMENTS both arrive on the wire with
+        // shipment_reference_identifier === plugin externalIdentifier (whether the
+        // shipment was created via V2 fulfillment or a manual export), so one path
+        // covers both.
+        if (AccountFeaturesServiceInterface::ORDER_MODE_V1 === $effectiveMode) {
             return;
         }
 
@@ -74,7 +79,7 @@ class ShipmentWebhookService
 
         if (empty($orderIds)) {
             $this->logSkippedWebhook(
-                'Skipping order v2 shipment webhook without a shipment reference identifier',
+                'Skipping shipment label created webhook without a shipment reference identifier',
                 $content
             );
 
@@ -86,13 +91,13 @@ class ShipmentWebhookService
 
     /**
      * @param  array $content
-     * @param  int   $orderModeVersion
+     * @param  int   $effectiveMode
      *
      * @return string[]
      */
-    private function getOrderIds(array $content, int $orderModeVersion): array
+    private function getOrderIds(array $content, int $effectiveMode): array
     {
-        if (AccountFeaturesServiceInterface::ORDER_MODE_V1 === $orderModeVersion) {
+        if (AccountFeaturesServiceInterface::ORDER_MODE_V1 === $effectiveMode) {
             return $this->getOrderIdsForOrderV1($content);
         }
 
