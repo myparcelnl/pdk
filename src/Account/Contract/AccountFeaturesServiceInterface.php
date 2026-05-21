@@ -45,4 +45,26 @@ interface AccountFeaturesServiceInterface
      * @return int
      */
     public function getOrderModeVersion(): int;
+
+    /**
+     * The order management version the PDK should behave as.
+     *
+     * Use this from any code path that adapts behaviour to the order management mode
+     * — export dispatch, bulk actions, settings filtering, UI gating, webhook routing.
+     * Returns one of the same {@see self::ORDER_MODE_*} constants as
+     * {@see self::getOrderModeVersion()}, but the value may diverge from the raw mode
+     * once business rules layer on top.
+     *
+     * Reserve {@see self::getOrderModeVersion()} for code that genuinely needs the raw
+     * IAM feature value (display, diagnostics, or behaviour that must follow IAM
+     * regardless of plugin-side business rules).
+     *
+     * @TODO INT-1590: implementations will downgrade ORDER_MODE_V2 to
+     *       ORDER_MODE_SHIPMENTS when the customer has no active sales channel,
+     *       so manual shipment export keeps working without callers needing
+     *       per-mode branches.
+     *
+     * @return int
+     */
+    public function getEffectiveOrderMode(): int;
 }
