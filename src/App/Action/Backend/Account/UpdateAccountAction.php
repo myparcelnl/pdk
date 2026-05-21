@@ -13,9 +13,11 @@ use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule\ImplicationsService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,18 +50,25 @@ class UpdateAccountAction implements ActionInterface
      */
     protected CapabilitiesService $capabilitiesService;
 
+    /**
+     * @var \MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule\ImplicationsService
+     */
+    protected ImplicationsService $implicationsService;
+
     public function __construct(
         PdkSettingsRepositoryInterface     $pdkSettingsRepository,
         PdkAccountRepositoryInterface      $pdkAccountRepository,
         AccountRepository                  $accountRepository,
         CarrierCapabilitiesRepository      $carrierCapabilitiesRepository,
-        CapabilitiesService                $capabilitiesService
+        CapabilitiesService                $capabilitiesService,
+        ImplicationsService                $implicationsService
     ) {
         $this->pdkSettingsRepository          = $pdkSettingsRepository;
         $this->pdkAccountRepository           = $pdkAccountRepository;
         $this->accountRepository              = $accountRepository;
         $this->carrierCapabilitiesRepository  = $carrierCapabilitiesRepository;
         $this->capabilitiesService            = $capabilitiesService;
+        $this->implicationsService            = $implicationsService;
     }
 
     /**
@@ -83,6 +92,35 @@ class UpdateAccountAction implements ActionInterface
                 Context::ID_PLUGIN_SETTINGS_VIEW,
             ]),
         ]);
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\Account\Model\Account $account
+     *
+     * @return void
+     */
+    protected function setShopDefaultCarrier(Account $account): void
+    {
+        $shop = $account->shops->first();
+
+        if (! $shop || ! $shop->id) {
+            Logger::warning('Cannot fetch default carrier: no shop or shop id available');
+            return;
+        }
+
+        $resolved = $this->implicationsService->getDefaultCarrierName($shop->id);
+
+        if ($resolved === null) {
+            // Service returned null (transient error). Carry forward the previously persisted
+            // value when available so a single flaky call doesn't wipe the cached default.
+            $previousAccount = $this->pdkAccountRepository->getAccount();
+            $previousShop    = $previousAccount ? $previousAccount->shops->first() : null;
+            $resolved        = $previousShop ? $previousShop->defaultCarrier : null;
+        }
+
+        if ($resolved !== null) {
+            $shop->defaultCarrier = $resolved;
+        }
     }
 
     /**
@@ -170,6 +208,7 @@ class UpdateAccountAction implements ActionInterface
         }
 
         $this->setShopCarriers($account);
+        $this->setShopDefaultCarrier($account);
         $this->pdkAccountRepository->store($account);
         $this->setApiKeyValidity(true);
         Actions::execute(PdkBackendActions::UPDATE_SUBSCRIPTION_FEATURES);

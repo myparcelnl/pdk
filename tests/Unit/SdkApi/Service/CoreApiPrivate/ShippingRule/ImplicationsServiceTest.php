@@ -204,8 +204,10 @@ it('logs an unexpected error and returns null when a non-API exception bubbles u
         $message   = $log['message'] ?? '';
         $exception = $log['context']['exception'] ?? '';
 
-        if (strpos($message, 'Unexpected error fetching default carrier name') !== false
-            && strpos($exception, 'TypeError') !== false) {
+        if (
+            strpos($message, 'Unexpected error fetching default carrier name') !== false
+            && strpos($exception, 'TypeError') !== false
+        ) {
             $hasUnexpectedLog = true;
 
             break;
@@ -239,7 +241,9 @@ it('passes shop_id through unchanged and does not add extra query params', funct
 it('exposes only getDefaultCarrierName as a public non-constructor non-inherited method', function () {
     $reflection    = new \ReflectionClass(ImplicationsService::class);
     $parentMethods = array_map(
-        static function (\ReflectionMethod $m): string { return $m->getName(); },
+        static function (\ReflectionMethod $m): string {
+            return $m->getName();
+        },
         (new \ReflectionClass(get_parent_class(ImplicationsService::class)))->getMethods(\ReflectionMethod::IS_PUBLIC)
     );
 

@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
 usesShared(new UsesEachMockPdkInstance(), new UsesAccountMock());
 
+
 const INPUT_RECIPIENT = [
     'cc'         => 'NL',
     'city'       => 'Hoofddorp',
