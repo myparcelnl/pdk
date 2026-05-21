@@ -212,38 +212,6 @@
   },
   "contracts": {
     "enablePostNLCustomContract": false,
-    "inbound": {
-      "BE": {
-        "carrier": {
-          "id": 2,
-          "name": "BPOST"
-        },
-        "id": 2
-      },
-      "default": {
-        "carrier": {
-          "id": 4,
-          "name": "DPD"
-        },
-        "id": 4
-      },
-      "NL": {
-        "carrier": {
-          "id": 1,
-          "name": "POSTNL"
-        },
-        "id": 1
-      }
-    },
-    "outbound": {
-      "default": {
-        "carrier": {
-          "id": 2,
-          "name": "BPOST"
-        },
-        "id": 2
-      }
-    },
     "withCutoffTime": ["POSTNL", "DPD", "BPOST"],
     "withPostponedDelivery": ["POSTNL", "DPD", "BPOST"]
   },

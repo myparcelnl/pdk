@@ -263,8 +263,7 @@
             "human": "MyParcel Nederland",
             "backofficeUrl": "https:\/\/backoffice.myparcel.nl",
             "supportUrl": "https:\/\/developer.myparcel.nl",
-            "localCountry": "NL",
-            "defaultCarrier": "POSTNL"
+            "localCountry": "NL"
         },
         "translations": {
             "apple_tree": "Appelboom",

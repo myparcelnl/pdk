@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Proposition\Service;
 
-use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
-use RuntimeException;
 
 class PropositionService
 {
@@ -26,19 +23,6 @@ class PropositionService
      * @var array<int, PropositionConfig>
      */
     private static $configCache = [];
-
-    /**
-     * @var \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface
-     */
-    private $carrierRepository;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface $carrierRepository
-     */
-    public function __construct(CarrierRepositoryInterface $carrierRepository)
-    {
-        $this->carrierRepository = $carrierRepository;
-    }
 
     /**
      * Get the active proposition ID.
@@ -173,31 +157,6 @@ class PropositionService
 
         // Create a PropositionConfig instance from the array
         return new PropositionConfig($configArray);
-    }
-
-    /**
-     * @TODO: Refactor to shipping rules API once carrier selection is handled there.
-     *
-     * Get the default carrier from the proposition config.
-     * Returns the outbound carrier by default. Use $outbound = false to get the inbound (return shipments) carrier.
-
-     * @param bool $outbound
-     * @return Carrier
-     */
-    public function getDefaultCarrier($outbound = true): Carrier
-    {
-        if ($outbound) {
-            $defaultCarrierId = $this->getPropositionConfig()->contracts->outbound['default']['carrier']['id'];
-        } else {
-            $defaultCarrierId = $this->getPropositionConfig()->contracts->inbound['default']['carrier']['id'];
-        }
-        $carrier = $this->carrierRepository->findByLegacyId($defaultCarrierId);
-
-        if (! $carrier) {
-            throw new \RuntimeException(sprintf('Default %s carrier with id %d was not found', $outbound ? 'outbound' : 'inbound', $defaultCarrierId));
-        }
-
-        return $carrier;
     }
 
     /**

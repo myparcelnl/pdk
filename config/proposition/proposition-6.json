@@ -111,23 +111,7 @@
     }
   },
   "contracts": {
-    "enablePostNLCustomContract": false,
-    "inbound": {
-      "default": {
-        "carrier": {
-          "id": 15,
-          "name": "BRT"
-        }
-      }
-    },
-    "outbound": {
-      "default": {
-        "carrier": {
-          "id": 15,
-          "name": "BRT"
-        }
-      }
-    }
+    "enablePostNLCustomContract": false
   },
   "collectTrip": {
     "enabled": false
