@@ -92,6 +92,29 @@ it('returns 0 (shipments fallback) when account has no features at all', functio
     expect($service->getOrderModeVersion())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS);
 });
 
+// getEffectiveOrderMode — identity today (INT-1590 will add sales-channel-conditional logic)
+
+it('returns the raw mode unchanged from getEffectiveOrderMode when V2 is active', function () {
+    TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
+    $service = Pdk::get(AccountFeaturesServiceInterface::class);
+
+    expect($service->getEffectiveOrderMode())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_V2);
+});
+
+it('returns the raw mode unchanged from getEffectiveOrderMode when V1 is active', function () {
+    TestBootstrapper::hasSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
+    $service = Pdk::get(AccountFeaturesServiceInterface::class);
+
+    expect($service->getEffectiveOrderMode())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_V1);
+});
+
+it('returns the raw mode unchanged from getEffectiveOrderMode when no order management is active', function () {
+    TestBootstrapper::hasSubscriptionFeatures([]);
+    $service = Pdk::get(AccountFeaturesServiceInterface::class);
+
+    expect($service->getEffectiveOrderMode())->toBe(AccountFeaturesServiceInterface::ORDER_MODE_SHIPMENTS);
+});
+
 // usesOrderMode
 
 it('returns true for usesOrderMode when any order management feature is present', function () {

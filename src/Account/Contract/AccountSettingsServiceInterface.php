@@ -42,6 +42,11 @@ interface AccountSettingsServiceInterface
     public function getOrderModeVersion(): int;
 
     /**
+     * @return int
+     */
+    public function getEffectiveOrderMode(): int;
+
+    /**
      * @return bool
      */
     public function usesOrderMode(): bool;

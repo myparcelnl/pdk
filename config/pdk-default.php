@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -85,24 +86,32 @@ return [
      */
 
     'allBulkActions' => value([
-        'default'   => [
+        'Shipments' => [
             'action_print',
             'action_export_print',
             'action_export',
             'action_edit',
         ],
-        'orderMode' => [
+        'OrderV1'   => [
             'action_edit',
             'action_export',
+        ],
+        'OrderV2'   => [
+            'action_print',
+            'action_export_print',
+            'action_export',
+            'action_edit',
         ],
     ]),
 
     'bulkActions'              => factory(static function (): array {
         $all = PdkFacade::get('allBulkActions');
+        $key = [
+            AccountFeaturesServiceInterface::ORDER_MODE_V1 => 'OrderV1',
+            AccountFeaturesServiceInterface::ORDER_MODE_V2 => 'OrderV2',
+        ][AccountSettings::getEffectiveOrderMode()] ?? 'Shipments';
 
-        return AccountSettings::usesOrderMode()
-            ? Arr::get($all, 'orderMode', [])
-            : Arr::get($all, 'default', []);
+        return Arr::get($all, $key, []);
     }),
 
     /**
