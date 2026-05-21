@@ -8,13 +8,15 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeInterface;
+use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
@@ -314,7 +316,7 @@ class DeliveryOptions extends Model
     /**
      * Always resolves a fresh Carrier from the repository so capability data is never stale.
      *
-     * - No carrier set → returns the proposition default carrier.
+     * - No carrier set → returns the shop's default carrier; throws when none is available.
      * - Carrier name set but not found in the repository → throws (repository findOrFail).
      *
      * Reads directly from $this->attributes to avoid re-entering getAttribute() which would
@@ -327,11 +329,10 @@ class DeliveryOptions extends Model
         $carrierName = $this->attributes[self::CARRIER];
 
         if (! $carrierName) {
-            return Pdk::get(PropositionService::class)->getDefaultCarrier();
+            return Shop::getDefaultCarrierOrThrow();
         }
 
-        $found = Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);
-        return $found;
+        return Pdk::get(CarrierRepositoryInterface::class)->findOrFail($carrierName);
     }
 
     /**
@@ -381,6 +382,28 @@ class DeliveryOptions extends Model
      */
     public function toArray(?int $flags = null): array
     {
+        // The default toArray() path resolves the carrier via the getter so downstream consumers
+        // (JS-PDK admin/checkout) receive the full Carrier model — including capabilities and
+        // options — in serialized form. The getter throws when no carrier is stored AND no shop
+        // default exists; detect that case upfront and emit the raw null attribute instead of
+        // throwing during serialization.
+        $hasStoredCarrier = (bool) ($this->attributes[self::CARRIER] ?? null);
+        $shop             = AccountSettings::getShop();
+        $hasShopDefault   = $shop && $shop->defaultCarrierModel;
+
+        if (! $hasStoredCarrier && ! $hasShopDefault) {
+            $array = $this->except(self::CARRIER, $flags);
+
+            // Honour SKIP_NULL (toArrayWithoutNull / toStorableArray / ENCODED): omit the key
+            // entirely instead of emitting carrier: null, which would otherwise leak past the
+            // null-stripping serializers.
+            if (! ($flags & Arrayable::SKIP_NULL)) {
+                $array[self::CARRIER] = null;
+            }
+
+            return Utils::filterNull([self::DATE => $this->getDateAsString()]) + $array;
+        }
+
         return Utils::filterNull([self::DATE => $this->getDateAsString()]) + parent::toArray($flags);
     }
 
@@ -388,7 +411,7 @@ class DeliveryOptions extends Model
     {
         $array = parent::toStorableArray();
         // Carrier should be the (raw) name only, not the full resolved carrier data.
-        $array[self::CARRIER] = $this->attributes[self::CARRIER];
+        $array[self::CARRIER] = $this->attributes[self::CARRIER] ?? null;
         return $array;
     }
 }

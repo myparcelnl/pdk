@@ -10,7 +10,6 @@ use InvalidArgumentException;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Collection\SettingsModelCollection;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
@@ -145,9 +144,14 @@ final class SettingsFactory extends AbstractModelFactory
      */
     protected function createDefault(): FactoryInterface
     {
-        // @TODO replace with dynamic fetch from shipping rules in the future
-        $propositionService = Pdk::get(PropositionService::class);
-        return $this->withCarrier($propositionService->getDefaultCarrier()->carrier);
+        // Prime the CarrierRepository cache from the currently-stored account, mirroring the
+        // historical side effect of PropositionService::getDefaultCarrier(). Tests that later
+        // replace the account with a slimmer shop continue to see the bootstrap carrier set
+        // (including capabilities) via the cached "carrier:all" entry, so downstream services
+        // such as PdkShippingMethod::getAllCarrierPackageTypes() still resolve package types.
+        Pdk::get(\MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface::class)->all();
+
+        return $this->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL);
     }
 
     /**

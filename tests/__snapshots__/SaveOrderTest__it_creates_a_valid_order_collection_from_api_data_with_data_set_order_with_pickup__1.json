@@ -1,126 +1,134 @@
 [
-  {
-    "uuid": "123",
-    "orderDate": "2022-08-22 00:00:00",
-    "lines": [
-      {
-        "uuid": "1234",
-        "quantity": 1,
-        "price": 250,
-        "vat": 10,
-        "priceAfterVat": 260,
-        "product": {
-          "uuid": "12345",
-          "sku": "018234",
-          "ean": "018234",
-          "externalIdentifier": "018234",
-          "name": "Paarse stofzuiger",
-          "description": "Een paars object waarmee stof opgezogen kan worden",
-          "width": 0,
-          "length": 0,
-          "height": 0,
-          "weight": 3500
-        }
-      }
-    ],
-    "notes": [],
-    "shipment": {
-      "orderId": "123",
-      "carrier": {
-        "carrier": "POSTNL",
-        "packageTypes": ["PACKAGE", "MAILBOX", "UNFRANKED", "DIGITAL_STAMP", "PALLET", "SMALL_PACKAGE", "ENVELOPE"],
-        "options": {
-          "cooledDelivery": [],
-          "freshFood": [],
-          "frozen": [],
-          "hideSender": [],
-          "oversizedPackage": [],
-          "priorityDelivery": [],
-          "recipientOnlyDelivery": [],
-          "requiresAgeVerification": [],
-          "requiresReceiptCode": [],
-          "requiresSignature": [],
-          "returnOnFirstFailedDelivery": [],
-          "sameDayDelivery": [],
-          "saturdayDelivery": [],
-          "scheduledCollection": [],
-          "tracked": [],
-          "insurance": {
-            "insuredAmount": {
-              "default": {
-                "currency": "EUR",
-                "amount": 0
-              },
-              "min": {
-                "currency": "EUR",
-                "amount": 0
-              },
-              "max": {
-                "currency": "EUR",
-                "amount": 500000
-              }
+    {
+        "uuid": "123",
+        "orderDate": "2022-08-22 00:00:00",
+        "lines": [
+            {
+                "uuid": "1234",
+                "quantity": 1,
+                "price": 250,
+                "vat": 10,
+                "priceAfterVat": 260,
+                "product": {
+                    "uuid": "12345",
+                    "sku": "018234",
+                    "ean": "018234",
+                    "externalIdentifier": "018234",
+                    "name": "Paarse stofzuiger",
+                    "description": "Een paars object waarmee stof opgezogen kan worden",
+                    "width": 0,
+                    "length": 0,
+                    "height": 0,
+                    "weight": 3500
+                }
             }
-          }
+        ],
+        "notes": [],
+        "shipment": {
+            "orderId": "123",
+            "carrier": {
+                "carrier": "POSTNL",
+                "packageTypes": [
+                    "PACKAGE",
+                    "MAILBOX",
+                    "UNFRANKED",
+                    "DIGITAL_STAMP",
+                    "PALLET",
+                    "SMALL_PACKAGE",
+                    "ENVELOPE"
+                ],
+                "options": {
+                    "cooledDelivery": [],
+                    "freshFood": [],
+                    "frozen": [],
+                    "hideSender": [],
+                    "oversizedPackage": [],
+                    "priorityDelivery": [],
+                    "recipientOnlyDelivery": [],
+                    "requiresAgeVerification": [],
+                    "requiresReceiptCode": [],
+                    "requiresSignature": [],
+                    "returnOnFirstFailedDelivery": [],
+                    "sameDayDelivery": [],
+                    "saturdayDelivery": [],
+                    "scheduledCollection": [],
+                    "tracked": [],
+                    "insurance": {
+                        "insuredAmount": {
+                            "default": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "min": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "max": {
+                                "currency": "EUR",
+                                "amount": 500000
+                            }
+                        }
+                    }
+                },
+                "deliveryTypes": [
+                    "MORNING_DELIVERY",
+                    "STANDARD_DELIVERY",
+                    "EVENING_DELIVERY",
+                    "PICKUP_DELIVERY",
+                    "SAME_DAY_DELIVERY",
+                    "EXPRESS_DELIVERY",
+                    "EARLY_MORNING_DELIVERY"
+                ],
+                "collo": {
+                    "max": 10
+                }
+            },
+            "contractId": "123",
+            "customsDeclaration": {
+                "contents": 1,
+                "invoice": "25",
+                "items": [
+                    {
+                        "amount": 1,
+                        "classification": "5256",
+                        "country": "BE",
+                        "description": "Vlaamse Patatekes",
+                        "itemValue": {
+                            "amount": 5000,
+                            "currency": "EUR"
+                        },
+                        "weight": 200
+                    },
+                    {
+                        "amount": 1,
+                        "classification": "9221",
+                        "country": "FR",
+                        "description": "Omelette du Fromage",
+                        "itemValue": {
+                            "amount": 10000,
+                            "currency": "EUR"
+                        },
+                        "weight": 350
+                    }
+                ],
+                "weight": 550
+            },
+            "options": {
+                "labelDescription": ""
+            },
+            "recipient": {
+                "cc": "NL",
+                "city": "Hoofddorp",
+                "postalCode": "2132JE",
+                "street": "Antareslaan 31",
+                "person": "Jaap Krekel"
+            },
+            "physicalProperties": {
+                "weight": 3500
+            }
         },
-        "deliveryTypes": [
-          "MORNING_DELIVERY",
-          "STANDARD_DELIVERY",
-          "EVENING_DELIVERY",
-          "PICKUP_DELIVERY",
-          "SAME_DAY_DELIVERY",
-          "EXPRESS_DELIVERY",
-          "EARLY_MORNING_DELIVERY"
-        ],
-        "collo": {
-          "max": 10
-        }
-      },
-      "contractId": "123",
-      "customsDeclaration": {
-        "contents": 1,
-        "invoice": "25",
-        "items": [
-          {
-            "amount": 1,
-            "classification": "5256",
-            "country": "BE",
-            "description": "Vlaamse Patatekes",
-            "itemValue": {
-              "amount": 5000,
-              "currency": "EUR"
-            },
-            "weight": 200
-          },
-          {
-            "amount": 1,
-            "classification": "9221",
-            "country": "FR",
-            "description": "Omelette du Fromage",
-            "itemValue": {
-              "amount": 10000,
-              "currency": "EUR"
-            },
-            "weight": 350
-          }
-        ],
-        "weight": 550
-      },
-      "options": {
-        "labelDescription": ""
-      },
-      "recipient": {
-        "cc": "NL",
-        "city": "Hoofddorp",
-        "postalCode": "2132JE",
-        "street": "Antareslaan 31",
-        "person": "Jaap Krekel"
-      },
-      "physicalProperties": {
-        "weight": 3500
-      }
-    },
-    "price": 260,
-    "vat": 0,
-    "priceAfterVat": 0
-  }
+        "price": 260,
+        "vat": 0,
+        "priceAfterVat": 0
+    }
 ]

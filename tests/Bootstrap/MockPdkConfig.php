@@ -25,6 +25,7 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule\ImplicationsService;
 use MyParcelNL\Pdk\SdkApi\Service\Iam\WhoamiService;
 use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Service\AuditService;
@@ -108,6 +109,7 @@ class MockPdkConfig
             ViewServiceInterface::class                 => get(MockViewService::class),
 
             CapabilitiesService::class                  => get(MockCapabilitiesService::class),
+            ImplicationsService::class                  => get(MockImplicationsService::class),
             WhoamiService::class                        => get(MockWhoamiService::class),
             CarrierCapabilitiesRepository::class        => get(MockCarrierCapabilitiesRepository::class),
 
