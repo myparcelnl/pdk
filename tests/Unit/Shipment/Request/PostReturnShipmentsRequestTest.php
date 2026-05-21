@@ -24,7 +24,6 @@ use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 
 usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock(), new UsesAccountMock());
 

@@ -173,6 +173,18 @@ it('throws RuntimeException when stored carrier is unset and shop has no default
     $deliveryOptions->carrier;
 })->throws(RuntimeException::class, 'No default carrier available');
 
+it('omits the carrier key from toArrayWithoutNull when no stored carrier and no shop default', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repo */
+    $repo                                    = Pdk::get(PdkAccountRepositoryInterface::class);
+    $account                                 = $repo->getAccount();
+    $account->shops->first()->defaultCarrier = null;
+    $repo->store($account);
+
+    $array = (new DeliveryOptions())->toArrayWithoutNull();
+
+    expect($array)->not->toHaveKey('carrier');
+});
+
 it('can be instantiated from its storable array', function () {
     $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
     $carrier = $carrierRepository->findOrFail('DHL_FOR_YOU');

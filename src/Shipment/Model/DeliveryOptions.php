@@ -9,6 +9,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use DateTime;
 use DateTimeInterface;
 use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Concern\HasCarrierAttribute;
@@ -391,8 +392,14 @@ class DeliveryOptions extends Model
         $hasShopDefault   = $shop && $shop->defaultCarrierModel;
 
         if (! $hasStoredCarrier && ! $hasShopDefault) {
-            $array                = $this->except(self::CARRIER, $flags);
-            $array[self::CARRIER] = null;
+            $array = $this->except(self::CARRIER, $flags);
+
+            // Honour SKIP_NULL (toArrayWithoutNull / toStorableArray / ENCODED): omit the key
+            // entirely instead of emitting carrier: null, which would otherwise leak past the
+            // null-stripping serializers.
+            if (! ($flags & Arrayable::SKIP_NULL)) {
+                $array[self::CARRIER] = null;
+            }
 
             return Utils::filterNull([self::DATE => $this->getDateAsString()]) + $array;
         }
