@@ -191,7 +191,7 @@ it('uses fetched shipment status for order status updates instead of webhook sta
     expect($statusLog['context']['status'])->toBe(OrderSettings::STATUS_WHEN_LABEL_SCANNED);
 });
 
-it('skips order v2 label created webhook when shipment reference identifier is missing', function () {
+it('skips label created webhook when shipment reference identifier is missing', function () {
     setShipmentLabelCreatedAccountFeatures([PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]);
 
     $body = validShipmentLabelCreatedHookBody(['shipment_reference_identifier' => null]);
@@ -203,7 +203,7 @@ it('skips order v2 label created webhook when shipment reference identifier is m
         ->and($result['logger']->getLogs('debug'))
         ->toContain([
             'level'   => 'debug',
-            'message' => '[PDK]: Skipping order v2 shipment webhook without a shipment reference identifier',
+            'message' => '[PDK]: Skipping shipment label created webhook without a shipment reference identifier',
             'context' => [
                 'shipment_id'                   => 231032886,
                 'order_id'                      => null,
@@ -233,13 +233,25 @@ it('skips order v2 label created webhook when shipment id is missing', function 
         ]);
 });
 
-it('keeps shipment label created as a no-op outside order v2', function (array $features) {
-    setShipmentLabelCreatedAccountFeatures($features);
+it('keeps shipment label created as a no-op for order v1', function () {
+    setShipmentLabelCreatedAccountFeatures([PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]);
 
     $result = dispatchShipmentLabelCreatedWebhook(validShipmentLabelCreatedHookBody(), false);
 
     expect($result['actions']->getCalls())->toHaveCount(0);
-})->with([
-    'shipments only' => [[]],
-    'order v1'       => [[PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT]],
-]);
+});
+
+it('dispatches update shipments for label created webhooks in shipments-only mode', function () {
+    setShipmentLabelCreatedAccountFeatures([]);
+
+    $result = dispatchShipmentLabelCreatedWebhook(validShipmentLabelCreatedHookBody());
+    $call   = $result['actions']->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS);
+
+    expect($call['parameters'])
+        ->toMatchArray([
+            'orderIds'                        => ['197'],
+            'shipmentIds'                     => [231032886],
+            'useShipmentStatusForOrderStatus' => true,
+            'linkFirstShipmentToFirstOrder'   => true,
+        ]);
+});
