@@ -386,7 +386,7 @@ class DeliveryOptions extends Model
         // options — in serialized form. The getter throws when no carrier is stored AND no shop
         // default exists; detect that case upfront and emit the raw null attribute instead of
         // throwing during serialization.
-        $hasStoredCarrier = (bool) $this->attributes[self::CARRIER];
+        $hasStoredCarrier = (bool) ($this->attributes[self::CARRIER] ?? null);
         $shop             = AccountSettings::getShop();
         $hasShopDefault   = $shop && $shop->defaultCarrierModel;
 
@@ -404,7 +404,7 @@ class DeliveryOptions extends Model
     {
         $array = parent::toStorableArray();
         // Carrier should be the (raw) name only, not the full resolved carrier data.
-        $array[self::CARRIER] = $this->attributes[self::CARRIER];
+        $array[self::CARRIER] = $this->attributes[self::CARRIER] ?? null;
         return $array;
     }
 }
