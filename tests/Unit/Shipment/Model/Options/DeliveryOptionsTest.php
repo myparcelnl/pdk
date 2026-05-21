@@ -8,14 +8,18 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use DateTime;
 use DateTimeImmutable;
+use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use RuntimeException;
+use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -136,6 +140,50 @@ it('can get delivery type as id', function (string $name, int $id) {
 
     expect($deliveryOptions->getDeliveryTypeId())->toBe($id);
 })->with('deliveryTypeNamesToIds');
+
+// Site 5: when carrier attribute is unset, resolves to shop's defaultCarrierModel.
+it('resolves to shop default carrier when stored carrier is unset', function () {
+    // Set the shop's defaultCarrier while keeping all carriers in the repository.
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repo */
+    $repo    = Pdk::get(PdkAccountRepositoryInterface::class);
+    $account = $repo->getAccount();
+    $account->shops->first()->defaultCarrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+    $repo->store($account);
+
+    $deliveryOptions = new DeliveryOptions();
+
+    expect($deliveryOptions->carrier)
+        ->toBeInstanceOf(Carrier::class)
+        ->and($deliveryOptions->carrier->carrier)
+        ->toBe(RefCapabilitiesSharedCarrierV2::POSTNL);
+});
+
+// Site 5: when carrier attribute is unset and shop has no default, throws RuntimeException.
+it('throws RuntimeException when stored carrier is unset and shop has no default', function () {
+    // Explicitly clear the defaultCarrier that ShopFactory sets by default.
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repo */
+    $repo    = Pdk::get(PdkAccountRepositoryInterface::class);
+    $account = $repo->getAccount();
+    $account->shops->first()->defaultCarrier = null;
+    $repo->store($account);
+
+    $deliveryOptions = new DeliveryOptions();
+
+    // Triggers getCarrierAttribute — must throw when no default is available.
+    $deliveryOptions->carrier;
+})->throws(RuntimeException::class, 'No default carrier available');
+
+it('omits the carrier key from toArrayWithoutNull when no stored carrier and no shop default', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repo */
+    $repo                                    = Pdk::get(PdkAccountRepositoryInterface::class);
+    $account                                 = $repo->getAccount();
+    $account->shops->first()->defaultCarrier = null;
+    $repo->store($account);
+
+    $array = (new DeliveryOptions())->toArrayWithoutNull();
+
+    expect($array)->not->toHaveKey('carrier');
+});
 
 it('can be instantiated from its storable array', function () {
     $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
