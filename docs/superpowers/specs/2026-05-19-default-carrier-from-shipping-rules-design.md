@@ -94,7 +94,7 @@ abstract class AbstractCoreApiPrivateService extends AbstractSdkApiService
 }
 ```
 
-Assumption: `AbstractSdkApiService::applyConfigSettings()` is generic enough to accept the private Configuration. If its signature is currently typed against `CoreApiConfiguration`, the plan widens it to the shared parent type — the field-setting body is identical.
+`AbstractSdkApiService::applyConfigSettings()` accepts `object` and returns `object`, so the private `Configuration` flows through unchanged — no widening needed.
 
 ### New: `ImplicationsService`
 
@@ -106,26 +106,50 @@ Single public method. No other endpoint methods are wrapped — INT-1586 explici
 class ImplicationsService extends AbstractCoreApiPrivateService
 {
     private ShippingRuleApi $api;
+    private CarrierRepositoryInterface $carrierRepository;
 
-    public function __construct()
+    public function __construct(CarrierRepositoryInterface $carrierRepository)
     {
-        $this->api = new ShippingRuleApi(null, $this->getApiConfig());
+        $this->api               = new ShippingRuleApi($this->createGuzzleClient(), $this->getApiConfig());
+        $this->carrierRepository = $carrierRepository;
     }
 
     public function getDefaultCarrierName(int $shopId): ?string
     {
-        return $this->executeOperationWithErrorHandling(
-            function () use ($shopId): ?string {
-                $implications = $this->api->getShippingRuleImplications($shopId);
-                $carrierId    = $implications->getCarrierId();
+        try {
+            $response     = $this->api->getShippingRuleImplications($shopId);
+            $implications = $response->getData()->getImplications();
 
-                return $carrierId ? (string) $carrierId : null;
-            },
-            'getShippingRuleImplications'
-        );
+            if (empty($implications)) {
+                return null;
+            }
+
+            $carrierId = $implications[0]->getCarrierId();
+
+            if ($carrierId === null) {
+                return null;
+            }
+
+            $carrier = $this->carrierRepository->findByLegacyId((int) $carrierId);
+
+            return $carrier ? $carrier->carrier : null;
+        } catch (ApiException $e) {
+            // LoggingMiddleware already records the HTTP failure at the Guzzle transport layer.
+            return null;
+        } catch (Throwable $e) {
+            // Unexpected programmer error — log so it doesn't get silently masked.
+            Logger::error('Unexpected error fetching default carrier name', [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+            ]);
+
+            return null;
+        }
     }
 }
 ```
+
+The catch is split deliberately: `ApiException` is the expected SDK failure path and is already logged by `LoggingMiddleware::forApiRequests()` (pushed onto every SDK service's Guzzle handler stack), so we silently return `null`. Any other `Throwable` indicates something unexpected (response-shape change, programmer error in the chain) — log before returning `null` so real bugs surface in logs instead of disappearing.
 
 ### Extended: `Shop`
 
@@ -235,7 +259,7 @@ Same code path as the happy path. `setShopDefaultCarrier()` runs and overwrites 
 
 - **No API key**: short-circuits at `if (! $accountSettings->apiKey)`. Account is wiped. No Shop ⇒ no `defaultCarrier`.
 - **API key invalid (401)**: `accountRepository->getAccount()` throws; the surrounding `try` wipes the account and re-throws. `setShopDefaultCarrier()` never runs.
-- **Implications endpoint errors**: `executeOperationWithErrorHandling` swallows + logs, returns `null`. `setShopDefaultCarrier()` does **not** overwrite the previously stored value (decision β).
+- **Implications endpoint errors**: `ImplicationsService::getDefaultCarrierName()` catches `ApiException` (already logged by `LoggingMiddleware`) and other `Throwable`s (logged explicitly at error level), then returns `null`. `setShopDefaultCarrier()` does **not** overwrite the previously stored value (decision β).
 - **Unsupported `carrier_id`**: persisted on Shop; `Shop::getDefaultCarrierModelAttribute()` returns `null` via `CarrierRepository::find()`; `Carrier::isSupported()` logs the warning.
 
 ### Read by a caller
@@ -256,7 +280,7 @@ No API call on read. Local state only.
 | --- | --------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | 1   | No API key set                                                  | `UpdateAccountAction` guard                   | `setShopDefaultCarrier()` never runs.                                                           |
 | 2   | API key invalid (401)                                           | `accountRepository->getAccount()` throws      | Existing try/catch wipes account.                                                               |
-| 3   | Implications endpoint 5xx / network blip                        | `executeOperationWithErrorHandling`           | Log error, return `null`. **Preserve previous Shop value.**                                     |
+| 3   | Implications endpoint 5xx / network blip                        | `ImplicationsService` `ApiException` catch    | Silent return `null` (LoggingMiddleware already logged). **Preserve previous Shop value.**      |
 | 4   | Response deserializes; `carrier_id` empty / unsupported V2 name | Shop persists string; `find()` returns `null` | Attribute getter returns `null`. Existing `Carrier::isSupported()` warning fires when consumed. |
 | 5   | Shop has no `id` yet                                            | Defensive guard in `setShopDefaultCarrier`    | Skip fetch, log warning.                                                                        |
 
