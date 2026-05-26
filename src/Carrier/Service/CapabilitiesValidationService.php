@@ -244,12 +244,7 @@ class CapabilitiesValidationService
             }
 
             $carrierMax = $this->extractWeightInGrams($props->getWeight()->getMax());
-
-            if ($carrierMax === null) {
-                continue;
-            }
-
-            $maxWeight = $maxWeight === null ? $carrierMax : max($maxWeight, $carrierMax);
+            $maxWeight  = null === $maxWeight ? $carrierMax : max($maxWeight, $carrierMax);
         }
 
         return $maxWeight;
