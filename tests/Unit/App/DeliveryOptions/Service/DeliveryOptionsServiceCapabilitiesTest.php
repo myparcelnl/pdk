@@ -41,7 +41,8 @@ function capabilityResult(
     array $packageTypes,
     array $deliveryTypes = ['STANDARD_DELIVERY'],
     int $weightMin = 1,
-    int $weightMax = 23000
+    int $weightMax = 23000,
+    string $weightUnit = 'g'
 ): array {
     return [
         'carrier'            => $carrier,
@@ -50,8 +51,8 @@ function capabilityResult(
         'options'            => (object) [],
         'physicalProperties' => [
             'weight' => [
-                'min' => ['value' => $weightMin, 'unit' => 'g'],
-                'max' => ['value' => $weightMax, 'unit' => 'g'],
+                'min' => ['value' => $weightMin, 'unit' => $weightUnit],
+                'max' => ['value' => $weightMax, 'unit' => $weightUnit],
             ],
         ],
         'deliveryTypes'      => $deliveryTypes,
@@ -293,6 +294,52 @@ it('passes contract ID from capabilities to carrier settings output', function (
     expect($result['carrierSettings'][$carrierId]['contractId'])->toBe(777);
 });
 
+it('selects mailbox when product packageType is mailbox and contents fit', function () {
+    storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
+
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)
+                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+                    ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX']))
+        )
+        ->store();
+
+    resetStorageCache();
+
+    enqueueCapabilitiesPerType([
+        'PACKAGE' => [capabilityResult('POSTNL', 100, ['PACKAGE'], ['STANDARD_DELIVERY'], 1, 23000)],
+        'MAILBOX' => [capabilityResult('POSTNL', 100, ['MAILBOX'], ['STANDARD_DELIVERY'], 1, 2000)],
+    ]);
+
+    /** @var DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    // Mirrors the reported scenario: packageType=mailbox, fitInMailbox=10, weight 0.35 kg, qty 1.
+    // Mailbox percentage = 1 * 100/10 = 10% (well below 100%), weight 350g (well below 2000g max).
+    $result = $service->createAllCarrierSettings(new PdkCart([
+        'shippingMethod' => [
+            'shippingAddress' => ['cc' => 'NL'],
+        ],
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 350,
+                    'isDeliverable' => true,
+                    'settings'      => [
+                        'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        'fitInMailbox' => 10,
+                    ],
+                ],
+            ],
+        ],
+    ]));
+
+    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+});
+
 it('skips mailbox package type when mailbox percentage exceeds 100%', function () {
     storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
 
@@ -388,4 +435,78 @@ it('upgrades to next fitting package type when desired type exceeds weight', fun
 
     // Mailbox too heavy → upgraded to package.
     expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+});
+
+it('normalizes max weight to grams when capabilities response uses kg', function () {
+    storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
+
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)
+                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+                    ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX']))
+        )
+        ->store();
+
+    resetStorageCache();
+
+    // API returns mailbox max as 2 kg (= 2000 g). Without unit normalization, the PDK
+    // would treat this as 2 g and reject the 1500 g cart.
+    enqueueCapabilitiesPerType([
+        'PACKAGE' => [capabilityResult('POSTNL', 100, ['PACKAGE'], ['STANDARD_DELIVERY'], 1, 23, 'kg')],
+        'MAILBOX' => [capabilityResult('POSTNL', 100, ['MAILBOX'], ['STANDARD_DELIVERY'], 1, 2, 'kg')],
+    ]);
+
+    /** @var DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createAllCarrierSettings(new PdkCart([
+        'shippingMethod' => [
+            'shippingAddress' => ['cc' => 'NL'],
+        ],
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 1500,
+                    'isDeliverable' => true,
+                    'settings'      => [
+                        'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    ],
+                ],
+            ],
+        ],
+    ]));
+
+    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+});
+
+it('normalizes min weight to grams when capabilities response uses kg', function () {
+    storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
+
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)
+                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+                    ->withCapabilityPackageTypes(['PACKAGE']))
+        )
+        ->store();
+
+    resetStorageCache();
+
+    // API returns package min as 1 kg (= 1000 g). Cart weighs 500 g — should be rejected
+    // by the min constraint. Without unit normalization the PDK would read min=1 g and
+    // wrongly accept the 500 g cart.
+    enqueueCapabilitiesPerType([
+        'PACKAGE' => [capabilityResult('POSTNL', 100, ['PACKAGE'], ['STANDARD_DELIVERY'], 1, 23, 'kg')],
+    ]);
+
+    /** @var DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createAllCarrierSettings(makeCart('NL', 500));
+
+    expect($result['packageType'])->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME);
 });

@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -141,7 +142,7 @@ function makeReturnShipmentCollection(string $carrierName = RefCapabilitiesShare
 
 // Site 3 case 1: carrier supports returns — no fallback path, no notification emitted.
 it('keeps the original carrier when it supports returns', function () {
-    $supportsReturns = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+    $supportsReturns = new class(Pdk::get(CarrierCapabilitiesRepository::class), Pdk::get(WeightServiceInterface::class)) extends CapabilitiesValidationService {
         public function supportsReturns(Carrier $carrier, string $countryCode): bool { return true; }
     };
     mockPdkProperties([CapabilitiesValidationService::class => $supportsReturns]);
@@ -163,7 +164,7 @@ it('swaps to default carrier and emits a notification when the carrier lacks ret
     $account->shops->first()->defaultCarrier = RefCapabilitiesSharedCarrierV2::POSTNL;
     $repo->store($account);
 
-    $noReturns = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+    $noReturns = new class(Pdk::get(CarrierCapabilitiesRepository::class), Pdk::get(WeightServiceInterface::class)) extends CapabilitiesValidationService {
         public function supportsReturns(Carrier $carrier, string $countryCode): bool { return false; }
     };
     mockPdkProperties([CapabilitiesValidationService::class => $noReturns]);
@@ -194,7 +195,7 @@ it('keeps the original carrier and emits no notification when the carrier lacks 
     $account->shops->first()->defaultCarrier = null;
     $repo->store($account);
 
-    $noReturns = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+    $noReturns = new class(Pdk::get(CarrierCapabilitiesRepository::class), Pdk::get(WeightServiceInterface::class)) extends CapabilitiesValidationService {
         public function supportsReturns(Carrier $carrier, string $countryCode): bool { return false; }
     };
     mockPdkProperties([CapabilitiesValidationService::class => $noReturns]);

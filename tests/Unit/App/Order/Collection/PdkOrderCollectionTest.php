@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Order\Collection;
 
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
@@ -215,7 +216,10 @@ it('updates order shipments by order ids', function () {
 
 it('can generate return shipments', function () {
     // Stub CapabilitiesValidationService::supportsReturns to always return true.
-    $capabilitiesValidationService = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+    $capabilitiesValidationService = new class(
+        Pdk::get(CarrierCapabilitiesRepository::class),
+        Pdk::get(WeightServiceInterface::class)
+    ) extends CapabilitiesValidationService {
         public function supportsReturns(Carrier $carrier, string $countryCode): bool
         {
             return true;
@@ -263,7 +267,10 @@ it('can generate return shipments', function () {
 
 it('skips shipments from carriers without return capabilities when generating return shipments', function () {
     // Stub CapabilitiesValidationService::supportsReturns to always return false.
-    $capabilitiesValidationService = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+    $capabilitiesValidationService = new class(
+        Pdk::get(CarrierCapabilitiesRepository::class),
+        Pdk::get(WeightServiceInterface::class)
+    ) extends CapabilitiesValidationService {
         public function supportsReturns(Carrier $carrier, string $countryCode): bool
         {
             return false;
@@ -304,7 +311,10 @@ it('skips shipments from carriers without return capabilities when generating re
 
 it('skips shipments without a destination country code when generating return shipments', function () {
     // supportsReturns must NOT be invoked when the destination is unknown.
-    $capabilitiesValidationService = new class(Pdk::get(CarrierCapabilitiesRepository::class)) extends CapabilitiesValidationService {
+    $capabilitiesValidationService = new class(
+        Pdk::get(CarrierCapabilitiesRepository::class),
+        Pdk::get(WeightServiceInterface::class)
+    ) extends CapabilitiesValidationService {
         public function supportsReturns(Carrier $carrier, string $countryCode): bool
         {
             throw new \LogicException('supportsReturns must not be called without a destination');

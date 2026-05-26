@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Carrier\Service;
 
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
@@ -12,6 +13,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesValueWithUnit;
 
 /**
  * Business logic for validating carrier capabilities.
@@ -30,9 +32,17 @@ class CapabilitiesValidationService
      */
     private $capabilitiesRepository;
 
-    public function __construct(CarrierCapabilitiesRepository $capabilitiesRepository)
-    {
+    /**
+     * @var \MyParcelNL\Pdk\Base\Contract\WeightServiceInterface
+     */
+    private $weightService;
+
+    public function __construct(
+        CarrierCapabilitiesRepository $capabilitiesRepository,
+        WeightServiceInterface $weightService
+    ) {
         $this->capabilitiesRepository = $capabilitiesRepository;
+        $this->weightService          = $weightService;
     }
 
     /**
@@ -150,11 +160,11 @@ class CapabilitiesValidationService
             return true;
         }
 
-        $min = $weightConstraint->getMin() ? (int) $weightConstraint->getMin()->getValue() : null; // @phpstan-ignore-line
-        $max = $weightConstraint->getMax() ? (int) $weightConstraint->getMax()->getValue() : null; // @phpstan-ignore-line
+        $min = $this->extractWeightInGrams($weightConstraint->getMin());
+        $max = $this->extractWeightInGrams($weightConstraint->getMax());
 
-        return ($max === null || $weight <= $max) // @phpstan-ignore-line
-            && ($min === null || $weight >= $min); // @phpstan-ignore-line
+        return ($max === null || $weight <= $max)
+            && ($min === null || $weight >= $min);
     }
 
     /**
@@ -233,10 +243,35 @@ class CapabilitiesValidationService
                 continue;
             }
 
-            $carrierMax = (int) $props->getWeight()->getMax()->getValue();
-            $maxWeight  = $maxWeight === null ? $carrierMax : max($maxWeight, $carrierMax);
+            $carrierMax = $this->extractWeightInGrams($props->getWeight()->getMax());
+
+            if ($carrierMax === null) {
+                continue;
+            }
+
+            $maxWeight = $maxWeight === null ? $carrierMax : max($maxWeight, $carrierMax);
         }
 
         return $maxWeight;
+    }
+
+    /**
+     * Convert a SDK value-with-unit weight into grams.
+     *
+     * The capabilities API returns weight constraints as `{value, unit}` where the unit
+     * may be `g` or `kg`. The PDK works in grams everywhere downstream, so normalize at
+     * the read boundary. Returns `null` when the value or unit is missing so callers can
+     * skip the constraint rather than misinterpret it.
+     */
+    private function extractWeightInGrams(?RefTypesValueWithUnit $valueWithUnit): ?int
+    {
+        if (! $valueWithUnit) {
+            return null;
+        }
+
+        $value = (float) $valueWithUnit->getValue();
+        $unit  = (string) $valueWithUnit->getUnit();
+
+        return $this->weightService->convertToGrams($value, $unit);
     }
 }
