@@ -108,11 +108,14 @@ class UpdateAccountAction implements ActionInterface
             return;
         }
 
-        $resolved = $this->implicationsService->getDefaultCarrierName($shop->id);
+        $apiResult = $this->implicationsService->getDefaultCarrierName($shop->id);
 
-        if ($resolved === null) {
-            // Service returned null (transient error). Carry forward the previously persisted
-            // value when available so a single flaky call doesn't wipe the cached default.
+        // Availability is checked against the in-memory $shop->carriers (just resolved from
+        // contract definitions); the persisted account is one step behind at this point.
+        if ($apiResult !== null && $shop->carriers->contains('carrier', $apiResult)) {
+            $resolved = $apiResult;
+        } else {
+            // Carry forward so a single missing/unavailable implication does not wipe a good default.
             $previousAccount = $this->pdkAccountRepository->getAccount();
             $previousShop    = $previousAccount ? $previousAccount->shops->first() : null;
             $resolved        = $previousShop ? $previousShop->defaultCarrier : null;
@@ -121,6 +124,8 @@ class UpdateAccountAction implements ActionInterface
         if ($resolved !== null) {
             $shop->defaultCarrier = $resolved;
         }
+
+        Logger::debug(sprintf('Shop default carrier set to %s', $shop->defaultCarrier ?? 'null'));
     }
 
     /**
@@ -130,19 +135,14 @@ class UpdateAccountAction implements ActionInterface
      */
     protected function setShopCarriers(Account $account): void
     {
-        // Carriers are nested under shops, because one API key falls under one shop.
-        // The endpoint and our model implies more than one shop can be used. This in reality is never the case here since 1 API key = 1 Shop. We can safely use the first
-        $shop = $account->shops->first();
-        // Fetch the carriers available to the account and store them in the shop model for easy access throughout the plugin
+        // The API key always resolves to exactly one shop, despite the collection shape.
+        $shop           = $account->shops->first();
         $shop->carriers = $this->carrierCapabilitiesRepository->getContractDefinitions();
     }
 
     /**
-     * Stores the validity of the api key in the account, for use in
-     * src/App/Account/Repository/AbstractPdkAccountRepository.php
-     * When the user rotates the key in the backoffice, the plugin will start receiving 401 responses from the API,
-     * however for the purpose of the PDK the api key is still valid. Upon receiving the errors the user will no doubt
-     * update their api key in the settings at which point the validity is reassessed here (updateAndSaveAccount).
+     * Persist the API key's validity flag for {@see AbstractPdkAccountRepository} to consult.
+     * Re-evaluated whenever the user (re-)saves a key after a 401 surfaces in the backoffice.
      *
      * @param  bool $apiKeyIsValid
      *
@@ -165,19 +165,16 @@ class UpdateAccountAction implements ActionInterface
      */
     protected function updateAccountSettings(array $settings): AccountSettings
     {
-        // Get existing account settings to preserve them
         $existingSettings = $this->pdkSettingsRepository->all()->account;
-
-        // Always merge with existing settings
-        $existingData    = $existingSettings->toArray();
-        $mergedData      = array_merge($existingData, $settings);
-        $accountSettings = new AccountSettings($mergedData);
+        $mergedData       = array_merge($existingSettings->toArray(), $settings);
+        $accountSettings  = new AccountSettings($mergedData);
 
         $this->pdkSettingsRepository->storeSettings($accountSettings);
 
-        // The capabilitiesService only sets the API key from its constructor
-        // Call the refresh method to update the API key in the service so it can be used immediately after updating the account settings
+        // SDK services capture the API key on their Configuration at construction (DI-time, before
+        // this request stored the new key). Refresh each service that this request will still call.
         $this->capabilitiesService->refreshApiConfig();
+        $this->implicationsService->refreshApiConfig();
 
         return $accountSettings;
     }
@@ -196,7 +193,7 @@ class UpdateAccountAction implements ActionInterface
             return;
         }
 
-        // this try is for the case when the UI is no longer supplying an empty api key when you click "remove api key"
+        // Guards against legacy "remove API key" UI paths that surfaced as exceptions here.
         try {
             $account = $this->accountRepository->getAccount();
             Pdk::get(PropositionService::class)->setActivePropositionId($account->platformId);
