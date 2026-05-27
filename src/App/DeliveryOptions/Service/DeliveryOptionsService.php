@@ -118,32 +118,37 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             'priceStandardDelivery' => $showPriceSurcharge ? $cart->shipmentPrice : 0,
         ];
 
-        // Collect contractIds from the destination-filtered carriers (they had contractId set by filterCarriersForPackageType).
-        $contractIdByCarrier = [];
+        // Index filteredCarriers by name. Carriers present here have contractId set where the
+        // capabilities API returned one. This also covers the fallback case where getValidCarrierOptions()
+        // returned $allCarriers (no carrier has delivery options enabled) — all carriers are already in the map.
+        $carrierMap = [];
         foreach ($carriers as $carrier) {
-            if (null !== $carrier->contractId) {
-                $contractIdByCarrier[$carrier->carrier] = $carrier->contractId;
+            if (null !== $carrier->carrier) {
+                $carrierMap[$carrier->carrier] = $carrier;
             }
         }
 
-        // Build carrierSettings for ALL enabled carriers, not just those returned by the
-        // destination-country-filtered capabilities call. The delivery options widget determines
-        // actual per-destination availability via its own capabilities proxy call; carrierSettings
-        // only carries the merchant's configuration (prices, allow-flags).
+        // Augment with enabled carriers not already in the map (e.g. GLS when the destination-country
+        // capabilities call does not return it for NL, while the widget's own proxy call does).
+        // The delivery options widget determines actual per-destination availability via its own capabilities
+        // proxy call; carrierSettings only carries the merchant's configuration (prices, allow-flags).
         $carrierSettingsData = Settings::get(CarrierSettings::ID);
 
-        foreach ($this->carrierRepository->all() as $carrier) {
-            if (null === $carrier->carrier) {
+        foreach ($this->carrierRepository->all() as $extra) {
+            if (null === $extra->carrier || isset($carrierMap[$extra->carrier])) {
                 continue;
             }
-            if (! $this->isCarrierEnabled($carrierSettingsData, $carrier)) {
-                continue;
+            if ($this->isCarrierEnabled($carrierSettingsData, $extra)) {
+                $carrierMap[$extra->carrier] = $extra;
             }
+        }
+
+        foreach ($carrierMap as $carrier) {
             // Use the legacy identifier for the delivery options, as that endpoint does not yet support the new identifiers.
             $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
             $settings['carrierSettings'][$identifier] = array_merge(
                 $this->createCarrierSettings($carrier, $cart, $packageType),
-                ['contractId' => $contractIdByCarrier[$carrier->carrier] ?? null]
+                ['contractId' => $carrier->contractId ?? null]
             );
         }
 
