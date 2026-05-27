@@ -61,10 +61,10 @@ it('formats delivery options correctly', function () {
     expect($result['shipmentOptions']['oversizedPackage'])->toBeInstanceOf(ArrayObject::class);
     expect($result['shipmentOptions']['requiresAgeVerification'])->toBeInstanceOf(ArrayObject::class);
 
-    // Check that insurance has amount in micro units
+    // Insurance: 50000 cents (€500) → 500_000_000 micros (€500 × 1_000_000)
     expect($result['shipmentOptions']['insurance'])
         ->toBeArray()
-        ->toHaveKey('amount', 50000 * 1000000);
+        ->toHaveKey('amount', 50000 * 10_000);
 });
 
 it('returns empty object when no shipment options are enabled', function () {
@@ -91,7 +91,7 @@ it('returns empty object when no shipment options are enabled', function () {
 
 it('correctly formats insurance amount in micro units', function () {
     $shipmentOptions = new ShipmentOptions([
-        'insurance' => 100, // €100
+        'insurance' => 10000, // 10000 cents = €100
     ]);
 
     $deliveryOptions = new DeliveryOptions([
@@ -101,11 +101,12 @@ it('correctly formats insurance amount in micro units', function () {
     $resource = new DeliveryOptionsV1Resource($deliveryOptions);
     $result = $resource->format();
 
+    // 10000 cents (€100) → 100_000_000 micros (€100 × 1_000_000)
     expect($result['shipmentOptions'])
         ->toHaveKey('insurance')
         ->and($result['shipmentOptions']['insurance'])
         ->toBeArray()
-        ->toHaveKey('amount', 100 * 1000000);
+        ->toHaveKey('amount', 10000 * 10_000);
 });
 
 it('ignores inherited shipment options', function () {
