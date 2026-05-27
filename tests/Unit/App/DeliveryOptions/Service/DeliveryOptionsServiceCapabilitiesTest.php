@@ -133,7 +133,7 @@ function enqueueCapabilitiesPerType(array $responsesPerType): void
     }
 }
 
-it('excludes carrier when package type is not in capabilities', function () {
+it('includes enabled carrier in carrierSettings even when absent from capabilities response', function () {
     storeCarrierSettings([
         RefCapabilitiesSharedCarrierV2::POSTNL      => true,
         RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU  => true,
@@ -154,7 +154,8 @@ it('excludes carrier when package type is not in capabilities', function () {
 
     resetStorageCache();
 
-    // Capabilities call for PACKAGE: only PostNL available for NL.
+    // Capabilities call for PACKAGE: only PostNL returned for NL.
+    // DHL_FOR_YOU is absent from the capabilities response but still enabled in settings.
     enqueueCapabilitiesPerType([
         'PACKAGE' => [capabilityResult('POSTNL', 100, ['PACKAGE'])],
     ]);
@@ -167,9 +168,14 @@ it('excludes carrier when package type is not in capabilities', function () {
     $postnlId = FrontendData::getLegacyCarrierIdentifier(RefCapabilitiesSharedCarrierV2::POSTNL);
     $dhlId    = FrontendData::getLegacyCarrierIdentifier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU);
 
+    // Both carriers must appear — the widget's own capabilities proxy call determines
+    // actual per-destination availability; carrierSettings only carries merchant config.
     expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
         ->and($result['carrierSettings'])->toHaveKey($postnlId)
-        ->and($result['carrierSettings'])->not->toHaveKey($dhlId);
+        ->and($result['carrierSettings'])->toHaveKey($dhlId)
+        // PostNL was in capabilities → contractId propagated; DHL_FOR_YOU was not → null.
+        ->and($result['carrierSettings'][$postnlId]['contractId'])->toBe(100)
+        ->and($result['carrierSettings'][$dhlId]['contractId'])->toBeNull();
 });
 
 it('excludes carriers when weight exceeds maximum', function () {
