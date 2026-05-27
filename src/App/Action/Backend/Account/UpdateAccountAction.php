@@ -141,7 +141,7 @@ class UpdateAccountAction implements ActionInterface
     }
 
     /**
-     * Persist the API key's validity flag for {@see AbstractPdkAccountRepository} to consult.
+     * Persist the API key's validity flag for {@see \MyParcelNL\Pdk\App\Account\Repository\AbstractPdkAccountRepository} to consult.
      * Re-evaluated whenever the user (re-)saves a key after a 401 surfaces in the backoffice.
      *
      * @param  bool $apiKeyIsValid
