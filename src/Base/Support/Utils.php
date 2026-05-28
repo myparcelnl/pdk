@@ -32,17 +32,6 @@ class Utils extends \MyParcelNL\Sdk\Helper\Utils
     }
 
     /**
-     * Clear the static class cast cache. Used in test teardown to prevent stale cached model objects
-     * (which are mutable) from leaking between tests.
-     *
-     * @return void
-     */
-    public static function clearCastCache(): void
-    {
-        self::$classCastCache = [];
-    }
-
-    /**
      * @template T
      * @param  class-string<T> $class
      * @param  mixed           ...$args

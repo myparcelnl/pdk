@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Proposition\Service;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Proposition\Model\PropositionConfig;
-use RuntimeException;
 
 class PropositionService
 {
