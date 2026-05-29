@@ -229,3 +229,204 @@ it('supportsReturns is false when /capabilities (direction: INBOUND) returns an 
 
     expect($service->supportsReturns($carrier, 'NL'))->toBeFalse();
 });
+
+/**
+ * Fetch one deserialized capability from the mock queue for direct testing of
+ * methods that accept a RefCapabilitiesResponseCapabilityV2.
+ *
+ * @param  array $capabilityArray Raw shape matching ExampleCapabilitiesResponse entries
+ *
+ * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2
+ */
+function fetchCapability(array $capabilityArray)
+{
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([$capabilityArray]));
+
+    /** @var CapabilitiesValidationService $service */
+    $service      = Pdk::get(CapabilitiesValidationService::class);
+    $capabilities = $service->getRepository()->getCapabilities([
+        'recipient'    => ['country_code' => 'NL'],
+        'package_type' => 'PACKAGE',
+        // Unique nonce so each test gets its own cache key
+        '__test_nonce' => uniqid('cap', true),
+    ]);
+
+    return $capabilities[0];
+}
+
+it('supportsWeight returns true when capability has no physicalProperties', function () {
+    $capability = fetchCapability([
+        'carrier'          => 'POSTNL',
+        'contract'         => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'     => ['PACKAGE'],
+        'options'          => (object) [],
+        'deliveryTypes'    => ['STANDARD_DELIVERY'],
+        'transactionTypes' => [],
+        'collo'            => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsWeight($capability, 5000))->toBeTrue();
+});
+
+it('supportsWeight returns true when physicalProperties has no weight constraint', function () {
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => (object) [],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsWeight($capability, 5000))->toBeTrue();
+});
+
+it('supportsWeight accepts weights within [min, max] expressed in grams', function () {
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => [
+            'weight' => [
+                'min' => ['value' => 1000, 'unit' => 'g'],
+                'max' => ['value' => 20000, 'unit' => 'g'],
+            ],
+        ],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsWeight($capability, 5000))->toBeTrue();
+});
+
+it('supportsWeight rejects weight above max', function () {
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => [
+            'weight' => [
+                'min' => ['value' => 1000, 'unit' => 'g'],
+                'max' => ['value' => 20000, 'unit' => 'g'],
+            ],
+        ],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsWeight($capability, 25000))->toBeFalse();
+});
+
+it('supportsWeight rejects weight below min', function () {
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => [
+            'weight' => [
+                'min' => ['value' => 1000, 'unit' => 'g'],
+                'max' => ['value' => 20000, 'unit' => 'g'],
+            ],
+        ],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsWeight($capability, 500))->toBeFalse();
+});
+
+it('supportsWeight normalizes kg constraints to grams before comparing', function () {
+    // API returns max as 23 kg (= 23 000 g). A weight of 15 000 g must still fit;
+    // a weight of 25 000 g must not. Without unit normalization the 23 would be
+    // treated as 23 g and even 100 g would be rejected.
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => [
+            'weight' => [
+                'min' => ['value' => 1, 'unit' => 'kg'],
+                'max' => ['value' => 23, 'unit' => 'kg'],
+            ],
+        ],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsWeight($capability, 15000))->toBeTrue()
+        ->and($service->supportsWeight($capability, 25000))->toBeFalse();
+});
+
+it('supportsWeight skips the min check when only max is defined', function () {
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => [
+            'weight' => [
+                'max' => ['value' => 20000, 'unit' => 'g'],
+            ],
+        ],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    // Below any plausible min, but within max, must pass: min is unconstrained.
+    expect($service->supportsWeight($capability, 1))->toBeTrue();
+});
+
+it('supportsWeight skips the max check when only min is defined', function () {
+    $capability = fetchCapability([
+        'carrier'            => 'POSTNL',
+        'contract'           => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'       => ['PACKAGE'],
+        'options'            => (object) [],
+        'physicalProperties' => [
+            'weight' => [
+                'min' => ['value' => 1000, 'unit' => 'g'],
+            ],
+        ],
+        'deliveryTypes'      => ['STANDARD_DELIVERY'],
+        'transactionTypes'   => [],
+        'collo'              => ['max' => 1],
+    ]);
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    // Far above any plausible max, but within min, must pass: max is unconstrained.
+    expect($service->supportsWeight($capability, 999999))->toBeTrue();
+});
