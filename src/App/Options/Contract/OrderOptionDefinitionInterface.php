@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Contract;
 
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
-
 interface OrderOptionDefinitionInterface
 {
     /**
@@ -30,18 +28,38 @@ interface OrderOptionDefinitionInterface
     public function getShipmentOptionsKey(): ?string;
 
     /**
-     * Get the key that represents the option in the proposition.
+     * Get the camelCase property key that represents this option in the capabilities options object
+     * (RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2).
      *
      * @return null|string
      */
-    public function getPropositionKey(): ?string;
+    public function getCapabilitiesOptionsKey(): ?string;
 
     /**
-     * Validates if the option is allowed for the current carrier.
+     * Get the delivery options "allow" toggle key (e.g. 'allowSignature').
      *
-     * @param  \MyParcelNL\Pdk\Validation\Validator\CarrierSchema $carrierSchema
-     *
-     * @return bool
+     * @return null|string
      */
-    public function validate(CarrierSchema $carrierSchema): bool;
+    public function getAllowSettingsKey(): ?string;
+
+    /**
+     * Get the price surcharge key (e.g. 'priceSignature').
+     *
+     * @return null|string
+     */
+    public function getPriceSettingsKey(): ?string;
+
+    /**
+     * Get the cast type for this option on the ShipmentOptions model.
+     *
+     * @return string
+     */
+    public function getShipmentOptionsCast(): string;
+
+    /**
+     * Get the default value for this option on the ShipmentOptions model.
+     *
+     * @return mixed
+     */
+    public function getShipmentOptionsDefault();
 }

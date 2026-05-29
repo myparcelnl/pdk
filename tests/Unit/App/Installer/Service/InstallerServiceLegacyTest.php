@@ -6,12 +6,13 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
-use MyParcelNL\Pdk\Account\Platform;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Proposition\Proposition;
+use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockLegacyMigrationService;
@@ -31,7 +32,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(
     new UsesMockPdkInstance([
-        'platform' => value(Platform::SENDMYPARCEL_NAME),
+        'platform' => value(Proposition::SENDMYPARCEL_NAME),
         'appInfo'  => factory(function (): AppInfo {
             return new AppInfo([
                 'name'    => 'test',
@@ -50,11 +51,22 @@ usesShared(
     ])
 );
 
+beforeEach(function () {
+    /** @var \MyParcelNL\Pdk\Proposition\Service\PropositionService $propositionService */
+    $propositionService = Pdk::get(PropositionService::class);
+    $propositionService->clearCache();
+    $propositionService->setActivePropositionId(Proposition::SENDMYPARCEL_ID);
+});
+
 afterEach(function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository $settingsRepository */
     $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    /** @var \MyParcelNL\Pdk\Proposition\Service\PropositionService $propositionService */
+    $propositionService = Pdk::get(PropositionService::class);
 
     $settingsRepository->reset();
+    $propositionService->clearActivePropositionId();
+    $propositionService->clearCache();
 });
 
 function expectSettingsToContainLegacy(array $values): void

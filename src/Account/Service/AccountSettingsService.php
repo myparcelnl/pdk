@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Service;
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
@@ -11,12 +12,15 @@ use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
+    /**
+     * @var \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface
+     */
+    private $featuresService;
+
     /**
      * @var \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface
      */
@@ -24,10 +28,14 @@ class AccountSettingsService implements AccountSettingsServiceInterface
 
     /**
      * @param  \MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface $pdkAccountRepository
+     * @param  \MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface   $featuresService
      */
-    public function __construct(PdkAccountRepositoryInterface $pdkAccountRepository)
-    {
+    public function __construct(
+        PdkAccountRepositoryInterface  $pdkAccountRepository,
+        AccountFeaturesServiceInterface $featuresService
+    ) {
         $this->pdkAccountRepository = $pdkAccountRepository;
+        $this->featuresService      = $featuresService;
     }
 
     /**
@@ -39,16 +47,12 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     }
 
     /**
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     * @deprecated use getCarriers()
-     */
-    public function getCarrierOptions(): CarrierCollection
-    {
-        return $this->getCarriers();
-    }
-
-    /**
-     * Return the carriers for the current shop, filtered by the carriers available in the proposition service.
+     * Return the carriers saved for the current shop.
+     *
+     * Filters out carriers this PDK version does not support so a server-side
+     * proposition update cannot expose an unsupported carrier to the admin UI.
+     * @see Carrier::isSupported()
+     *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
     public function getCarriers(): CarrierCollection
@@ -59,33 +63,12 @@ class AccountSettingsService implements AccountSettingsServiceInterface
             return new CarrierCollection();
         }
 
-        try {
-            $allowedCarriers = $this->getPropositionCarriers();
-        } catch (\InvalidArgumentException $e) {
-            Logger::error('Could not fetch carriers from proposition service: ' . $e->getMessage());
-            return new CarrierCollection();
-        }
-
-        return $shop->carriers
-            ->filter(function (Carrier $carrier) use ($allowedCarriers) {
-                $isAllowed = $allowedCarriers->contains('name', $carrier->name);
-
-                return $isAllowed && $carrier->enabled && !empty($carrier->outboundFeatures->toArray());
-            })
-            ->sort(function (Carrier $carrierA, Carrier $carrierB) use ($allowedCarriers) {
-                $aIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierA) {
-                    return $allowedCarrier->name === $carrierA->name;
-                }, true);
-
-                $bIndex = $allowedCarriers->search(function (Carrier $allowedCarrier) use ($carrierB) {
-                    return $allowedCarrier->name === $carrierB->name;
-                }, true);
-
-                return $aIndex === $bIndex
-                    ? $carrierA->contractId <=> $carrierB->contractId
-                    : $aIndex <=> $bIndex;
-            })
-            ->values();
+        // The SDK already rejects unknown V2 carriers at hydration time, leaving the
+        // failed entries as raw arrays in the collection. Drop those alongside any
+        // Carriers whose name our local map doesn't recognise.
+        return $shop->carriers->filter(static function ($carrier): bool {
+            return $carrier instanceof Carrier && Carrier::isSupported($carrier->carrier);
+        })->values();
     }
 
     /**
@@ -117,7 +100,6 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $account ? $account->generalSettings->hasCarrierSmallPackageContract : false;
     }
 
-
     /**
      * @param  string $feature
      *
@@ -143,9 +125,32 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         return $this->hasAccount()
             && (new Collection(Pdk::get('carriersWithTaxFields') ?? []))
-                ->contains(function (string $carrier) {
-                    return $this->hasCarrier($carrier);
-                });
+            ->contains(function (string $carrier) {
+                return $this->hasCarrier($carrier);
+            });
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrderModeVersion(): int
+    {
+        return $this->featuresService->getOrderModeVersion();
+    }
+
+    /**
+     * The order management version the PDK should behave as.
+     *
+     * Delegates to {@see AccountFeaturesServiceInterface::getEffectiveOrderMode()} —
+     * see there for intent and future evolution. Use this (or its facade
+     * {@see \MyParcelNL\Pdk\Facade\AccountSettings::getEffectiveOrderMode()}) for any
+     * code path that adapts behaviour to the order management mode.
+     *
+     * @return int
+     */
+    public function getEffectiveOrderMode(): int
+    {
+        return $this->featuresService->getEffectiveOrderMode();
     }
 
     /**
@@ -153,7 +158,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
      */
     public function usesOrderMode(): bool
     {
-        return $this->getAccount()->generalSettings->orderMode;
+        return $this->featuresService->usesOrderMode();
     }
 
     /**
@@ -165,19 +170,8 @@ class AccountSettingsService implements AccountSettingsServiceInterface
     {
         return $this->hasAccount()
             && $this->getCarriers()
-                ->contains(function (Carrier $carrier) use ($carrierName) {
-                    return $carrier->name === $carrierName;
-                });
-    }
-
-    /**
-     * Get supported carriers from proposition service.
-     *
-     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
-     */
-    private function getPropositionCarriers(): CarrierCollection
-    {
-        $propositionService = Pdk::get(PropositionService::class);
-        return $propositionService->getCarriers(true);
+            ->contains(function (Carrier $carrier) use ($carrierName) {
+                return $carrier->carrier === $carrierName;
+            });
     }
 }

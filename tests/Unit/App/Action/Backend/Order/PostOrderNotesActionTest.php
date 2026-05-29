@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection,StaticClosureCanBeUsedInspection */
 
 declare(strict_types=1);
@@ -6,6 +7,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
 use MyParcelNL\Pdk\Account\Model\Account;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
@@ -15,7 +17,6 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderNote;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Actions;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrderNotesResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
@@ -34,10 +35,9 @@ it('posts order notes if order has notes', function (
     TestBootstrapper::hasApiKey();
 
     (new FactoryCollection([
+        factory(Account::class)->withShops()->withSubscriptionFeatures([PdkAccountFeaturesService::FEATURE_ORDER_NOTES]),
         $ordersFactory,
         $notesFactory,
-        factory(OrderSettings::class)->withOrderMode(true),
-        factory(Account::class)->withSubscriptionFeatures([Account::FEATURE_ORDER_NOTES]),
     ]))->store();
 
     $orderCollection = new Collection($ordersFactory->make());
@@ -125,10 +125,6 @@ it('does not post order notes if account does not have feature', function (PdkOr
 
     $orderCollection = $factory->store()
         ->make();
-
-    factory(OrderSettings::class)
-        ->withOrderMode(true)
-        ->store();
 
     Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
         'orderIds' => (new Collection($orderCollection))

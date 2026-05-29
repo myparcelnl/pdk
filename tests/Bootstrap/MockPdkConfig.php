@@ -23,6 +23,10 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
+use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
+use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule\ImplicationsService;
+use MyParcelNL\Pdk\SdkApi\Service\Iam\WhoamiService;
 use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Service\AuditService;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
@@ -36,7 +40,6 @@ use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use MyParcelNL\Pdk\Tests\Api\Guzzle7ClientAdapter;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
 use Psr\Log\LoggerInterface;
 use function DI\factory;
 use function DI\get;
@@ -76,7 +79,6 @@ class MockPdkConfig
             AuditServiceInterface::class                => get(AuditService::class),
             PdkAuditRepositoryInterface::class          => get(MockPdkAuditRepository::class),
             BackendEndpointServiceInterface::class      => get(MockBackendEndpointService::class),
-            CarrierSchema::class                        => get(MockCarrierSchema::class),
             ClientAdapterInterface::class               => get(Guzzle7ClientAdapter::class),
             ConfigInterface::class                      => get(MockConfig::class),
             CronServiceInterface::class                 => get(MockCronService::class),
@@ -105,6 +107,11 @@ class MockPdkConfig
             StorageInterface::class                     => get(MockMemoryCacheStorage::class),
             TaxServiceInterface::class                  => get(MockTaxService::class),
             ViewServiceInterface::class                 => get(MockViewService::class),
+
+            CapabilitiesService::class                  => get(MockCapabilitiesService::class),
+            ImplicationsService::class                  => get(MockImplicationsService::class),
+            WhoamiService::class                        => get(MockWhoamiService::class),
+            CarrierCapabilitiesRepository::class        => get(MockCarrierCapabilitiesRepository::class),
 
             MemoryCacheStorage::class => get(MockMemoryCacheStorage::class),
         ];

@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Service;
 
+use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -48,19 +56,22 @@ it('returns the correct list of delivery option settings', function () {
     $service = new DeliveryOptionsResetService();
     $settings = $service->getDeliveryOptionSettings();
 
-    expect($settings)->toHaveLength(12)
-        ->and($settings)->toContain(
-            CarrierSettings::ALLOW_DELIVERY_OPTIONS,
-            CarrierSettings::ALLOW_STANDARD_DELIVERY,
-            CarrierSettings::ALLOW_MORNING_DELIVERY,
-            CarrierSettings::ALLOW_EVENING_DELIVERY,
-            CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-            CarrierSettings::ALLOW_MONDAY_DELIVERY,
-            CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-            CarrierSettings::ALLOW_SIGNATURE,
-            CarrierSettings::ALLOW_ONLY_RECIPIENT,
-            CarrierSettings::ALLOW_PRIORITY_DELIVERY,
-            CarrierSettings::ALLOW_PICKUP_LOCATIONS,
-            CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS
-        );
+    // Length not pinned — auto-derivation may grow the list as the SDK enum
+    // (or DELIVERY_OPTION_*) gains entries. What matters is that the known
+    // delivery toggles are all present.
+    expect($settings)->toContain(
+        SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME),
+        SettingKey::allow(RefTypesDeliveryTypeV2::STANDARD),
+        SettingKey::allow(RefTypesDeliveryTypeV2::MORNING),
+        SettingKey::allow(RefTypesDeliveryTypeV2::EVENING),
+        (new SameDayDeliveryDefinition())->getAllowSettingsKey(),
+        SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_MONDAY),
+        (new SaturdayDeliveryDefinition())->getAllowSettingsKey(),
+        (new SignatureDefinition())->getAllowSettingsKey(),
+        (new OnlyRecipientDefinition())->getAllowSettingsKey(),
+        (new PriorityDeliveryDefinition())->getAllowSettingsKey(),
+        SettingKey::allow(RefTypesDeliveryTypeV2::PICKUP),
+        // Storage attribute is the legacy 'allowDeliveryTypeExpress', not the clean expressDelivery key.
+        'allowDeliveryTypeExpress'
+    );
 });

@@ -12,8 +12,9 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  * @property string                $method
  * @property array{string, string} $parameters
  * @property string                $path
- * @property string                $property
+ * @property string|null           $property
  * @property string|null           $responseProperty
+ * @property bool                  $useDataEnvelope
  */
 class Request implements RequestInterface
 {
@@ -43,7 +44,7 @@ class Request implements RequestInterface
     protected $path = '';
 
     /**
-     * @var string
+     * @var string|null
      */
     private $property;
 
@@ -51,6 +52,11 @@ class Request implements RequestInterface
      * @var null|string
      */
     private $responseProperty;
+
+    /**
+     * @var bool
+     */
+    private $useDataEnvelope = true;
 
     /**
      * @param  array $config
@@ -64,6 +70,7 @@ class Request implements RequestInterface
         $this->path             = $config['path'] ?? $this->path;
         $this->property         = $config['property'] ?? $this->property;
         $this->responseProperty = $config['responseProperty'] ?? $this->responseProperty;
+        $this->useDataEnvelope  = $config['useDataEnvelope'] ?? $this->useDataEnvelope;
     }
 
     /**
@@ -128,6 +135,14 @@ class Request implements RequestInterface
     public function getUniqueKey(): string
     {
         return sprintf('%s?%s:%s', $this->getPath(), $this->getQueryString(), http_build_query($this->getHeaders()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUseDataEnvelope(): bool
+    {
+        return $this->useDataEnvelope;
     }
 
     /**

@@ -9,7 +9,9 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 
 /**
- * This will replace the SDK one day...
+ * Service for making API calls to the MyParcel API.
+ *
+ * @deprecated use the generated SDK instead. Use specific services from the SdkApi namespace, such as those in the MyParcelNL\Pdk\SdkApi\Service\CoreApi namespace.
  */
 class MyParcelApiService extends AbstractApiService
 {
@@ -32,26 +34,5 @@ class MyParcelApiService extends AbstractApiService
         $apiKey = Settings::get(AccountSettings::API_KEY, AccountSettings::ID);
 
         return $apiKey ? sprintf('bearer %s', base64_encode($apiKey)) : null;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getUserAgentHeader(): string
-    {
-        $userAgentStrings = [];
-        $userAgents       = array_merge(
-            Pdk::get('userAgent'),
-            [
-                'MyParcelNL-PDK' => Pdk::get('pdkVersion'),
-                'php'            => PHP_VERSION,
-            ]
-        );
-
-        foreach ($userAgents as $platform => $version) {
-            $userAgentStrings[] = sprintf('%s/%s', $platform, $version);
-        }
-
-        return implode(' ', $userAgentStrings);
     }
 }

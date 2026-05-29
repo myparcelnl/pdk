@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountRepositoryInterface;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Service\AccountSettingsService;
+use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\Api\Contract\ApiServiceInterface;
 use MyParcelNL\Pdk\Api\Service\AddressesApiService;
 use MyParcelNL\Pdk\Api\Service\MyParcelApiService;
@@ -55,8 +57,6 @@ use MyParcelNL\Pdk\Frontend\Service\FrontendRenderService;
 use MyParcelNL\Pdk\Frontend\Service\ScriptService;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
-use MyParcelNL\Pdk\Platform\PlatformManager;
-use MyParcelNL\Pdk\Platform\PlatformManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
@@ -83,6 +83,7 @@ return [
     /**
      * Handles account settings.
      */
+    AccountFeaturesServiceInterface::class     => autowire(PdkAccountFeaturesService::class),
     AccountSettingsServiceInterface::class     => autowire(AccountSettingsService::class),
 
     /**
@@ -94,11 +95,6 @@ return [
      * Used to manage audit data.
      */
     AuditServiceInterface::class               => autowire(AuditService::class),
-
-    /**
-     * Retrieves carriers from the config.
-     */
-    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     /**
      * Does calculations on carts.
@@ -166,11 +162,6 @@ return [
     NotificationServiceInterface::class        => autowire(NotificationService::class),
 
     /**
-     * Handles platform specific logic.
-     */
-    PlatformManagerInterface::class            => autowire(PlatformManager::class),
-
-    /**
      * Handles CDN urls.
      */
     ScriptServiceInterface::class              => autowire(ScriptService::class),
@@ -199,6 +190,7 @@ return [
      * Addresses microservice proxy
      */
     AddressesApiService::class                 => autowire(),
+
 
     /**
      * @todo remove in v3.0.0
@@ -244,6 +236,11 @@ return [
      * that JS-PDK and Delivery Options expect.
      */
     FrontendDataAdapterInterface::class        => autowire(FrontendDataAdapter::class),
+
+    /**
+     * Handles carrier lookups from account data.
+     */
+    CarrierRepositoryInterface::class          => autowire(CarrierRepository::class),
 
     PropositionService::class            => autowire(),
 ];

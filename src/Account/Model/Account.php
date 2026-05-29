@@ -16,12 +16,10 @@ use MyParcelNL\Pdk\Base\Support\Collection;
  * @property AccountGeneralSettings $generalSettings
  * @property ShopCollection         $shops
  * @property int                    $status
- * @property array                  $subscriptionFeatures
+ * @property Collection             $subscriptionFeatures
  */
 class Account extends Model
 {
-    public const FEATURE_ORDER_NOTES = 'allow_order_notes';
-
     public $attributes = [
         'id'                   => null,
         'platformId'           => null,

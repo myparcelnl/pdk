@@ -9,14 +9,14 @@ namespace MyParcelNL\Pdk\Account\Service;
 use MyParcelNL\Pdk\Account\Contract\AccountSettingsServiceInterface;
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -38,40 +38,16 @@ beforeAll(function () {
                     'carriers'   => [
                         // Messed up sorting on purpose
                         [
-                            'name'    => Carrier::CARRIER_DHL_EUROPLUS_NAME,
-                            'enabled' => true,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS,
                         ],
                         [
-                            'name'    => Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
-                            'enabled' => true,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT,
                         ],
                         [
-                            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-                            'contractId' => '8277',
-                            'enabled'    => true,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
                         ],
                         [
-                            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-                            'contractId' => '2312',
-                            'enabled'    => true,
-                        ],
-                        [
-                            'name'       => Carrier::CARRIER_POSTNL_NAME,
-                            'contractId' => '2312',
-                            'enabled'    => true,
-                        ],
-                        [
-                            'name'       => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-                            'contractId' => '4689',
-                            'enabled'    => false,
-                        ],
-                        [
-                            'name'    => Carrier::CARRIER_DHL_FOR_YOU_NAME,
-                            'enabled' => true,
-                        ],
-                        [
-                            'name'    => Carrier::CARRIER_POSTNL_NAME,
-                            'enabled' => true,
+                            'carrier' => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
                         ],
                     ],
                 ],
@@ -80,24 +56,56 @@ beforeAll(function () {
     );
 });
 
-it('gets carriers in correct order', function () {
+it('gets carriers in the same order as stored', function () {
     /** @var AccountSettingsServiceInterface $service */
     $service = Pdk::get(AccountSettingsServiceInterface::class);
 
     $carriers = $service->getCarriers();
 
     expect(
-        $carriers->pluck('externalIdentifier')
+        $carriers->pluck('carrier')
             ->all()
     )
         ->toEqual([
-            Carrier::CARRIER_POSTNL_NAME,
-            sprintf('%s:2312', Carrier::CARRIER_POSTNL_NAME),
-            Carrier::CARRIER_DHL_FOR_YOU_NAME,
-            sprintf('%s:2312', Carrier::CARRIER_DHL_FOR_YOU_NAME),
-            sprintf('%s:8277', Carrier::CARRIER_DHL_FOR_YOU_NAME),
-            Carrier::CARRIER_DHL_PARCEL_CONNECT_NAME,
-            Carrier::CARRIER_DHL_EUROPLUS_NAME,
+            RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS,
+            RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT,
+            RefCapabilitiesSharedCarrierV2::POSTNL,
+            RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
+        ]);
+});
+
+it('filters out carriers this PDK version does not support', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
+    $repository = Pdk::get(PdkAccountRepositoryInterface::class);
+
+    $repository->store(
+        new Account([
+            'id'         => '7654321',
+            'platformId' => 1,
+            'status'     => 2,
+            'shops'      => [
+                [
+                    'id'         => '555',
+                    'accountId'  => '7654321',
+                    'platformId' => 1,
+                    'name'       => 'MixedShop',
+                    'carriers'   => [
+                        ['carrier' => RefCapabilitiesSharedCarrierV2::POSTNL],
+                        ['carrier' => 'UNSUPPORTED_FUTURE_CARRIER'],
+                        ['carrier' => RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU],
+                    ],
+                ],
+            ],
+        ])
+    );
+
+    /** @var AccountSettingsServiceInterface $service */
+    $service = Pdk::get(AccountSettingsServiceInterface::class);
+
+    expect($service->getCarriers()->pluck('carrier')->all())
+        ->toEqual([
+            RefCapabilitiesSharedCarrierV2::POSTNL,
+            RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU,
         ]);
 });
 
@@ -107,7 +115,7 @@ it('checks subscription features in non-existent account', function () {
 
     $repository->store(null);
 
-    $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
+    $result = AccountSettings::hasSubscriptionFeature(PdkAccountFeaturesService::FEATURE_ORDER_NOTES);
 
     expect($result)->toBeFalse();
 });
@@ -117,37 +125,11 @@ it('checks subscription features in account', function () {
 
     factory(Account::class)
         ->withSubscriptionFeatures([
-            Account::FEATURE_ORDER_NOTES,
+            PdkAccountFeaturesService::FEATURE_ORDER_NOTES,
         ])
         ->store();
 
-    $result = AccountSettings::hasSubscriptionFeature(Account::FEATURE_ORDER_NOTES);
+    $result = AccountSettings::hasSubscriptionFeature(PdkAccountFeaturesService::FEATURE_ORDER_NOTES);
 
     expect($result)->toBeTrue();
-});
-
-it('checks account small package contract', function () {
-    TestBootstrapper::hasAccount();
-
-    factory(Account::class)
-        ->withGeneralSettings([
-            'hasCarrierSmallPackageContract' => true,
-        ])
-        ->store();
-
-    $result = AccountSettings::hasCarrierSmallPackageContract();
-
-    expect($result)->toBeTrue();
-
-    TestBootstrapper::hasAccount();
-
-    factory(Account::class)
-        ->withGeneralSettings([
-            'hasCarrierSmallPackageContract' => false,
-        ])
-        ->store();
-
-    $result = AccountSettings::hasCarrierSmallPackageContract();
-
-    expect($result)->toBeFalse();
 });

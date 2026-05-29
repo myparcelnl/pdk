@@ -7,11 +7,11 @@ namespace MyParcelNL\Pdk\App\Order\Collection;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
-use MyParcelNL\Pdk\Validation\Validator\CarrierSchema;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
+use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Notification\Model\Notification;
@@ -51,14 +51,16 @@ class PdkOrderCollection extends Collection
      */
     public function generateShipments(): ShipmentCollection
     {
-        $newShipments = new ShipmentCollection();
+        $newShipments             = new ShipmentCollection();
+        $carrierValidationService = Pdk::get(CarrierValidationService::class);
 
-        $this->each(function (PdkOrder $order) use ($newShipments) {
-            $schema = Pdk::get(CarrierSchema::class);
+        $this->each(function (PdkOrder $order) use ($newShipments, $carrierValidationService) {
+            $carrier = $order->deliveryOptions->carrier;
 
-            $schema->setCarrier($order->deliveryOptions->carrier);
-
-            $amountOfShipmentsToCreate = max(1, $schema->canHaveMultiCollo() ? 1 : $order->deliveryOptions->labelAmount);
+            $amountOfShipmentsToCreate = max(
+                1,
+                $carrierValidationService->supportsMultiCollo($carrier) ? 1 : $order->deliveryOptions->labelAmount
+            );
 
             for ($i = 0; $i < $amountOfShipmentsToCreate; $i++) {
                 $newShipment = $order->createShipment();
@@ -77,16 +79,29 @@ class PdkOrderCollection extends Collection
      */
     public function generateReturnShipments(): ShipmentCollection
     {
-        $shipments = $this->getLastShipments();
+        $shipments                     = $this->getLastShipments();
+        $capabilitiesValidationService = Pdk::get(CapabilitiesValidationService::class);
 
         foreach ($shipments as $shipment) {
-            $schema = Pdk::get(CarrierSchema::class);
-            $schema->setCarrier($shipment->carrier);
+            $destinationCc = $shipment->recipient ? $shipment->recipient->cc : null;
 
-            if (!$schema->hasReturnCapabilities()) {
+            if (! $destinationCc) {
+                Notifications::warning(
+                    "Cannot determine return capabilities for {$shipment->carrier->name}",
+                    'Skipping return shipment: destination country code is missing',
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                continue;
+            }
+
+            if (! $capabilitiesValidationService->supportsReturns($shipment->carrier, $destinationCc)) {
                 Notifications::warning(
                     "{$shipment->carrier->name} has no return capabilities",
-                    "Skipping return shipment for carrier without return capabilities",
+                    'Skipping return shipment for carrier without return capabilities',
                     Notification::CATEGORY_ACTION,
                     [
                         'action'   => PdkBackendActions::EXPORT_RETURN,
@@ -170,12 +185,6 @@ class PdkOrderCollection extends Collection
     public function updateShipments(ShipmentCollection $shipments): self
     {
         $useOrderId = null !== $shipments->firstWhere('orderId', '!=', null);
-
-        // The carrier in the incoming request is not in the correct format, so we need to convert it,
-        // this is needed for legacy support in the frontend.
-        $shipments->each(function (Shipment $shipment) {
-            $shipment->carrier = FrontendData::convertCarrierToLegacyFormat($shipment->carrier);
-        });
 
         $this->each(function (PdkOrder $order) use ($shipments, $useOrderId) {
             $order->shipments = $useOrderId

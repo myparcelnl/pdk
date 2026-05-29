@@ -69,6 +69,24 @@ docker compose build
 docker compose run php composer test
 ```
 
+### Adding a shipment option
+
+Shipment options are managed through the `OrderOptionDefinitionInterface` system. Each option is a single Definition class that declares all its keys (shipment, capabilities, carrier settings, product settings, allow, price). All models, views, and services build their attributes and form elements dynamically from these definitions.
+
+To add a new option:
+
+1. **Create a Definition class** in `src/App/Options/Definition/` extending `AbstractOrderOptionDefinition`. Only two methods are required:
+   - `getShipmentOptionsKey()` — the PDK-internal key, derived from `Str::camel(RefShipmentShipmentOptions::attributeMap()['sdk_key'])`
+   - `getCapabilitiesOptionsKey()` — the V2 capabilities key, from `RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['capabilities_key']`
+2. **Register it** in the `orderOptionDefinitions` array in `config/pdk-business-logic.php`.
+3. **Optionally**, add a deprecated constant to `ShipmentOptions` if platform integrations reference the key directly.
+
+Everything else (carrier settings, product settings, allow/price toggles, validation, frontend form fields, API export/import) is derived automatically. Run `yarn test:unit` to verify the consistency tests pass.
+
+If the option is not yet in the SDK types, update the SDK or regenerate the OpenAPI types first.
+
+> **Using Claude Code?** Run `/add-shipment-option` for a guided step-by-step walkthrough that asks the right questions and generates the code.
+
 ### Linting
 
 We use Prettier to format .json, .yml, .md and .html files.

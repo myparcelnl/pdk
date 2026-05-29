@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Integration\Context\Concern;
 
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -106,10 +105,6 @@ trait ValidatesValues
         $entity = $this->resolveModel($entityResolver);
 
         $match = preg_replace_callback_array([
-            '/PLATFORM_(\w+)/' => static function ($matches) {
-                return Platform::get(strtolower($matches[1]));
-            },
-
             // Matches models defined in ResolvesModels
             '/\w+:(\w+)/'      => function ($matches) use ($entity) {
                 return $this->matchModelProperty($entity, $matches[1]);

@@ -2,16 +2,12 @@
 
 declare(strict_types=1);
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Base\Support\Collection;
-use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
-use MyParcelNL\Pdk\Facade\Config;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Pdk as PdkFacade;
-use MyParcelNL\Pdk\Facade\Platform;
-use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 
 use function DI\env;
@@ -37,6 +33,7 @@ return [
     /**
      * Url to the API.
      */
+    //@deprecated, use the apiUrl from the OpenAPI spec instead.
     'apiUrl'                 => env('PDK_API_URL', 'https://api.myparcel.nl'),
     'printingApiUrl'         => env('PDK_PRINTING_API_URL', 'https://printing.api.myparcel.nl'),
     'addressesServiceUrl'    => env('PDK_ADDRESSES_SERVICE_URL', 'https://address.api.myparcel.nl'),
@@ -83,66 +80,44 @@ return [
     'defaultTimeZone'        => value('Europe/Amsterdam'),
 
     /**
-     * Package types, ordered by size from largest to smallest.
-     */
-    'packageTypesBySize'     => value([
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-        DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-    ]),
-
-    /**
      * Bulk order actions.
      *
      * @example Pdk::get('bulkActions') // gets the bulk actions for the current order mode.
      */
 
     'allBulkActions' => value([
-        'default'   => [
+        'Shipments' => [
             'action_print',
             'action_export_print',
             'action_export',
             'action_edit',
         ],
-        'orderMode' => [
+        'OrderV1'   => [
             'action_edit',
             'action_export',
+        ],
+        'OrderV2'   => [
+            'action_print',
+            'action_export_print',
+            'action_export',
+            'action_edit',
         ],
     ]),
 
     'bulkActions'              => factory(static function (): array {
-        $orderModeEnabled = Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID);
-        $all              = PdkFacade::get('allBulkActions');
+        $all = PdkFacade::get('allBulkActions');
+        $key = [
+            AccountFeaturesServiceInterface::ORDER_MODE_V1 => 'OrderV1',
+            AccountFeaturesServiceInterface::ORDER_MODE_V2 => 'OrderV2',
+        ][AccountSettings::getEffectiveOrderMode()] ?? 'Shipments';
 
-        return $orderModeEnabled
-            ? Arr::get($all, 'orderMode', [])
-            : Arr::get($all, 'default', []);
+        return Arr::get($all, $key, []);
     }),
 
     /**
      * Allowed positions for the delivery options in the checkout.
      */
     'deliveryOptionsPositions' => value([]),
-
-    /**
-     * All carriers available in the proposition.
-     * @deprecated use PropositionService::getCarriers() instead.
-     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
-     */
-    'allCarriers' => factory(function (): CarrierCollection {
-        return Pdk::get(PropositionService::class)->getCarriers();
-    }),
-
-    /**
-     * All carriers available in the proposition that support available delivery types.
-     * @deprecated use PropositionService::getCarriers(true) instead.
-     * @see \MyParcelNL\Pdk\Proposition\Service\PropositionService::getCarriers();
-     */
-    'carriers' => factory(function (): CarrierCollection {
-        return Pdk::get(PropositionService::class)->getCarriers(true);
-    }),
 
     /**
      * Language to default to when no language is set.

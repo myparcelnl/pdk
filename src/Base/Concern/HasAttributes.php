@@ -301,8 +301,12 @@ trait HasAttributes
     protected function addCastAttributesToArray(array $attributes, array $mutatedAttributes, ?int $flags): array
     {
         foreach ($this->getCasts() as $key => $value) {
-            $originalKey = Utils::changeCase($key);
-            $key         = Utils::changeCase($key, $flags);
+            if ($this->convertCase) {
+                $originalKey = Utils::changeCase($key);
+                $key         = Utils::changeCase($key, $flags);
+            } else {
+                $originalKey = $key;
+            }
 
             if (! array_key_exists($key, $attributes) || in_array($key, $mutatedAttributes, true)) {
                 continue;
