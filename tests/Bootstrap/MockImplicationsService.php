@@ -32,6 +32,20 @@ class MockImplicationsService extends ImplicationsService
     private static $callCount = 0;
 
     /**
+     * Order-preserving log of method invocations on this mock. Each entry is a method name
+     * ('refreshApiConfig' or 'getDefaultCarrierName'). Used by regression tests that need to
+     * assert that the API config was refreshed before any outbound call.
+     *
+     * @var string[]
+     */
+    private static $callLog = [];
+
+    /**
+     * @var int
+     */
+    private static $refreshCallCount = 0;
+
+    /**
      * Skip the parent constructor — we never call into the real ShippingRuleApi.
      */
     public function __construct()
@@ -59,12 +73,34 @@ class MockImplicationsService extends ImplicationsService
     }
 
     /**
+     * Return the number of times refreshApiConfig() has been called since the last reset().
+     *
+     * @return int
+     */
+    public static function getRefreshCallCount(): int
+    {
+        return self::$refreshCallCount;
+    }
+
+    /**
+     * Return the order-preserving log of mock method invocations since the last reset().
+     *
+     * @return string[]
+     */
+    public static function getCallLog(): array
+    {
+        return self::$callLog;
+    }
+
+    /**
      * Reset to the default null state. Call from afterEach hooks or test teardown.
      */
     public static function reset(): void
     {
         self::$defaultCarrierName = null;
         self::$callCount          = 0;
+        self::$refreshCallCount   = 0;
+        self::$callLog            = [];
     }
 
     /**
@@ -75,7 +111,21 @@ class MockImplicationsService extends ImplicationsService
     public function getDefaultCarrierName(int $shopId): ?string
     {
         self::$callCount++;
+        self::$callLog[] = 'getDefaultCarrierName';
 
         return self::$defaultCarrierName;
+    }
+
+    /**
+     * Override the inherited refresh: the parent implementation iterates the
+     * (real) SDK API clients on $this->api, but this mock skips the parent
+     * constructor so $this->api is never initialised. Just record the call.
+     *
+     * @return void
+     */
+    public function refreshApiConfig(): void
+    {
+        self::$refreshCallCount++;
+        self::$callLog[] = 'refreshApiConfig';
     }
 }

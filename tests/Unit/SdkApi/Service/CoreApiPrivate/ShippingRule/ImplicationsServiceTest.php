@@ -8,9 +8,6 @@ namespace MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule;
 
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
-use Mockery;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Http\Message\RequestInterface;
@@ -33,10 +30,10 @@ class MockableImplicationsService extends ImplicationsService
     /** @var RequestInterface[] */
     public $capturedRequests = [];
 
-    public function __construct(CarrierRepositoryInterface $carrierRepository)
+    public function __construct()
     {
         $this->mockHandler = new MockHandler();
-        parent::__construct($carrierRepository);
+        parent::__construct();
     }
 
     protected function createGuzzleClient(): \GuzzleHttp\Client
@@ -94,13 +91,8 @@ function emptyImplResponse(): string
 it('returns the V2 carrier name when implications contain a known carrier id', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldReceive('findByLegacyId')
-        ->once()
-        ->with(1)
-        ->andReturn(new Carrier(['carrier' => 'POSTNL']));
-
-    $service = new MockableImplicationsService($carrierRepository);
+    // carrier_id 1 maps to "POSTNL" in Carrier::CARRIER_NAME_ID_MAP.
+    $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(200, [], implResponse(1)));
 
     expect($service->getDefaultCarrierName(42))->toBe('POSTNL');
@@ -110,10 +102,7 @@ it('returns the V2 carrier name when implications contain a known carrier id', f
 it('returns null when the implications array is empty', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldNotReceive('findByLegacyId');
-
-    $service = new MockableImplicationsService($carrierRepository);
+    $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(200, [], emptyImplResponse()));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
@@ -123,30 +112,21 @@ it('returns null when the implications array is empty', function () {
 it('returns null when the first implication has no carrier_id', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldNotReceive('findByLegacyId');
-
     // Omit carrier_id so the deserialized model has null for that field.
-    $service = new MockableImplicationsService($carrierRepository);
+    $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(200, [], implResponse()));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
 });
 
-// Test 4: returns null when carrier id is not found in CarrierRepository
-it('returns null when the carrier id is not found in the carrier repository', function () {
+// Test 4: returns null when the carrier id is not in the local V2 mapping
+it('returns null when the carrier id is not in the local V2 mapping', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    // Use a valid SDK enum value (2 = BPOST) that is not present in this shop's carriers.
-    // findByLegacyId returns null when the carrier is not in the account's carrier list.
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldReceive('findByLegacyId')
-        ->once()
-        ->with(2)
-        ->andReturn(null);
-
-    $service = new MockableImplicationsService($carrierRepository);
-    $service->mockHandler->append(new Response(200, [], implResponse(2)));
+    // 9999 is not in Carrier::CARRIER_NAME_ID_MAP — simulates an API id this PDK version
+    // does not yet know about. Should yield null rather than throwing.
+    $service = new MockableImplicationsService();
+    $service->mockHandler->append(new Response(200, [], implResponse(9999)));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
 });
@@ -155,14 +135,11 @@ it('returns null when the carrier id is not found in the carrier repository', fu
 it('returns null on ApiException without re-logging at the service layer', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldNotReceive('findByLegacyId');
-
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = \MyParcelNL\Pdk\Facade\Pdk::get(\MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface::class);
     $logger->clear();
 
-    $service = new MockableImplicationsService($carrierRepository);
+    $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(500, [], '{"error":"internal server error"}'));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
@@ -177,20 +154,15 @@ it('returns null on ApiException without re-logging at the service layer', funct
 it('logs an unexpected error and returns null when a non-API exception bubbles up', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    // Force a TypeError out of CarrierRepository to simulate a programmer error somewhere
-    // inside the try block. The ApiException catch must NOT swallow this — the Throwable
-    // catch must log it before returning null so the bug is surfaced.
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldReceive('findByLegacyId')
-        ->once()
-        ->andThrow(new \TypeError('unexpected boom'));
+    // Push a non-Guzzle Throwable into the handler queue. Guzzle's MockHandler will reject
+    // the request promise with it; the SDK's ApiException wrapper only catches GuzzleException,
+    // so this TypeError propagates into our Throwable catch and must be logged before nulling.
+    $service = new MockableImplicationsService();
+    $service->mockHandler->append(new \TypeError('unexpected boom'));
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
     $logger = \MyParcelNL\Pdk\Facade\Pdk::get(\MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface::class);
     $logger->clear();
-
-    $service = new MockableImplicationsService($carrierRepository);
-    $service->mockHandler->append(new Response(200, [], implResponse(1)));
 
     expect($service->getDefaultCarrierName(42))->toBeNull();
 
@@ -221,10 +193,7 @@ it('logs an unexpected error and returns null when a non-API exception bubbles u
 it('passes shop_id through unchanged and does not add extra query params', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $carrierRepository = Mockery::mock(CarrierRepositoryInterface::class);
-    $carrierRepository->shouldReceive('findByLegacyId')->andReturn(new Carrier(['carrier' => 'POSTNL']));
-
-    $service = new MockableImplicationsService($carrierRepository);
+    $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(200, [], implResponse(1)));
 
     $service->getDefaultCarrierName(42);

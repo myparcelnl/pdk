@@ -173,6 +173,27 @@ class Carrier extends SdkBackedModel
     }
 
     /**
+     * Translate a numeric carrier id (as exposed by external APIs in legacy CoreAPI shape)
+     * to its V2 carrier name (e.g. 1 → "POSTNL", 15 → "BRT"). Returns null when the id is
+     * not in the local id↔name mapping — typically a carrier that exists in the API enum
+     * but is not yet known to this PDK version.
+     *
+     * Pure static-map lookup with no shop/repository dependency, so it is safe to call
+     * before any carrier collection has been resolved or persisted.
+     *
+     * Currently backed by {@see self::CARRIER_NAME_ID_MAP}; switch to an
+     * SDK-provided definition when INT-1441 lands so call sites stay unchanged.
+     *
+     * @param  int $id Numeric carrier id from a legacy CoreAPI payload.
+     *
+     * @return null|string V2 carrier name, or null when the id is not in the local mapping.
+     */
+    public static function v2NameFromLegacyId(int $id): ?string
+    {
+        return array_search($id, self::CARRIER_NAME_ID_MAP, true) ?: null;
+    }
+
+    /**
      * Any attributes here extend/overwrite the data from RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2.
      * @see RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
      */
