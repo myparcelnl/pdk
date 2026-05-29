@@ -251,3 +251,85 @@ it('does not call ImplicationsService when the API key is empty', function () {
 
     expect(MockImplicationsService::getCallCount())->toBe(0);
 });
+
+it('falls back to carry-forward when the resolved carrier is not in the shop\'s contracts', function () {
+    // Regression for INT-1479: the shop's carrier collection is the authority for "available
+    // carriers". An implication pointing at a carrier the shop does not contract must be
+    // rejected (not silently persisted) so consumers downstream of $shop->defaultCarrier
+    // can rely on getting a Carrier the shop can actually use.
+    $previousAccount = new Account([
+        'id'         => 120,
+        'platformId' => 1,
+        'shops'      => [
+            [
+                'id'             => 2100,
+                'accountId'      => 120,
+                'platformId'     => 1,
+                'defaultCarrier' => 'DPD',
+            ],
+        ],
+    ]);
+    /** @var MockPdkAccountRepository $repo */
+    $repo = Pdk::get(PdkAccountRepositoryInterface::class);
+    $repo->store($previousAccount);
+
+    // GLS is a valid V2 carrier name in CARRIER_NAME_ID_MAP but absent from the fixture's
+    // contract definitions, so the in-memory shop's carrier collection does not contain it.
+    MockImplicationsService::setDefaultCarrierName('GLS');
+
+    executeUpdateAccount(['apiKey' => 'test-api-key']);
+
+    $shop = AccountSettings::getAccount()->shops->first();
+
+    expect($shop->defaultCarrier)->toBe('DPD');
+});
+
+it('uses the in-memory shop carriers (not the persisted account) as the availability authority', function () {
+    // Regression for INT-1479 root cause: the availability check must consult the just-
+    // resolved carrier collection on the in-memory $shop (set by setShopCarriers earlier in
+    // this same request), NOT the carrier collection on the persisted account. The persisted
+    // account is from the previous save and reflects a stale contract set; consulting it
+    // would reject implications pointing at carriers that ARE in the freshly-fetched
+    // contract definitions (the actual symptom reported on Italian API keys).
+    $previousAccount = new Account([
+        'id'         => 120,
+        'platformId' => 1,
+        'shops'      => [
+            [
+                'id'             => 2100,
+                'accountId'      => 120,
+                'platformId'     => 1,
+                'defaultCarrier' => 'DPD',
+                'carriers'       => [['carrier' => 'DPD']],
+            ],
+        ],
+    ]);
+    /** @var MockPdkAccountRepository $repo */
+    $repo = Pdk::get(PdkAccountRepositoryInterface::class);
+    $repo->store($previousAccount);
+
+    // BRT is NOT in the persisted account's stored carriers ([DPD] above), but IS in the
+    // fresh contract-definitions fixture used by setShopCarriers.
+    MockImplicationsService::setDefaultCarrierName('BRT');
+
+    executeUpdateAccount(['apiKey' => 'test-api-key']);
+
+    $shop = AccountSettings::getAccount()->shops->first();
+
+    expect($shop->defaultCarrier)->toBe('BRT');
+});
+
+it('refreshes ImplicationsService API config before calling it', function () {
+    // Regression for INT-1479: ImplicationsService is constructor-injected, so DI captures
+    // it (and the API key on its internal SDK Configuration) at request boot — before the
+    // new API key has been written to settings. If updateAccountSettings does not call
+    // refreshApiConfig on ImplicationsService, the outbound shipping-rules call carries a
+    // stale (or empty) Authorization header and the API returns 401 Permission Denied.
+    MockImplicationsService::setDefaultCarrierName('POSTNL');
+
+    executeUpdateAccount(['apiKey' => 'test-api-key']);
+
+    expect(MockImplicationsService::getRefreshCallCount())->toBeGreaterThan(0)
+        ->and(MockImplicationsService::getCallLog())
+        ->toBe(['refreshApiConfig', 'getDefaultCarrierName']);
+});

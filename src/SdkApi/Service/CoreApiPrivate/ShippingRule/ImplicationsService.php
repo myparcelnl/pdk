@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule;
 
-use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
+use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\AbstractCoreApiPrivateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Api\ShippingRuleApi;
@@ -21,26 +21,23 @@ class ImplicationsService extends AbstractCoreApiPrivateService
      */
     private $api;
 
-    /**
-     * @var CarrierRepositoryInterface
-     */
-    private $carrierRepository;
-
-    /**
-     * @param  CarrierRepositoryInterface $carrierRepository
-     */
-    public function __construct(CarrierRepositoryInterface $carrierRepository)
+    public function __construct()
     {
-        $this->api               = new ShippingRuleApi($this->createGuzzleClient(), $this->getApiConfig());
-        $this->carrierRepository = $carrierRepository;
+        $this->api = new ShippingRuleApi($this->createGuzzleClient(), $this->getApiConfig());
     }
 
     /**
      * Return the V2 carrier name implied by the shop's shipping rules, or null when unavailable.
      *
-     * Fetches the first implication returned for the shop, reads its carrier_id, and maps
-     * it to a V2 carrier name via CarrierRepository. Returns null when the implications list
-     * is empty, carrier_id is absent, the id is unmapped, or the API call fails.
+     * Fetches the first implication returned for the shop, reads its carrier_id, and translates
+     * it to a V2 carrier name via {@see Carrier::v2NameFromLegacyId()}. Returns null when the
+     * implications list is empty, carrier_id is absent, the id is not in the local mapping, or
+     * the API call fails.
+     *
+     * The returned name is not checked against the shop's available carrier contracts — that
+     * "is this carrier actually available to my shop?" check is the caller's responsibility,
+     * since it is the caller that holds the authoritative carrier collection (the just-fetched
+     * contract definitions are not yet persisted at the moment this service is consulted).
      *
      * @param  int $shopId
      *
@@ -66,9 +63,7 @@ class ImplicationsService extends AbstractCoreApiPrivateService
             }
 
             // @phpstan-ignore cast.int (same reason: container holds a raw int, not an instantiated RefTypesCarrier)
-            $carrier = $this->carrierRepository->findByLegacyId((int) $carrierId);
-
-            return $carrier ? $carrier->carrier : null;
+            return Carrier::v2NameFromLegacyId((int) $carrierId);
         } catch (ApiException $e) {
             // Expected SDK request failure — LoggingMiddleware already logged the HTTP error
             // at the Guzzle transport layer before the exception was rethrown.

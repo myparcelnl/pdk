@@ -192,6 +192,6 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
      */
     private function normalizeFromId(int $id): ?string
     {
-        return array_search($id, Carrier::CARRIER_NAME_ID_MAP, true) ?: null;
+        return Carrier::v2NameFromLegacyId($id);
     }
 }
