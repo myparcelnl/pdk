@@ -321,7 +321,7 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
     factory(Settings::class)
         ->withCarrier('postnl', [
             CarrierSettings::EXPORT_INSURANCE        => true,
-            CarrierSettings::EXPORT_INSURANCE_UP_TO => 500,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO => 50000, // 50000 cents = €500
         ])
         ->store();
 
@@ -332,7 +332,8 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
 
     $content = json_decode($response->getContent(), true);
 
-    expect($content['shipmentOptions']['insurance']['amount'])->toBe(500 * 1_000_000);
+    // 50000 cents (€500) → 500_000_000 micros
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(50000 * 10_000);
 
     Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
 });
@@ -385,8 +386,9 @@ it('insurance: preserves an explicit monetary amount already set on the order sh
 
     $content = json_decode($response->getContent(), true);
 
-    // The explicit amount (10000) must win over the carrier setting (500).
-    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 1_000_000);
+    // The explicit amount (10000 cents = €100) must win over the carrier setting (500 cents).
+    // 10000 cents → 100_000_000 micros
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 10_000);
 
     Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
 });
