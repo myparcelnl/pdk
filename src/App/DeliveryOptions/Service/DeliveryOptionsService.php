@@ -378,7 +378,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             : [];
 
         return $allCarriers->filter(
-            function (Carrier $carrier) use ($carrierSettings, $capabilitiesByCarrier, $weight, $cc): bool {
+            function (Carrier $carrier) use ($carrierSettings, $capabilitiesByCarrier, $weight, $cc, $v2PackageType): bool {
                 if (! $this->isCarrierEnabled($carrierSettings, $carrier)) {
                     return false;
                 }
@@ -386,6 +386,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 // Without recipient set, accept all enabled carriers.
                 if (! $cc) {
                     return true;
+                }
+
+                if (
+                    $v2PackageType === RefShipmentPackageTypeV2::MAILBOX
+                    && ! $this->countryService->isLocalCountry($cc)
+                    && ! CarrierSettings::fromCarrier($carrier)->allowInternationalMailbox
+                ) {
+                    return false;
                 }
 
                 $capability = $capabilitiesByCarrier[$carrier->carrier] ?? null;
