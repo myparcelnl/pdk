@@ -100,8 +100,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
 
         foreach ($filteredOptions as $key => $value) {
             if ($key === ShipmentOptions::INSURANCE) {
-                // Insurance amount converted to integer micro as per ADR-0014
-                $amount = ((int)$value) * 1_000_000;
+                // Insurance is stored in cents; convert to integer micros (1 cent = 10_000 micros).
+                $amount = ((int)$value) * 10_000;
                 $currency = (new ISO4217())->getByAlpha3('EUR'); // Assuming EUR, adjust in the future as needed
                 $formattedOptions[$orderApiShipmentOptions['insurance']] = ['amount' => $amount, 'currency' => $currency['alpha3']];
             } elseif ($key === ShipmentOptions::LABEL_DESCRIPTION) {
