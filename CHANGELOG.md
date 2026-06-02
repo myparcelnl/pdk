@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/myparcelnl/pdk/compare/v3.5.2...v3.5.3) (2026-06-02)
+
+
+### :bug: Bug Fixes
+
+* correct insurance cents-to-micros conversion factor ([#477](https://github.com/myparcelnl/pdk/issues/477)) ([aa10e61](https://github.com/myparcelnl/pdk/commit/aa10e613a7eebcd7fc67cec4a2f2783deab41991))
+
 ## [3.5.2](https://github.com/myparcelnl/pdk/compare/v3.5.1...v3.5.2) (2026-05-29)
 
 ## [3.5.1](https://github.com/myparcelnl/pdk/compare/v3.5.0...v3.5.1) (2026-05-12)
