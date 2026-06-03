@@ -50,6 +50,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
@@ -479,7 +480,7 @@ it('exports multiple orders in a batch with per-shipment option resolution', fun
     expect($shipments)->toHaveLength(3);
 
     // Order 0: mailbox package type, no signature
-    expect($shipments[0]['options']['package_type'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID)
+    expect($shipments[0]['options']['package_type'])->toBe(RefShipmentPackageType::MAILBOX)
         ->and($shipments[0]['options'])->not->toHaveKey('signature');
 
     // Order 1: evening delivery type, signature and only_recipient present
@@ -1100,7 +1101,7 @@ it(
             // Carrier supports mailbox internationally and account has the contract — package type should be mailbox
             'assertions'                            => function () {
                 return function (array $shipment) {
-                    expect($shipment['options']['package_type'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID);
+                    expect($shipment['options']['package_type'])->toBe(RefShipmentPackageType::MAILBOX);
                 };
             },
         ],

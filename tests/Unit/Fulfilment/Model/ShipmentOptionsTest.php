@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
@@ -26,7 +27,7 @@ it('can create instance from pdk delivery options', function () {
 
     expect($created->toArray())->toEqual([
         'deliveryType'     => DeliveryOptions::DELIVERY_TYPE_MORNING_ID,
-        'packageType'      => DeliveryOptions::PACKAGE_TYPE_MAILBOX_ID,
+        'packageType'      => RefShipmentPackageType::MAILBOX,
         'deliveryDate'     => null,
         'insurance'        => 100,
         'labelDescription' => 'test',

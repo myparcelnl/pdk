@@ -167,12 +167,14 @@ abstract class AbstractSettingsView implements Arrayable
     }
 
     /**
-     * @param  array $packageTypes
+     * @param  null|array $packageTypes
      *
      * @return array
      */
-    protected function createPackageTypeOptions(array $packageTypes = DeliveryOptions::PACKAGE_TYPES_NAMES): array
+    protected function createPackageTypeOptions(?array $packageTypes = null): array
     {
+        $packageTypes = $packageTypes ?? array_keys(DeliveryOptions::PACKAGE_TYPES_V2_MAP);
+
         $propositionService = Pdk::get(PropositionService::class);
         return $this->toSelectOptions(
             array_combine(
