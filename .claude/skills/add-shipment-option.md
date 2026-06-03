@@ -69,17 +69,13 @@ Add null overrides for any settings the user opted out of.
 
 Add the new definition to the `orderOptionDefinitions` array in `config/pdk-business-logic.php`. Add the import at the top of the file.
 
-### 3. Add Deprecated Constant to ShipmentOptions
-
-Add a `@deprecated` constant to `src/Shipment/Model/ShipmentOptions.php` for backwards compatibility with platform integrations. Do NOT use this constant anywhere in PDK code — use the definition's `getShipmentOptionsKey()` instead.
-
-### 4. Run IDE Helper
+### 3. Run IDE Helper
 
 ```bash
 docker compose run php composer console generate:ide-helper
 ```
 
-### 5. Run Tests
+### 4. Run Tests
 
 ```bash
 yarn run test:unit
@@ -95,4 +91,4 @@ yarn test:unit:snapshot
 
 - The `Carrier` model filters serialized options to only include those with registered definitions. Adding a definition automatically makes the option visible to the frontend.
 - `CarrierSettings`, `ProductSettings`, `ShipmentOptions`, and `Fulfilment\ShipmentOptions` all build their option attributes dynamically from definitions — no manual attribute registration needed.
-- `CarrierSchema::canHaveShipmentOption()` checks capabilities for the option automatically via the definition's capabilities key.
+- `CarrierValidationService::supportsShipmentOption()` checks capabilities for the option automatically via the definition's capabilities key.
