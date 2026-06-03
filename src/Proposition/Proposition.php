@@ -21,11 +21,17 @@ class Proposition
     public const SENDMYPARCEL_ID    = 3;
     public const SENDMYPARCEL_NAME  = 'myparcel-belgie';
 
+    public const ITALY_ID    = 6;
+    public const ITALY_NAME  = 'myparcel-italie';
+
     /** Platform name as defined by AccountDefsPlatformName::MYPARCEL. */
     public const PLATFORM_NAME_MYPARCEL     = AccountDefsPlatformName::MYPARCEL;
 
     /** Platform name as defined by AccountDefsPlatformName::BELGIE. */
     public const PLATFORM_NAME_SENDMYPARCEL = AccountDefsPlatformName::BELGIE;
+
+    /** Platform name as defined by AccountDefsPlatformName::ITALY. */
+    public const PLATFORM_NAME_ITALY = AccountDefsPlatformName::ITALY;
 
     /**
      * Maps a proposition key (e.g. 'myparcel-nederland') to its AccountDefsPlatformName value.
@@ -33,6 +39,7 @@ class Proposition
     public const PROPOSITION_KEY_TO_PLATFORM_NAME_MAP = [
         self::MYPARCEL_NAME     => self::PLATFORM_NAME_MYPARCEL,
         self::SENDMYPARCEL_NAME => self::PLATFORM_NAME_SENDMYPARCEL,
+        self::ITALY_NAME        => self::PLATFORM_NAME_ITALY,
     ];
 
     /**
@@ -41,5 +48,6 @@ class Proposition
     public const PROPOSITION_ID_TO_NAME_MAP = [
         self::MYPARCEL_ID     => self::MYPARCEL_NAME,
         self::SENDMYPARCEL_ID => self::SENDMYPARCEL_NAME,
+        self::ITALY_ID        => self::ITALY_NAME,
     ];
 }
