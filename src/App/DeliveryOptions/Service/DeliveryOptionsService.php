@@ -391,7 +391,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 if (
                     $v2PackageType === RefShipmentPackageTypeV2::MAILBOX
                     && ! $this->countryService->isLocalCountry($cc)
-                    && ! CarrierSettings::fromCarrier($carrier)->allowInternationalMailbox
+                    && ! ($carrierSettings[$carrier->carrier][SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX)] ?? false)
                 ) {
                     return false;
                 }
