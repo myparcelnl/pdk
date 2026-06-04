@@ -8,9 +8,10 @@ use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -81,19 +82,36 @@ class PostReturnShipmentsRequest extends Request
         $returnShipments = [];
 
         foreach ($this->collection as $shipment) {
-            $shipment = $this->ensureReturnCapabilities($shipment);
-
-            // Get the original recipient data
             $recipient = $shipment->recipient;
-            if (!$recipient) {
+            if (! $recipient) {
                 throw new \RuntimeException('Recipient data is required for return shipments');
+            }
+
+            if (! $recipient->cc) {
+                Notifications::warning(
+                    "Cannot determine return capabilities for {$shipment->carrier->name}",
+                    'Skipping return shipment: destination country code is missing',
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                continue;
+            }
+
+            $shipment = $this->ensureReturnCapabilities($shipment, $recipient->cc);
+
+            $carrierId = Utils::convertToId($shipment->carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+            if (! $carrierId) {
+                throw new \InvalidArgumentException(sprintf('Cannot encode return shipment: carrier %s is not mapped to an ID.', $shipment->carrier->carrier));
             }
 
             // Create a new array with only the required fields
             $returnShipment = [
                 'parent' => $shipment->id,
                 'reference_identifier' => $shipment->referenceIdentifier,
-                'carrier' => $shipment->carrier->id,
+                'carrier' => $carrierId,
                 'email' => $recipient->email,
                 'name' => $recipient->person,
                 'options' => [
@@ -112,32 +130,38 @@ class PostReturnShipmentsRequest extends Request
     }
 
     /**
-     * If the carrier cannot handle return shipments, the carrier will be set to the platform default carrier.
-     * In that case a notification is emitted.
+     * If the carrier cannot handle return shipments to the destination, swap to the
+     * shop's default carrier and emit a notification.
      *
      * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     * @param  string                                  $destinationCc ISO 3166-1 alpha-2 destination country code
      *
      * @return \MyParcelNL\Pdk\Shipment\Model\Shipment
      */
-    private function ensureReturnCapabilities(Shipment $shipment): Shipment
+    private function ensureReturnCapabilities(Shipment $shipment, string $destinationCc): Shipment
     {
-        $carrierId = $shipment->carrier->id;
+        $capabilitiesValidationService = Pdk::get(CapabilitiesValidationService::class);
 
-        $propositionService = Pdk::get(PropositionService::class);
-        $carrier = $propositionService->getCarrierById($carrierId);
+        if (! $capabilitiesValidationService->supportsReturns($shipment->carrier, $destinationCc)) {
+            $carrierName    = $shipment->carrier->carrier;
+            $shop           = AccountSettings::getShop();
+            $defaultCarrier = $shop ? $shop->defaultCarrierModel : null;
 
-        if (! $carrier || ! $carrier->returnCapabilities) {
-            $defaultCarrier = $propositionService->getDefaultCarrier();
-            Notifications::warning(
-                "{$shipment->carrier->name} has no return capabilities",
-                'Return shipment exported with default carrier ' . $defaultCarrier->name,
-                Notification::CATEGORY_ACTION,
-                [
-                    'action'   => PdkBackendActions::EXPORT_RETURN,
-                    'orderIds' => $shipment->referenceIdentifier,
-                ]
-            );
-            $shipment->carrier = new Carrier(['carrierId' => $defaultCarrier->id]);
+            if ($defaultCarrier !== null) {
+                // Swap to the shop's default carrier and notify. When no default is available, keep
+                // the user's original carrier — the downstream export attempt will surface a more
+                // accurate error rather than silently switching to an unknown carrier.
+                Notifications::warning(
+                    "{$carrierName} has no return capabilities",
+                    'Return shipment exported with default carrier ' . $defaultCarrier->carrier,
+                    Notification::CATEGORY_ACTION,
+                    [
+                        'action'   => PdkBackendActions::EXPORT_RETURN,
+                        'orderIds' => $shipment->referenceIdentifier,
+                    ]
+                );
+                $shipment->carrier = $defaultCarrier;
+            }
         }
 
         return $shipment;

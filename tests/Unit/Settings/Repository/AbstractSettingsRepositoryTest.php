@@ -5,12 +5,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Settings\Repository;
 
+use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
+use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockSettingsRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function DI\autowire;
@@ -25,14 +27,14 @@ usesShared(
             ],
             CarrierSettings::ID => [
                 'postnl' => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
-                    CarrierSettings::CUTOFF_TIME            => '17:00',
+                    SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME) => true,
+                    CarrierSettings::CUTOFF_TIME         => '17:00',
                 ],
                 'dhl'    => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => false,
+                    SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME) => false,
                 ],
                 'bpost'  => [
-                    CarrierSettings::ALLOW_DELIVERY_OPTIONS => true,
+                    SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME) => true,
                 ],
             ],
         ]),

@@ -26,6 +26,7 @@ use function MyParcelNL\Pdk\Tests\factory;
  * @method $this withBarcode(string $barcode)
  * @method $this withCarrier(array|Carrier|CarrierFactory $carrier)
  * @method $this withCollectionContact(string $collectionContact)
+ * @method $this withContractId(string $contractId)
  * @method $this withCreated(array|string|DateTimeInterface $created)
  * @method $this withCreatedBy(int $createdBy)
  * @method $this withCustomsDeclaration(array|CustomsDeclaration|CustomsDeclarationFactory|CustomsDeclarationFactory|CustomsDeclarationFactory $customsDeclaration)

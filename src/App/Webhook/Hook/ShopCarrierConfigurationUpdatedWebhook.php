@@ -9,6 +9,12 @@ use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Webhook\Model\WebhookSubscription;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Even though we do not use the carrier configuration endpoint and corresponding models,
+ * the webhook event is still relevant to fetch updated data from other sources (eg. account, whoami, capabilities).
+ *
+ * @package MyParcelNL\Pdk\App\Webhook\Hook
+ */
 final class ShopCarrierConfigurationUpdatedWebhook extends AbstractHook
 {
     /**

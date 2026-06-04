@@ -4,112 +4,101 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Account\Model;
 
-use MyParcelNL\Pdk\Account\Collection\ShopCarrierConfigurationCollection;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\Pdk;
+use RuntimeException;
 
 /**
- * @property int                                $id
- * @property int                                $accountId
- * @property int                                $platformId
- * @property string                             $name
- * @property bool                               $hidden
- * @property array<string, mixed>               $billing
- * @property array<string, mixed>               $deliveryAddress
- * @property array<string, mixed>               $generalSettings
- * @property array<string, mixed>               $return
- * @property array<string, mixed>               $shipmentOptions
- * @property array<string, mixed>[]             $trackTrace
- * @property CarrierCollection                  $carriers
- * @property ShopCarrierConfigurationCollection $carrierConfigurations
+ * @property int                    $id
+ * @property int                    $accountId
+ * @property int                    $platformId
+ * @property string                 $name
+ * @property bool                   $hidden
+ * @property array<string, mixed>   $billing
+ * @property CarrierCollection      $carriers
+ * @property string|null            $defaultCarrier
+ * @property array<string, mixed>   $deliveryAddress
+ * @property array<string, mixed>   $generalSettings
+ * @property array<string, mixed>   $return
+ * @property array<string, mixed>   $shipmentOptions
+ * @property array<string, mixed>[] $trackTrace
+ * @property-read Carrier|null      $defaultCarrierModel
  */
 class Shop extends Model
 {
-    private const DEPRECATED_KEY_CARRIER_OPTIONS = 'carrierOptions';
-
-    public    $attributes = [
-        'id'                    => null,
-        'accountId'             => null,
-        'platformId'            => null,
-        'name'                  => null,
-        'hidden'                => false,
-        'billing'               => [],
-        'deliveryAddress'       => [],
-        'generalSettings'       => [],
-        'return'                => [],
-        'shipmentOptions'       => [],
-        'trackTrace'            => [],
-        'carriers'              => CarrierCollection::class,
-        'carrierConfigurations' => ShopCarrierConfigurationCollection::class,
+    public $attributes = [
+        'id'              => null,
+        'accountId'       => null,
+        'platformId'      => null,
+        'name'            => null,
+        'hidden'          => false,
+        'billing'         => [],
+        'carriers'        => CarrierCollection::class,
+        'defaultCarrier'  => null,
+        'deliveryAddress' => [],
+        'generalSettings' => [],
+        'return'          => [],
+        'shipmentOptions' => [],
+        'trackTrace'      => [],
     ];
 
-    protected $casts      = [
-        'id'                    => 'int',
-        'accountId'             => 'int',
-        'platformId'            => 'int',
-        'name'                  => 'string',
-        'hidden'                => 'bool',
-        'billing'               => 'array',
-        'deliveryAddress'       => 'array',
-        'generalSettings'       => 'array',
-        'return'                => 'array',
-        'shipmentOptions'       => 'array',
-        'trackTrace'            => 'array',
-        'carriers'              => CarrierCollection::class,
-        'carrierConfigurations' => ShopCarrierConfigurationCollection::class,
+    protected $casts = [
+        'id'              => 'int',
+        'accountId'       => 'int',
+        'platformId'      => 'int',
+        'name'            => 'string',
+        'hidden'          => 'bool',
+        'billing'         => 'array',
+        'carriers'        => CarrierCollection::class,
+        'defaultCarrier'  => 'string',
+        'deliveryAddress' => 'array',
+        'generalSettings' => 'array',
+        'return'          => 'array',
+        'shipmentOptions' => 'array',
+        'trackTrace'      => 'array',
     ];
 
-    protected $deprecated = [
-        self::DEPRECATED_KEY_CARRIER_OPTIONS => 'carriers',
-    ];
-
-    /**
-     * @param  null|array $data
-     */
-    public function __construct(?array $data = null)
+    public function getDefaultCarrierModelAttribute(): ?Carrier
     {
-        if (isset($data[self::DEPRECATED_KEY_CARRIER_OPTIONS])) {
-            $data['carriers'] = array_map(
-                static function (array $carrierOptions): array {
-                    $rest = Arr::except($carrierOptions, ['carrier']);
-
-                    return array_merge($rest, $carrierOptions['carrier'] ?? null);
-                },
-                $data[self::DEPRECATED_KEY_CARRIER_OPTIONS]
-            );
-
-            unset($data[self::DEPRECATED_KEY_CARRIER_OPTIONS]);
+        if (! $this->defaultCarrier) {
+            return null;
         }
 
-        parent::__construct($data);
+        return Pdk::get(CarrierRepositoryInterface::class)->find($this->defaultCarrier);
     }
 
     /**
-     * @return array
+     * Resolve the current shop's default carrier or throw when none is available.
+     *
+     * Consolidates the "no stored carrier → fall back to the shop default" pattern shared by
+     * Shipment and DeliveryOptions: callers that contract a non-nullable Carrier delegate the
+     * null-handling here so the trail back to the underlying state is consistent.
+     *
+     * @throws RuntimeException When no current shop is available, the shop has no default
+     *                          carrier set, or the stored V2 name is not in the repository.
      */
-    public function toStorableArray(): array
+    public static function getDefaultCarrierOrThrow(): Carrier
     {
-        $carriers = (new Collection($this->carriers))
-            ->map(static function (Carrier $carrier): array {
-                return $carrier->only([
-                    'externalIdentifier',
-                    'enabled',
-                    'label',
-                    'primary',
-                    'optional',
-                    'type',
-                ], Arrayable::STORABLE_NULL);
-            });
+        $shop    = AccountSettings::getShop();
+        $default = $shop ? $shop->defaultCarrierModel : null;
 
-        return array_replace(
-            $this->except('carriers', Arrayable::STORABLE_NULL),
-            [
-                'carriers' => $carriers->toArray(self::STORABLE_NULL),
-            ]
-        );
+        if ($default !== null) {
+            return $default;
+        }
+
+        if ($shop && $shop->defaultCarrier) {
+            throw new RuntimeException(
+                sprintf('Default carrier "%s" is not available in the repository', $shop->defaultCarrier)
+            );
+        }
+
+        throw new RuntimeException('No default carrier available; shop has no default carrier set');
     }
 }

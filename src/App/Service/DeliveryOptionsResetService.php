@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Service;
 
+use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 
 /**
@@ -11,24 +12,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
  */
 class DeliveryOptionsResetService
 {
-    /**
-     * List of delivery option settings that should be reset when delivery options are disabled.
-     */
-    private const DELIVERY_OPTION_SETTINGS = [
-        CarrierSettings::ALLOW_DELIVERY_OPTIONS,
-        CarrierSettings::ALLOW_STANDARD_DELIVERY,
-        CarrierSettings::ALLOW_MORNING_DELIVERY,
-        CarrierSettings::ALLOW_EVENING_DELIVERY,
-        CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-        CarrierSettings::ALLOW_MONDAY_DELIVERY,
-        CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-        CarrierSettings::ALLOW_SIGNATURE,
-        CarrierSettings::ALLOW_ONLY_RECIPIENT,
-        CarrierSettings::ALLOW_PRIORITY_DELIVERY,
-        CarrierSettings::ALLOW_PICKUP_LOCATIONS,
-        CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
-    ];
-
     /**
      * Reset all delivery option settings to false on a carrier settings object.
      *
@@ -38,18 +21,27 @@ class DeliveryOptionsResetService
      */
     public function resetDeliveryOptions(CarrierSettings $carrierSettings): void
     {
-        foreach (self::DELIVERY_OPTION_SETTINGS as $setting) {
+        foreach ($this->getDeliveryOptionSettings() as $setting) {
             $carrierSettings->setAttribute($setting, false);
         }
     }
 
     /**
-     * Get the list of delivery option settings that should be reset.
+     * The carrier-settings attribute names this service resets.
      *
-     * @return array
+     * Derived from the canonical map exposed by {@see DeliveryOptionsService::getCarrierSettingsMap()}
+     * — keeping the source of truth in one place. The allow-* subset is selected because
+     * prices follow from the allow state; resetting prices is unnecessary.
+     *
+     * @return string[]
      */
     public function getDeliveryOptionSettings(): array
     {
-        return self::DELIVERY_OPTION_SETTINGS;
+        return array_values(array_filter(
+            DeliveryOptionsService::getCarrierSettingsMap(),
+            static function (string $attribute): bool {
+                return strncmp($attribute, 'allow', 5) === 0;
+            }
+        ));
     }
 }

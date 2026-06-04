@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Fulfilment\Model;
 
+use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\Base\Concern\ResolvesOptionAttributes;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
  * @property bool   $ageCheck
@@ -24,6 +27,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool   $onlyRecipient
  * @property bool   $priorityDelivery
  * @property int    $packageType
+ * @property bool   $receiptCode
  * @property bool   $return
  * @property bool   $sameDayDelivery
  * @property bool   $saturdayDelivery
@@ -31,43 +35,45 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  */
 class ShipmentOptions extends Model
 {
+    use ResolvesOptionAttributes;
+
+    // Non-option attributes remain static
     public $attributes = [
-        'ageCheck'         => null,
-        'collect'          => null,
-        'cooledDelivery'   => null,
         'deliveryDate'     => null,
         'deliveryType'     => null,
-        'hideSender'       => null,
-        'insurance'        => null,
         'labelDescription' => '',
-        'largeFormat'      => null,
-        'onlyRecipient'    => null,
-        'priorityDelivery' => null,
         'packageType'      => null,
-        'return'           => null,
-        'sameDayDelivery'  => null,
-        'saturdayDelivery' => null,
-        'signature'        => null,
     ];
 
-    public $casts      = [
-        'ageCheck'         => 'bool',
-        'collect'          => 'bool',
-        'cooledDelivery'   => 'bool',
+    public $casts = [
         'deliveryDate'     => 'string',
         'deliveryType'     => 'int',
-        'hideSender'       => 'bool',
-        'insurance'        => 'int',
         'labelDescription' => 'string',
-        'largeFormat'      => 'bool',
-        'onlyRecipient'    => 'bool',
-        'priorityDelivery' => 'bool',
         'packageType'      => 'int',
-        'return'           => 'bool',
-        'sameDayDelivery'  => 'bool',
-        'saturdayDelivery' => 'bool',
-        'signature'        => 'bool',
     ];
+
+    /**
+     * Populate option attributes dynamically from definitions.
+     * Fulfilment uses null as default and converts tri-state casts to bool.
+     */
+    protected function initializeResolvesOptionAttributes(): void
+    {
+        [$optionAttributes, $optionCasts] = $this->resolveOptionAttributes(
+            static function (OrderOptionDefinitionInterface $definition): ?string {
+                return $definition->getShipmentOptionsKey();
+            },
+            null,
+            static function (OrderOptionDefinitionInterface $definition): string {
+                $cast = $definition->getShipmentOptionsCast();
+
+                // Fulfilment uses simple booleans instead of tri-state
+                return $cast === TriStateService::TYPE_STRICT ? 'bool' : $cast;
+            }
+        );
+
+        $this->attributes = array_merge($optionAttributes, $this->attributes);
+        $this->casts      = array_merge($optionCasts, $this->casts);
+    }
 
     /**
      * @param  null|\MyParcelNL\Pdk\Shipment\Model\DeliveryOptions $pdkDeliveryOptions

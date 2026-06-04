@@ -6,60 +6,46 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use InvalidArgumentException;
+use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
-use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\SettingKey;
+use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
-use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
-use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
-use MyParcelNL\Pdk\Shipment\Model\PackageType;
-use MyParcelNL\Pdk\Types\Service\TriStateService;
-use MyParcelNL\Pdk\Validation\Repository\SchemaRepository;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
-    private const CONFIG_CARRIER_SETTINGS_MAP = [
-        'allowDeliveryOptions'         => CarrierSettings::ALLOW_DELIVERY_OPTIONS,
-        'allowStandardDelivery'        => CarrierSettings::ALLOW_STANDARD_DELIVERY,
-        'allowEveningDelivery'         => CarrierSettings::ALLOW_EVENING_DELIVERY,
-        'allowMondayDelivery'          => CarrierSettings::ALLOW_MONDAY_DELIVERY,
-        'allowMorningDelivery'         => CarrierSettings::ALLOW_MORNING_DELIVERY,
-        'allowOnlyRecipient'           => CarrierSettings::ALLOW_ONLY_RECIPIENT,
-        'allowPickupLocations'         => CarrierSettings::ALLOW_PICKUP_DELIVERY,
-        'allowPriorityDelivery'        => CarrierSettings::ALLOW_PRIORITY_DELIVERY,
-        'allowSameDayDelivery'         => CarrierSettings::ALLOW_SAME_DAY_DELIVERY,
-        'allowSaturdayDelivery'        => CarrierSettings::ALLOW_SATURDAY_DELIVERY,
-        'allowSignature'               => CarrierSettings::ALLOW_SIGNATURE,
-        'allowExpressDelivery'         => CarrierSettings::ALLOW_DELIVERY_TYPE_EXPRESS,
-        'priceEveningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EVENING,
-        'priceMorningDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_MORNING,
-        'priceOnlyRecipient'           => CarrierSettings::PRICE_ONLY_RECIPIENT,
-        'pricePriorityDelivery'        => CarrierSettings::PRICE_PRIORITY_DELIVERY,
-        'pricePackageTypeDigitalStamp' => CarrierSettings::PRICE_PACKAGE_TYPE_DIGITAL_STAMP,
-        'pricePackageTypeMailbox'      => CarrierSettings::PRICE_PACKAGE_TYPE_MAILBOX,
-        'pricePackageTypePackageSmall' => CarrierSettings::PRICE_PACKAGE_TYPE_PACKAGE_SMALL,
-        'pricePickup'                  => CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP,
-        'priceSameDayDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_SAME_DAY,
-        'priceSignature'               => CarrierSettings::PRICE_SIGNATURE,
-        'priceStandardDelivery'        => CarrierSettings::PRICE_DELIVERY_TYPE_STANDARD,
-        'priceCollect'                 => CarrierSettings::PRICE_COLLECT,
-        'priceExpressDelivery'         => CarrierSettings::PRICE_DELIVERY_TYPE_EXPRESS,
-        'excludeParcelLockers'         => CheckoutSettings::EXCLUDE_PARCEL_LOCKERS,
-    ];
+
+    /**
+     * @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface
+     */
+    private $cartCalculationService;
+
+    /**
+     * @var \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService
+     */
+    private $capabilitiesValidation;
+
+    /**
+     * @var \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface
+     */
+    private $carrierRepository;
 
     /**
      * @var \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface
@@ -77,100 +63,35 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $dropOffService;
 
     /**
-     * @var \MyParcelNL\Pdk\Validation\Repository\SchemaRepository
-     */
-    private $schemaRepository;
-
-    /**
      * @var \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface
      */
     private $taxService;
 
     /**
-     * @var \MyParcelNL\Pdk\Types\Service\TriStateService
-     */
-    private $triStateService;
-
-    /**
-     * @var \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface
-     */
-    private $frontendDataAdapter;
-
-    /**
-     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface     $countryService
-     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface    $currencyService
-     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface $dropOffService
-     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface      $taxService
-     * @param  \MyParcelNL\Pdk\Validation\Repository\SchemaRepository    $schemaRepository
-     * @param  \MyParcelNL\Pdk\Types\Service\TriStateService             $triStateService
-     * @param  \MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface $frontendDataAdapter
+     * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $cartCalculationService
+     * @param  \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService     $capabilitiesValidation
+     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface       $carrierRepository
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface             $countryService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface            $currencyService
+     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface         $dropOffService
+     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface              $taxService
      */
     public function __construct(
-        CountryServiceInterface     $countryService,
-        CurrencyServiceInterface    $currencyService,
-        DropOffServiceInterface     $dropOffService,
-        TaxServiceInterface         $taxService,
-        SchemaRepository            $schemaRepository,
-        TriStateService             $triStateService,
-        FrontendDataAdapterInterface $frontendDataAdapter
+        CartCalculationServiceInterface  $cartCalculationService,
+        CapabilitiesValidationService    $capabilitiesValidation,
+        CarrierRepositoryInterface       $carrierRepository,
+        CountryServiceInterface          $countryService,
+        CurrencyServiceInterface         $currencyService,
+        DropOffServiceInterface          $dropOffService,
+        TaxServiceInterface              $taxService
     ) {
-        $this->countryService      = $countryService;
-        $this->currencyService     = $currencyService;
-        $this->dropOffService      = $dropOffService;
-        $this->taxService          = $taxService;
-        $this->schemaRepository    = $schemaRepository;
-        $this->triStateService     = $triStateService;
-        $this->frontendDataAdapter = $frontendDataAdapter;
-    }
-
-    /**
-     * Creates a carrier configuration for the delivery options.
-     * Note that some of these properties will be deprecated and should be replaced by interactions with the capabilities API.
-     * (e.g. packageTypes, features, shipmentOptionsPerPackageType)
-     * @return array
-     * @throws InvalidArgumentException
-     */
-    public function createPropositionConfig(): array
-    {
-        $config = ['carriers' => []];
-        $carriers = Pdk::get(PropositionService::class)
-            ->getCarriers(true);
-
-        /**
-         * @var FrontendDataAdapterInterface $adapter
-         */
-        $adapter = Pdk::get(FrontendDataAdapterInterface::class);
-
-        // @TODO: this data should be based on calls by the DO to the capabilities API through a proxy in the PDK
-        $config['carriers'] = array_map(function ($carrier) use ($adapter) {
-            $legacyCarrier = $adapter->convertCarrierToLegacyFormat($carrier);
-
-            return array_filter([
-                "name"      => $legacyCarrier->name,
-                "active"    => true,
-                "subscription" => TriStateService::INHERIT, // This does not seem to be actually used in the DO?
-                "packageTypes" => $legacyCarrier->capabilities->packageTypes,
-                'deliveryTypes' => $legacyCarrier->capabilities->deliveryTypes,
-                'deliveryCountries' => $carrier->outboundFeatures->deliveryCountries ?? [],
-                "pickupCountries" => $carrier->outboundFeatures->pickupCountries ?? [],
-                // smallPackagePickupCountries currently always equal deliveryCountries. If that changes before the capabilities endpoint is integrated, add it to the Proposition config.
-                "smallPackagePickupCountries" => in_array(DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME, $legacyCarrier->capabilities->packageTypes) ? ($carrier->outboundFeatures->deliveryCountries ?? []) : [],
-                "fakeDelivery" => $carrier->deliveryOptions['allowFakeDelivery'] ?? false,
-                // Map shipment options to package type package as a fallback, if the proposition config does not have a "shipmentOptionsPerPackageType" property within the deliveryOptions.
-                "shipmentOptionsPerPackageType" =>
-                    array_key_exists('shipmentOptionsPerPackageType', $carrier->deliveryOptions) ?
-                        $carrier->deliveryOptions['shipmentOptionsPerPackageType'] :
-                        [
-                            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => array_map(function ($key) {
-                                return Str::snake($key);
-                            }, array_keys((array) $legacyCarrier->capabilities->shipmentOptions))
-                        ],
-                "features" => $carrier->deliveryOptions['availableFeatures'] ?? null,
-                "addressFields" => $carrier->deliveryOptions['addressFields'] ?? null,
-                "unsupportedParameters" => $carrier->deliveryOptions['unsupportedParameters'] ?? null
-            ]);
-        }, $carriers->all());
-        return $config;
+        $this->cartCalculationService  = $cartCalculationService;
+        $this->capabilitiesValidation  = $capabilitiesValidation;
+        $this->carrierRepository       = $carrierRepository;
+        $this->countryService          = $countryService;
+        $this->currencyService         = $currencyService;
+        $this->dropOffService          = $dropOffService;
+        $this->taxService              = $taxService;
     }
 
     /**
@@ -198,9 +119,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         ];
 
         foreach ($carriers as $carrier) {
+            if (null === $carrier->carrier) {
+                continue;
+            }
             // Use the legacy identifier for the delivery options, as that endpoint does not yet support the new identifiers.
-            $identifier = FrontendData::getLegacyIdentifier($carrier->externalIdentifier);
-            $settings['carrierSettings'][$identifier] = $this->createCarrierSettings($carrier, $cart, $packageType);
+            $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
+            $settings['carrierSettings'][$identifier] = array_merge(
+                $this->createCarrierSettings($carrier, $cart, $packageType),
+                ['contractId' => $carrier->contractId ?? null]
+            );
         }
 
         return $settings;
@@ -234,7 +161,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $cc = $cart->shippingMethod->shippingAddress->cc ?? null;
         if (
             $cc
-            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)) {
+            && $this->shouldUseInternationalMailboxPrice($packageType, $cc)
+        ) {
             $carrierSettings->pricePackageTypeMailbox = $carrierSettings->priceInternationalMailbox;
         }
 
@@ -275,7 +203,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                     : $value;
 
                 // For pickup price, ensure it doesn't exceed shipping costs
-                if ($key === CarrierSettings::PRICE_DELIVERY_TYPE_PICKUP) {
+                if ($key === SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::PICKUP)) {
                     $shippingCost = $this->currencyService->convertToEuros($cart->shipmentPrice);
                     $subtotal     = max(-$shippingCost, $value);
                 }
@@ -284,11 +212,16 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             }
 
             return $value;
-        }, self::CONFIG_CARRIER_SETTINGS_MAP);
+        }, self::getCarrierSettingsMap());
     }
 
     /**
-     * Filters all carrier options by the package type and weight.
+     * Find the best package type for this cart and the carriers that support it.
+     *
+     * Uses a tiered approach:
+     * 1. Carrier model (contract definitions) → which package types each carrier supports
+     * 2. Broad capabilities call (per country) → carrier-level weight range for early bail-out
+     * 3. Per-package-type capabilities call → accurate weight limits for the specific package type
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
@@ -296,75 +229,292 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
-        $allCarriers     = $this->frontendDataAdapter->carrierCollectionToLegacyFormat(
-            AccountSettings::getCarriers()
-        );
-        $carrierSettings = Settings::get(CarrierSettings::ID);
+        $allCarriers           = $this->carrierRepository->all();
+        $carrierSettings       = Settings::get(CarrierSettings::ID);
+        $cc                    = $cart->shippingMethod->shippingAddress->cc ?? null;
+        $candidatePackageTypes = $this->getCandidatePackageTypes($cart);
 
-        // Get the package types from the cart
-        $cartPackageTypes = $cart->lines->pluck('product.settings.packageType');
-
-        // Convert TriState::INHERIT to the default package type.
-        $cartPackageTypes = $cartPackageTypes->map(
-            function ($packageType) {
-                if ($this->triStateService->cast($packageType) === TriStateService::INHERIT) {
-                    return DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME;
-                }
-
-                return $packageType;
-            }
-        );
-
-        // Get the largest package type first.
-        // This will ensure we do not show delivery options with a smaller package type than fits what is in the cart.
-        foreach ($cart->shippingMethod->allowedPackageTypes->sortBySize() as $packageType) {
-            // Skip package types that do not match any of the items in the cart
-            if (! $cartPackageTypes->contains($packageType->name)) {
-                continue;
-            }
-
-            $weight = Pdk::get(WeightServiceInterface::class)
-                ->addEmptyPackageWeight($cart->lines->getTotalWeight(), $packageType);
-
-            $filteredCarriers = $allCarriers
-                ->filter(
-                    function (Carrier $carrier) use ($cart, $weight, $packageType, $carrierSettings): bool {
-                        $hasDeliveryOptions =
-                            $carrierSettings[$carrier->externalIdentifier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
-
-                        if (! $hasDeliveryOptions) {
-                            return false;
-                        }
-
-                        $schema = $this->schemaRepository->getOrderValidationSchema(
-                            $carrier->name,
-                            $cart->shippingMethod->shippingAddress->cc,
-                            // TODO: support full package type class instead of string
-                            $packageType->name
-                        );
-
-                        $packageTypeValidation = $this->schemaRepository->validateOption(
-                            $schema,
-                            'properties.deliveryOptions.properties.packageType',
-                            $packageType->name
-                        );
-
-                        $weightValidation = $this->schemaRepository->validateOption(
-                            $schema,
-                            'properties.physicalProperties.properties.weight',
-                            $weight
-                        );
-
-                        return $packageTypeValidation && $weightValidation;
-                    }
-                );
+        foreach ($candidatePackageTypes as $packageTypeName => $v2PackageType) {
+            $weight           = $this->cartCalculationService->getCartWeightForPackageType($cart, $packageTypeName);
+            $filteredCarriers = $this->filterCarriersForPackageType(
+                $allCarriers,
+                $carrierSettings,
+                $cc,
+                $v2PackageType,
+                $weight
+            );
 
             if ($filteredCarriers->isNotEmpty()) {
-                return [$packageType->name, $filteredCarriers];
+                return [$packageTypeName, $filteredCarriers];
             }
         }
 
         return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
+    }
+
+    /**
+     * Determine which package types to try, starting from the cart's desired type and
+     * upgrading to larger types if the total order weight doesn't fit.
+     *
+     * Uses a "next fitting size" approach: if the desired type (e.g. mailbox) can't
+     * accommodate the total order weight, tries the next larger type from the shipping
+     * method's allowed list (e.g. small_package → package).
+     *
+     * Package type ordering is determined by capabilities weight limits — the type with
+     * the highest max weight across carriers is considered the "largest".
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     *
+     * @return array<string, string> PDK package type name => V2 package type name
+     */
+    private function getCandidatePackageTypes(PdkCart $cart): array
+    {
+        $cc            = $cart->shippingMethod->shippingAddress->cc ?? null;
+        $allowedTypes  = $this->getAvailablePackageTypes($cart);
+        $cartTypes     = $this->cartCalculationService->getCartPackageTypes($cart);
+
+        // Fetch capabilities for each allowed type to determine weight-based ordering.
+        // Cached per cc+packageType — subsequent use in filterCarriersForPackageType hits cache.
+        $typeWeights = $cc
+            ? $this->capabilitiesValidation->getPackageTypeWeights($cc, $allowedTypes)
+            : [];
+
+        // The desired type is the heaviest type among the cart's product types.
+        $desiredType   = $this->capabilitiesValidation->resolveHeaviestType($cartTypes, $typeWeights);
+        $desiredWeight = $typeWeights[$desiredType] ?? null;
+
+        $candidates = [];
+
+        foreach ($allowedTypes as $packageTypeName => $v2PackageType) {
+            $typeWeight = $typeWeights[$packageTypeName] ?? null;
+
+            // Only include the desired type and types that are heavier (upgrade path).
+            if ($packageTypeName !== $desiredType && Utils::compareNullableInts($typeWeight, $desiredWeight) < 0) {
+                continue;
+            }
+
+            // Mailbox requires the cart contents to physically fit (product-level, not carrier-level).
+            if (
+                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName
+                && $this->cartCalculationService->calculateMailboxPercentage($cart) > 100.0
+            ) {
+                continue;
+            }
+
+            $candidates[$packageTypeName] = $v2PackageType;
+        }
+
+        // Sort: desired type first, then ascending by weight capacity (smallest upgrade first).
+        uksort($candidates, static function (string $a, string $b) use ($typeWeights, $desiredType): int {
+            if ($a === $desiredType) {
+                return -1;
+            }
+            if ($b === $desiredType) {
+                return 1;
+            }
+
+            return Utils::compareNullableInts($typeWeights[$a] ?? null, $typeWeights[$b] ?? null);
+        });
+
+        return $candidates;
+    }
+
+    /**
+     * Get available package types as a PDK name => V2 name map.
+     *
+     * Reads from the shipping method's allowedPackageTypes, which is resolved from
+     * checkout settings by the PdkShippingMethod attribute getter.
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     *
+     * @return array<string, string> PDK package type name => V2 package type name
+     */
+    private function getAvailablePackageTypes(PdkCart $cart): array
+    {
+        $available = [];
+
+        foreach ($cart->shippingMethod->allowedPackageTypes as $packageType) {
+            $name   = is_object($packageType) ? $packageType->name : $packageType;
+            $v2Type = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$name] ?? null;
+
+            if ($v2Type) {
+                $available[$name] = $v2Type;
+            }
+        }
+
+        return $available;
+    }
+
+    /**
+     * Filter carriers that are enabled and support the given package type and weight.
+     *
+     * Uses per-package-type capabilities call for accurate weight limits. Sets the
+     * contract ID from the response on each matching carrier for downstream propagation.
+     *
+     * @param  \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection $allCarriers
+     * @param  array                                                 $carrierSettings
+     * @param  null|string                                           $cc
+     * @param  string                                                $v2PackageType
+     * @param  int                                                   $weight
+     *
+     * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
+     */
+    private function filterCarriersForPackageType(
+        $allCarriers,
+        array $carrierSettings,
+        ?string $cc,
+        string $v2PackageType,
+        int $weight
+    ) {
+        // Cache key: cc+package_type — shareable across orders with different weights.
+        // Carrier presence and weight constraints are evaluated client-side per carrier.
+        $capabilitiesByCarrier = $cc
+            ? $this->capabilitiesValidation->indexByCarrier(
+                $this->capabilitiesValidation->getRepository()->getCapabilities([
+                    'recipient'    => ['country_code' => $cc],
+                    'package_type' => $v2PackageType,
+                ])
+            )
+            : [];
+
+        return $allCarriers->filter(
+            function (Carrier $carrier) use ($carrierSettings, $capabilitiesByCarrier, $weight, $cc, $v2PackageType): bool {
+                if (! $this->isCarrierEnabled($carrierSettings, $carrier)) {
+                    return false;
+                }
+
+                // Without recipient set, accept all enabled carriers.
+                if (! $cc) {
+                    return true;
+                }
+
+                if (
+                    $v2PackageType === RefShipmentPackageTypeV2::MAILBOX
+                    && ! $this->countryService->isLocalCountry($cc)
+                    && ! ($carrierSettings[$carrier->carrier][SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX)] ?? false)
+                ) {
+                    return false;
+                }
+
+                $capability = $capabilitiesByCarrier[$carrier->carrier] ?? null;
+
+                // Carrier not in capabilities response → not available for this destination + package type.
+                if (! $capability) {
+                    return false;
+                }
+
+                if (! $this->capabilitiesValidation->supportsWeight($capability, $weight)) {
+                    return false;
+                }
+
+                $contract = $capability->getContract();
+
+                if ($contract) {
+                    $carrier->contractId = $contract->getId();
+                }
+
+                return true;
+            }
+        );
+    }
+
+    /**
+     * @param  array                                  $carrierSettings
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
+     *
+     * @return bool
+     */
+    private function isCarrierEnabled(array $carrierSettings, Carrier $carrier): bool
+    {
+        return $carrierSettings[$carrier->carrier][CarrierSettings::DELIVERY_OPTIONS_ENABLED] ?? false;
+    }
+
+    /**
+     * Build the settings map exposed to the Delivery Options checkout widget.
+     *
+     * The delivery- and package-type lists below are hand-curated to match the
+     * fields the widget currently understands — they are NOT yet driven from
+     * the carrier's capabilities. Adding a new type means updating these lists
+     * AND making the widget render the new field. When the widget becomes
+     * fully capability-driven, this hand-curation collapses into iteration
+     * over $carrier->deliveryTypes / packageTypes directly.
+     *
+     * @return array<string, string>
+     */
+    public static function getCarrierSettingsMap(): array
+    {
+        // Auto-derived from the SDK V2 enums, filtered to PDK-supported types
+        // via DeliveryOptions::isDeliveryTypeSupported() / isPackageTypeSupported().
+        // PDK-only consts (no SDK counterpart) appended explicitly.
+        $supportedDeliveryTypes = array_values(array_filter(
+            RefTypesDeliveryTypeV2::getAllowableEnumValues(),
+            static function (string $v2): bool {
+                return DeliveryOptions::isDeliveryTypeSupported($v2);
+            }
+        ));
+
+        $allowDeliveryTypes = array_merge($supportedDeliveryTypes, [DeliveryOptions::DELIVERY_OPTION_MONDAY]);
+        $priceDeliveryTypes = $supportedDeliveryTypes;
+
+        // Default package type's price is the carrier's basePrice, not a
+        // surcharge. Excluded to avoid stacking semantics.
+        $pricePackageTypes = array_filter(
+            RefShipmentPackageTypeV2::getAllowableEnumValues(),
+            static function (string $v2): bool {
+                return DeliveryOptions::isPackageTypeSupported($v2)
+                    && $v2 !== DeliveryOptions::DEFAULT_PACKAGE_TYPE_V2;
+            }
+        );
+
+        /** @var \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+        $map         = [];
+
+        foreach ($definitions as $definition) {
+            $allowKey = $definition->getAllowSettingsKey();
+
+            if ($allowKey) {
+                $map[$allowKey] = $allowKey;
+            }
+
+            $priceKey = $definition->getPriceSettingsKey();
+
+            if ($priceKey) {
+                $map[$priceKey] = $priceKey;
+            }
+        }
+
+        foreach ($allowDeliveryTypes as $type) {
+            $key       = SettingKey::allow($type);
+            $map[$key] = $key;
+        }
+
+        foreach ($priceDeliveryTypes as $type) {
+            $map[SettingKey::price($type)] = SettingKey::priceDeliveryType($type);
+        }
+
+        foreach ($pricePackageTypes as $type) {
+            $key       = SettingKey::pricePackageType($type);
+            $map[$key] = $key;
+        }
+
+        // Special-case overrides — the widget exposes these under JS field
+        // names that don't follow the formula:
+        $map[SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME)] = SettingKey::allow(DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME); // master toggle
+        // Express is stored under the legacy 'allowDeliveryTypeExpress' attribute (via
+        // SettingKey ALLOW_EXCEPTIONS) but exposed to the widget under the clean
+        // JS field 'allowExpressDelivery'. Swap the loop's entry for the JS-clean key.
+        $expressStorageKey = SettingKey::allow(RefTypesDeliveryTypeV2::EXPRESS);
+        unset($map[$expressStorageKey]);
+        $map['allowExpressDelivery'] = $expressStorageKey;
+        // Pickup is exposed under the short JS field 'pricePickup' (not 'pricePickupDelivery'
+        // produced by the auto-derive loop). Drop the loop's entry to avoid two JS fields
+        // pointing at the same storage attribute.
+        unset($map[SettingKey::price(RefTypesDeliveryTypeV2::PICKUP)]);
+        $map['pricePickup'] = SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::PICKUP);
+        $map['excludeParcelLockers'] = CheckoutSettings::EXCLUDE_PARCEL_LOCKERS; // different settings class
+
+        return $map;
     }
 
     /**

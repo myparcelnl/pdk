@@ -17,7 +17,6 @@ use Behat\Testwork\Hook\Scope\HookScope;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestCase;

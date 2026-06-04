@@ -26,7 +26,6 @@ class CheckoutContext extends Model
 {
     public $attributes = [
         'config'    => null,
-        'platformConfig' => null,
         'strings'   => [],
         'settings'  => [],
         'endpoints' => EndpointRequestCollection::class,
@@ -34,7 +33,6 @@ class CheckoutContext extends Model
 
     protected $casts      = [
         'config'    => DeliveryOptionsConfig::class,
-        'platformConfig' => 'array',
         'strings'   => 'array',
         'settings'  => 'array',
         'endpoints' => EndpointRequestCollection::class,
@@ -49,7 +47,6 @@ class CheckoutContext extends Model
 
         $this->attributes['strings']  = $this->getStrings();
         $this->attributes['settings'] = $this->getSettings();
-        $this->attributes['platformConfig'] = Pdk::get(DeliveryOptionsService::class)->createPropositionConfig();
     }
 
     /**

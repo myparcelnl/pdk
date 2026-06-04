@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Base\Service;
 
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Facade\Platform;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Sdk\Support\Str;
 

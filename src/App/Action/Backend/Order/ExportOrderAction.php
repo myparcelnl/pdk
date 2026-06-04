@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Action\Backend\Order;
 
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
 use MyParcelNL\Pdk\Api\Exception\ApiException;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
@@ -11,6 +12,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
@@ -102,17 +104,23 @@ class ExportOrderAction extends AbstractOrderAction
      */
     protected function export(PdkOrderCollection $orders, Request $request): PdkOrderCollection
     {
-        if (! Settings::get(OrderSettings::ORDER_MODE, OrderSettings::ID)) {
-            return $this->exportShipments($orders);
+        if (AccountFeaturesServiceInterface::ORDER_MODE_V1 === AccountSettings::getEffectiveOrderMode()) {
+            $response = $this->exportOrders($orders);
+
+            Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
+                'orderIds' => $this->getOrderIds($request),
+            ]);
+
+            return $response;
         }
 
-        $response = $this->exportOrders($orders);
-
-        Actions::execute(PdkBackendActions::POST_ORDER_NOTES, [
-            'orderIds' => $this->getOrderIds($request),
-        ]);
-
-        return $response;
+        // SHIPMENTS or V2 — both currently run the shipments-export path so manual export
+        // works inside V2 (hybrid: V2 fulfilment continues externally, manual export creates
+        // shipments via the shipments API).
+        // @TODO INT-1590: once sales-channel detection lands, V2 should become a distinct
+        //       no-op branch here so manual export does not duplicate sales-channel-driven
+        //       fulfilment.
+        return $this->exportShipments($orders);
     }
 
     /**

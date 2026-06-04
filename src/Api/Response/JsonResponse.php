@@ -7,8 +7,32 @@ namespace MyParcelNL\Pdk\Api\Response;
 use MyParcelNL\Pdk\Facade\Notifications;
 use Symfony\Component\HttpFoundation\Response;
 
-class JsonResponse extends Response
+final class JsonResponse extends Response
 {
+    /**
+     * Factory method for fluent creation. Uses a Symfony-compatible signature
+     * when Response::create() exists and normalizes content to the array payload
+     * expected by this response class. Parameters stay untyped because the PDK
+     * supports multiple Symfony parent signatures.
+     *
+     * @param  mixed $content
+     * @param  mixed $status
+     * @param  mixed $headers
+     *
+     * @return static
+     */
+    public static function create($content = '', $status = 200, $headers = [])
+    {
+        if (is_array($content)) {
+            $data = $content;
+        } elseif (null === $content || '' === $content) {
+            $data = [];
+        } else {
+            $data = ['content' => $content];
+        }
+        return new static($data, $status, $headers);
+    }
+
     /**
      * @param  array $data
      * @param  int   $status

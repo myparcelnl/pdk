@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Bootstrap;
 use Exception;
 use MyParcelNL\Pdk\Base\Facade;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Tests\Factory\SharedFactoryState;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Contracts\Service\ResetInterface;
@@ -22,7 +23,6 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         return [
             MockAbstractLanguageService::class,
-            MockCarrierSchema::class,
             MockLanguageService::class,
             MockMemoryCacheStorage::class,
             MockOrderStatusService::class,
@@ -66,5 +66,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->resetServices();
+
+        Utils::clearCastCache();
     }
 }
