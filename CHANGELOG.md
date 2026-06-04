@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.0](https://github.com/myparcelnl/pdk/compare/v3.5.3...v4.0.0) (2026-06-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **capabilities:** The following classes have been removed:
+- ShopCarrierConfigurationCollection
+- ShopCarrierConfiguration
+- ShopCarrierOptionsRepository
+- ShopCarrierConfigurationRepository
+- GetShopCarrierConfigurationRequest
+- GetShopCarrierConfigurationsRequest
+- GetShopCarrierOptionsRequest
+- GetShopCarrierConfigurationsResponse
+- GetShopCarrierOptionsResponse
+
+The Shop model no longer has a `carrierConfigurations` property.
+The deprecated `carrierOptions` key and its migration logic have been removed.
+
+Refs: INT-1261
+
+Co-authored-by: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+
+### :sparkles: New Features
+
+* **capabilities:** drive carrier capabilities, options, and settings from the MyParcel API ([#459](https://github.com/myparcelnl/pdk/issues/459)) ([8e8d33d](https://github.com/myparcelnl/pdk/commit/8e8d33df766133bcf3d4fd90067dd1a5d632f40c)), closes [#438](https://github.com/myparcelnl/pdk/issues/438) [#444](https://github.com/myparcelnl/pdk/issues/444)
+
 ## [3.5.3](https://github.com/myparcelnl/pdk/compare/v3.5.2...v3.5.3) (2026-06-02)
 
 
