@@ -257,6 +257,50 @@ it(
     ],
 ]);
 
+it('falls back to package when international mailbox is disabled by merchant setting', function () {
+    $fakeCarrier = factory(Carrier::class)
+        ->withCarrier('POSTNL')
+        ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX'])
+        ->make();
+
+    factory(CarrierSettings::class, $fakeCarrier->carrier)
+        ->withDeliveryOptions()
+        ->withAllowInternationalMailbox(false)
+        ->store();
+
+    factory(Shop::class)
+        ->withCarriers(factory(CarrierCollection::class)->push(
+            factory(Carrier::class)
+                ->withCarrier('POSTNL')
+                ->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX'])
+        ))
+        ->store();
+
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createAllCarrierSettings(new PdkCart([
+        'shippingMethod' => [
+            'shippingAddress' => ['cc' => 'BE'],
+        ],
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 500,
+                    'isDeliverable' => true,
+                    'settings'      => [
+                        ProductSettings::FIT_IN_MAILBOX => 5,
+                        ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    ],
+                ],
+            ],
+        ],
+    ]));
+
+    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+});
+
 it('uses international mailbox price when shipping address is non-local', function () {
     $fakeCarrier = factory(Carrier::class)->withCarrier('POSTNL')->make();
 
