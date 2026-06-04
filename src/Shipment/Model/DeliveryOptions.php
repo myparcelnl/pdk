@@ -83,30 +83,6 @@ class DeliveryOptions extends Model
     public const DELIVERY_OPTION_SATURDAY              = 'saturdayDelivery';
 
     /**
-     * @var int[]
-     */
-    public const DELIVERY_TYPES_IDS = [
-        self::DELIVERY_TYPE_MORNING_ID,
-        self::DELIVERY_TYPE_STANDARD_ID,
-        self::DELIVERY_TYPE_EVENING_ID,
-        self::DELIVERY_TYPE_PICKUP_ID,
-        self::DELIVERY_TYPE_EXPRESS_ID,
-        self::DELIVERY_TYPE_SAME_DAY_ID,
-        self::DELIVERY_TYPE_EARLY_MORNING_ID,
-    ];
-    /**
-     * @var string[]
-     */
-    public const DELIVERY_TYPES_NAMES = [
-        self::DELIVERY_TYPE_MORNING_NAME,
-        self::DELIVERY_TYPE_STANDARD_NAME,
-        self::DELIVERY_TYPE_EVENING_NAME,
-        self::DELIVERY_TYPE_PICKUP_NAME,
-        self::DELIVERY_TYPE_EXPRESS_NAME,
-        self::DELIVERY_TYPE_SAME_DAY_NAME,
-        self::DELIVERY_TYPE_EARLY_MORNING_NAME,
-    ];
-    /**
      * @var array
      */
     public const DELIVERY_TYPES_NAMES_IDS_MAP = [
@@ -135,13 +111,16 @@ class DeliveryOptions extends Model
     /**
      * Package types
      */
-    public const  PACKAGE_TYPE_PACKAGE_ID         = RefShipmentPackageType::PACKAGE;
-    public const  PACKAGE_TYPE_MAILBOX_ID         = RefShipmentPackageType::MAILBOX;
-    public const  PACKAGE_TYPE_LETTER_ID          = RefShipmentPackageType::UNFRANKED;
-    public const  PACKAGE_TYPE_DIGITAL_STAMP_ID   = RefShipmentPackageType::DIGITAL_STAMP;
-    public const  PACKAGE_TYPE_PACKAGE_SMALL_ID   = RefShipmentPackageType::SMALL_PACKAGE;
-    public const  PACKAGE_TYPE_PALLET_ID          = RefShipmentPackageType::PALLET;
-    public const  PACKAGE_TYPE_ENVELOPE_ID        = RefShipmentPackageType::ENVELOPE;
+    /**
+     * PDK-internal package-type names (also used by the delivery-options widget).
+     *
+     * @TODO: source these from the SDK delivery-options response enum
+     *   ShipmentResponsesDeliveryOptionsPackageTypeV2 once its OpenAPI spec is
+     *   corrected. The spec currently defines 'small_package' / 'unfranked' where
+     *   the live endpoint accepts 'package_small' / 'letter' (spec fix in progress
+     *   in core-api); sourcing from the SDK before that lands would import the
+     *   wrong values.
+     */
     public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
     public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
     public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
@@ -150,33 +129,14 @@ class DeliveryOptions extends Model
     public const  PACKAGE_TYPE_PALLET_NAME        = 'pallet';
     public const  PACKAGE_TYPE_ENVELOPE_NAME      = 'envelope';
 
-    public const PACKAGE_TYPES_IDS = [
-        self::PACKAGE_TYPE_PACKAGE_ID,
-        self::PACKAGE_TYPE_MAILBOX_ID,
-        self::PACKAGE_TYPE_LETTER_ID,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_ID,
-        self::PACKAGE_TYPE_PALLET_ID,
-        self::PACKAGE_TYPE_ENVELOPE_ID,
-    ];
-    public const PACKAGE_TYPES_NAMES = [
-        self::PACKAGE_TYPE_PACKAGE_NAME,
-        self::PACKAGE_TYPE_MAILBOX_NAME,
-        self::PACKAGE_TYPE_LETTER_NAME,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
-        self::PACKAGE_TYPE_PALLET_NAME,
-        self::PACKAGE_TYPE_ENVELOPE_NAME,
-    ];
-
     public const PACKAGE_TYPES_NAMES_IDS_MAP     = [
-        self::PACKAGE_TYPE_PACKAGE_NAME       => self::PACKAGE_TYPE_PACKAGE_ID,
-        self::PACKAGE_TYPE_MAILBOX_NAME       => self::PACKAGE_TYPE_MAILBOX_ID,
-        self::PACKAGE_TYPE_LETTER_NAME        => self::PACKAGE_TYPE_LETTER_ID,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => self::PACKAGE_TYPE_DIGITAL_STAMP_ID,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => self::PACKAGE_TYPE_PACKAGE_SMALL_ID,
-        self::PACKAGE_TYPE_PALLET_NAME        => self::PACKAGE_TYPE_PALLET_ID,
-        self::PACKAGE_TYPE_ENVELOPE_NAME      => self::PACKAGE_TYPE_ENVELOPE_ID,
+        self::PACKAGE_TYPE_PACKAGE_NAME       => RefShipmentPackageType::PACKAGE,
+        self::PACKAGE_TYPE_MAILBOX_NAME       => RefShipmentPackageType::MAILBOX,
+        self::PACKAGE_TYPE_LETTER_NAME        => RefShipmentPackageType::UNFRANKED,
+        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => RefShipmentPackageType::DIGITAL_STAMP,
+        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageType::SMALL_PACKAGE,
+        self::PACKAGE_TYPE_PALLET_NAME        => RefShipmentPackageType::PALLET,
+        self::PACKAGE_TYPE_ENVELOPE_NAME      => RefShipmentPackageType::ENVELOPE,
     ];
 
     public const PACKAGE_TYPES_V2_MAP = [
@@ -214,7 +174,7 @@ class DeliveryOptions extends Model
         return in_array($v2PackageType, self::PACKAGE_TYPES_V2_MAP, true);
     }
 
-    public const  DEFAULT_PACKAGE_TYPE_ID         = self::PACKAGE_TYPE_PACKAGE_ID;
+    public const  DEFAULT_PACKAGE_TYPE_ID         = RefShipmentPackageType::PACKAGE;
     public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
     public const  DEFAULT_PACKAGE_TYPE_V2         = RefShipmentPackageTypeV2::PACKAGE;
 

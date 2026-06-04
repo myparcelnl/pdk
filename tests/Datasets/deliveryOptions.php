@@ -33,7 +33,7 @@ dataset('packageTypeNames', function () {
         static function (string $name) {
             return [$name];
         },
-        DeliveryOptions::PACKAGE_TYPES_NAMES
+        array_keys(DeliveryOptions::PACKAGE_TYPES_V2_MAP)
     );
 });
 
@@ -42,7 +42,7 @@ dataset('deliveryTypeNames', function () {
         static function (string $name) {
             return [$name];
         },
-        DeliveryOptions::DELIVERY_TYPES_NAMES
+        array_keys(DeliveryOptions::DELIVERY_TYPES_V2_MAP)
     );
 });
 
