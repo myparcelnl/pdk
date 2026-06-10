@@ -109,6 +109,38 @@ it('filters out carriers this PDK version does not support', function () {
         ]);
 });
 
+it('filters out carriers that hydrated without a name', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
+    $repository = Pdk::get(PdkAccountRepositoryInterface::class);
+
+    $repository->store(
+        new Account([
+            'id'         => '1112223',
+            'platformId' => 1,
+            'status'     => 2,
+            'shops'      => [
+                [
+                    'id'         => '666',
+                    'accountId'  => '1112223',
+                    'platformId' => 1,
+                    'name'       => 'PartialShop',
+                    'carriers'   => [
+                        ['carrier' => RefCapabilitiesSharedCarrierV2::POSTNL],
+                        // Partial/legacy data with no carrier name: $carrier->carrier resolves to null.
+                        ['packageTypes' => ['PACKAGE']],
+                    ],
+                ],
+            ],
+        ])
+    );
+
+    /** @var AccountSettingsServiceInterface $service */
+    $service = Pdk::get(AccountSettingsServiceInterface::class);
+
+    expect($service->getCarriers()->pluck('carrier')->all())
+        ->toEqual([RefCapabilitiesSharedCarrierV2::POSTNL]);
+});
+
 it('checks subscription features in non-existent account', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkAccountRepository $repository */
     $repository = Pdk::get(PdkAccountRepositoryInterface::class);
