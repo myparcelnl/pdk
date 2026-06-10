@@ -65,9 +65,12 @@ class AccountSettingsService implements AccountSettingsServiceInterface
 
         // The SDK already rejects unknown V2 carriers at hydration time, leaving the
         // failed entries as raw arrays in the collection. Drop those alongside any
-        // Carriers whose name our local map doesn't recognise.
+        // Carriers whose name is missing (e.g. partial/legacy data) or that our local
+        // map doesn't recognise.
         return $shop->carriers->filter(static function ($carrier): bool {
-            return $carrier instanceof Carrier && Carrier::isSupported($carrier->carrier);
+            return $carrier instanceof Carrier
+                && is_string($carrier->carrier)
+                && Carrier::isSupported($carrier->carrier);
         })->values();
     }
 

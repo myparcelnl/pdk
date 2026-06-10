@@ -8,7 +8,7 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Sdk\Support\Str;
 use Throwable;
 
-class Utils extends \MyParcelNL\Sdk\Helper\Utils
+class Utils
 {
     /**
      * @var array
