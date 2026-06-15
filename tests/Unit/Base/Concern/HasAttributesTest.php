@@ -205,3 +205,13 @@ it('without() is fluent and accepts multiple keys', function () {
         ->and($result)->not->toHaveKey('perenboom')
         ->and($result)->toHaveKey('bloemkool');
 });
+
+it('without() exclusion applies to case-converting serialization', function () {
+    $model = new MockMutateModel();
+
+    $result = $model->without('myProperty')->toSnakeCaseArray();
+
+    // myProperty becomes my_property in snake_case — must still be excluded
+    expect($result)->not->toHaveKey('my_property')
+        ->and($result)->toHaveKey('bloemkool');
+});
