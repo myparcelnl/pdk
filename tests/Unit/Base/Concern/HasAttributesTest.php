@@ -164,3 +164,44 @@ it('can cast various datetime formats', function (string $input, string $expecte
         'Y-m-d H:i:s.u'  => ['2077-10-23 09:45:56.123456', '2077-10-23 09:45:56'],
     ];
 });
+
+it('excludes specified attributes from toArray output', function () {
+    $model = new MockMutateModel();
+
+    $full    = $model->toArray();
+    $without = $model->without('myProperty')->toArray();
+
+    expect($full)->toHaveKey('myProperty')
+        ->and($without)->not->toHaveKey('myProperty')
+        ->and($without)->toHaveKey('perenboom')
+        ->and($without)->toHaveKey('bloemkool');
+});
+
+it('without() does not prevent getAttribute() from working', function () {
+    $model = new MockMutateModel();
+
+    $model->without('myProperty');
+
+    expect($model->getAttribute('myProperty'))->toBe(1);
+});
+
+it('without() does not affect toArrayWithoutNull()', function () {
+    $model = new MockMutateModel();
+
+    // bloemkool has a get mutator returning 'bloemkool', so it survives SKIP_NULL.
+    // myProperty = 1 (not null), also survives SKIP_NULL normally.
+    $without = $model->without('myProperty')->toArrayWithoutNull();
+
+    expect($without)->not->toHaveKey('myProperty')
+        ->and($without)->toHaveKey('bloemkool');
+});
+
+it('without() is fluent and accepts multiple keys', function () {
+    $model = new MockMutateModel();
+
+    $result = $model->without('myProperty', 'perenboom')->toArray();
+
+    expect($result)->not->toHaveKey('myProperty')
+        ->and($result)->not->toHaveKey('perenboom')
+        ->and($result)->toHaveKey('bloemkool');
+});

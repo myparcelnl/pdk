@@ -82,6 +82,11 @@ trait HasAttributes
     private $classCastCache = [];
 
     /**
+     * @var string[]
+     */
+    private $excludedFromSerialization = [];
+
+    /**
      * Extract and cache all the mutated attributes of a class.
      *
      * @param  string $class
@@ -122,6 +127,10 @@ trait HasAttributes
     {
         $attributes = $this->getAttributes($flags);
 
+        if (! empty($this->excludedFromSerialization)) {
+            $attributes = Arr::except($attributes, $this->excludedFromSerialization);
+        }
+
         return $this->createArrayFromAttributes($attributes, $flags);
     }
 
@@ -134,6 +143,24 @@ trait HasAttributes
     public function except($attributes, ?int $flags = null): array
     {
         return $this->createArrayFromAttributes(Arr::except($this->attributes, Arr::wrap($attributes)), $flags);
+    }
+
+    /**
+     * Mark attributes to be excluded from toArray() serialization.
+     * Does not affect getAttribute() or internal attribute access.
+     *
+     * @param  string ...$attributes
+     *
+     * @return self
+     */
+    public function without(string ...$attributes): self
+    {
+        $this->excludedFromSerialization = array_merge(
+            $this->excludedFromSerialization,
+            array_map([Utils::class, 'changeCase'], $attributes)
+        );
+
+        return $this;
     }
 
     /**
