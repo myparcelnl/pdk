@@ -128,7 +128,13 @@ trait HasAttributes
         $attributes = $this->getAttributes($flags);
 
         if (! empty($this->excludedFromSerialization)) {
-            $attributes = Arr::except($attributes, $this->excludedFromSerialization);
+            $excluded = array_map(
+                static function (string $key) use ($flags): string {
+                    return Utils::changeCase($key, $flags);
+                },
+                $this->excludedFromSerialization
+            );
+            $attributes = Arr::except($attributes, $excluded);
         }
 
         return $this->createArrayFromAttributes($attributes, $flags);
@@ -155,10 +161,10 @@ trait HasAttributes
      */
     public function without(string ...$attributes): self
     {
-        $this->excludedFromSerialization = array_merge(
+        $this->excludedFromSerialization = array_unique(array_merge(
             $this->excludedFromSerialization,
             array_map([Utils::class, 'changeCase'], $attributes)
-        );
+        ));
 
         return $this;
     }
