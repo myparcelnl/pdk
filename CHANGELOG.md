@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/myparcelnl/pdk/compare/v4.0.0...v4.0.1) (2026-06-16)
+
+
+### :bug: Bug Fixes
+
+* don't crash on incomplete carrier data, just filter it out silently ([#491](https://github.com/myparcelnl/pdk/issues/491)) ([3a548b6](https://github.com/myparcelnl/pdk/commit/3a548b65913423c1b65d2f79a4cee989c3dc892c))
+
 ## [4.0.0](https://github.com/myparcelnl/pdk/compare/v3.5.3...v4.0.0) (2026-06-04)
 
 
