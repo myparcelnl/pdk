@@ -152,7 +152,7 @@ trait HasAttributes
     }
 
     /**
-     * Mark attributes to be excluded from toArray() serialization.
+     * Mark attributes to be excluded from model serialization (toArray() and its variants).
      * Does not affect getAttribute() or internal attribute access.
      *
      * @param  string ...$attributes

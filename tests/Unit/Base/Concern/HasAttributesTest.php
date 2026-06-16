@@ -185,7 +185,7 @@ it('without() does not prevent getAttribute() from working', function () {
     expect($model->getAttribute('myProperty'))->toBe(1);
 });
 
-it('without() does not affect toArrayWithoutNull()', function () {
+it('without() exclusion also applies to toArrayWithoutNull()', function () {
     $model = new MockMutateModel();
 
     // bloemkool has a get mutator returning 'bloemkool', so it survives SKIP_NULL.
