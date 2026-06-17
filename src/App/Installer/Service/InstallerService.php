@@ -93,6 +93,32 @@ class InstallerService implements InstallerServiceInterface
     {
         $this->setDefaultSettings();
         $this->migrateInstall();
+        $this->seedAppliedMigrationsForFreshInstall();
+    }
+
+    /**
+     * Pre-marks every registered upgrade migration as applied on a fresh install.
+     * This prevents them from firing retroactively on the user's first upgrade —
+     * they're considered "baked into" the installed version.
+     *
+     * @return void
+     */
+    protected function seedAppliedMigrationsForFreshInstall(): void
+    {
+        $upgrades = $this->createMigrationCollection(
+            method_exists($this->migrationService, 'getUpgradeMigrations')
+                ? $this->migrationService->getUpgradeMigrations()
+                : $this->migrationService->all()
+        );
+
+        $ids = $upgrades
+            ->map(function (MigrationInterface $m) {
+                return $this->resolveMigrationId($m);
+            })
+            ->values()
+            ->all();
+
+        $this->settingsRepository->store(Pdk::get('settingKeyAppliedMigrations'), $ids);
     }
 
     /**
