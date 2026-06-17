@@ -381,6 +381,21 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
+     * Sort comparator for migrations, ordering by semantic version.
+     *
+     * @TODO: extend to place timestamp-based migrations after version-based ones.
+     *
+     * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface $a
+     * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface $b
+     *
+     * @return int
+     */
+    public function compareMigrations(MigrationInterface $a, MigrationInterface $b): int
+    {
+        return version_compare($a->getVersion(), $b->getVersion());
+    }
+
+    /**
      * @param  \MyParcelNL\Pdk\Base\Support\Collection<MigrationInterface> $migrations
      *
      * @return void
@@ -388,11 +403,10 @@ class InstallerService implements InstallerServiceInterface
     private function runUpMigrations(Collection $migrations): void
     {
         $migrations
-            ->sort(function (MigrationInterface $a, MigrationInterface $b) {
-                return version_compare($a->getVersion(), $b->getVersion());
-            })
+            ->sort([$this, 'compareMigrations'])
             ->each(function (MigrationInterface $migration) {
                 $migration->up();
+                $this->markMigrationApplied($migration);
             });
     }
 }
