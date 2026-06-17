@@ -102,15 +102,23 @@ class InstallerService implements InstallerServiceInterface
      * This prevents them from firing retroactively on the user's first upgrade —
      * they're considered "baked into" the installed version.
      *
+     * Auto-discovered files from migrationDirectory are merged in alongside
+     * plugin-registered sources so that file-only deployments are also pre-marked.
+     *
      * @return void
      */
     protected function seedAppliedMigrationsForFreshInstall(): void
     {
-        $upgrades = $this->createMigrationCollection(
-            method_exists($this->migrationService, 'getUpgradeMigrations')
-                ? $this->migrationService->getUpgradeMigrations()
-                : $this->migrationService->all()
-        );
+        $registered = method_exists($this->migrationService, 'getUpgradeMigrations')
+            ? $this->migrationService->getUpgradeMigrations()
+            : $this->migrationService->all();
+
+        $sources = array_values(array_unique(array_merge(
+            $registered,
+            $this->discoverTimestampedMigrationFiles()
+        )));
+
+        $upgrades = $this->createMigrationCollection($sources);
 
         $ids = $upgrades
             ->map(function (MigrationInterface $m) {
@@ -397,11 +405,22 @@ class InstallerService implements InstallerServiceInterface
             );
         }
 
-        $migrations = $useLegacy
+        $registered = $useLegacy
             ? $this->migrationService->all()
             : $this->migrationService->getUpgradeMigrations();
 
-        $collection = $this->createMigrationCollection($migrations);
+        // Merge PDK-owned file discovery on top, then dedupe. A source can
+        // legitimately appear in both (plugin explicitly registered a file
+        // that's also in migrationDirectory) — dedupe prevents double-require.
+        // Dedupe compares source strings, so a file registered under a different
+        // path than discovery returns (e.g. via a symlink) would not be deduped;
+        // plugins should rely on discovery alone or register the exact discovered path.
+        $sources = array_values(array_unique(array_merge(
+            $registered,
+            $this->discoverTimestampedMigrationFiles()
+        )));
+
+        $collection = $this->createMigrationCollection($sources);
 
         if (! $version) {
             return $collection;
@@ -413,6 +432,38 @@ class InstallerService implements InstallerServiceInterface
         return $collection->filter(function (MigrationInterface $migration) use ($applied) {
             return ! in_array($this->resolveMigrationId($migration), $applied, true);
         });
+    }
+
+    /**
+     * Returns absolute paths of every file in the configured migrationDirectory
+     * whose basename matches the YYYY_MM_DD_HHMMSS_<slug>.php convention.
+     *
+     * Returns an empty array if the config key is undefined, null, or does not
+     * point to an existing directory — lets plugins opt out by setting
+     * migrationDirectory to null in their own config.
+     *
+     * @return string[]
+     */
+    private function discoverTimestampedMigrationFiles(): array
+    {
+        $dir = null;
+        try {
+            $dir = Pdk::get('migrationDirectory');
+        } catch (\Throwable $e) {
+            // Config key not defined — treat as disabled.
+            return [];
+        }
+
+        if (! is_string($dir) || ! is_dir($dir)) {
+            return [];
+        }
+
+        $files = glob(rtrim($dir, '/') . '/*.php') ?: [];
+
+        return array_values(array_filter($files, function (string $path) {
+            $basename = pathinfo($path, PATHINFO_FILENAME);
+            return (bool) preg_match('/^\d{4}_\d{2}_\d{2}_\d{6}_/', $basename);
+        }));
     }
 
     private function migrateUninstall(): void
