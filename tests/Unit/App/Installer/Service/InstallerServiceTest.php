@@ -381,6 +381,99 @@ PHP
     }
 });
 
+it('auto-discovers timestamped migration files from migrationDirectory', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_autodiscover_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+
+    $file = $tmpDir . '/2026_06_01_000000_autodiscover_test.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $repo->store('order.autoDiscoverMarker', 'applied');
+    }
+};
+PHP
+    );
+
+    Pdk::set('migrationDirectory', $tmpDir);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Installed version must differ from current (1.3.0) to trigger the upgrade path.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    try {
+        Installer::install();
+
+        $applied = $settingsRepository->get($appliedMigrationsKey);
+
+        expect($applied)->toContain('2026_06_01_000000_autodiscover_test');
+        expect($settingsRepository->get('order.autoDiscoverMarker'))->toBe('applied');
+    } finally {
+        Pdk::set('migrationDirectory', null);
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('does not duplicate-run when the same file is both in migrationDirectory and registered via MigrationService', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_dedupe_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+
+    $file = $tmpDir . '/2026_06_02_000000_dedupe_test.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        $GLOBALS['__dedupe_runs'] = ($GLOBALS['__dedupe_runs'] ?? 0) + 1;
+    }
+};
+PHP
+    );
+
+    Pdk::set('migrationDirectory', $tmpDir);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Installed version must differ from current (1.3.0) to trigger the upgrade path.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    // Register the SAME file via the MigrationService too.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+    $GLOBALS['__dedupe_runs'] = 0;
+
+    try {
+        Installer::install();
+
+        expect($GLOBALS['__dedupe_runs'])->toBe(1);
+    } finally {
+        Pdk::set('migrationDirectory', null);
+        unset($GLOBALS['__dedupe_runs']);
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
 it('runs down() on timestamped file-based migrations during uninstall', function () {
     $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_test_' . uniqid();
     mkdir($tmpDir, 0777, true);
