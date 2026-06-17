@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Bootstrap;
 
 use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
-use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 
 final class MockTimestampedMigration20260101 extends AbstractTimestampedMigration
@@ -20,7 +21,9 @@ final class MockTimestampedMigration20260101 extends AbstractTimestampedMigratio
     public function up(): void
     {
         // Write a sentinel so tests can assert this migration ran.
-        Settings::set(sprintf('%s.%s', OrderSettings::ID, 'mockTimestampedMarker'), 'applied');
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $repo->store(Pdk::get('createSettingsKey')(OrderSettings::ID . '.mockTimestampedMarker'), 'applied');
 
         if (isset($GLOBALS['__migration_order'])) {
             $GLOBALS['__migration_order'][] = $this->getId();
