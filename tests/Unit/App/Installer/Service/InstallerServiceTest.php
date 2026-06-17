@@ -263,11 +263,21 @@ it('seeds applied_migrations from installed_version on first access', function (
 
     // Mock migrations in the test bootstrap: MockUpgradeMigration110 (1.1.0),
     // MockUpgradeMigration120 (1.2.0), MockUpgradeMigration130 (1.3.0).
-    // Versions <= 1.2.0 should be seeded as applied; 1.3.0 should NOT be seeded.
+    // Versions <= 1.2.0 are seeded from installed_version; 1.3.0 was not seeded but
+    // runs as an upgrade migration and is recorded by markMigrationApplied() after its up() call.
     expect($applied)
         ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110::class)
         ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
-        ->not->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
+
+    // Prove the seed boundary at 1.2.0 via side effects, not just list membership:
+    // 110 and 120 were SEEDED, so their up() must NOT have run (their settings stay null),
+    // while 130 was not seeded and therefore ran (it writes order.emptyMailboxWeight = 400).
+    expectSettingsToContain([
+        'label.description'        => null, // MockUpgradeMigration110 seeded, not run
+        'order.barcodeInNoteTitle' => null, // MockUpgradeMigration120 seeded, not run
+        'order.emptyMailboxWeight' => 400,  // MockUpgradeMigration130 not seeded, ran
+    ]);
 });
 
 it('seeds applied_migrations with every upgrade migration after a fresh install', function () {
@@ -303,4 +313,23 @@ it('seeds applied_migrations with every upgrade migration after a fresh install'
         ->not->toBeEmpty()
         ->and($settingsRepository->get('order.mockTimestampedMarker'))
         ->toBeNull();
+});
+
+it('records a migration identity in applied_migrations after it runs', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Pre-seed as if on 1.1.0 — only MockUpgradeMigration110 considered applied.
+    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    Installer::install();
+
+    $applied = $settingsRepository->get($appliedMigrationsKey);
+
+    expect($applied)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
 });
