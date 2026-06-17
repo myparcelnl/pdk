@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\Console\Command\GenerateDocumentationCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateFactoryCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateIdeHelperCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateTypeScriptTypesCommand;
+use MyParcelNL\Pdk\Console\Command\MakeMigrationCommand;
 use MyParcelNL\Pdk\Console\Command\ParseSourceCommand;
 use Symfony\Component\Console\Application;
 
@@ -25,6 +26,7 @@ final class PdkConsoleApp
         $app = new Application();
 
         $app->addCommands([
+            new MakeMigrationCommand(),
             new ParseSourceCommand(),
             new GenerateDocumentationCommand(),
             new GenerateFactoryCommand(),
