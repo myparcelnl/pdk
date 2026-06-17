@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\TimestampedMigrationInterface;
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -292,17 +293,69 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * @template T of \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface
-     * @param  array<T> $migrations
+     * Builds a Collection of MigrationInterface instances from an array of sources.
+     * Each source is either an absolute path to a .php file that returns an
+     * anonymous-class migration, or an FQCN resolved via the DI container.
+     *
+     * @param  array<int, string> $migrations
      *
      * @return \MyParcelNL\Pdk\Base\Support\Collection
      */
     private function createMigrationCollection(array $migrations): Collection
     {
         return Collection::make($migrations)
-            ->map(function (string $className) {
-                return Pdk::get($className);
+            ->map(function ($source) {
+                // File-based migration: absolute path ending in .php
+                if (is_string($source)
+                    && '.php' === substr($source, -4)
+                    && is_file($source)
+                ) {
+                    return $this->loadFileMigration($source);
+                }
+
+                // Class-based migration: FQCN resolved via container
+                return Pdk::get($source);
             });
+    }
+
+    /**
+     * Loads an anonymous-class migration from a file whose basename follows
+     * the "YYYY_MM_DD_HHMMSS_<slug>.php" convention, injects identity into
+     * AbstractTimestampedMigration instances, and returns the migration.
+     *
+     * Throws a RuntimeException when the file does not return a MigrationInterface
+     * instance or when the filename does not match the required convention.
+     *
+     * @param  string $path Absolute path to the migration file.
+     *
+     * @return \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface
+     */
+    private function loadFileMigration(string $path): MigrationInterface
+    {
+        /** @var mixed $migration */
+        $migration = require $path;
+
+        if (! $migration instanceof MigrationInterface) {
+            throw new \RuntimeException(sprintf(
+                'Migration file "%s" must return an instance of MigrationInterface.',
+                $path
+            ));
+        }
+
+        if ($migration instanceof AbstractTimestampedMigration) {
+            $basename = pathinfo($path, PATHINFO_FILENAME);
+
+            if (! preg_match('/^\d{4}_\d{2}_\d{2}_\d{6}_/', $basename)) {
+                throw new \RuntimeException(sprintf(
+                    'Migration filename "%s" does not match "YYYY_MM_DD_HHMMSS_<slug>" convention.',
+                    $basename
+                ));
+            }
+
+            $migration->setIdentity($basename);
+        }
+
+        return $migration;
     }
 
     /**
@@ -373,7 +426,8 @@ class InstallerService implements InstallerServiceInterface
     {
         $migrations
             ->sort(function (MigrationInterface $a, MigrationInterface $b) {
-                return version_compare($b->getVersion(), $a->getVersion());
+                // Reverse the up-order: timestamp-based first (they were last), then version-based descending.
+                return $this->compareMigrations($b, $a);
             })
             ->each(function (MigrationInterface $migration) {
                 $migration->down();
@@ -381,9 +435,10 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * Sort comparator for migrations, ordering by semantic version.
-     *
-     * @TODO: extend to place timestamp-based migrations after version-based ones.
+     * Sort comparator for migrations. Version-based migrations are ordered by
+     * semantic version and run before timestamp-based ones. Timestamp-based
+     * migrations are ordered lexicographically by their ID (YYYY_MM_DD_HHMMSS_<slug>),
+     * which is equivalent to chronological order.
      *
      * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface $a
      * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface $b
@@ -392,6 +447,19 @@ class InstallerService implements InstallerServiceInterface
      */
     public function compareMigrations(MigrationInterface $a, MigrationInterface $b): int
     {
+        $aIsTimestamped = $a instanceof TimestampedMigrationInterface;
+        $bIsTimestamped = $b instanceof TimestampedMigrationInterface;
+
+        // Version-based migrations run before timestamp-based ones.
+        if ($aIsTimestamped !== $bIsTimestamped) {
+            return $aIsTimestamped ? 1 : -1;
+        }
+
+        if ($a instanceof TimestampedMigrationInterface && $b instanceof TimestampedMigrationInterface) {
+            // Both are timestamped: lexicographic order on ID equals chronological order.
+            return strcmp($a->getId(), $b->getId());
+        }
+
         return version_compare($a->getVersion(), $b->getVersion());
     }
 

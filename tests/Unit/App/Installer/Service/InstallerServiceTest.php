@@ -333,3 +333,50 @@ it('records a migration identity in applied_migrations after it runs', function 
         ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
         ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
 });
+
+it('loads a file-based migration and runs it exactly once', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_test_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_04_17_100000_test_file_migration.php';
+
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $key  = Pdk::get('createSettingsKey')('order.barcodeInNoteTitle');
+        $repo->store($key, 'file-migration-applied');
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Simulate an install that is behind the current version so the upgrade path runs.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    try {
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+        Installer::install();
+
+        $applied = $settingsRepository->get($appliedMigrationsKey);
+
+        expect($applied)->toContain('2026_04_17_100000_test_file_migration');
+        expectSettingsToContain(['order.barcodeInNoteTitle' => 'file-migration-applied']);
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
