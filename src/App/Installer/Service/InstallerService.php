@@ -94,6 +94,10 @@ class InstallerService implements InstallerServiceInterface
     {
         $this->setDefaultSettings();
         $this->migrateInstall();
+        // migrateInstall() marks the installation migrations as applied; this call then
+        // overwrites applied_migrations with the upgrade-migration ids. That overwrite is
+        // intentional: installation migrations never appear in the upgrade set, so dropping
+        // their ids here cannot cause them to re-run.
         $this->seedAppliedMigrationsForFreshInstall();
     }
 
@@ -254,11 +258,16 @@ class InstallerService implements InstallerServiceInterface
      */
     protected function migrateDown(): void
     {
+        $applied = $this->getAppliedMigrations();
+
         $this->runDownMigrations(
             $this->getUpgradeMigrations()
-                ->filter(function (MigrationInterface $migration) {
+                ->filter(function (MigrationInterface $migration) use ($applied) {
+                    // Timestamp-based migrations are version-less, so they can't be
+                    // version-gated. Only reverse one that was actually applied — otherwise a
+                    // migration whose up() never ran on this install would have its down() run.
                     if ($migration instanceof TimestampedMigrationInterface) {
-                        return true; // not version-gated; always reversed on uninstall
+                        return in_array($this->resolveMigrationId($migration), $applied, true);
                     }
 
                     return version_compare($migration->getVersion(), $this->getInstalledVersion(), '<=');
