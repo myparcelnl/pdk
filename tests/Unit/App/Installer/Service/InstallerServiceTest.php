@@ -242,3 +242,26 @@ it('does not uninstall if is not installed', function () {
         ->and($settingsRepository->get($createSettingsKey('label.description')))
         ->toBe('description');
 });
+
+it('seeds applied_migrations from installed_version on first access', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Simulate an existing install upgraded past 1.2.0 but before this PDK change.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    Installer::install();
+
+    $applied = $settingsRepository->get($appliedMigrationsKey);
+
+    // Mock migrations in the test bootstrap: MockUpgradeMigration110 (1.1.0),
+    // MockUpgradeMigration120 (1.2.0), MockUpgradeMigration130 (1.3.0).
+    // Versions <= 1.2.0 should be seeded as applied; 1.3.0 should NOT be seeded.
+    expect($applied)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
+        ->not->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
+});

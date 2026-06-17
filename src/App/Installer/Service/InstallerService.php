@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\App\Installer\Service;
 use MyParcelNL\Pdk\App\Installer\Contract\InstallerServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
+use MyParcelNL\Pdk\App\Installer\Contract\TimestampedMigrationInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -110,6 +111,107 @@ class InstallerService implements InstallerServiceInterface
     protected function getInstalledVersion(): ?string
     {
         return $this->settingsRepository->get(Pdk::get('settingKeyInstalledVersion'));
+    }
+
+    /**
+     * Returns the identity string used to track whether a migration has been applied.
+     * Falls back to the class FQCN for class-based migrations that don't implement
+     * TimestampedMigrationInterface.
+     *
+     * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface $migration
+     *
+     * @return string
+     */
+    protected function resolveMigrationId(MigrationInterface $migration): string
+    {
+        if ($migration instanceof TimestampedMigrationInterface) {
+            return $migration->getId();
+        }
+
+        return get_class($migration);
+    }
+
+    /**
+     * Returns the list of migration identities already applied on this installation.
+     * On first access after a plugin upgrade (when the key doesn't exist yet but
+     * installed_version does), seeds the list from the legacy installed_version
+     * gate so class-based migrations that already ran are not re-executed.
+     *
+     * Fresh installs bypass this lazy seed path — executeInstallation() seeds
+     * eagerly with ALL registered upgrade migrations. See that method for why.
+     *
+     * @param  null|\MyParcelNL\Pdk\Base\Support\Collection $allMigrations Required on first access to compute the seed.
+     *
+     * @return string[]
+     */
+    protected function getAppliedMigrations(?Collection $allMigrations = null): array
+    {
+        $key    = Pdk::get('settingKeyAppliedMigrations');
+        $stored = $this->settingsRepository->get($key);
+
+        // An empty result is treated as "not yet seeded": the settings repository
+        // returns an empty array for a key that was never stored, so it cannot be
+        // distinguished from a deliberately-empty list. Re-seeding an empty list is
+        // idempotent, so treating empty as absent is safe.
+        if (is_array($stored) && ! empty($stored)) {
+            return $stored;
+        }
+
+        if (null === $allMigrations) {
+            // Cannot seed without the collection; return empty but do NOT persist.
+            return [];
+        }
+
+        $installedVersion = $this->getInstalledVersion();
+
+        if (! $installedVersion) {
+            // No installed_version and no applied_migrations. This only happens
+            // when getAppliedMigrations is called during install() before
+            // executeInstallation completes. Return empty without persisting —
+            // executeInstallation will seed eagerly.
+            return [];
+        }
+
+        // Existing install upgrading to a PDK that has this tracking system.
+        // Mark every class-based migration whose version is <= installed_version as applied.
+        // Timestamp-based migrations are intentionally NOT seeded — they represent
+        // net-new work relative to the pre-tracking era and should run.
+        $seed = $allMigrations
+            ->filter(function (MigrationInterface $m) use ($installedVersion) {
+                if ($m instanceof TimestampedMigrationInterface) {
+                    return false;
+                }
+
+                return version_compare($m->getVersion(), $installedVersion, '<=');
+            })
+            ->map(function (MigrationInterface $m) {
+                return $this->resolveMigrationId($m);
+            })
+            ->values()
+            ->all();
+
+        $this->settingsRepository->store($key, $seed);
+
+        return $seed;
+    }
+
+    /**
+     * Appends a migration identity to the persisted applied list.
+     *
+     * @param  \MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface $migration
+     *
+     * @return void
+     */
+    protected function markMigrationApplied(MigrationInterface $migration): void
+    {
+        $key     = Pdk::get('settingKeyAppliedMigrations');
+        $applied = $this->getAppliedMigrations();
+        $id      = $this->resolveMigrationId($migration);
+
+        if (! in_array($id, $applied, true)) {
+            $applied[] = $id;
+            $this->settingsRepository->store($key, $applied);
+        }
     }
 
     /**
@@ -222,9 +324,11 @@ class InstallerService implements InstallerServiceInterface
             return $collection;
         }
 
-        return $collection->filter(function (MigrationInterface $migration) use ($version) {
-            return version_compare($migration->getVersion(), $this->getInstalledVersion(), '>')
-                && version_compare($migration->getVersion(), $version, '<=');
+        // Trigger seeding on first access (pass collection so seed can be computed).
+        $applied = $this->getAppliedMigrations($collection);
+
+        return $collection->filter(function (MigrationInterface $migration) use ($applied) {
+            return ! in_array($this->resolveMigrationId($migration), $applied, true);
         });
     }
 
