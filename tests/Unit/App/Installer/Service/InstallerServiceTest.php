@@ -307,11 +307,12 @@ it('seeds applied_migrations with every upgrade migration after a fresh install'
         ->toContain('2026_01_01_000000_mock_timestamped');
 
     // The timestamped migration's up() must NOT have run (only pre-marked, not executed).
-    // MockTimestampedMigration20260101::up() writes order.mockTimestampedMarker = 'applied'
-    // via the Settings facade, so had it run the marker would be 'applied' instead of null.
+    // MockTimestampedMigration20260101::up() stores order.mockTimestampedMarker = 'applied'
+    // through the settings repository, so had it run the marker would be 'applied' not null.
+    // Read via the same prefixed key the migration writes, otherwise the check never fires.
     expect($settingsRepository->get($appliedMigrationsKey))
         ->not->toBeEmpty()
-        ->and($settingsRepository->get('order.mockTimestampedMarker'))
+        ->and($settingsRepository->get(Pdk::get('createSettingsKey')('order.mockTimestampedMarker')))
         ->toBeNull();
 });
 
@@ -471,6 +472,72 @@ PHP
         unset($GLOBALS['__dedupe_runs']);
         @unlink($file);
         @rmdir($tmpDir);
+    }
+});
+
+it('runs timestamp-based migrations after version-based ones within the same execution', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+    );
+
+    $GLOBALS['__migration_order'] = [];
+
+    Installer::install();
+
+    $order = $GLOBALS['__migration_order'];
+
+    expect($order)
+        ->toContain('1.2.0')
+        ->toContain('1.3.0')
+        ->toContain('2026_01_01_000000_mock_timestamped')
+        // 1.1.0 equals the installed version, so it is seeded as applied and must not run.
+        ->not->toContain('1.1.0');
+
+    $last = end($order);
+    expect($last)->toStartWith('2026_');
+
+    unset($GLOBALS['__migration_order']);
+});
+
+it('runs a new timestamp migration even when current version is an RC below installed version', function () {
+    // Simulate the WC test environment: installed is 1.3.0, but this build reports 1.3.0-rc.999
+    Pdk::set('appInfo', new AppInfo([
+        'name'    => 'test',
+        'version' => '1.3.0-rc.999',
+    ]));
+
+    try {
+        /** @var PdkSettingsRepositoryInterface $settingsRepository */
+        $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+        $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+        $settingsRepository->store($installedVersionKey, '1.3.0');
+        $settingsRepository->store($appliedMigrationsKey, null);
+
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+            \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+        );
+
+        Installer::install();
+
+        $applied = $settingsRepository->get($appliedMigrationsKey);
+
+        expect($applied)->toContain('2026_01_01_000000_mock_timestamped');
+    } finally {
+        // Restore the original appInfo so subsequent tests are not affected.
+        Pdk::set('appInfo', new AppInfo([
+            'name'    => 'test',
+            'version' => '1.3.0',
+        ]));
     }
 });
 

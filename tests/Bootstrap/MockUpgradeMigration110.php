@@ -34,6 +34,10 @@ class MockUpgradeMigration110 implements UpgradeMigrationInterface
 
     public function up(): void
     {
+        if (isset($GLOBALS['__migration_order'])) {
+            $GLOBALS['__migration_order'][] = $this->getVersion();
+        }
+
         $this->settingsRepository->store($this->getSettingKey(), 'new-description');
     }
 
