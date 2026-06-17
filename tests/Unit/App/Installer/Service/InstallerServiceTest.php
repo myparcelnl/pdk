@@ -541,12 +541,12 @@ it('runs a new timestamp migration even when current version is an RC below inst
     }
 });
 
-it('runs down() on timestamped file-based migrations during uninstall', function () {
-    $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_test_' . uniqid();
+it('runs down() on a timestamped migration that was applied', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_applied_' . uniqid();
     mkdir($tmpDir, 0777, true);
-    $file = $tmpDir . '/2026_05_01_000000_down_test_migration.php';
+    $file = $tmpDir . '/2026_05_01_000000_down_applied_migration.php';
 
-    // Write a migration whose down() marks a sentinel key that no other mock migration touches.
+    // up() is a no-op; down() marks a sentinel key that no other mock migration touches.
     file_put_contents($file, <<<'PHP'
 <?php
 use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
@@ -556,30 +556,33 @@ use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 return new class extends AbstractTimestampedMigration {
     public function up(): void
     {
-        // No-op: this migration exists only to test that down() is called on uninstall.
+        // No-op; running it merely records the migration as applied.
     }
 
     public function down(): void
     {
         /** @var PdkSettingsRepositoryInterface $repo */
         $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
-        $key  = Pdk::get('createSettingsKey')('order.downTestMarker');
-        $repo->store($key, 'down-ran');
+        $repo->store(Pdk::get('createSettingsKey')('order.downTestMarker'), 'down-ran');
     }
 };
 PHP
     );
 
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
-    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
 
     try {
         \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
 
-        // Store an installed version so uninstall() proceeds.
-        $settingsRepository->store($installedVersionKey, '1.3.0');
+        // Upgrade into the migration so its up() runs and it is recorded as applied.
+        $settingsRepository->store($installedVersionKey, '1.2.0');
+        $settingsRepository->store($appliedMigrationsKey, null);
+        Installer::install();
 
+        // Now uninstall: the migration was applied, so its down() must run.
         Installer::uninstall();
 
         // The sentinel key is not a declared OrderSettings model property, so we read
@@ -587,6 +590,56 @@ PHP
         $sentinel = $settingsRepository->get(Pdk::get('createSettingsKey')('order.downTestMarker'));
 
         expect($sentinel)->toBe('down-ran');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('does not run down() on a timestamped migration that was never applied', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_unapplied_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_05_02_000000_down_unapplied_migration.php';
+
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+    }
+
+    public function down(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $repo->store(Pdk::get('createSettingsKey')('order.downTestMarker'), 'down-ran');
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    try {
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+        // Installed, but the migration was never applied (it isn't in applied_migrations).
+        $settingsRepository->store($installedVersionKey, '1.3.0');
+        $settingsRepository->store($appliedMigrationsKey, ['some_other_applied_migration']);
+
+        Installer::uninstall();
+
+        // Its up() never ran, so its down() must NOT run either.
+        $sentinel = $settingsRepository->get(Pdk::get('createSettingsKey')('order.downTestMarker'));
+
+        expect($sentinel)->toBeNull();
     } finally {
         @unlink($file);
         @rmdir($tmpDir);
