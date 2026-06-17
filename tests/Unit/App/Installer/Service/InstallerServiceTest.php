@@ -41,6 +41,10 @@ usesShared(
     new UsesSettingsMock()
 );
 
+afterEach(function () {
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::resetExtraUpgrades();
+});
+
 function expectSettingsToContain(array $values): void
 {
     /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
@@ -264,4 +268,39 @@ it('seeds applied_migrations from installed_version on first access', function (
         ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110::class)
         ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
         ->not->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
+});
+
+it('seeds applied_migrations with every upgrade migration after a fresh install', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Simulate a fresh install: no installed_version, no applied_migrations.
+    $settingsRepository->store($installedVersionKey, null);
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    // Register one timestamped migration to prove it too gets pre-marked.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+    );
+
+    Installer::install();
+
+    $applied = $settingsRepository->get($appliedMigrationsKey);
+
+    // Every upgrade migration that was registered at install time must be pre-marked.
+    expect($applied)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class)
+        ->toContain('2026_01_01_000000_mock_timestamped');
+
+    // The timestamped migration's up() must NOT have run (only pre-marked, not executed).
+    // MockTimestampedMigration20260101::up() writes order.mockTimestampedMarker = 'applied'
+    // via the Settings facade, so had it run the marker would be 'applied' instead of null.
+    expect($settingsRepository->get($appliedMigrationsKey))
+        ->not->toBeEmpty()
+        ->and($settingsRepository->get('order.mockTimestampedMarker'))
+        ->toBeNull();
 });
