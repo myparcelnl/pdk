@@ -380,3 +380,55 @@ PHP
         @rmdir($tmpDir);
     }
 });
+
+it('runs down() on timestamped file-based migrations during uninstall', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_test_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_05_01_000000_down_test_migration.php';
+
+    // Write a migration whose down() marks a sentinel key that no other mock migration touches.
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        // No-op: this migration exists only to test that down() is called on uninstall.
+    }
+
+    public function down(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $key  = Pdk::get('createSettingsKey')('order.downTestMarker');
+        $repo->store($key, 'down-ran');
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+
+    try {
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+        // Store an installed version so uninstall() proceeds.
+        $settingsRepository->store($installedVersionKey, '1.3.0');
+
+        Installer::uninstall();
+
+        // The sentinel key is not a declared OrderSettings model property, so we read
+        // directly via the repository instead of expectSettingsToContain().
+        $sentinel = $settingsRepository->get(Pdk::get('createSettingsKey')('order.downTestMarker'));
+
+        expect($sentinel)->toBe('down-ran');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});

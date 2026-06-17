@@ -249,6 +249,10 @@ class InstallerService implements InstallerServiceInterface
         $this->runDownMigrations(
             $this->getUpgradeMigrations()
                 ->filter(function (MigrationInterface $migration) {
+                    if ($migration instanceof TimestampedMigrationInterface) {
+                        return true; // not version-gated; always reversed on uninstall
+                    }
+
                     return version_compare($migration->getVersion(), $this->getInstalledVersion(), '<=');
                 })
         );
