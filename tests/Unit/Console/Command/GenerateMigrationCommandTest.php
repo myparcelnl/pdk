@@ -43,7 +43,7 @@ it('generates a timestamped migration file in the default src/Migration dir', fu
     }
 });
 
-it('respects the --upgrade-path option', function () {
+it('respects the --dir option', function () {
     $tmpRoot   = sys_get_temp_dir() . '/pdk_make_migration_' . uniqid('', true);
     $targetDir = $tmpRoot . '/src/CustomMigrations';
     mkdir($targetDir, 0777, true);
@@ -56,7 +56,7 @@ it('respects the --upgrade-path option', function () {
         $tester  = new CommandTester($command);
         $tester->execute([
             'slug'           => 'foo_bar',
-            '--upgrade-path' => 'src/CustomMigrations',
+            '--dir' => 'src/CustomMigrations',
         ]);
 
         expect($tester->getStatusCode())->toBe(0);
