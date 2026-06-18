@@ -24,6 +24,10 @@ class MockUpgradeMigration110 implements UpgradeMigrationInterface
 
     public function down(): void
     {
+        if (isset($GLOBALS['__down_order'])) {
+            $GLOBALS['__down_order'][] = $this->getVersion();
+        }
+
         $this->settingsRepository->store($this->getSettingKey(), 'old-description');
     }
 

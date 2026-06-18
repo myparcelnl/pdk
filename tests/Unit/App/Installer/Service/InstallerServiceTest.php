@@ -645,3 +645,43 @@ PHP
         @rmdir($tmpDir);
     }
 });
+
+it('reverses an applied versioned migration on uninstall even when installed_version is an RC', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // The plugin was last installed on a release-candidate build, so installed_version is a
+    // pre-release. version_compare treats 1.2.0 as NEWER than 1.2.0-rc.1, so a version-gated
+    // down filter would wrongly skip the already-applied 1.2.0 migration. Identity tracking
+    // must reverse it because it is recorded in applied_migrations.
+    $settingsRepository->store($installedVersionKey, '1.2.0-rc.1');
+    $settingsRepository->store(
+        $appliedMigrationsKey,
+        [\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class]
+    );
+
+    Installer::uninstall();
+
+    // MockUpgradeMigration120::down() restores order.barcodeInNoteTitle.
+    expectSettingsToContain(['order.barcodeInNoteTitle' => 'old-barcode-in-note']);
+});
+
+it('runs down migrations in reverse of the up order', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+
+    $settingsRepository->store($installedVersionKey, '1.3.0');
+
+    $GLOBALS['__down_order'] = [];
+
+    Installer::uninstall();
+
+    $order = $GLOBALS['__down_order'];
+    unset($GLOBALS['__down_order']);
+
+    // Up runs versioned migrations ascending (1.1.0, 1.2.0, 1.3.0); down must mirror that.
+    expect($order)->toBe(['1.3.0', '1.2.0', '1.1.0']);
+});
