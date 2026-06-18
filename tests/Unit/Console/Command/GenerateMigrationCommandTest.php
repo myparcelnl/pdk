@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Console\Command;
 
-use MyParcelNL\Pdk\Console\Command\MakeMigrationCommand;
+use MyParcelNL\Pdk\Console\Command\GenerateMigrationCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 it('generates a timestamped migration file in the default src/Migration dir', function () {
@@ -17,7 +17,7 @@ it('generates a timestamped migration file in the default src/Migration dir', fu
     chdir($tmpRoot);
 
     try {
-        $command = new MakeMigrationCommand();
+        $command = new GenerateMigrationCommand();
         $tester  = new CommandTester($command);
         $tester->execute(['slug' => 'migrate_carriers_to_v2']);
 
@@ -52,7 +52,7 @@ it('respects the --upgrade-path option', function () {
     chdir($tmpRoot);
 
     try {
-        $command = new MakeMigrationCommand();
+        $command = new GenerateMigrationCommand();
         $tester  = new CommandTester($command);
         $tester->execute([
             'slug'           => 'foo_bar',
@@ -81,7 +81,7 @@ it('rejects an invalid slug and writes no file', function () {
     chdir($tmpRoot);
 
     try {
-        $command = new MakeMigrationCommand();
+        $command = new GenerateMigrationCommand();
         $tester  = new CommandTester($command);
         $tester->execute(['slug' => 'Bad-Slug']);
 
@@ -107,7 +107,7 @@ it('refuses to overwrite an existing migration file', function () {
     chdir($tmpRoot);
 
     try {
-        $command = new MakeMigrationCommand();
+        $command = new GenerateMigrationCommand();
 
         // First run: file is created successfully.
         $tester = new CommandTester($command);
