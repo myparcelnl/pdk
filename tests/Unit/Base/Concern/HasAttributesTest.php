@@ -215,3 +215,22 @@ it('without() exclusion applies to case-converting serialization', function () {
     expect($result)->not->toHaveKey('my_property')
         ->and($result)->toHaveKey('bloemkool');
 });
+
+it('with() reverses a without() exclusion', function () {
+    $model = new MockMutateModel();
+
+    $result = $model->without('myProperty')->with('myProperty')->toArray();
+
+    expect($result)->toHaveKey('myProperty');
+});
+
+it('except() respects without() exclusions', function () {
+    $model = new MockMutateModel();
+
+    // without() excludes myProperty; except() excludes perenboom — both should be absent
+    $result = $model->without('myProperty')->except('perenboom');
+
+    expect($result)->not->toHaveKey('myProperty')
+        ->and($result)->not->toHaveKey('perenboom')
+        ->and($result)->toHaveKey('bloemkool');
+});
