@@ -7,12 +7,10 @@ namespace MyParcelNL\Pdk\App\Installer\Contract;
 interface TimestampedMigrationInterface extends MigrationInterface
 {
     /**
-     * Stable unique identifier for this migration. Used for per-migration tracking
-     * AND for ordering — because filenames follow "YYYY_MM_DD_HHMMSS_<slug>", a
-     * lexicographic sort on this string yields chronological order.
-     *
-     * For file-based migrations this is the filename without extension, e.g.
-     * "2026_04_17_100000_migrate_carriers".
+     * The migration's stable, unique id: its filename without the .php extension,
+     * e.g. "2026_04_17_100000_migrate_carriers". It identifies the migration in the
+     * applied-migrations list and sets its run order — because the filename starts with
+     * a timestamp, sorting ids alphabetically also sorts the migrations oldest-to-newest.
      */
     public function getId(): string;
 }

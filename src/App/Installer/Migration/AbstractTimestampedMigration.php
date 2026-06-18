@@ -30,6 +30,9 @@ abstract class AbstractTimestampedMigration implements TimestampedMigrationInter
         $this->id = $id;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getId(): string
     {
         if ('' === $this->id) {
