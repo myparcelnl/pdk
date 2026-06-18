@@ -404,6 +404,7 @@ return new class extends AbstractTimestampedMigration {
 PHP
     );
 
+    $originalMigrationDir = Pdk::get('migrationDirectory');
     Pdk::set('migrationDirectory', $tmpDir);
 
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
@@ -423,7 +424,7 @@ PHP
         expect($applied)->toContain('2026_06_01_000000_autodiscover_test');
         expect($settingsRepository->get('order.autoDiscoverMarker'))->toBe('applied');
     } finally {
-        Pdk::set('migrationDirectory', null);
+        Pdk::set('migrationDirectory', $originalMigrationDir);
         @unlink($file);
         @rmdir($tmpDir);
     }
@@ -447,6 +448,7 @@ return new class extends AbstractTimestampedMigration {
 PHP
     );
 
+    $originalMigrationDir = Pdk::get('migrationDirectory');
     Pdk::set('migrationDirectory', $tmpDir);
 
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
@@ -468,7 +470,7 @@ PHP
 
         expect($GLOBALS['__dedupe_runs'])->toBe(1);
     } finally {
-        Pdk::set('migrationDirectory', null);
+        Pdk::set('migrationDirectory', $originalMigrationDir);
         unset($GLOBALS['__dedupe_runs']);
         @unlink($file);
         @rmdir($tmpDir);
@@ -780,6 +782,46 @@ PHP;
         unset($GLOBALS['__ts_order']);
         @unlink($early);
         @unlink($late);
+        @rmdir($tmpDir);
+    }
+});
+
+it('runs a migration only once even if the same file is registered under divergent paths', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_dup_run_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_08_01_000000_dup.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        $GLOBALS['__dup_runs'] = ($GLOBALS['__dup_runs'] ?? 0) + 1;
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyAppliedMigrations'), null);
+
+    // Two different path strings pointing at the same file — source dedupe (array_unique)
+    // keeps both, but they resolve to the same migration identity.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($tmpDir . '/./2026_08_01_000000_dup.php');
+
+    $GLOBALS['__dup_runs'] = 0;
+
+    try {
+        Installer::install();
+
+        expect($GLOBALS['__dup_runs'])->toBe(1);
+    } finally {
+        unset($GLOBALS['__dup_runs']);
+        @unlink($file);
         @rmdir($tmpDir);
     }
 });

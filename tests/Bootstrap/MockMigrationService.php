@@ -9,16 +9,18 @@ use MyParcelNL\Pdk\App\Installer\Service\MigrationService;
 class MockMigrationService extends MigrationService
 {
     /**
-     * Extra upgrade migration class names registered dynamically during tests.
-     * Allows individual tests to inject additional migrations without modifying
-     * the fixed base set. Reset between tests via resetExtraUpgrades().
+     * Extra upgrade migration sources registered dynamically during tests. Each entry is
+     * either a migration class name (FQCN) or an absolute path to a migration file.
+     * Allows individual tests to inject additional migrations without modifying the fixed
+     * base set. Reset between tests via resetExtraUpgrades().
      *
      * @var string[]
      */
     private static $extraUpgrades = [];
 
     /**
-     * Appends a migration class name to the dynamic extras list for the current test.
+     * Appends a migration source (class name or absolute file path) to the dynamic extras
+     * list for the current test.
      *
      * @param  string $source
      *
@@ -30,7 +32,8 @@ class MockMigrationService extends MigrationService
     }
 
     /**
-     * Removes a migration class name from the dynamic extras list.
+     * Removes a migration source (class name or absolute file path) from the dynamic
+     * extras list.
      *
      * @param  string $source
      *
