@@ -11,9 +11,24 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class MakeMigrationCommand extends Command
+/**
+ * Scaffolds a new timestamped migration file.
+ *
+ * Usage:
+ *   composer console generate:migration <slug>
+ *
+ *   # creates src/Migration/2026_06_18_143000_<slug>.php (the prefix is the current time)
+ *   composer console generate:migration migrate_carriers_to_v2
+ *
+ *   # write into a different directory (relative to the working directory)
+ *   composer console generate:migration migrate_carriers_to_v2 --upgrade-path=src/CustomMigrations
+ *
+ * The slug must be snake_case (^[a-z][a-z0-9_]{0,79}$). The file is created relative to the
+ * current working directory, so run it from the plugin you are adding the migration to.
+ */
+final class GenerateMigrationCommand extends Command
 {
-    protected static $defaultName = 'make:migration';
+    protected static $defaultName = 'generate:migration';
 
     private const DEFAULT_UPGRADE_PATH = 'src/Migration';
 
