@@ -24,6 +24,10 @@ class MockUpgradeMigration120 implements MigrationInterface
 
     public function down(): void
     {
+        if (isset($GLOBALS['__down_order'])) {
+            $GLOBALS['__down_order'][] = $this->getVersion();
+        }
+
         $this->settingsRepository->store($this->getSettingKey(), 'old-barcode-in-note');
     }
 

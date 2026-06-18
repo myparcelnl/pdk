@@ -245,20 +245,19 @@ class InstallerService implements InstallerServiceInterface
      */
     protected function migrateDown(): void
     {
+        $collection = $this->getUpgradeMigrations();
+
+        // Reverse exactly the migrations recorded as applied — for both versioned and
+        // timestamp-based migrations. Version math is not used here: it would skip an
+        // applied versioned migration whose version compares "newer" than an RC
+        // installed_version (e.g. 1.3.0 vs 1.3.0-rc.4), the same bug this tracking fixes.
+        $this->seedAppliedMigrationsFromInstalledVersion($collection);
         $applied = $this->getAppliedMigrations();
 
         $this->runDownMigrations(
-            $this->getUpgradeMigrations()
-                ->filter(function (MigrationInterface $migration) use ($applied) {
-                    // Timestamp-based migrations are version-less, so they can't be
-                    // version-gated. Only reverse one that was actually applied — otherwise a
-                    // migration whose up() never ran on this install would have its down() run.
-                    if ($migration instanceof TimestampedMigrationInterface) {
-                        return in_array($this->resolveMigrationId($migration), $applied, true);
-                    }
-
-                    return version_compare($migration->getVersion(), $this->getInstalledVersion(), '<=');
-                })
+            $collection->filter(function (MigrationInterface $migration) use ($applied) {
+                return in_array($this->resolveMigrationId($migration), $applied, true);
+            })
         );
     }
 
