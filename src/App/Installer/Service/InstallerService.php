@@ -94,37 +94,28 @@ class InstallerService implements InstallerServiceInterface
     {
         $this->setDefaultSettings();
         $this->migrateInstall();
-        // migrateInstall() marks the installation migrations as applied; this call then
+        // migrateInstall() records the installation migrations as applied; this call then
         // overwrites applied_migrations with the upgrade-migration ids. That overwrite is
         // intentional: installation migrations never appear in the upgrade set, so dropping
         // their ids here cannot cause them to re-run.
-        $this->seedAppliedMigrationsForFreshInstall();
+        $this->markAllUpgradeMigrationsApplied();
     }
 
     /**
-     * Pre-marks every registered upgrade migration as applied on a fresh install.
-     * This prevents them from firing retroactively on the user's first upgrade —
-     * they're considered "baked into" the installed version.
-     *
-     * Auto-discovered files from migrationDirectory are merged in alongside
-     * plugin-registered sources so that file-only deployments are also pre-marked.
+     * Records every registered and auto-discovered upgrade migration as applied, without
+     * running them. Used on a fresh install: the new installation already reflects their
+     * end state, so marking them applied stops the user's first later upgrade from
+     * replaying migrations that are effectively "baked into" this version.
      *
      * @return void
      */
-    protected function seedAppliedMigrationsForFreshInstall(): void
+    protected function markAllUpgradeMigrationsApplied(): void
     {
         $registered = method_exists($this->migrationService, 'getUpgradeMigrations')
             ? $this->migrationService->getUpgradeMigrations()
             : $this->migrationService->all();
 
-        $sources = array_values(array_unique(array_merge(
-            $registered,
-            $this->discoverTimestampedMigrationFiles()
-        )));
-
-        $upgrades = $this->createMigrationCollection($sources);
-
-        $ids = $upgrades
+        $ids = $this->createMigrationCollection($this->mergeMigrationSources($registered))
             ->map(function (MigrationInterface $m) {
                 return $this->resolveMigrationId($m);
             })
@@ -171,57 +162,55 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * Returns the list of migration identities already applied on this installation.
-     * On first access after a plugin upgrade (when the key doesn't exist yet but
-     * installed_version does), seeds the list from the legacy installed_version
-     * gate so class-based migrations that already ran are not re-executed.
-     *
-     * Fresh installs bypass this lazy seed path — executeInstallation() seeds
-     * eagerly with ALL registered upgrade migrations. See that method for why.
-     *
-     * @param  null|\MyParcelNL\Pdk\Base\Support\Collection $allMigrations Required on first access to compute the seed.
+     * Returns the migration identities recorded as applied on this installation.
+     * A migration runs exactly once — when its identity is not yet in this list.
      *
      * @return string[]
      */
-    protected function getAppliedMigrations(?Collection $allMigrations = null): array
+    protected function getAppliedMigrations(): array
+    {
+        $stored = $this->settingsRepository->get(Pdk::get('settingKeyAppliedMigrations'));
+
+        return is_array($stored) ? $stored : [];
+    }
+
+    /**
+     * Seeds the applied list the first time per-migration tracking runs against an install
+     * that predates it — the upgrade in which this tracking is introduced, when
+     * applied_migrations does not exist yet but installed_version does. Versioned migrations
+     * at or below the installed version are recorded as applied so they are not re-run;
+     * timestamp-based migrations are intentionally left out so they do run.
+     *
+     * No-op once the list is populated (including after a fresh install, where
+     * markAllUpgradeMigrationsApplied() has already seeded it).
+     *
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $allMigrations
+     *
+     * @return void
+     */
+    protected function seedAppliedMigrationsFromInstalledVersion(Collection $allMigrations): void
     {
         $key    = Pdk::get('settingKeyAppliedMigrations');
         $stored = $this->settingsRepository->get($key);
 
-        // An empty result is treated as "not yet seeded": the settings repository
-        // returns an empty array for a key that was never stored, so it cannot be
-        // distinguished from a deliberately-empty list. Re-seeding an empty list is
-        // idempotent, so treating empty as absent is safe.
+        // The repository returns an empty array for a never-stored key, indistinguishable
+        // from a deliberately-empty list; treat empty as "not yet seeded". Re-seeding is
+        // idempotent, so this is safe.
         if (is_array($stored) && ! empty($stored)) {
-            return $stored;
-        }
-
-        if (null === $allMigrations) {
-            // Cannot seed without the collection; return empty but do NOT persist.
-            return [];
+            return;
         }
 
         $installedVersion = $this->getInstalledVersion();
 
         if (! $installedVersion) {
-            // No installed_version and no applied_migrations. This only happens
-            // when getAppliedMigrations is called during install() before
-            // executeInstallation completes. Return empty without persisting —
-            // executeInstallation will seed eagerly.
-            return [];
+            // Fresh install — markAllUpgradeMigrationsApplied() seeds instead.
+            return;
         }
 
-        // Existing install upgrading to a PDK that has this tracking system.
-        // Mark every class-based migration whose version is <= installed_version as applied.
-        // Timestamp-based migrations are intentionally NOT seeded — they represent
-        // net-new work relative to the pre-tracking era and should run.
         $seed = $allMigrations
             ->filter(function (MigrationInterface $m) use ($installedVersion) {
-                if ($m instanceof TimestampedMigrationInterface) {
-                    return false;
-                }
-
-                return version_compare($m->getVersion(), $installedVersion, '<=');
+                return ! $m instanceof TimestampedMigrationInterface
+                    && version_compare($m->getVersion(), $installedVersion, '<=');
             })
             ->map(function (MigrationInterface $m) {
                 return $this->resolveMigrationId($m);
@@ -230,8 +219,6 @@ class InstallerService implements InstallerServiceInterface
             ->all();
 
         $this->settingsRepository->store($key, $seed);
-
-        return $seed;
     }
 
     /**
@@ -418,29 +405,38 @@ class InstallerService implements InstallerServiceInterface
             ? $this->migrationService->all()
             : $this->migrationService->getUpgradeMigrations();
 
-        // Merge PDK-owned file discovery on top, then dedupe. A source can
-        // legitimately appear in both (plugin explicitly registered a file
-        // that's also in migrationDirectory) — dedupe prevents double-require.
-        // Dedupe compares source strings, so a file registered under a different
-        // path than discovery returns (e.g. via a symlink) would not be deduped;
-        // plugins should rely on discovery alone or register the exact discovered path.
-        $sources = array_values(array_unique(array_merge(
-            $registered,
-            $this->discoverTimestampedMigrationFiles()
-        )));
-
-        $collection = $this->createMigrationCollection($sources);
+        $collection = $this->createMigrationCollection($this->mergeMigrationSources($registered));
 
         if (! $version) {
             return $collection;
         }
 
-        // Trigger seeding on first access (pass collection so seed can be computed).
-        $applied = $this->getAppliedMigrations($collection);
+        $this->seedAppliedMigrationsFromInstalledVersion($collection);
+        $applied = $this->getAppliedMigrations();
 
         return $collection->filter(function (MigrationInterface $migration) use ($applied) {
             return ! in_array($this->resolveMigrationId($migration), $applied, true);
         });
+    }
+
+    /**
+     * Combines plugin-registered migration sources with the timestamped files
+     * auto-discovered in migrationDirectory, removing duplicates. A source can
+     * legitimately appear in both — e.g. a plugin registers a file that also lives in
+     * migrationDirectory. Dedupe compares the source strings, so a file registered under
+     * a different path than discovery returns (e.g. via a symlink) would not be deduped;
+     * plugins should rely on discovery alone or register the exact discovered path.
+     *
+     * @param  array<int, string> $registered
+     *
+     * @return string[]
+     */
+    private function mergeMigrationSources(array $registered): array
+    {
+        return array_values(array_unique(array_merge(
+            $registered,
+            $this->discoverTimestampedMigrationFiles()
+        )));
     }
 
     /**
