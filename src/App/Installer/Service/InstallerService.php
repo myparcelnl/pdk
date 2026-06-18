@@ -535,11 +535,23 @@ class InstallerService implements InstallerServiceInterface
      */
     private function runUpMigrations(Collection $migrations): void
     {
+        $ran = [];
+
         $migrations
             ->sort([$this, 'compareMigrations'])
-            ->each(function (MigrationInterface $migration) {
+            ->each(function (MigrationInterface $migration) use (&$ran) {
+                $id = $this->resolveMigrationId($migration);
+
+                // Run each identity at most once per pass. The collection is pre-filtered by
+                // applied state, but two entries can still resolve to the same identity (e.g.
+                // a file reachable via differing path strings that source dedupe missed).
+                if (in_array($id, $ran, true)) {
+                    return;
+                }
+
                 $migration->up();
                 $this->markMigrationApplied($migration);
+                $ran[] = $id;
             });
     }
 }

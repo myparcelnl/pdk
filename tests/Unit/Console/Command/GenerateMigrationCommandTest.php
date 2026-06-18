@@ -8,6 +8,16 @@ namespace MyParcelNL\Pdk\Console\Command;
 use MyParcelNL\Pdk\Console\Command\GenerateMigrationCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Overrides date() for GenerateMigrationCommand, which calls it unqualified in this
+ * namespace, so the generated timestamp is deterministic when a test pins it. Falls back
+ * to the real date() when $GLOBALS['__fake_now'] is not set.
+ */
+function date(string $format): string
+{
+    return $GLOBALS['__fake_now'] ?? \date($format);
+}
+
 it('generates a timestamped migration file in the default src/Migration dir', function () {
     $tmpRoot   = sys_get_temp_dir() . '/pdk_make_migration_' . uniqid('', true);
     $targetDir = $tmpRoot . '/src/Migration';
@@ -106,33 +116,32 @@ it('refuses to overwrite an existing migration file', function () {
     $prevCwd = getcwd();
     chdir($tmpRoot);
 
+    // Pin the timestamp so both runs target the same filename — no same-second race.
+    $GLOBALS['__fake_now'] = '2026_01_01_000000';
+
     try {
         $command = new GenerateMigrationCommand();
 
-        // First run: file is created successfully.
+        // First run creates the file.
         $tester = new CommandTester($command);
         $tester->execute(['slug' => 'ok_slug']);
         expect($tester->getStatusCode())->toBe(0);
 
-        $files = glob($targetDir . '/*_ok_slug.php');
-        expect($files)->toHaveCount(1);
+        $path = $targetDir . '/2026_01_01_000000_ok_slug.php';
+        expect(file_exists($path))->toBeTrue();
 
-        // Replace the file content so we can detect if it gets clobbered.
-        $existingPath = $files[0];
-        file_put_contents($existingPath, '<?php // sentinel');
+        // Mark the content so a clobber would be detectable.
+        file_put_contents($path, '<?php // sentinel');
 
-        // Rename the file so its timestamp matches "now" exactly — forcing a collision.
-        $collisionPath = $targetDir . '/' . date('Y_m_d_His') . '_ok_slug.php';
-        rename($existingPath, $collisionPath);
-
-        // Second run within the same second must be rejected.
+        // Second run targets the same filename and must be rejected.
         $tester2 = new CommandTester($command);
         $tester2->execute(['slug' => 'ok_slug']);
         expect($tester2->getStatusCode())->not->toBe(0);
 
         // Original content must be preserved.
-        expect(file_get_contents($collisionPath))->toBe('<?php // sentinel');
+        expect(file_get_contents($path))->toBe('<?php // sentinel');
     } finally {
+        unset($GLOBALS['__fake_now']);
         chdir($prevCwd);
         array_map('unlink', glob($targetDir . '/*.php') ?: []);
         @rmdir($targetDir);

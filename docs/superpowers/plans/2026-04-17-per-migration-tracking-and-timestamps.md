@@ -1,5 +1,7 @@
 # Per-Migration Tracking + Timestamp-Based Migrations Implementation Plan
 
+> **Historical planning document.** This is the original plan; the shipped implementation deviated from it during review (e.g. the console command is `generate:migration` / `GenerateMigrationCommand`, not `make:migration`, and the seeding/getter were split). For the final design see the code, the PDK `README.md`, and the [Confluence page](https://myparcelnl.atlassian.net/wiki/spaces/IG/pages/866943327). Don't treat the details below as current.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Jira:** [INT-951 — Als PDK plugin wil ik betrouwbaar en vooral eenvoudig migraties kunnen doen](https://myparcelnl.atlassian.net/browse/INT-951). The PR that ships this work must reference INT-951 in the description; commit message templates in this plan include the key.
@@ -11,6 +13,7 @@
 Work is happening in a git worktree at `~/projects/worktrees/pdk-int-951/` (branch `feat/int-951-per-migration-tracking`, tracks `origin/main`). Tasks marked done below have been committed on this branch.
 
 **Done in session 1 (2026-04-17):**
+
 - ✅ Task 1 — `TimestampedMigrationInterface` (commit `488ac4fd`)
 - ✅ Task 2 — `AbstractTimestampedMigration` (commit `b84a8680`)
 - ✅ Task 3 — `settingKeyAppliedMigrations` + `migrationDirectory` config (commit `084f24e8`)
@@ -19,6 +22,7 @@ Work is happening in a git worktree at `~/projects/worktrees/pdk-int-951/` (bran
 Each of Tasks 1–3 passed both spec-compliance and code-quality review. Task 4 passed spec compliance; the code-quality review was deferred when session 1 was paused. All foundation pieces (interface, abstract class, config, test fixture) are in place; the remaining work is behavioural changes to `InstallerService` plus the WC adoption.
 
 **Remaining (resume here in session 2):**
+
 - ⬜ Task 5 — Identity resolver + `getAppliedMigrations()` with seeding (main behavioural change in `InstallerService::getUpgradeMigrations()`)
 - ⬜ Task 5b — Eager-seed `applied_migrations` during fresh install
 - ⬜ Task 6 — Mark migrations applied after `up()` runs
@@ -48,12 +52,14 @@ Each of Tasks 1–3 passed both spec-compliance and code-quality review. Task 4 
 **Design rationale for `getId()`:** For class-based migrations, `get_class($migration)` is a stable identity. For anonymous classes (the Laravel-style ones), `get_class()` returns something like `class@anonymous\0/absolute/path/to/file.php:5$42` — not stable across servers/PHP versions. So `getId()` exists only on `TimestampedMigrationInterface` to expose the filename as a portable identity. Class-based migrations use `get_class()` via a fallback in `resolveMigrationId()`. Putting `getId()` on the base `MigrationInterface` would be a breaking change for any external implementer; isolating it in the sub-interface keeps the contract backwards compatible. Since the filename convention is `YYYY_MM_DD_HHMMSS_<slug>.php`, the id string is already chronologically sortable — so sort order uses `strcmp($a->getId(), $b->getId())` and we don't need a separate `getTimestamp()` method (same pattern as Laravel's `Migrator`).
 
 **Tech Stack:**
+
 - PHP 7.4 (plugin runtime constraint — no constructor property promotion, no readonly properties, no `str_ends_with`; anonymous classes are fine since 7.0)
 - Pest (test framework in both repos)
 - PHP-DI (container used for class-based migration resolution)
 - WordPress options API / PrestaShop settings API (backing storage, abstracted via `PdkSettingsRepositoryInterface`)
 
 **Repositories touched:**
+
 - `myparcelnl/pdk` (shared framework — primary change)
 - `myparcelnl-woocommerce` (adoption + concrete migration that fixes the carrier bug)
 
@@ -63,24 +69,24 @@ Each of Tasks 1–3 passed both spec-compliance and code-quality review. Task 4 
 
 ### PDK repo (`~/projects/pdk`)
 
-| Path | Responsibility | New? |
-|---|---|---|
-| `src/App/Installer/Contract/MigrationInterface.php` | Base contract for migrations. Unchanged signatures — additive `getId()` is introduced on the timestamped sub-interface so existing implementers don't break. | No change |
-| `src/App/Installer/Contract/TimestampedMigrationInterface.php` | New sub-interface declaring `getId(): string`. | Create |
-| `src/App/Installer/Migration/AbstractTimestampedMigration.php` | Abstract base for file-based migrations. Holds `$id` set by loader. Explicitly disables `getVersion()`. | Create |
-| `src/App/Installer/Service/InstallerService.php` | Core change: new `getAppliedMigrations()`, `markMigrationApplied()`, `resolveMigrationId()`, `discoverTimestampedMigrationFiles()`, file-loader path in `createMigrationCollection()`, identity-based filter replaces version gate in `getUpgradeMigrations()`, updated sort in `runUpMigrations()`, eager seed in `executeInstallation()`. Keeps `installed_version` writes as informational. | Modify |
-| `config/pdk-settings.php` | Add `settingKeyAppliedMigrations` factory and `migrationDirectory` factory (default: `<rootDir>/src/Migration`; plugins override in their own config to change path, or set `null` to disable PDK-owned discovery). | Modify |
-| `tests/Bootstrap/MockTimestampedMigration20260101.php` | Mock fixture for tests. | Create |
-| `tests/Unit/App/Installer/Service/InstallerServiceTest.php` | Add tests for: seeding, identity-based filter, file-loader, timestamp sort, RC-version scenario. | Modify |
+| Path                                                           | Responsibility                                                                                                                                                                                                                                                                                                                                                                                 | New?      |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `src/App/Installer/Contract/MigrationInterface.php`            | Base contract for migrations. Unchanged signatures — additive `getId()` is introduced on the timestamped sub-interface so existing implementers don't break.                                                                                                                                                                                                                                   | No change |
+| `src/App/Installer/Contract/TimestampedMigrationInterface.php` | New sub-interface declaring `getId(): string`.                                                                                                                                                                                                                                                                                                                                                 | Create    |
+| `src/App/Installer/Migration/AbstractTimestampedMigration.php` | Abstract base for file-based migrations. Holds `$id` set by loader. Explicitly disables `getVersion()`.                                                                                                                                                                                                                                                                                        | Create    |
+| `src/App/Installer/Service/InstallerService.php`               | Core change: new `getAppliedMigrations()`, `markMigrationApplied()`, `resolveMigrationId()`, `discoverTimestampedMigrationFiles()`, file-loader path in `createMigrationCollection()`, identity-based filter replaces version gate in `getUpgradeMigrations()`, updated sort in `runUpMigrations()`, eager seed in `executeInstallation()`. Keeps `installed_version` writes as informational. | Modify    |
+| `config/pdk-settings.php`                                      | Add `settingKeyAppliedMigrations` factory and `migrationDirectory` factory (default: `<rootDir>/src/Migration`; plugins override in their own config to change path, or set `null` to disable PDK-owned discovery).                                                                                                                                                                            | Modify    |
+| `tests/Bootstrap/MockTimestampedMigration20260101.php`         | Mock fixture for tests.                                                                                                                                                                                                                                                                                                                                                                        | Create    |
+| `tests/Unit/App/Installer/Service/InstallerServiceTest.php`    | Add tests for: seeding, identity-based filter, file-loader, timestamp sort, RC-version scenario.                                                                                                                                                                                                                                                                                               | Modify    |
 
 ### WooCommerce plugin repo (`~/projects/docker-wordpress/plugins/myparcelnl-woocommerce`)
 
-| Path | Responsibility | New? |
-|---|---|---|
-| `src/Pdk/Plugin/Installer/WcMigrationService.php` | **No change required.** PDK-owned discovery finds timestamped migration files automatically. Plugins that want to disable or relocate discovery set `migrationDirectory` in their own config override. | No change |
-| `src/Migration/2026_04_17_100000_migrate_carriers_to_v2.php` | New file-based timestamped migration replicating the body of `Migration6_1_0`. Runs regardless of version, exactly once per install. | Create |
-| `src/Migration/Migration6_1_0.php` | Keep as-is (registered but always seeded as applied for existing installs). Delete once all environments have upgraded past this transition. | No change now; deletion is follow-up |
-| `tests/Unit/Migration/TimestampedCarrierMigrationTest.php` | Test that the new file migration hydrates carriers correctly and is marked applied after running. | Create |
+| Path                                                         | Responsibility                                                                                                                                                                                         | New?                                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------ |
+| `src/Pdk/Plugin/Installer/WcMigrationService.php`            | **No change required.** PDK-owned discovery finds timestamped migration files automatically. Plugins that want to disable or relocate discovery set `migrationDirectory` in their own config override. | No change                            |
+| `src/Migration/2026_04_17_100000_migrate_carriers_to_v2.php` | New file-based timestamped migration replicating the body of `Migration6_1_0`. Runs regardless of version, exactly once per install.                                                                   | Create                               |
+| `src/Migration/Migration6_1_0.php`                           | Keep as-is (registered but always seeded as applied for existing installs). Delete once all environments have upgraded past this transition.                                                           | No change now; deletion is follow-up |
+| `tests/Unit/Migration/TimestampedCarrierMigrationTest.php`   | Test that the new file migration hydrates carriers correctly and is marked applied after running.                                                                                                      | Create                               |
 
 ---
 
@@ -93,6 +99,7 @@ Each of Tasks 1–3 passed both spec-compliance and code-quality review. Task 4 
   cd ~/projects/docker-wordpress && PHP_VERSION=7.4 docker compose run --rm php bash -c \
     'cd /var/www/html/wp-content/plugins/myparcelnl-woocommerce && ./vendor/bin/pest <args>'
   ```
+
 - **Commits:** conventional commits. Every commit in this plan includes `INT-951` in the footer so Jira links them automatically.
 
 ---
@@ -100,6 +107,7 @@ Each of Tasks 1–3 passed both spec-compliance and code-quality review. Task 4 
 ## Task 1 (PDK): Add `TimestampedMigrationInterface`
 
 **Files:**
+
 - Create: `src/App/Installer/Contract/TimestampedMigrationInterface.php`
 
 - [ ] **Step 1: Create the interface file**
@@ -140,6 +148,7 @@ INT-951"
 ## Task 2 (PDK): Add `AbstractTimestampedMigration` base class
 
 **Files:**
+
 - Create: `src/App/Installer/Migration/AbstractTimestampedMigration.php`
 
 - [ ] **Step 1: Create the abstract base**
@@ -207,6 +216,7 @@ INT-951"
 ## Task 3 (PDK): Add `settingKeyAppliedMigrations` + `migrationDirectory` config
 
 **Files:**
+
 - Modify: `config/pdk-settings.php` (append to the returned array, near `settingKeyInstalledVersion`)
 
 - [ ] **Step 1: Add the new factory entries**
@@ -248,6 +258,7 @@ INT-951"
 ## Task 4 (PDK): Create mock timestamped migration fixture for tests
 
 **Files:**
+
 - Create: `tests/Bootstrap/MockTimestampedMigration20260101.php`
 
 - [ ] **Step 1: Create the mock**
@@ -298,6 +309,7 @@ INT-951"
 ## Task 5 (PDK): Add identity resolver + `getAppliedMigrations()` with seeding
 
 **Files:**
+
 - Modify: `src/App/Installer/Service/InstallerService.php` (add methods near `getInstalledVersion()` around line 110; modify the filter in `getUpgradeMigrations()`)
 
 - [ ] **Step 1: Write failing test for the seeding behaviour**
@@ -504,9 +516,10 @@ INT-951"
 
 ## Task 5b (PDK): Eager-seed applied_migrations during fresh install
 
-**Why this task exists:** on a fresh install, `executeInstallation()` runs installation migrations only — upgrade migrations in the registry do not fire. If we leave `applied_migrations` empty at the end of a fresh install, the user's *next* version bump would then run every timestamped upgrade migration that was already shipped in the initial version, because the lazy seed in `getAppliedMigrations()` has no way to know which migrations were "baked into the install". We preempt this by seeding every registered upgrade migration (class-based AND timestamped) as applied at install time. Only migrations added in future versions will run.
+**Why this task exists:** on a fresh install, `executeInstallation()` runs installation migrations only — upgrade migrations in the registry do not fire. If we leave `applied_migrations` empty at the end of a fresh install, the user's _next_ version bump would then run every timestamped upgrade migration that was already shipped in the initial version, because the lazy seed in `getAppliedMigrations()` has no way to know which migrations were "baked into the install". We preempt this by seeding every registered upgrade migration (class-based AND timestamped) as applied at install time. Only migrations added in future versions will run.
 
 **Files:**
+
 - Modify: `src/App/Installer/Service/InstallerService.php` (extend `executeInstallation()`)
 
 - [ ] **Step 1: Write failing test — fresh install pre-marks all upgrade migrations as applied**
@@ -626,6 +639,7 @@ INT-951"
 ## Task 6 (PDK): Mark migrations applied after `up()` runs
 
 **Files:**
+
 - Modify: `src/App/Installer/Service/InstallerService.php` (around line 253, the `runUpMigrations` method)
 
 - [ ] **Step 1: Write failing test — migration marked applied after running**
@@ -722,6 +736,7 @@ INT-951"
 ## Task 7 (PDK): File-based migration loader
 
 **Files:**
+
 - Modify: `tests/Bootstrap/MockMigrationService.php` (add dynamic registration helpers)
 - Modify: `src/App/Installer/Service/InstallerService.php` (modify `createMigrationCollection`, add `loadFileMigration`)
 
@@ -937,6 +952,7 @@ INT-951"
 **Why this task exists:** individual plugins (WooC, Presta, …) shouldn't each need to re-implement glob discovery in their `MigrationService`. The PDK owns it, driven by the `migrationDirectory` config added in Task 3. Plugins get it for free; plugins that want to opt out set `migrationDirectory => null` in their own config override. Plugins can also still register file paths directly from their `MigrationService::getUpgradeMigrations()` for edge cases (e.g., multiple discovery dirs) — the PDK deduplicates sources before building the collection.
 
 **Files:**
+
 - Modify: `src/App/Installer/Service/InstallerService.php` (add `discoverTimestampedMigrationFiles()` and hook it into `getUpgradeMigrations()`)
 
 - [ ] **Step 1: Write failing test — file in `migrationDirectory` is auto-discovered**
@@ -1187,6 +1203,7 @@ INT-951"
 ## Task 8 (PDK): Sort timestamp migrations after version migrations
 
 **Files:**
+
 - Modify: `src/App/Installer/Service/InstallerService.php` (expand the `compareMigrations` stub from Task 6)
 - Modify: `tests/Bootstrap/MockUpgradeMigration110.php`, `MockUpgradeMigration120.php`, `MockUpgradeMigration130.php` (append timestamp-order tracking global)
 
@@ -1299,6 +1316,7 @@ INT-951"
 This is the exact scenario that caused the WooCommerce carrier bug. Codifies it so future changes can't regress.
 
 **Files:**
+
 - Modify: `tests/Unit/App/Installer/Service/InstallerServiceTest.php`
 
 - [ ] **Step 1: Add the regression test**
@@ -1360,6 +1378,7 @@ cd ~/projects/pdk
 ```
 
 Expected: all green. If any legacy installer test fails because it asserted the old version-filter behaviour, inspect the failure. The correct action is almost always:
+
 - Pre-populate `settingKeyAppliedMigrations` in the test's Arrange block to simulate its intended state.
 - **Do not** revert the InstallerService change to pass a legacy test — adjust the test to reflect the new model.
 
@@ -1379,6 +1398,7 @@ INT-951"
 **Goal:** confirm the PDK's `migrationDirectory`-driven auto-discovery finds WC-specific timestamped migration files without any modification to `WcMigrationService`. This is a sanity-check task — no production code should change in the WC plugin here.
 
 **Files:**
+
 - Create: `tests/Unit/Pdk/Plugin/Installer/WcMigrationServiceDiscoveryTest.php`
 
 - [ ] **Step 1: Inspect current service and confirm it stays untouched**
@@ -1458,6 +1478,7 @@ INT-951"
 ## Task 12 (WC): Create the carrier V2 timestamped migration
 
 **Files:**
+
 - Create: `src/Migration/2026_04_17_100000_migrate_carriers_to_v2.php`
 - Create: `tests/Unit/Migration/TimestampedCarrierMigrationTest.php`
 
@@ -1591,6 +1612,7 @@ INT-951"
 ## Task 13 (WC): End-to-end integration test
 
 **Files:**
+
 - Create: `tests/Feature/CarrierMigrationRunsOnUpgradeTest.php`
 
 - [ ] **Step 1: Write the integration test**
@@ -1688,6 +1710,7 @@ docker compose exec php wp option get _myparcelcom_applied_migrations --format=j
 ```
 
 Expected output includes (among seeded entries):
+
 - `"2026_04_17_100000_migrate_carriers_to_v2"`
 - `"MyParcelNL\\WooCommerce\\Migration\\Migration6_1_0"` (seeded as already-applied)
 
@@ -1735,6 +1758,7 @@ composer console make:migration migrate_carriers_to_v2 --upgrade-path=src/Custom
 ```
 
 **Files:**
+
 - Create: `private/Command/MakeMigrationCommand.php`
 - Modify: `private/PdkConsoleApp.php` (register the new command)
 - Create: `tests/Unit/Console/Command/MakeMigrationCommandTest.php`
@@ -2059,19 +2083,19 @@ INT-951"
 - **Placeholder scan:** no "TBD"/"implement later"/"similar to" references. Every code step contains its full content.
 - **Type/name consistency:** `resolveMigrationId()`, `markMigrationApplied()`, `getAppliedMigrations()`, `seedAppliedMigrationsForFreshInstall()`, `discoverTimestampedMigrationFiles()`, `compareMigrations()`, `loadFileMigration()`, `TimestampedMigrationInterface::getId()`, `AbstractTimestampedMigration::setIdentity($id)` (single string arg), `settingKeyAppliedMigrations`, `migrationDirectory`, `MakeMigrationCommand` with `--upgrade-path` option — all referenced consistently across tasks.
 - **Migrations live in `src/Migration/`** (no `Upgrade/` subfolder). Legacy class-based files (`Migration6_1_0.php`) and new timestamped files (`2026_04_17_100000_*.php`) coexist; the glob regex `/^\d{4}_\d{2}_\d{2}_\d{6}_/` selects only the timestamped ones. PDK auto-discovers these via the `migrationDirectory` config; plugins opt out by setting it to `null` in their own config override.
-- **Plugins don't have to modify their `MigrationService` to adopt this.** They *can* still return file paths or FQCNs from `getUpgradeMigrations()` for special cases (multiple discovery directories, explicit ordering hints, etc.); the PDK merges and deduplicates those against its own discovery results.
+- **Plugins don't have to modify their `MigrationService` to adopt this.** They _can_ still return file paths or FQCNs from `getUpgradeMigrations()` for special cases (multiple discovery directories, explicit ordering hints, etc.); the PDK merges and deduplicates those against its own discovery results.
 - **Fragile areas worth noting on execution:** Task 7 Step 2 modifies `MockMigrationService` and assumes a `$extraUpgrades` shape. If the existing mock is structured differently, adapt while preserving the intent (tests can inject extra upgrade sources). Task 15 Step 5 assumes `PdkConsoleApp` exposes an `->add()` method like Symfony Console; if the app uses a different registration style, mirror whatever pattern existing commands use.
 - **Out of scope for this plan:** down-migration semantics, PrestaShop adoption (should be zero-code: the PDK change applies as soon as the PDK dependency is bumped, and a Presta `migrationDirectory` defaults to `<rootDir>/src/Migration` automatically), CI filename lint.
 
 ## Seeding walkthrough — what ends up in `applied_migrations`, across all scenarios
 
-| Scenario | `installed_version` before | `applied_migrations` before | Path taken | `applied_migrations` after | Which upgrade migrations actually ran |
-|---|---|---|---|---|---|
-| **A. Fresh install** (WC has no installation migrations, plugin ships legacy FQCNs + timestamped files + PDK-discovered files) | `null` | `null` | `executeInstallation()` → `setDefaultSettings()` → `migrateInstall()` (no-op for WC) → `seedAppliedMigrationsForFreshInstall()` pre-marks every registered-or-discovered upgrade migration | every registered-or-discovered upgrade migration id | **none** |
-| **B. Existing install crossing the INT-951 PDK boundary** (was on WC 6.3.0 with old PDK, now getting the new PDK) | e.g. `"6.3.0"` | `null` | `migrateUp()` → `getAppliedMigrations()` lazy-seeds: legacy migrations with `getVersion() <= installedVersion` are marked applied; **timestamped migrations are intentionally NOT seeded** | legacy ≤ installedVersion + every timestamped migration that actually ran this pass | every timestamped migration + any legacy FQCN above `installedVersion` |
-| **C. Existing install already on INT-951 PDK, plugin version bumps with new migrations** | e.g. `"6.4.0"` | populated list | `migrateUp()` → `getAppliedMigrations()` reads stored list directly; no seeding | previous list + newly-run migration ids | only migrations whose id isn't in the stored list (i.e. net-new) |
-| **D. Redeploy same code** | `installed_version === currentVersion` | (any) | Early-return at `install()` line 51 — no work | unchanged | none |
+| Scenario                                                                                                                       | `installed_version` before             | `applied_migrations` before | Path taken                                                                                                                                                                                 | `applied_migrations` after                                                          | Which upgrade migrations actually ran                                  |
+| ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| **A. Fresh install** (WC has no installation migrations, plugin ships legacy FQCNs + timestamped files + PDK-discovered files) | `null`                                 | `null`                      | `executeInstallation()` → `setDefaultSettings()` → `migrateInstall()` (no-op for WC) → `seedAppliedMigrationsForFreshInstall()` pre-marks every registered-or-discovered upgrade migration | every registered-or-discovered upgrade migration id                                 | **none**                                                               |
+| **B. Existing install crossing the INT-951 PDK boundary** (was on WC 6.3.0 with old PDK, now getting the new PDK)              | e.g. `"6.3.0"`                         | `null`                      | `migrateUp()` → `getAppliedMigrations()` lazy-seeds: legacy migrations with `getVersion() <= installedVersion` are marked applied; **timestamped migrations are intentionally NOT seeded** | legacy ≤ installedVersion + every timestamped migration that actually ran this pass | every timestamped migration + any legacy FQCN above `installedVersion` |
+| **C. Existing install already on INT-951 PDK, plugin version bumps with new migrations**                                       | e.g. `"6.4.0"`                         | populated list              | `migrateUp()` → `getAppliedMigrations()` reads stored list directly; no seeding                                                                                                            | previous list + newly-run migration ids                                             | only migrations whose id isn't in the stored list (i.e. net-new)       |
+| **D. Redeploy same code**                                                                                                      | `installed_version === currentVersion` | (any)                       | Early-return at `install()` line 51 — no work                                                                                                                                              | unchanged                                                                           | none                                                                   |
 
-**Why Task 5b (eager seed on fresh install) is load-bearing:** without it, scenario A would leave `applied_migrations` empty. The user's *next* version upgrade would then fall into scenario B's logic (lazy seed, timestamp migrations stay unseeded) and every timestamped migration baked into their *original* install would retroactively fire. Eager seeding prevents that — after A, the install is considered fully caught up.
+**Why Task 5b (eager seed on fresh install) is load-bearing:** without it, scenario A would leave `applied_migrations` empty. The user's _next_ version upgrade would then fall into scenario B's logic (lazy seed, timestamp migrations stay unseeded) and every timestamped migration baked into their _original_ install would retroactively fire. Eager seeding prevents that — after A, the install is considered fully caught up.
 
 **Why timestamped migrations are not auto-seeded in scenario B:** the existing install has never been exposed to the new carrier-data shape (or whatever else the timestamped migration produces). The whole point of B is to run those migrations retroactively against legacy data. That's exactly what this plan fixes for the WooCommerce carrier bug.
