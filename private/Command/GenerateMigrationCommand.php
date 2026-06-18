@@ -12,41 +12,49 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Scaffolds a new timestamped migration file.
- *
- * Usage:
- *   composer console generate:migration <slug>
- *
- *   # creates src/Migration/2026_06_18_143000_<slug>.php (the prefix is the current time)
- *   composer console generate:migration migrate_carriers_to_v2
- *
- *   # write into a different directory (relative to the working directory)
- *   composer console generate:migration migrate_carriers_to_v2 --upgrade-path=src/CustomMigrations
- *
- * The slug must be snake_case (^[a-z][a-z0-9_]{0,79}$). The file is created relative to the
- * current working directory, so run it from the plugin you are adding the migration to.
+ * Scaffolds a new timestamped migration file (YYYY_MM_DD_HHMMSS_<slug>.php) for a plugin.
+ * Run `composer console help generate:migration` for full usage.
  */
 final class GenerateMigrationCommand extends Command
 {
     protected static $defaultName = 'generate:migration';
 
-    private const DEFAULT_UPGRADE_PATH = 'src/Migration';
+    private const DEFAULT_MIGRATION_DIR = 'src/Migration';
 
     protected function configure(): void
     {
         $this
             ->setDescription('Generate a timestamped migration stub file.')
+            ->setHelp(
+                <<<'HELP'
+Creates a timestamped migration — an anonymous class extending AbstractTimestampedMigration,
+in a file named YYYY_MM_DD_HHMMSS_<slug>.php.
+
+Run it from your plugin's root, with the PDK dev-linked (pdk-dev-on):
+
+  composer console generate:migration migrate_carriers_to_v2
+
+The file is written to "src/Migration" by default, which matches the PDK's default
+migrationDirectory. If your plugin overrides migrationDirectory, point --dir at it so the
+file lands where auto-discovery looks:
+
+  composer console generate:migration migrate_carriers_to_v2 --dir=src/CustomMigrations
+
+The slug must be snake_case (matching ^[a-z][a-z0-9_]{0,79}$).
+HELP
+            )
             ->addArgument(
                 'slug',
                 InputArgument::REQUIRED,
                 'Migration slug in snake_case, e.g. "migrate_carriers_to_v2"'
             )
             ->addOption(
-                'upgrade-path',
+                'dir',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Target directory relative to the current working directory.',
-                self::DEFAULT_UPGRADE_PATH
+                'Target directory, relative to the working directory. Defaults to src/Migration '
+                . '(the PDK default migration directory); set this if your plugin overrides migrationDirectory.',
+                self::DEFAULT_MIGRATION_DIR
             );
     }
 
@@ -81,8 +89,8 @@ final class GenerateMigrationCommand extends Command
             return 1;
         }
 
-        $upgradePath = trim((string) $input->getOption('upgrade-path'), '/');
-        $targetDir   = rtrim($cwd, '/') . '/' . $upgradePath;
+        $dir       = trim((string) $input->getOption('dir'), '/');
+        $targetDir = rtrim($cwd, '/') . '/' . $dir;
 
         if (! is_dir($targetDir)) {
             $output->writeln(sprintf('<error>Target directory does not exist: %s</error>', $targetDir));
