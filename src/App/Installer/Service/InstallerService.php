@@ -203,8 +203,10 @@ class InstallerService implements InstallerServiceInterface
         $installedVersion = $this->getInstalledVersion();
 
         if (! $installedVersion) {
-            // Fresh install — markAllUpgradeMigrationsApplied() seeds instead.
-            return;
+            // Defensive: both callers (getUpgradeMigrations with a version, and migrateDown
+            // on uninstall) only run when installed_version is set, so this is never reached
+            // in practice — a fresh install seeds via markAllUpgradeMigrationsApplied().
+            return; // @codeCoverageIgnore
         }
 
         $seed = $allMigrations
@@ -453,9 +455,13 @@ class InstallerService implements InstallerServiceInterface
         $dir = null;
         try {
             $dir = Pdk::get('migrationDirectory');
+            // @codeCoverageIgnoreStart
         } catch (\Throwable $e) {
-            // Config key not defined — treat as disabled.
+            // migrationDirectory is undefined in this container, so discovery is disabled.
+            // Not reachable from the PDK's own tests (its config always defines the key);
+            // this exists for a consumer that removes it.
             return [];
+            // @codeCoverageIgnoreEnd
         }
 
         if (! is_string($dir) || ! is_dir($dir)) {

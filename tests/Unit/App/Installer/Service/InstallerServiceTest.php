@@ -685,3 +685,101 @@ it('runs down migrations in reverse of the up order', function () {
     // Up runs versioned migrations ascending (1.1.0, 1.2.0, 1.3.0); down must mirror that.
     expect($order)->toBe(['1.3.0', '1.2.0', '1.1.0']);
 });
+
+it('throws when a migration file does not return a MigrationInterface', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_not_a_migration_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_07_01_000000_not_a_migration.php';
+    file_put_contents($file, '<?php return new \stdClass();');
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    // Behind the current version so the upgrade path builds the migration collection.
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+    try {
+        expect(static fn () => Installer::install())
+            ->toThrow(\RuntimeException::class, 'must return an instance of MigrationInterface');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('throws when a migration file name does not match the timestamp convention', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_badname_migration_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/not_a_timestamped_name.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+    try {
+        expect(static fn () => Installer::install())
+            ->toThrow(\RuntimeException::class, 'does not match');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('orders timestamp-based migrations chronologically among themselves', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_ts_order_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $early = $tmpDir . '/2026_01_01_000000_early.php';
+    $late  = $tmpDir . '/2026_02_01_000000_late.php';
+    $body  = <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        $GLOBALS['__ts_order'][] = $this->getId();
+    }
+};
+PHP;
+    file_put_contents($early, $body);
+    file_put_contents($late, $body);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyAppliedMigrations'), null);
+
+    // Register the later one first to prove ordering is by id, not registration order.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($late);
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($early);
+
+    $GLOBALS['__ts_order'] = [];
+
+    try {
+        Installer::install();
+
+        expect($GLOBALS['__ts_order'])->toBe([
+            '2026_01_01_000000_early',
+            '2026_02_01_000000_late',
+        ]);
+    } finally {
+        unset($GLOBALS['__ts_order']);
+        @unlink($early);
+        @unlink($late);
+        @rmdir($tmpDir);
+    }
+});
