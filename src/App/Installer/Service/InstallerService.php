@@ -315,10 +315,8 @@ class InstallerService implements InstallerServiceInterface
         return Collection::make($migrations)
             ->map(function ($source) {
                 // File-based migration: absolute path ending in .php
-                if (is_string($source) && '.php' === substr($source, -4)) {
-                    if (! is_file($source)) {
                         throw new \RuntimeException(sprintf(
-                            'Migration file "%s" was provided but does not exist. Expected an absolute path to a .php migration file.',
+                            'Migration file "%s" was provided but does not exist. Expected a path to an existing .php migration file.',
                             $source
                         ));
                     }
