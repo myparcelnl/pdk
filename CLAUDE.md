@@ -48,6 +48,13 @@ This is the plugin development kit, which is a composer dependency of several My
 - New endpoints and major refactors must use the definitions as available in the generated clients in the SDK
 - Treat API requests and responses defined within the PDK as legacy and deprecated
 
+# Migrations
+
+- Migrations are tracked by identity in the `applied_migrations` setting and run once per install, independent of plugin version (the old version-comparison gate is gone).
+- Prefer timestamped migrations for new work: a `YYYY_MM_DD_HHMMSS_<slug>.php` file in a plugin's `src/Migration/` returning an anonymous class extending `AbstractTimestampedMigration`. Scaffold with `composer console generate:migration <slug>`.
+- `UpgradeMigrationInterface` (version-based migrations) is deprecated — do not add new ones.
+- Installation migrations (`InstallationMigrationInterface`) are unchanged; they set up initial state on a fresh install.
+
 # Cache
 
 The .cache folder may contain artifacts related to a specific plugin instance when linked to a plugin, you can safely clear the `.cache` folder when making changes to the PDK or encountering unexpected behavior from plugins.
