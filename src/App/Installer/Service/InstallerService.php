@@ -514,7 +514,7 @@ class InstallerService implements InstallerServiceInterface
      *
      * @return int
      */
-    public function compareMigrations(MigrationInterface $a, MigrationInterface $b): int
+    private function compareMigrations(MigrationInterface $a, MigrationInterface $b): int
     {
         $aIsTimestamped = $a instanceof TimestampedMigrationInterface;
         $bIsTimestamped = $b instanceof TimestampedMigrationInterface;
@@ -542,7 +542,9 @@ class InstallerService implements InstallerServiceInterface
         $ran = [];
 
         $migrations
-            ->sort([$this, 'compareMigrations'])
+            ->sort(function (MigrationInterface $a, MigrationInterface $b) {
+                return $this->compareMigrations($a, $b);
+            })
             ->each(function (MigrationInterface $migration) use (&$ran) {
                 $id = $this->resolveMigrationId($migration);
 
