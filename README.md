@@ -87,6 +87,21 @@ If the option is not yet in the SDK types, update the SDK or regenerate the Open
 
 > **Using Claude Code?** Run `/add-shipment-option` for a guided step-by-step walkthrough that asks the right questions and generates the code.
 
+### Writing a migration
+
+Migrations are tracked by identity in an `applied_migrations` setting and run exactly once per install, independent of the plugin version. There are two kinds:
+
+- **Timestamped migrations** (preferred) — a file named `YYYY_MM_DD_HHMMSS_<slug>.php` in a plugin's `src/Migration/` that returns an anonymous class extending `AbstractTimestampedMigration`. The PDK auto-discovers them and runs each once regardless of version, so they fire even on release-candidate builds where version comparison is unreliable.
+- **Versioned migrations** — classes implementing `UpgradeMigrationInterface` with a `getVersion()`. **Deprecated**: prefer a timestamped migration for new work.
+
+To scaffold a timestamped migration, run this from a plugin checkout with the PDK dev-linked (`pdk-dev-on`):
+
+```shell
+composer console generate:migration <slug>
+```
+
+It creates `src/Migration/YYYY_MM_DD_HHMMSS_<slug>.php` with empty `up()`/`down()` methods — implement `up()`; `down()` is optional and defaults to a no-op. Run `composer console help generate:migration` for the available options.
+
 ### Linting
 
 We use Prettier to format .json, .yml, .md and .html files.
