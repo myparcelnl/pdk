@@ -17,7 +17,6 @@
             "ENVELOPE"
         ],
         "options": {
-            "cooledDelivery": [],
             "freshFood": [],
             "frozen": [],
             "hideSender": [],
@@ -78,7 +77,6 @@
                 "ENVELOPE"
             ],
             "options": {
-                "cooledDelivery": [],
                 "freshFood": [],
                 "frozen": [],
                 "hideSender": [],
@@ -139,8 +137,7 @@
             "receiptCode": -1,
             "collect": -1,
             "freshFood": -1,
-            "frozen": -1,
-            "cooledDelivery": -1
+            "frozen": -1
         },
         "deliveryType": "standard",
         "packageType": "package"

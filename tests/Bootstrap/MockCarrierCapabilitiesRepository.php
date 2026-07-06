@@ -120,7 +120,6 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                 'priorityDelivery'            => $option,
                 'requiresReceiptCode'         => $option,
                 'scheduledCollection'         => $option,
-                'cooledDelivery'              => $option,
                 'freshFood'                   => $option,
                 'frozen'                      => $option,
                 'deliverAtPostalPoint'        => $option,

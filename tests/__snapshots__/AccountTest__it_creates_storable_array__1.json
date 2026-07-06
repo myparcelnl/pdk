@@ -36,7 +36,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -93,7 +92,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -150,7 +148,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -207,7 +204,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -264,7 +260,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -321,7 +316,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -378,7 +372,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -435,7 +428,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -492,7 +484,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -549,7 +540,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -606,7 +596,62 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
+                        "freshFood": [],
+                        "frozen": [],
+                        "hideSender": [],
+                        "oversizedPackage": [],
+                        "priorityDelivery": [],
+                        "recipientOnlyDelivery": [],
+                        "requiresAgeVerification": [],
+                        "requiresReceiptCode": [],
+                        "requiresSignature": [],
+                        "returnOnFirstFailedDelivery": [],
+                        "sameDayDelivery": [],
+                        "saturdayDelivery": [],
+                        "scheduledCollection": [],
+                        "tracked": [],
+                        "insurance": {
+                            "insuredAmount": {
+                                "default": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "min": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "max": {
+                                    "currency": "EUR",
+                                    "amount": 500000
+                                }
+                            }
+                        }
+                    },
+                    "deliveryTypes": [
+                        "MORNING_DELIVERY",
+                        "STANDARD_DELIVERY",
+                        "EVENING_DELIVERY",
+                        "PICKUP_DELIVERY",
+                        "SAME_DAY_DELIVERY",
+                        "EXPRESS_DELIVERY",
+                        "EARLY_MORNING_DELIVERY"
+                    ],
+                    "collo": {
+                        "max": 10
+                    }
+                },
+                {
+                    "carrier": "SPRING",
+                    "packageTypes": [
+                        "PACKAGE",
+                        "MAILBOX",
+                        "UNFRANKED",
+                        "DIGITAL_STAMP",
+                        "PALLET",
+                        "SMALL_PACKAGE",
+                        "ENVELOPE"
+                    ],
+                    "options": {
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -663,7 +708,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -720,7 +764,6 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],
@@ -777,7 +820,62 @@
                         "ENVELOPE"
                     ],
                     "options": {
-                        "cooledDelivery": [],
+                        "freshFood": [],
+                        "frozen": [],
+                        "hideSender": [],
+                        "oversizedPackage": [],
+                        "priorityDelivery": [],
+                        "recipientOnlyDelivery": [],
+                        "requiresAgeVerification": [],
+                        "requiresReceiptCode": [],
+                        "requiresSignature": [],
+                        "returnOnFirstFailedDelivery": [],
+                        "sameDayDelivery": [],
+                        "saturdayDelivery": [],
+                        "scheduledCollection": [],
+                        "tracked": [],
+                        "insurance": {
+                            "insuredAmount": {
+                                "default": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "min": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "max": {
+                                    "currency": "EUR",
+                                    "amount": 500000
+                                }
+                            }
+                        }
+                    },
+                    "deliveryTypes": [
+                        "MORNING_DELIVERY",
+                        "STANDARD_DELIVERY",
+                        "EVENING_DELIVERY",
+                        "PICKUP_DELIVERY",
+                        "SAME_DAY_DELIVERY",
+                        "EXPRESS_DELIVERY",
+                        "EARLY_MORNING_DELIVERY"
+                    ],
+                    "collo": {
+                        "max": 10
+                    }
+                },
+                {
+                    "carrier": "VIA_TIM",
+                    "packageTypes": [
+                        "PACKAGE",
+                        "MAILBOX",
+                        "UNFRANKED",
+                        "DIGITAL_STAMP",
+                        "PALLET",
+                        "SMALL_PACKAGE",
+                        "ENVELOPE"
+                    ],
+                    "options": {
                         "freshFood": [],
                         "frozen": [],
                         "hideSender": [],

@@ -17,7 +17,6 @@
             "ENVELOPE"
         ],
         "options": {
-            "cooledDelivery": [],
             "freshFood": [],
             "frozen": [],
             "hideSender": [],
@@ -95,7 +94,6 @@
                 "ENVELOPE"
             ],
             "options": {
-                "cooledDelivery": [],
                 "freshFood": [],
                 "frozen": [],
                 "hideSender": [],
@@ -157,7 +155,6 @@
             "collect": 0,
             "freshFood": -1,
             "frozen": -1,
-            "cooledDelivery": -1,
             "labelDescription": "standaard kenmerk"
         },
         "deliveryType": "standard",

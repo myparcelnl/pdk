@@ -15,7 +15,6 @@
                 "ENVELOPE"
             ],
             "options": {
-                "cooledDelivery": [],
                 "freshFood": [],
                 "frozen": [],
                 "hideSender": [],
@@ -76,7 +75,6 @@
             "collect": false,
             "freshFood": false,
             "frozen": false,
-            "cooledDelivery": false,
             "deliveryType": 2,
             "labelDescription": "",
             "packageType": 1

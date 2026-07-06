@@ -114,7 +114,7 @@ class CapabilitiesService extends AbstractShipmentApiService
         $request = $this->hydrateModel(CapabilitiesPostCapabilitiesRequestV2::class, $parameters);
 
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
-        $response = $this->shipmentApi->postCapabilities($this->getUserAgent(), $request);
+        $response = $this->shipmentApi->postCapabilities($request, $this->getUserAgent());
         $results  = $response->getResults();
 
         return $filterSupported ? $this->filterSupportedCapabilities($results) : $results;
@@ -260,8 +260,8 @@ class CapabilitiesService extends AbstractShipmentApiService
         }
 
         $response = $this->shipmentApi->postCapabilitiesContractDefinitions(
-            $this->getUserAgent(),
-            $request
+            $request,
+            $this->getUserAgent()
         );
         $items = $response->getItems();
 

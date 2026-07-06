@@ -16,7 +16,6 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 /**
  * @property bool   $ageCheck
  * @property bool   $collect
- * @property bool   $cooledDelivery
  * @property string $deliveryDate
  * @property int    $deliveryType
  * @property bool   $dropOffAtPostalPoint
