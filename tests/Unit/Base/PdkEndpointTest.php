@@ -27,7 +27,6 @@ use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
-use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -88,7 +87,7 @@ dataset('backend actions', function () {
         PdkBackendActions::UPDATE_PLUGIN_SETTINGS,
         PdkBackendActions::UPDATE_PRODUCT_SETTINGS,
         PdkBackendActions::UPDATE_SHIPMENTS,
-        PdkSharedActions::FETCH_CONTEXT,
+        PdkBackendActions::FETCH_CONTEXT,
     ];
 });
 

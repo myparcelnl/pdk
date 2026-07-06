@@ -29,7 +29,6 @@ use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
-use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\App\Request\Account\DeleteAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateSubscriptionFeaturesEndpointRequest;
@@ -97,7 +96,7 @@ return [
     ],
 
     PdkEndpoint::CONTEXT_BACKEND => [
-        PdkSharedActions::FETCH_CONTEXT                 => [
+        PdkBackendActions::FETCH_CONTEXT                => [
             'request' => FetchContextEndpointRequest::class,
             'action'  => FetchContextAction::class,
         ],

@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Action\Contract\ActionInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
-use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Actions;
@@ -86,7 +85,7 @@ class UpdateAccountAction implements ActionInterface
 
         $this->updateAndSaveAccount($accountSettings);
 
-        return Actions::execute(PdkSharedActions::FETCH_CONTEXT, [
+        return Actions::execute(PdkBackendActions::FETCH_CONTEXT, [
             'context' => implode(',', [
                 Context::ID_DYNAMIC,
                 Context::ID_PLUGIN_SETTINGS_VIEW,

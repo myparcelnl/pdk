@@ -11,9 +11,9 @@ use MyParcelNL\Pdk\Api\PdkCapabilitiesActions;
 use MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction;
 use MyParcelNL\Pdk\App\Action\Frontend\Context\FetchCheckoutContextAction;
 use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
+use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
-use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use ReflectionMethod;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,12 +43,12 @@ if (! function_exists(__NAMESPACE__ . '\\resolveEndpointAction')) {
  * Regression test, `fetchContext` must be resolvable from the backend context only.
  */
 it('does NOT expose fetchContext to the unauthenticated frontend endpoint', function () {
-    expect(fn() => resolveEndpointAction(PdkEndpoint::CONTEXT_FRONTEND, PdkSharedActions::FETCH_CONTEXT))
+    expect(fn() => resolveEndpointAction(PdkEndpoint::CONTEXT_FRONTEND, PdkBackendActions::FETCH_CONTEXT))
         ->toThrow(PdkEndpointException::class, 'Action "fetchContext" does not exist.');
 });
 
 it('still resolves fetchContext for the authenticated backend endpoint', function () {
-    expect(resolveEndpointAction(PdkEndpoint::CONTEXT_BACKEND, PdkSharedActions::FETCH_CONTEXT))
+    expect(resolveEndpointAction(PdkEndpoint::CONTEXT_BACKEND, PdkBackendActions::FETCH_CONTEXT))
         ->toBe(FetchContextAction::class);
 });
 
