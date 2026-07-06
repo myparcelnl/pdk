@@ -17,7 +17,6 @@
             "ENVELOPE"
         ],
         "options": {
-            "cooledDelivery": [],
             "freshFood": [],
             "frozen": [],
             "hideSender": [],
@@ -78,7 +77,6 @@
                 "ENVELOPE"
             ],
             "options": {
-                "cooledDelivery": [],
                 "freshFood": [],
                 "frozen": [],
                 "hideSender": [],

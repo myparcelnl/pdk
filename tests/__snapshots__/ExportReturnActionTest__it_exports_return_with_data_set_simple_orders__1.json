@@ -16,7 +16,6 @@
                             "ENVELOPE"
                         ],
                         "options": {
-                            "cooledDelivery": [],
                             "freshFood": [],
                             "frozen": [],
                             "hideSender": [],
@@ -77,8 +76,7 @@
                         "requiresReceiptCode": -1,
                         "scheduledCollection": -1,
                         "freshFood": -1,
-                        "frozen": -1,
-                        "cooledDelivery": -1
+                        "frozen": -1
                     },
                     "deliveryType": "STANDARD_DELIVERY",
                     "packageType": "PACKAGE"
@@ -121,7 +119,6 @@
                                 "ENVELOPE"
                             ],
                             "options": {
-                                "cooledDelivery": [],
                                 "freshFood": [],
                                 "frozen": [],
                                 "hideSender": [],
@@ -181,7 +178,6 @@
                                     "ENVELOPE"
                                 ],
                                 "options": {
-                                    "cooledDelivery": [],
                                     "freshFood": [],
                                     "frozen": [],
                                     "hideSender": [],
@@ -273,7 +269,6 @@
                                 "ENVELOPE"
                             ],
                             "options": {
-                                "cooledDelivery": [],
                                 "freshFood": [],
                                 "frozen": [],
                                 "hideSender": [],
@@ -333,7 +328,6 @@
                                     "ENVELOPE"
                                 ],
                                 "options": {
-                                    "cooledDelivery": [],
                                     "freshFood": [],
                                     "frozen": [],
                                     "hideSender": [],
@@ -522,8 +516,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -545,8 +538,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -568,8 +560,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -591,8 +582,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -614,8 +604,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -637,8 +626,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -660,8 +648,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -683,8 +670,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -706,8 +692,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -729,8 +714,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -752,8 +736,29 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
+                        },
+                        "deliveryType": "STANDARD_DELIVERY",
+                        "packageType": "PACKAGE"
+                    },
+                    "SPRING": {
+                        "labelAmount": 1,
+                        "shipmentOptions": {
+                            "requiresAgeVerification": 0,
+                            "returnOnFirstFailedDelivery": 0,
+                            "hideSender": 0,
+                            "insurance": 0,
+                            "oversizedPackage": 0,
+                            "recipientOnlyDelivery": 0,
+                            "priorityDelivery": 0,
+                            "sameDayDelivery": 0,
+                            "saturdayDelivery": 0,
+                            "requiresSignature": 0,
+                            "tracked": 0,
+                            "requiresReceiptCode": 0,
+                            "scheduledCollection": 0,
+                            "freshFood": 0,
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -775,8 +780,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -798,8 +802,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -821,8 +824,29 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
+                        },
+                        "deliveryType": "STANDARD_DELIVERY",
+                        "packageType": "PACKAGE"
+                    },
+                    "VIA_TIM": {
+                        "labelAmount": 1,
+                        "shipmentOptions": {
+                            "requiresAgeVerification": 0,
+                            "returnOnFirstFailedDelivery": 0,
+                            "hideSender": 0,
+                            "insurance": 0,
+                            "oversizedPackage": 0,
+                            "recipientOnlyDelivery": 0,
+                            "priorityDelivery": 0,
+                            "sameDayDelivery": 0,
+                            "saturdayDelivery": 0,
+                            "requiresSignature": 0,
+                            "tracked": 0,
+                            "requiresReceiptCode": 0,
+                            "scheduledCollection": 0,
+                            "freshFood": 0,
+                            "frozen": 0
                         },
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
@@ -866,7 +890,6 @@
                             "ENVELOPE"
                         ],
                         "options": {
-                            "cooledDelivery": [],
                             "freshFood": [],
                             "frozen": [],
                             "hideSender": [],
@@ -927,8 +950,7 @@
                         "requiresReceiptCode": -1,
                         "scheduledCollection": -1,
                         "freshFood": -1,
-                        "frozen": -1,
-                        "cooledDelivery": -1
+                        "frozen": -1
                     },
                     "deliveryType": "EVENING_DELIVERY",
                     "packageType": "PACKAGE"
@@ -1057,8 +1079,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1080,8 +1101,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1103,8 +1123,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1126,8 +1145,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1149,8 +1167,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1172,8 +1189,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1195,8 +1211,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1218,8 +1233,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1241,8 +1255,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1264,8 +1277,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1287,8 +1299,29 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
+                        },
+                        "deliveryType": "EVENING_DELIVERY",
+                        "packageType": "PACKAGE"
+                    },
+                    "SPRING": {
+                        "labelAmount": 1,
+                        "shipmentOptions": {
+                            "requiresAgeVerification": 0,
+                            "returnOnFirstFailedDelivery": 0,
+                            "hideSender": 0,
+                            "insurance": 0,
+                            "oversizedPackage": 0,
+                            "recipientOnlyDelivery": 0,
+                            "priorityDelivery": 0,
+                            "sameDayDelivery": 0,
+                            "saturdayDelivery": 0,
+                            "requiresSignature": 0,
+                            "tracked": 0,
+                            "requiresReceiptCode": 0,
+                            "scheduledCollection": 0,
+                            "freshFood": 0,
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1310,8 +1343,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1333,8 +1365,7 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"
@@ -1356,8 +1387,29 @@
                             "requiresReceiptCode": 0,
                             "scheduledCollection": 0,
                             "freshFood": 0,
-                            "frozen": 0,
-                            "cooledDelivery": 0
+                            "frozen": 0
+                        },
+                        "deliveryType": "EVENING_DELIVERY",
+                        "packageType": "PACKAGE"
+                    },
+                    "VIA_TIM": {
+                        "labelAmount": 1,
+                        "shipmentOptions": {
+                            "requiresAgeVerification": 0,
+                            "returnOnFirstFailedDelivery": 0,
+                            "hideSender": 0,
+                            "insurance": 0,
+                            "oversizedPackage": 0,
+                            "recipientOnlyDelivery": 0,
+                            "priorityDelivery": 0,
+                            "sameDayDelivery": 0,
+                            "saturdayDelivery": 0,
+                            "requiresSignature": 0,
+                            "tracked": 0,
+                            "requiresReceiptCode": 0,
+                            "scheduledCollection": 0,
+                            "freshFood": 0,
+                            "frozen": 0
                         },
                         "deliveryType": "EVENING_DELIVERY",
                         "packageType": "PACKAGE"

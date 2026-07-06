@@ -96,7 +96,6 @@ it('exposes inherited options', function () {
             'scheduledCollection'         => TriStateService::INHERIT,
             'freshFood'                   => TriStateService::INHERIT,
             'frozen'                      => TriStateService::INHERIT,
-            'cooledDelivery'              => TriStateService::INHERIT,
             'saturdayDelivery'            => TriStateService::INHERIT,
         ])
         ->and($context->inheritedDeliveryOptions->toArrayWithoutNull())
@@ -124,7 +123,6 @@ it('exposes inherited options', function () {
                     'scheduledCollection'         => TriStateService::DISABLED,
                     'freshFood'                   => TriStateService::DISABLED,
                     'frozen'                      => TriStateService::DISABLED,
-                    'cooledDelivery'              => TriStateService::DISABLED,
                     'saturdayDelivery'            => TriStateService::DISABLED,
                 ],
             ],
@@ -150,7 +148,6 @@ it('exposes inherited options', function () {
                     'scheduledCollection'         => TriStateService::DISABLED,
                     'freshFood'                   => TriStateService::DISABLED,
                     'frozen'                      => TriStateService::DISABLED,
-                    'cooledDelivery'              => TriStateService::DISABLED,
                     'saturdayDelivery'            => TriStateService::DISABLED,
                 ],
             ],

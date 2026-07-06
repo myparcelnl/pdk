@@ -112,6 +112,16 @@ class Carrier extends SdkBackedModel
     public const CARRIER_POSTE_ITALIANE_LEGACY_NAME = 'posteitaliane';
 
     /**
+     * @deprecated use RefCapabilitiesSharedCarrierV2::SPRING
+     */
+    public const CARRIER_SPRING_LEGACY_NAME    = 'spring';
+
+    /**
+     * @deprecated use RefCapabilitiesSharedCarrierV2::VIA_TIM
+     */
+    public const CARRIER_VIA_TIM_LEGACY_NAME   = 'viatim';
+
+    /**
      * Legacy names as used by delivery options and internal storage.
      *
      * @deprecated use new carrier names directly
@@ -131,6 +141,8 @@ class Carrier extends SdkBackedModel
         RefCapabilitiesSharedCarrierV2::TRUNKRS            => self::CARRIER_TRUNKRS_LEGACY_NAME,
         RefCapabilitiesSharedCarrierV2::INPOST             => self::CARRIER_INPOST_LEGACY_NAME,
         RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => self::CARRIER_POSTE_ITALIANE_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::SPRING             => self::CARRIER_SPRING_LEGACY_NAME,
+        RefCapabilitiesSharedCarrierV2::VIA_TIM            => self::CARRIER_VIA_TIM_LEGACY_NAME,
     ];
 
     /**
@@ -152,6 +164,8 @@ class Carrier extends SdkBackedModel
         RefCapabilitiesSharedCarrierV2::TRUNKRS            => RefTypesCarrier::TRUNKRS,
         RefCapabilitiesSharedCarrierV2::INPOST             => RefTypesCarrier::INPOST,
         RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => RefTypesCarrier::POSTE_ITALIANE,
+        RefCapabilitiesSharedCarrierV2::SPRING             => RefTypesCarrier::SPRING,
+        RefCapabilitiesSharedCarrierV2::VIA_TIM            => RefTypesCarrier::VIA_TIM,
     ];
 
     /**
