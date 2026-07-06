@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\App\Action\Backend\Shipment\UpdateShipmentsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\CreateWebhooksAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\DeleteWebhooksAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\FetchWebhooksAction;
+use MyParcelNL\Pdk\App\Action\Frontend\Context\FetchCheckoutContextAction;
 use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
@@ -52,6 +53,7 @@ usesShared(
         DeleteWebhooksAction::class        => get(MockAction::class),
         ExportOrderAction::class           => get(MockAction::class),
         ExportReturnAction::class          => get(MockAction::class),
+        FetchCheckoutContextAction::class  => get(MockAction::class),
         FetchContextAction::class          => get(MockAction::class),
         FetchOrdersAction::class           => get(MockAction::class),
         FetchWebhooksAction::class         => get(MockAction::class),
@@ -93,7 +95,6 @@ dataset('backend actions', function () {
 dataset('frontend actions', function () {
     return [
         PdkFrontendActions::FETCH_CHECKOUT_CONTEXT,
-        PdkSharedActions::FETCH_CONTEXT,
     ];
 });
 
@@ -204,11 +205,8 @@ it('returns error response when using the wrong context', function (string $acti
     $endpoint = Pdk::get(PdkEndpoint::class);
     $response = $endpoint->call($action, PdkEndpoint::CONTEXT_FRONTEND);
 
-    if (PdkSharedActions::FETCH_CONTEXT === $action) {
-        expect($response->getStatusCode())->toBe(Response::HTTP_OK);
-        return;
-    }
-
+    // Every backend-only action — including fetchContext — must be unreachable from the public
+    // frontend context.
     $responseContent = json_decode($response->getContent(), true);
     expect($response->getStatusCode())
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)

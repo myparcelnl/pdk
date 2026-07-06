@@ -65,14 +65,6 @@ use MyParcelNL\Pdk\App\Request\Capabilities\CapabilitiesEndpointRequest;
 return [
     PdkEndpoint::CONTEXT_SHARED => [
         /**
-         * Fetch context
-         */
-        PdkSharedActions::FETCH_CONTEXT => [
-            'request' => FetchContextEndpointRequest::class,
-            'action'  => FetchContextAction::class,
-        ],
-
-        /**
          * Capabilities microservice proxy. Shared because both checkout (frontend) and the
          * admin order-edit form drive contextual capability lookups against the same action.
          */
@@ -105,6 +97,11 @@ return [
     ],
 
     PdkEndpoint::CONTEXT_BACKEND => [
+        PdkSharedActions::FETCH_CONTEXT                 => [
+            'request' => FetchContextEndpointRequest::class,
+            'action'  => FetchContextAction::class,
+        ],
+
         /**
          * Delete account.
          */

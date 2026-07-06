@@ -43,18 +43,6 @@
                         "responseProperty": null,
                         "useDataEnvelope": true
                     },
-                    "fetchContext": {
-                        "body": null,
-                        "headers": [],
-                        "method": "GET",
-                        "parameters": {
-                            "action": "fetchContext"
-                        },
-                        "path": "",
-                        "property": "context",
-                        "responseProperty": null,
-                        "useDataEnvelope": true
-                    },
                     "proxyCapabilities": {
                         "body": null,
                         "headers": [],
