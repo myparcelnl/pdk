@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.0](https://github.com/myparcelnl/pdk/compare/v4.0.2...v4.1.0) (2026-07-06)
+
+
+### :sparkles: New Features
+
+* add SPRING and VIA_TIM carriers (INT-1683) ([#497](https://github.com/myparcelnl/pdk/issues/497)) ([4e047c0](https://github.com/myparcelnl/pdk/commit/4e047c01fb490da8f0724b7bd104236ca814cc04))
+
 ## [4.0.2](https://github.com/myparcelnl/pdk/compare/v4.0.1...v4.0.2) (2026-06-22)
 
 ## [4.0.1](https://github.com/myparcelnl/pdk/compare/v4.0.0...v4.0.1) (2026-06-16)
