@@ -73,8 +73,7 @@
                 "receiptCode": -1,
                 "collect": -1,
                 "freshFood": -1,
-                "frozen": -1,
-                "cooledDelivery": -1
+                "frozen": -1
             },
             "deliveryType": "standard",
             "packageType": "package"
@@ -115,7 +114,6 @@
                         "excludeParcelLockers": -1,
                         "exportFreshFood": -1,
                         "exportFrozen": -1,
-                        "exportCooledDelivery": -1,
                         "id": "product",
                         "countryOfOrigin": -1,
                         "customsCode": -1,
@@ -138,7 +136,6 @@
                         "excludeParcelLockers": -1,
                         "exportFreshFood": -1,
                         "exportFrozen": -1,
-                        "exportCooledDelivery": -1,
                         "id": "product",
                         "countryOfOrigin": -1,
                         "customsCode": -1,

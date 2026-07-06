@@ -19,8 +19,7 @@
                 "receiptCode": -1,
                 "collect": -1,
                 "freshFood": -1,
-                "frozen": -1,
-                "cooledDelivery": -1
+                "frozen": -1
             },
             "deliveryType": "standard",
             "packageType": "mailbox"
@@ -48,8 +47,7 @@
                 "receiptCode": -1,
                 "collect": -1,
                 "freshFood": -1,
-                "frozen": -1,
-                "cooledDelivery": -1
+                "frozen": -1
             },
             "deliveryType": "evening",
             "packageType": "package"
@@ -76,8 +74,7 @@
                 "receiptCode": -1,
                 "collect": -1,
                 "freshFood": -1,
-                "frozen": -1,
-                "cooledDelivery": -1
+                "frozen": -1
             },
             "deliveryType": "standard",
             "packageType": "package"

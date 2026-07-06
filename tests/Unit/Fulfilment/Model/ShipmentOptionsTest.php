@@ -33,7 +33,6 @@ it('can create instance from pdk delivery options', function () {
         'labelDescription' => 'test',
         'ageCheck'         => true,
         'collect'          => false,
-        'cooledDelivery'   => false,
         'hideSender'       => true,
         'largeFormat'      => true,
         'onlyRecipient'    => true,

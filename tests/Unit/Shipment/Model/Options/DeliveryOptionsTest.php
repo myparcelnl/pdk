@@ -87,7 +87,6 @@ it('instantiates shipment options', function () {
             'priorityDelivery' => TriStateService::ENABLED,
             'frozen'           => TriStateService::DISABLED,
             'freshFood'        => TriStateService::DISABLED,
-            'cooledDelivery'   => TriStateService::INHERIT,
             'saturdayDelivery' => TriStateService::INHERIT
         ]);
 });

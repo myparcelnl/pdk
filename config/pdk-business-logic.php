@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CooledDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
@@ -84,7 +83,6 @@ return [
             new ExcludeParcelLockersDefinition(),
             new FreshFoodDefinition(),
             new FrozenDefinition(),
-            new CooledDeliveryDefinition(),
         ];
     }),
 

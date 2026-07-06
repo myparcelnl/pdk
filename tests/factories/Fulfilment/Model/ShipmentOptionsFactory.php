@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method ShipmentOptions make()
  * @method $this withAgeCheck(bool $ageCheck)
  * @method $this withCollect(bool $collect)
- * @method $this withCooledDelivery(bool $cooledDelivery)
  * @method $this withDeliveryDate(string $deliveryDate)
  * @method $this withDeliveryType(int $deliveryType)
  * @method $this withDropOffAtPostalPoint(bool $dropOffAtPostalPoint)

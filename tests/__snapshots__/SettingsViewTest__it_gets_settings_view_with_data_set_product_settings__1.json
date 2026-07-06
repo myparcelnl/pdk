@@ -1191,12 +1191,6 @@
             "$component": "TriStateInput",
             "label": "settings_product_export_frozen",
             "description": "settings_product_export_frozen_description"
-        },
-        {
-            "name": "exportCooledDelivery",
-            "$component": "TriStateInput",
-            "label": "settings_product_export_cooled_delivery",
-            "description": "settings_product_export_cooled_delivery_description"
         }
     ],
     "children": null

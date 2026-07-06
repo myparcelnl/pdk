@@ -136,7 +136,6 @@
             "collect": 0,
             "freshFood": -1,
             "frozen": -1,
-            "cooledDelivery": -1,
             "labelDescription": "Vliegtuig"
         },
         "deliveryType": "standard",
