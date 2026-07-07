@@ -29,7 +29,6 @@ use MyParcelNL\Pdk\App\Action\Shared\Context\FetchContextAction;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Frontend\PdkFrontendActions;
 use MyParcelNL\Pdk\App\Api\PdkEndpoint;
-use MyParcelNL\Pdk\App\Api\Shared\PdkSharedActions;
 use MyParcelNL\Pdk\App\Request\Account\DeleteAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateAccountEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Account\UpdateSubscriptionFeaturesEndpointRequest;
@@ -65,14 +64,6 @@ use MyParcelNL\Pdk\App\Request\Capabilities\CapabilitiesEndpointRequest;
 return [
     PdkEndpoint::CONTEXT_SHARED => [
         /**
-         * Fetch context
-         */
-        PdkSharedActions::FETCH_CONTEXT => [
-            'request' => FetchContextEndpointRequest::class,
-            'action'  => FetchContextAction::class,
-        ],
-
-        /**
          * Capabilities microservice proxy. Shared because both checkout (frontend) and the
          * admin order-edit form drive contextual capability lookups against the same action.
          */
@@ -105,6 +96,11 @@ return [
     ],
 
     PdkEndpoint::CONTEXT_BACKEND => [
+        PdkBackendActions::FETCH_CONTEXT                => [
+            'request' => FetchContextEndpointRequest::class,
+            'action'  => FetchContextAction::class,
+        ],
+
         /**
          * Delete account.
          */
