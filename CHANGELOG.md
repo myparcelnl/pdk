@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/myparcelnl/pdk/compare/v4.1.0...v4.1.1) (2026-07-07)
+
+
+### :bug: Bug Fixes
+
+* move fetch context endpoint to backend ([#498](https://github.com/myparcelnl/pdk/issues/498)) ([ff7f44c](https://github.com/myparcelnl/pdk/commit/ff7f44ced88646c7ebc62520ff2f66100059040f))
+
 ## [4.1.0](https://github.com/myparcelnl/pdk/compare/v4.0.2...v4.1.0) (2026-07-06)
 
 
