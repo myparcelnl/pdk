@@ -32,6 +32,10 @@ return [
     'pdkNextMajorVersion'       => factory(function (): string {
         $version = Pdk::get('pdkVersion');
 
+        if (! preg_match('/^\d+\./', $version)) {
+            return 'unknown';
+        }
+
         return (int) explode('.', $version)[0] + 1 . '.0.0';
     }),
 

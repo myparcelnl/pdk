@@ -60,7 +60,16 @@ class PdkFactory implements PdkFactoryInterface
      */
     public static function setCacheVersion(?string $version): void
     {
-        self::$cacheVersion = null === $version ? null : preg_replace('/[^\w.-]+/', '_', $version);
+        $sanitized = null === $version ? null : preg_replace('/[^\w.-]+/', '_', $version);
+
+        // Reject values that would escape or collapse the cache directory, e.g. "..", "." or "".
+        if (null === $sanitized || '' === trim($sanitized, '.') || false !== strpos($sanitized, '..')) {
+            self::$cacheVersion = null;
+
+            return;
+        }
+
+        self::$cacheVersion = $sanitized;
     }
 
     /**

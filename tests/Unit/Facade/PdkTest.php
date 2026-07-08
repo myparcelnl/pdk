@@ -83,10 +83,23 @@ it('clears cache files of all versions recursively', function () {
         ->toBeEmpty();
 });
 
+it('falls back to the default cache directory for unsafe cache versions', function (string $version) {
+    PdkFactory::setCacheVersion($version);
+
+    putenv('PDK_DISABLE_CACHE=0');
+    PdkFactory::create(MockPdkConfig::create(['mode' => 'production']));
+    putenv('PDK_DISABLE_CACHE=1');
+
+    expect(scandir(PdkBase::CACHE_DIR . '/default'))->toContain('CompiledContainer.php');
+})->with(['..', '../evil', '', '.']);
+
 it('falls back to unknown pdk version when composer.json cannot be read', function () {
     PdkFactory::create(MockPdkConfig::create(['rootDir' => value('/nonexistent/pdk-root/')]));
 
-    expect(Pdk::get('pdkVersion'))->toBe('unknown');
+    expect(Pdk::get('pdkVersion'))
+        ->toBe('unknown')
+        ->and(Pdk::get('pdkNextMajorVersion'))
+        ->toBe('unknown');
 });
 
 it('throws error if appInfo is missing', function () {
