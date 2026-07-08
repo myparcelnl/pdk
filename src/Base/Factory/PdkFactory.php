@@ -22,6 +22,11 @@ class PdkFactory implements PdkFactoryInterface
     /**
      * @var null|string
      */
+    protected static $cacheVersion;
+
+    /**
+     * @var null|string
+     */
     protected static $mode;
 
     public function __construct() { }
@@ -42,6 +47,20 @@ class PdkFactory implements PdkFactoryInterface
         Facade::setPdkInstance($pdk);
 
         return $pdk;
+    }
+
+    /**
+     * Set the app version to key the container caches by. Without this, caches persist across
+     * up- and downgrades (most notably the APCu definition cache, which survives replacing the
+     * plugin directory) and poison the compiled container with definitions from another version.
+     *
+     * @param  null|string $version
+     *
+     * @return void
+     */
+    public static function setCacheVersion(?string $version): void
+    {
+        self::$cacheVersion = null === $version ? null : preg_replace('/[^\w.-]+/', '_', $version);
     }
 
     /**
@@ -77,12 +96,23 @@ class PdkFactory implements PdkFactoryInterface
      */
     protected function setupCache(ContainerBuilder $builder): void
     {
+        $cacheVersion = $this->getCacheVersion();
+        $cacheDir     = Pdk::CACHE_DIR . '/' . $cacheVersion;
+
         if (SourceCache::isSupported()) {
-            $builder->enableDefinitionCache('pdk-definition-cache');
+            $builder->enableDefinitionCache("pdk-definition-cache-$cacheVersion");
         }
 
-        $builder->enableCompilation(Pdk::CACHE_DIR, Pdk::CACHE_CLASS_NAME);
-        $builder->writeProxiesToFile(true, Pdk::CACHE_DIR);
+        $builder->enableCompilation($cacheDir, Pdk::CACHE_CLASS_NAME);
+        $builder->writeProxiesToFile(true, $cacheDir);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCacheVersion(): string
+    {
+        return self::$cacheVersion ?? 'default';
     }
 
     /**

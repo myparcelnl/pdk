@@ -43,6 +43,8 @@ class PdkBootstrapper implements PdkBootstrapperInterface
         if (! self::$initialized) {
             PdkFactory::setMode($mode);
 
+            PdkFactory::setCacheVersion($version);
+
             self::$initialized = true;
             self::$pdk = PdkFactory::create(
                 "$path/config/pdk.php",

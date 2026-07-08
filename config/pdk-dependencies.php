@@ -11,13 +11,19 @@ use function DI\value;
 
 return [
     /**
-     * The current version of the pdk according to the composer.json file.
+     * The current version of the pdk according to the composer.json file. Falls back to "unknown"
+     * if the file cannot be read; this value is informational (user agent headers) and reading it
+     * must never take down the application. See myparcelnl/woocommerce#1664.
      */
     'pdkVersion'                => factory(function (FileSystemInterface $fileSystem): string {
-        $rootDir      = Pdk::get('rootDir');
-        $composerJson = json_decode($fileSystem->get("$rootDir/composer.json"), true);
+        try {
+            $rootDir      = rtrim(Pdk::get('rootDir'), '/');
+            $composerJson = json_decode($fileSystem->get("$rootDir/composer.json"), true);
 
-        return $composerJson['version'];
+            return $composerJson['version'] ?? 'unknown';
+        } catch (Throwable $e) {
+            return 'unknown';
+        }
     }),
 
     /**

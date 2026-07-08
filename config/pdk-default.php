@@ -19,15 +19,16 @@ use function DI\value;
  */
 return [
     /**
-     * Path to the root directory of the pdk.
+     * Path to the root directory of the pdk. Resolved via realpath to avoid baking symlink-based
+     * paths into the compiled container, which breaks hosts with open_basedir restrictions.
      */
-    'rootDir'                => value(__DIR__ . '/../'),
+    'rootDir'                => value((realpath(__DIR__ . '/..') ?: __DIR__ . '/..') . '/'),
 
     /**
      * Directories to load config files from.
      */
     'configDirs'             => value([
-        __DIR__ . '/../config',
+        realpath(__DIR__) ?: __DIR__,
     ]),
 
     /**
