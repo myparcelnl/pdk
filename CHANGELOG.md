@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.0](https://github.com/myparcelnl/pdk/compare/v4.1.1...v4.2.0) (2026-07-08)
+
+
+### :sparkles: New Features
+
+* **model:** add without() to exclude attributes from serialization ([#492](https://github.com/myparcelnl/pdk/issues/492)) ([20469a2](https://github.com/myparcelnl/pdk/commit/20469a2a100a64dce328083a49e3679bf25fe403))
+
 ## [4.1.1](https://github.com/myparcelnl/pdk/compare/v4.1.0...v4.1.1) (2026-07-07)
 
 
