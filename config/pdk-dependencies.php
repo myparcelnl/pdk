@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\FileSystemInterface;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 
@@ -22,6 +23,14 @@ return [
 
             return $composerJson['version'] ?? 'unknown';
         } catch (Throwable $e) {
+            try {
+                Logger::warning('Unable to determine PDK version', [
+                    'error' => $e->getMessage(),
+                ]);
+            } catch (Throwable $loggerException) {
+                // The version fallback must never break boot, even if logging is unavailable.
+            }
+
             return 'unknown';
         }
     }),

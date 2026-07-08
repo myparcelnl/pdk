@@ -106,13 +106,13 @@ class PdkFactory implements PdkFactoryInterface
     protected function setupCache(ContainerBuilder $builder): void
     {
         $cacheVersion = $this->getCacheVersion();
-        $cacheDir     = Pdk::CACHE_DIR . '/' . $cacheVersion;
+        $cacheDir     = Pdk::getCacheDir() . '/' . $cacheVersion;
 
         if (SourceCache::isSupported()) {
             $builder->enableDefinitionCache("pdk-definition-cache-$cacheVersion");
         }
 
-        $builder->enableCompilation($cacheDir, Pdk::CACHE_CLASS_NAME);
+        $builder->enableCompilation($cacheDir, $this->getCacheClassName());
         $builder->writeProxiesToFile(true, $cacheDir);
     }
 
@@ -125,6 +125,18 @@ class PdkFactory implements PdkFactoryInterface
     }
 
     /**
+     * @return string
+     */
+    protected function getCacheClassName(): string
+    {
+        return sprintf(
+            '%s_%s',
+            Pdk::CACHE_CLASS_NAME,
+            preg_replace('/\W+/', '_', $this->getCacheVersion())
+        );
+    }
+
+    /**
      * @param  array[]|string[] $configs
      *
      * @return \DI\Container
@@ -132,18 +144,19 @@ class PdkFactory implements PdkFactoryInterface
      */
     protected function setupContainer(...$configs): Container
     {
-        $mode    = $this->getMode();
-        $builder = new ContainerBuilder();
+        $mode       = $this->getMode();
+        $configPath = realpath(self::CONFIG_PATH) ?: self::CONFIG_PATH;
+        $builder    = new ContainerBuilder();
 
         $builder->useAutowiring(true);
         $builder->addDefinitions(
-            sprintf('%s/pdk-default.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-template.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-business-logic.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-dependencies.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-fields.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-services.php', self::CONFIG_PATH),
-            sprintf('%s/pdk-settings.php', self::CONFIG_PATH),
+            sprintf('%s/pdk-default.php', $configPath),
+            sprintf('%s/pdk-template.php', $configPath),
+            sprintf('%s/pdk-business-logic.php', $configPath),
+            sprintf('%s/pdk-dependencies.php', $configPath),
+            sprintf('%s/pdk-fields.php', $configPath),
+            sprintf('%s/pdk-services.php', $configPath),
+            sprintf('%s/pdk-settings.php', $configPath),
             ['mode' => value($mode)],
             ...$configs
         );

@@ -45,7 +45,26 @@ class Pdk implements PdkInterface
      */
     public function clearCache(): void
     {
-        $this->deleteDirectoryContents(self::CACHE_DIR);
+        $this->deleteDirectoryContents(self::getCacheDir());
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCacheDir(): string
+    {
+        $cacheDir = self::CACHE_DIR;
+        $realPath = realpath($cacheDir);
+
+        if (false !== $realPath) {
+            return $realPath;
+        }
+
+        $parent = realpath(dirname($cacheDir));
+
+        return false !== $parent
+            ? sprintf('%s/%s', $parent, basename($cacheDir))
+            : $cacheDir;
     }
 
     /**
