@@ -82,6 +82,11 @@ trait HasAttributes
     private $classCastCache = [];
 
     /**
+     * @var string[]
+     */
+    private $excludedFromSerialization = [];
+
+    /**
      * Extract and cache all the mutated attributes of a class.
      *
      * @param  string $class
@@ -122,6 +127,16 @@ trait HasAttributes
     {
         $attributes = $this->getAttributes($flags);
 
+        if (! empty($this->excludedFromSerialization)) {
+            $excluded = array_map(
+                static function (string $key) use ($flags): string {
+                    return Utils::changeCase($key, $flags);
+                },
+                $this->excludedFromSerialization
+            );
+            $attributes = Arr::except($attributes, $excluded);
+        }
+
         return $this->createArrayFromAttributes($attributes, $flags);
     }
 
@@ -133,7 +148,45 @@ trait HasAttributes
      */
     public function except($attributes, ?int $flags = null): array
     {
-        return $this->createArrayFromAttributes(Arr::except($this->attributes, Arr::wrap($attributes)), $flags);
+        return $this->createArrayFromAttributes(
+            Arr::except($this->attributes, array_merge(Arr::wrap($attributes), $this->excludedFromSerialization)),
+            $flags
+        );
+    }
+
+    /**
+     * Mark attributes to be excluded from model serialization (toArray() and its variants).
+     * Does not affect getAttribute() or internal attribute access.
+     *
+     * @param  string ...$attributes
+     *
+     * @return self
+     */
+    public function without(string ...$attributes): self
+    {
+        $this->excludedFromSerialization = array_unique(array_merge(
+            $this->excludedFromSerialization,
+            array_map([Utils::class, 'changeCase'], $attributes)
+        ));
+
+        return $this;
+    }
+
+    /**
+     * Re-include attributes previously excluded via without().
+     *
+     * @param  string ...$attributes
+     *
+     * @return self
+     */
+    public function with(string ...$attributes): self
+    {
+        $this->excludedFromSerialization = array_values(array_diff(
+            $this->excludedFromSerialization,
+            array_map([Utils::class, 'changeCase'], $attributes)
+        ));
+
+        return $this;
     }
 
     /**
