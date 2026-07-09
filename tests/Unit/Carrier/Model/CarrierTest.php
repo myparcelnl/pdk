@@ -129,9 +129,14 @@ it('creates carrier directly with constructor without lookup', function () {
         ->and($carrier->packageTypes)->toBeNull();
 });
 
-it('throws exception when carrier name does not match enum', function () {
-    new Carrier(['carrier' => 'NOT_AN_ENUM_VALUE']);
-})->throws(\InvalidArgumentException::class);
+it('marks unknown carrier names as unsupported', function () {
+    $carrier = new Carrier(['carrier' => 'NOT_AN_ENUM_VALUE']);
+
+    expect($carrier->carrier)
+        ->toBe('NOT_AN_ENUM_VALUE')
+        ->and(Carrier::isSupported($carrier->carrier))
+        ->toBeFalse();
+});
 
 it('factory can set option as required', function () {
     $carrier = factory(Carrier::class)
@@ -221,4 +226,3 @@ it('reports support only for carriers known to this PDK version', function () {
         ->and(Carrier::isSupported('UNSUPPORTED_FUTURE_CARRIER'))->toBeFalse()
         ->and(Carrier::isSupported(''))->toBeFalse();
 });
-
