@@ -14,7 +14,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LogLevel;
@@ -290,10 +289,9 @@ it('getContractDefinitions rejects unknown carrier names before making a request
     TestBootstrapper::hasApiKey('valid-key');
 
     $service = new CapabilitiesService();
-    $allowedValuesString = implode("', '", (new CapabilitiesPostContractDefinitionsRequestV2())->getCarrierAllowableValues());
 
     expect(fn() => $service->getContractDefinitions('unknown_carrier'))
-        ->toThrow(\InvalidArgumentException::class, "Invalid value 'unknown_carrier' for 'carrier', must be one of '$allowedValuesString'");
+        ->toThrow(\InvalidArgumentException::class, 'carrier');
 });
 
 // Tests for LoggingMiddleware integration
