@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/myparcelnl/pdk/compare/v4.2.0...v4.2.1) (2026-07-09)
+
+
+### :bug: Bug Fixes
+
+* harden container cache handling ([#499](https://github.com/myparcelnl/pdk/issues/499)) ([ae17c4e](https://github.com/myparcelnl/pdk/commit/ae17c4e466bb8a67266f423a5b506b0b3d1d4a72))
+* update sdk beta test expectations ([#503](https://github.com/myparcelnl/pdk/issues/503)) ([ae28336](https://github.com/myparcelnl/pdk/commit/ae28336d57a8bd1f8c1c4d9c2135a14cde10b605))
+
 ## [4.2.0](https://github.com/myparcelnl/pdk/compare/v4.1.1...v4.2.0) (2026-07-08)
 
 
