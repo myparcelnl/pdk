@@ -53,7 +53,6 @@ class LoggingMiddleware
                     'uri'     => SensitiveDataScrubber::scrubUri((string) $request->getUri()),
                     'body'    => is_array($decoded) ? SensitiveDataScrubber::scrubArray($decoded) : null,
                     'headers' => SensitiveDataScrubber::scrubHeaders($request->getHeaders()),
-                    'params'  => SensitiveDataScrubber::scrubArray($options['query'] ?? []),
                 ]);
 
 
