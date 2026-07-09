@@ -42,9 +42,17 @@ class LoggingMiddleware
     {
         return static function (callable $handler): callable {
             return static function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
+                $body    = (string) $request->getBody();
+                $decoded = $body ? json_decode($body, true) : null;
+
+                // Rewind so the handler can still read the body after logging.
+                $request->getBody()->rewind();
+
                 Logger::debug('Sending API request', [
-                    'method' => $request->getMethod(),
-                    'uri'    => SensitiveDataScrubber::scrubUri((string) $request->getUri()),
+                    'method'  => $request->getMethod(),
+                    'uri'     => SensitiveDataScrubber::scrubUri((string) $request->getUri()),
+                    'body'    => is_array($decoded) ? SensitiveDataScrubber::scrubArray($decoded) : null,
+                    'headers' => SensitiveDataScrubber::scrubHeaders($request->getHeaders()),
                 ]);
 
 
@@ -54,8 +62,9 @@ class LoggingMiddleware
                         $decoded = $body ? json_decode($body, true) : null;
 
                         Logger::debug('Received API response', [
-                            'status' => $response->getStatusCode(),
-                            'body'   => is_array($decoded) ? SensitiveDataScrubber::scrubArray($decoded) : null,
+                            'status'  => $response->getStatusCode(),
+                            'headers' => SensitiveDataScrubber::scrubHeaders($response->getHeaders()),
+                            'body'    => is_array($decoded) ? SensitiveDataScrubber::scrubArray($decoded) : null,
                         ]);
 
                         // Rewind so the SDK can still read the body after logging.

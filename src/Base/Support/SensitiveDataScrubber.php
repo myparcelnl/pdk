@@ -115,11 +115,28 @@ final class SensitiveDataScrubber
      */
     public static function scrubArray(array $data): array
     {
+        return self::scrub($data, false);
+    }
+
+    /**
+     * Recurse through the array, masking scalar leaves whose key is sensitive.
+     * Once a sensitive key is encountered, everything beneath it is masked
+     * regardless of the child key names, so an array value assigned to a
+     * sensitive key (e.g. ['token' => ['secret']]) cannot leak.
+     *
+     * @param array $data
+     * @param bool  $forceMask whether an ancestor key was already sensitive
+     *
+     * @return array
+     */
+    private static function scrub(array $data, bool $forceMask): array
+    {
         foreach ($data as $key => $value) {
+            $sensitive = $forceMask || self::isSensitiveKey((string) $key);
+
             if (is_array($value)) {
-                // Recurse into nested arrays, e.g. for JSON bodies with multiple levels of nesting.
-                $data[$key] = self::scrubArray($value);
-            } elseif (self::isSensitiveKey((string) $key)) {
+                $data[$key] = self::scrub($value, $sensitive);
+            } elseif ($sensitive) {
                 $data[$key] = self::MASK;
             }
         }

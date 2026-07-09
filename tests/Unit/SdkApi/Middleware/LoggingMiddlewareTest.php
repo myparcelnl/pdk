@@ -57,6 +57,46 @@ it('logs debug message with method and uri before sending request', function () 
         ->and($requestLog[0]['context']['uri'])->toBe('http://example.com/api/test');
 });
 
+it('logs the request body JSON-decoded with sensitive keys scrubbed', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(PdkLoggerInterface::class);
+    $logger->clear();
+
+    [$client, $mock] = makeLoggingClient();
+    $mock->append(new Response(200, [], '{}'));
+
+    $client->post('http://example.com/api/test', [
+        'body' => json_encode(['access_token' => 'supersecret', 'page' => 2]),
+    ]);
+
+    $debugLogs  = $logger->getLogs(LogLevel::DEBUG);
+    $requestLog = array_values(array_filter($debugLogs, fn($l) => $l['message'] === '[PDK]: Sending API request'));
+
+    expect($requestLog)->toHaveCount(1)
+        ->and($requestLog[0]['context']['body']['access_token'])->toBe('***')
+        ->and($requestLog[0]['context']['body']['page'])->toBe(2);
+});
+
+it('logs the request headers with sensitive headers masked', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(PdkLoggerInterface::class);
+    $logger->clear();
+
+    [$client, $mock] = makeLoggingClient();
+    $mock->append(new Response(200, [], '{}'));
+
+    $client->get('http://example.com/api/test', [
+        'headers' => ['Authorization' => 'Bearer token123', 'X-Request-Id' => 'req-abc'],
+    ]);
+
+    $debugLogs  = $logger->getLogs(LogLevel::DEBUG);
+    $requestLog = array_values(array_filter($debugLogs, fn($l) => $l['message'] === '[PDK]: Sending API request'));
+
+    expect($requestLog)->toHaveCount(1)
+        ->and($requestLog[0]['context']['headers']['authorization'])->toBe(['***'])
+        ->and($requestLog[0]['context']['headers']['x-request-id'])->toBe(['req-abc']);
+});
+
 // Successful response logging
 it('logs debug message with status and decoded body on successful response', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
@@ -74,6 +114,24 @@ it('logs debug message with status and decoded body on successful response', fun
     expect($responseLog)->toHaveCount(1)
         ->and($responseLog[0]['context']['status'])->toBe(200)
         ->and($responseLog[0]['context']['body'])->toBe(['foo' => 'bar']);
+});
+
+it('logs the response headers with sensitive headers masked', function () {
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(PdkLoggerInterface::class);
+    $logger->clear();
+
+    [$client, $mock] = makeLoggingClient();
+    $mock->append(new Response(200, ['Authorization' => 'Bearer token123', 'X-Request-Id' => 'req-abc'], '{}'));
+
+    $client->get('http://example.com/api/test');
+
+    $debugLogs   = $logger->getLogs(LogLevel::DEBUG);
+    $responseLog = array_values(array_filter($debugLogs, fn($l) => $l['message'] === '[PDK]: Received API response'));
+
+    expect($responseLog)->toHaveCount(1)
+        ->and($responseLog[0]['context']['headers']['authorization'])->toBe(['***'])
+        ->and($responseLog[0]['context']['headers']['x-request-id'])->toBe(['req-abc']);
 });
 
 it('logs null body when response body is empty', function () {
@@ -102,6 +160,18 @@ it('rewinds the response body after logging so the SDK can still read it', funct
     $response = $client->get('http://example.com/api/test');
 
     expect((string) $response->getBody())->toBe(json_encode(['result' => 42]));
+});
+
+it('rewinds the request body after logging so the handler can still read it', function () {
+    [$client, $mock] = makeLoggingClient();
+    $mock->append(new Response(200, [], '{}'));
+
+    $payload = json_encode(['foo' => 'bar']);
+    $client->post('http://example.com/api/test', ['body' => $payload]);
+
+    // If the body was not rewound after logging, the handler would receive an
+    // empty stream and getLastRequest()->getBody() would read as an empty string.
+    expect((string) $mock->getLastRequest()->getBody())->toBe($payload);
 });
 
 // Error logging
