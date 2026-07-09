@@ -10,10 +10,14 @@ use MyParcelNL\Pdk\Base\Exception\PdkConfigException;
 use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Pdk as PdkBase;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use function DI\value;
 
 afterEach(function () {
     Pdk::setPdkInstance(null);
+
+    PdkFactory::setCacheVersion(null);
 });
 
 it('works', function () {
@@ -49,7 +53,62 @@ it('sets up cache when required', function () {
     PdkFactory::create(MockPdkConfig::create(['mode' => 'production']));
     putenv('PDK_DISABLE_CACHE=1');
 
-    expect(scandir(PdkBase::CACHE_DIR))->toContain('CompiledContainer.php');
+    expect(scandir(PdkBase::getCacheDir() . '/default'))->toContain('CompiledContainer_default.php');
+});
+
+it('compiles container into a version specific cache directory', function () {
+    PdkFactory::setCacheVersion('9.9.9-test');
+
+    putenv('PDK_DISABLE_CACHE=0');
+    PdkFactory::create(MockPdkConfig::create(['mode' => 'production']));
+    putenv('PDK_DISABLE_CACHE=1');
+
+    expect(scandir(PdkBase::getCacheDir() . '/9.9.9-test'))->toContain('CompiledContainer_9_9_9_test.php');
+});
+
+it('clears cache files of all versions recursively', function () {
+    PdkFactory::create(MockPdkConfig::create());
+
+    $staleDir = PdkBase::getCacheDir() . '/1.0.0-stale';
+
+    if (! is_dir($staleDir)) {
+        mkdir($staleDir, 0755, true);
+    }
+
+    file_put_contents($staleDir . '/CompiledContainer.php', '<?php // stale');
+
+    Pdk::clearCache();
+
+    expect(is_dir($staleDir))
+        ->toBeFalse()
+        ->and(is_dir(PdkBase::getCacheDir()) ? array_diff(scandir(PdkBase::getCacheDir()), ['.', '..']) : [])
+        ->toBeEmpty();
+});
+
+it('falls back to the default cache directory for unsafe cache versions', function (string $version) {
+    PdkFactory::setCacheVersion($version);
+
+    putenv('PDK_DISABLE_CACHE=0');
+    PdkFactory::create(MockPdkConfig::create(['mode' => 'production']));
+    putenv('PDK_DISABLE_CACHE=1');
+
+    expect(scandir(PdkBase::getCacheDir() . '/default'))->toContain('CompiledContainer_default.php');
+})->with(['..', '../evil', '', '.']);
+
+it('falls back to unknown pdk version and logs a warning when composer.json cannot be read', function () {
+    PdkFactory::create(MockPdkConfig::create(['rootDir' => value('/nonexistent/pdk-root/')]));
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(LoggerInterface::class);
+
+    expect(Pdk::get('pdkVersion'))
+        ->toBe('unknown')
+        ->and(Pdk::get('pdkNextMajorVersion'))
+        ->toBe('unknown')
+        ->and($logger->getLogs(LogLevel::WARNING))
+        ->toHaveCount(1)
+        ->and($logger->getLogs(LogLevel::WARNING)[0]['message'])
+        ->toContain('Unable to determine PDK version');
 });
 
 it('throws error if appInfo is missing', function () {

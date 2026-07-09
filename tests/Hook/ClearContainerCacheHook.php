@@ -9,17 +9,31 @@ use PHPUnit\Runner\BeforeFirstTestHook;
 
 final class ClearContainerCacheHook implements BeforeFirstTestHook
 {
-    private const CACHE_DIR            = __DIR__ . '/../../.cache';
-    private const CONTAINER_CACHE_FILE = self::CACHE_DIR . '/CompiledContainer.php';
+    private const CACHE_DIR = __DIR__ . '/../../.cache';
 
     public function executeBeforeFirstTest(): void
     {
         putenv('PDK_DISABLE_CACHE=1');
 
-        if (! is_dir(self::CACHE_DIR) || ! is_file(self::CONTAINER_CACHE_FILE)) {
+        $this->deleteDirectoryContents(self::CACHE_DIR);
+    }
+
+    private function deleteDirectoryContents(string $directory): void
+    {
+        if (! is_dir($directory)) {
             return;
         }
 
-        unlink(self::CONTAINER_CACHE_FILE);
+        foreach (array_diff(scandir($directory) ?: [], ['.', '..']) as $entry) {
+            $path = "$directory/$entry";
+
+            if (is_dir($path) && ! is_link($path)) {
+                $this->deleteDirectoryContents($path);
+                rmdir($path);
+                continue;
+            }
+
+            unlink($path);
+        }
     }
 }

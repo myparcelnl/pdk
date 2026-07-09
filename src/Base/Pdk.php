@@ -23,10 +23,6 @@ class Pdk implements PdkInterface
      * The container cache class name.
      */
     public const CACHE_CLASS_NAME = 'CompiledContainer';
-    /**
-     * The full path to the container cache file.
-     */
-    private const CACHE_FILE_PATH = self::CACHE_DIR . '/' . self::CACHE_CLASS_NAME . '.php';
 
     /**
      * @var \DI\Container
@@ -42,17 +38,67 @@ class Pdk implements PdkInterface
     }
 
     /**
-     * Delete the container cache file if it exists.
+     * Delete all container cache files (compiled containers and proxies of any version),
+     * invalidating OPcache entries along the way so a deleted file cannot keep being served.
      *
      * @return void
      */
     public function clearCache(): void
     {
-        if (! file_exists(self::CACHE_FILE_PATH)) {
+        $this->deleteDirectoryContents(self::getCacheDir());
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCacheDir(): string
+    {
+        $cacheDir = self::CACHE_DIR;
+        $realPath = realpath($cacheDir);
+
+        if (false !== $realPath) {
+            return $realPath;
+        }
+
+        $parent = realpath(dirname($cacheDir));
+
+        return false !== $parent
+            ? sprintf('%s/%s', $parent, basename($cacheDir))
+            : $cacheDir;
+    }
+
+    /**
+     * @param  string $directory
+     *
+     * @return void
+     */
+    private function deleteDirectoryContents(string $directory): void
+    {
+        if (! is_dir($directory)) {
             return;
         }
 
-        unlink(self::CACHE_FILE_PATH);
+        $entries = @scandir($directory);
+
+        if (false === $entries) {
+            return;
+        }
+
+        foreach (array_diff($entries, ['.', '..']) as $entry) {
+            $path = "$directory/$entry";
+
+            if (is_dir($path) && ! is_link($path)) {
+                $this->deleteDirectoryContents($path);
+                @rmdir($path);
+                continue;
+            }
+
+            if (function_exists('opcache_invalidate') && 'php' === pathinfo($path, PATHINFO_EXTENSION)) {
+                @opcache_invalidate($path, true);
+            }
+
+            @unlink($path);
+        }
     }
 
     /**

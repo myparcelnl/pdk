@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use MyParcelNL\Pdk\Base\FileSystemInterface;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Contract\ScriptServiceInterface;
 
@@ -11,13 +12,27 @@ use function DI\value;
 
 return [
     /**
-     * The current version of the pdk according to the composer.json file.
+     * The current version of the pdk according to the composer.json file. Falls back to "unknown"
+     * if the file cannot be read; this value is informational (user agent headers) and reading it
+     * must never take down the application. See myparcelnl/woocommerce#1664.
      */
     'pdkVersion'                => factory(function (FileSystemInterface $fileSystem): string {
-        $rootDir      = Pdk::get('rootDir');
-        $composerJson = json_decode($fileSystem->get("$rootDir/composer.json"), true);
+        try {
+            $rootDir      = rtrim(Pdk::get('rootDir'), '/');
+            $composerJson = json_decode($fileSystem->get("$rootDir/composer.json"), true);
 
-        return $composerJson['version'];
+            return $composerJson['version'] ?? 'unknown';
+        } catch (Throwable $e) {
+            try {
+                Logger::warning('Unable to determine PDK version', [
+                    'error' => $e->getMessage(),
+                ]);
+            } catch (Throwable $loggerException) {
+                // The version fallback must never break boot, even if logging is unavailable.
+            }
+
+            return 'unknown';
+        }
     }),
 
     /**
@@ -25,6 +40,10 @@ return [
      */
     'pdkNextMajorVersion'       => factory(function (): string {
         $version = Pdk::get('pdkVersion');
+
+        if (! preg_match('/^\d+\./', $version)) {
+            return 'unknown';
+        }
 
         return (int) explode('.', $version)[0] + 1 . '.0.0';
     }),
