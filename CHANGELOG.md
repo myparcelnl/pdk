@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.0](https://github.com/myparcelnl/pdk/compare/v4.2.1...v4.3.0) (2026-07-09)
+
+
+### :sparkles: New Features
+
+* **debug:** log body, headers and params for sdk api calls ([#502](https://github.com/myparcelnl/pdk/issues/502)) ([3b5a1db](https://github.com/myparcelnl/pdk/commit/3b5a1db25d78414fc5f5d4d8fcba69a08c7c05dc))
+
 ## [4.2.1](https://github.com/myparcelnl/pdk/compare/v4.2.0...v4.2.1) (2026-07-09)
 
 
