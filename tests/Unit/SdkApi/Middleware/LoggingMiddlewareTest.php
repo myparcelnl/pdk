@@ -104,6 +104,18 @@ it('rewinds the response body after logging so the SDK can still read it', funct
     expect((string) $response->getBody())->toBe(json_encode(['result' => 42]));
 });
 
+it('rewinds the request body after logging so the handler can still read it', function () {
+    [$client, $mock] = makeLoggingClient();
+    $mock->append(new Response(200, [], '{}'));
+
+    $payload = json_encode(['foo' => 'bar']);
+    $client->post('http://example.com/api/test', ['body' => $payload]);
+
+    // If the body was not rewound after logging, the handler would receive an
+    // empty stream and getLastRequest()->getBody() would read as an empty string.
+    expect((string) $mock->getLastRequest()->getBody())->toBe($payload);
+});
+
 // Error logging
 it('logs error message with error details on request exception', function () {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
