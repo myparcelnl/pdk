@@ -9,3 +9,10 @@ updates:
     directory: '/'
     schedule:
       interval: 'daily'
+    versioning-strategy: increase-if-necessary
+    groups:
+      minor-php-updates:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
