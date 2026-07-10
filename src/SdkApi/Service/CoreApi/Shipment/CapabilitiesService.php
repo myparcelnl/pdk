@@ -113,6 +113,8 @@ class CapabilitiesService extends AbstractShipmentApiService
         /** @var CapabilitiesPostCapabilitiesRequestV2 $request */
         $request = $this->hydrateModel(CapabilitiesPostCapabilitiesRequestV2::class, $parameters);
 
+        $this->omitImplicitIsBusiness($request, $parameters);
+
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
         $response = $this->shipmentApi->postCapabilities($request, $this->getUserAgent());
         $results  = $response->getResults();
@@ -197,6 +199,39 @@ class CapabilitiesService extends AbstractShipmentApiService
         }
 
         return $options;
+    }
+
+    /**
+     * Keep isBusiness a genuine three-state flag on the wire: true, false, or absent.
+     *
+     * The generated {@see CapabilitiesRecipientV2} constructor forces `is_business` to `true`
+     * whenever a caller does not set it, which would tag every request as B2B. Unless the caller
+     * explicitly provided the flag (either casing), drop it from the wire so the API applies its
+     * own default. Uses the non-throwing ArrayAccess bypass ({@see \ArrayAccess::offsetSet()}); a
+     * null value on this non-nullable property is omitted by the SDK's ObjectSerializer.
+     *
+     * @TODO INT-1690: remove this omission once https://github.com/myparcelnl/core-api/pull/4658
+     *       lands and the generated `is_business` default is no longer `true`. Explicit true/false
+     *       handling must stay.
+     *
+     * @param  CapabilitiesPostCapabilitiesRequestV2 $request
+     * @param  array                                 $parameters The original caller input.
+     *
+     * @return void
+     */
+    private function omitImplicitIsBusiness(CapabilitiesPostCapabilitiesRequestV2 $request, array $parameters): void
+    {
+        $recipientInput = $parameters['recipient'] ?? [];
+        $explicitlySet  = is_array($recipientInput)
+            && (array_key_exists('is_business', $recipientInput) || array_key_exists('isBusiness', $recipientInput));
+
+        $recipient = $request->getRecipient();
+
+        // @phpstan-ignore booleanAnd.rightAlwaysTrue (SDK PHPDoc types getRecipient() non-null, but a request built without a recipient returns null at runtime)
+        if (! $explicitlySet && $recipient) {
+            // @phpstan-ignore argument.type (offsetSet accepts null; SDK typed setter would throw, ArrayAccess does not)
+            $recipient->offsetSet('is_business', null);
+        }
     }
 
     /**
