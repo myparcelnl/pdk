@@ -41,6 +41,10 @@ usesShared(
     new UsesSettingsMock()
 );
 
+afterEach(function () {
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::resetExtraUpgrades();
+});
+
 function expectSettingsToContain(array $values): void
 {
     /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
@@ -241,4 +245,583 @@ it('does not uninstall if is not installed', function () {
         ->toEqual(null)
         ->and($settingsRepository->get($createSettingsKey('label.description')))
         ->toBe('description');
+});
+
+it('seeds applied_migrations from installed_version on first access', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Simulate an existing install upgraded past 1.2.0 but before this PDK change.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    Installer::install();
+
+    $applied = $settingsRepository->get($appliedMigrationsKey);
+
+    // Mock migrations in the test bootstrap: MockUpgradeMigration110 (1.1.0),
+    // MockUpgradeMigration120 (1.2.0), MockUpgradeMigration130 (1.3.0).
+    // Versions <= 1.2.0 are seeded from installed_version; 1.3.0 was not seeded but
+    // runs as an upgrade migration and is recorded by markMigrationApplied() after its up() call.
+    expect($applied)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
+
+    // Prove the seed boundary at 1.2.0 via side effects, not just list membership:
+    // 110 and 120 were SEEDED, so their up() must NOT have run (their settings stay null),
+    // while 130 was not seeded and therefore ran (it writes order.emptyMailboxWeight = 400).
+    expectSettingsToContain([
+        'label.description'        => null, // MockUpgradeMigration110 seeded, not run
+        'order.barcodeInNoteTitle' => null, // MockUpgradeMigration120 seeded, not run
+        'order.emptyMailboxWeight' => 400,  // MockUpgradeMigration130 not seeded, ran
+    ]);
+});
+
+it('seeds applied_migrations with every upgrade migration after a fresh install', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Simulate a fresh install: no installed_version, no applied_migrations.
+    $settingsRepository->store($installedVersionKey, null);
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    // Register one timestamped migration to prove it too gets pre-marked.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+    );
+
+    Installer::install();
+
+    $applied = $settingsRepository->get($appliedMigrationsKey);
+
+    // Every upgrade migration that was registered at install time must be pre-marked.
+    expect($applied)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration110::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class)
+        ->toContain('2026_01_01_000000_mock_timestamped');
+
+    // The timestamped migration's up() must NOT have run (only pre-marked, not executed).
+    // MockTimestampedMigration20260101::up() stores order.mockTimestampedMarker = 'applied'
+    // through the settings repository, so had it run the marker would be 'applied' not null.
+    // Read via the same prefixed key the migration writes, otherwise the check never fires.
+    expect($settingsRepository->get($appliedMigrationsKey))
+        ->not->toBeEmpty()
+        ->and($settingsRepository->get(Pdk::get('createSettingsKey')('order.mockTimestampedMarker')))
+        ->toBeNull();
+});
+
+it('records a migration identity in applied_migrations after it runs', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Pre-seed as if on 1.1.0 — only MockUpgradeMigration110 considered applied.
+    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    Installer::install();
+
+    $applied = $settingsRepository->get($appliedMigrationsKey);
+
+    expect($applied)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class)
+        ->toContain(\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration130::class);
+});
+
+it('loads a file-based migration and runs it exactly once', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_test_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_04_17_100000_test_file_migration.php';
+
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $key  = Pdk::get('createSettingsKey')('order.barcodeInNoteTitle');
+        $repo->store($key, 'file-migration-applied');
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Simulate an install that is behind the current version so the upgrade path runs.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    try {
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+        Installer::install();
+
+        $applied = $settingsRepository->get($appliedMigrationsKey);
+
+        expect($applied)->toContain('2026_04_17_100000_test_file_migration');
+        expectSettingsToContain(['order.barcodeInNoteTitle' => 'file-migration-applied']);
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('auto-discovers timestamped migration files from migrationDirectory', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_autodiscover_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+
+    $file = $tmpDir . '/2026_06_01_000000_autodiscover_test.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $repo->store('order.autoDiscoverMarker', 'applied');
+    }
+};
+PHP
+    );
+
+    $originalMigrationDir = Pdk::get('migrationDirectory');
+    Pdk::set('migrationDirectory', $tmpDir);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Installed version must differ from current (1.3.0) to trigger the upgrade path.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    try {
+        Installer::install();
+
+        $applied = $settingsRepository->get($appliedMigrationsKey);
+
+        expect($applied)->toContain('2026_06_01_000000_autodiscover_test');
+        expect($settingsRepository->get('order.autoDiscoverMarker'))->toBe('applied');
+    } finally {
+        Pdk::set('migrationDirectory', $originalMigrationDir);
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('does not duplicate-run when the same file is both in migrationDirectory and registered via MigrationService', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_dedupe_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+
+    $file = $tmpDir . '/2026_06_02_000000_dedupe_test.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        $GLOBALS['__dedupe_runs'] = ($GLOBALS['__dedupe_runs'] ?? 0) + 1;
+    }
+};
+PHP
+    );
+
+    $originalMigrationDir = Pdk::get('migrationDirectory');
+    Pdk::set('migrationDirectory', $tmpDir);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // Installed version must differ from current (1.3.0) to trigger the upgrade path.
+    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    // Register the SAME file via the MigrationService too.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+    $GLOBALS['__dedupe_runs'] = 0;
+
+    try {
+        Installer::install();
+
+        expect($GLOBALS['__dedupe_runs'])->toBe(1);
+    } finally {
+        Pdk::set('migrationDirectory', $originalMigrationDir);
+        unset($GLOBALS['__dedupe_runs']);
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('runs timestamp-based migrations after version-based ones within the same execution', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+    );
+
+    $GLOBALS['__migration_order'] = [];
+
+    Installer::install();
+
+    $order = $GLOBALS['__migration_order'];
+
+    expect($order)
+        ->toContain('1.2.0')
+        ->toContain('1.3.0')
+        ->toContain('2026_01_01_000000_mock_timestamped')
+        // 1.1.0 equals the installed version, so it is seeded as applied and must not run.
+        ->not->toContain('1.1.0');
+
+    $last = end($order);
+    expect($last)->toStartWith('2026_');
+
+    unset($GLOBALS['__migration_order']);
+});
+
+it('runs a new timestamp migration even when current version is an RC below installed version', function () {
+    // Simulate the WC test environment: installed is 1.3.0, but this build reports 1.3.0-rc.999
+    Pdk::set('appInfo', new AppInfo([
+        'name'    => 'test',
+        'version' => '1.3.0-rc.999',
+    ]));
+
+    try {
+        /** @var PdkSettingsRepositoryInterface $settingsRepository */
+        $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+        $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+        $settingsRepository->store($installedVersionKey, '1.3.0');
+        $settingsRepository->store($appliedMigrationsKey, null);
+
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+            \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+        );
+
+        Installer::install();
+
+        $applied = $settingsRepository->get($appliedMigrationsKey);
+
+        expect($applied)->toContain('2026_01_01_000000_mock_timestamped');
+    } finally {
+        // Restore the original appInfo so subsequent tests are not affected.
+        Pdk::set('appInfo', new AppInfo([
+            'name'    => 'test',
+            'version' => '1.3.0',
+        ]));
+    }
+});
+
+it('runs down() on a timestamped migration that was applied', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_applied_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_05_01_000000_down_applied_migration.php';
+
+    // up() is a no-op; down() marks a sentinel key that no other mock migration touches.
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        // No-op; running it merely records the migration as applied.
+    }
+
+    public function down(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $repo->store(Pdk::get('createSettingsKey')('order.downTestMarker'), 'down-ran');
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    try {
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+        // Upgrade into the migration so its up() runs and it is recorded as applied.
+        $settingsRepository->store($installedVersionKey, '1.2.0');
+        $settingsRepository->store($appliedMigrationsKey, null);
+        Installer::install();
+
+        // Now uninstall: the migration was applied, so its down() must run.
+        Installer::uninstall();
+
+        // The sentinel key is not a declared OrderSettings model property, so we read
+        // directly via the repository instead of expectSettingsToContain().
+        $sentinel = $settingsRepository->get(Pdk::get('createSettingsKey')('order.downTestMarker'));
+
+        expect($sentinel)->toBe('down-ran');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('does not run down() on a timestamped migration that was never applied', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_migration_down_unapplied_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_05_02_000000_down_unapplied_migration.php';
+
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+    }
+
+    public function down(): void
+    {
+        /** @var PdkSettingsRepositoryInterface $repo */
+        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
+        $repo->store(Pdk::get('createSettingsKey')('order.downTestMarker'), 'down-ran');
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    try {
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+        // Installed, but the migration was never applied (it isn't in applied_migrations).
+        $settingsRepository->store($installedVersionKey, '1.3.0');
+        $settingsRepository->store($appliedMigrationsKey, ['some_other_applied_migration']);
+
+        Installer::uninstall();
+
+        // Its up() never ran, so its down() must NOT run either.
+        $sentinel = $settingsRepository->get(Pdk::get('createSettingsKey')('order.downTestMarker'));
+
+        expect($sentinel)->toBeNull();
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('reverses an applied versioned migration on uninstall even when installed_version is an RC', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // The plugin was last installed on a release-candidate build, so installed_version is a
+    // pre-release. version_compare treats 1.2.0 as NEWER than 1.2.0-rc.1, so a version-gated
+    // down filter would wrongly skip the already-applied 1.2.0 migration. Identity tracking
+    // must reverse it because it is recorded in applied_migrations.
+    $settingsRepository->store($installedVersionKey, '1.2.0-rc.1');
+    $settingsRepository->store(
+        $appliedMigrationsKey,
+        [\MyParcelNL\Pdk\Tests\Bootstrap\MockUpgradeMigration120::class]
+    );
+
+    Installer::uninstall();
+
+    // MockUpgradeMigration120::down() restores order.barcodeInNoteTitle.
+    expectSettingsToContain(['order.barcodeInNoteTitle' => 'old-barcode-in-note']);
+});
+
+it('runs down migrations in reverse of the up order', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository  = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey = Pdk::get('settingKeyInstalledVersion');
+
+    $settingsRepository->store($installedVersionKey, '1.3.0');
+
+    $GLOBALS['__down_order'] = [];
+
+    Installer::uninstall();
+
+    $order = $GLOBALS['__down_order'];
+    unset($GLOBALS['__down_order']);
+
+    // Up runs versioned migrations ascending (1.1.0, 1.2.0, 1.3.0); down must mirror that.
+    expect($order)->toBe(['1.3.0', '1.2.0', '1.1.0']);
+});
+
+it('throws when a migration file does not return a MigrationInterface', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_not_a_migration_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_07_01_000000_not_a_migration.php';
+    file_put_contents($file, '<?php return new \stdClass();');
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    // Behind the current version so the upgrade path builds the migration collection.
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+    try {
+        expect(static fn () => Installer::install())
+            ->toThrow(\RuntimeException::class, 'must return an instance of MigrationInterface');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('throws when a migration file name does not match the timestamp convention', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_badname_migration_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/not_a_timestamped_name.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+
+    try {
+        expect(static fn () => Installer::install())
+            ->toThrow(\RuntimeException::class, 'does not match');
+    } finally {
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('orders timestamp-based migrations chronologically among themselves', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_ts_order_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $early = $tmpDir . '/2026_01_01_000000_early.php';
+    $late  = $tmpDir . '/2026_02_01_000000_late.php';
+    $body  = <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        $GLOBALS['__ts_order'][] = $this->getId();
+    }
+};
+PHP;
+    file_put_contents($early, $body);
+    file_put_contents($late, $body);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyAppliedMigrations'), null);
+
+    // Register the later one first to prove ordering is by id, not registration order.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($late);
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($early);
+
+    $GLOBALS['__ts_order'] = [];
+
+    try {
+        Installer::install();
+
+        expect($GLOBALS['__ts_order'])->toBe([
+            '2026_01_01_000000_early',
+            '2026_02_01_000000_late',
+        ]);
+    } finally {
+        unset($GLOBALS['__ts_order']);
+        @unlink($early);
+        @unlink($late);
+        @rmdir($tmpDir);
+    }
+});
+
+it('runs a migration only once even if the same file is registered under divergent paths', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_dup_run_' . uniqid('', true);
+    mkdir($tmpDir, 0777, true);
+    $file = $tmpDir . '/2026_08_01_000000_dup.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        $GLOBALS['__dup_runs'] = ($GLOBALS['__dup_runs'] ?? 0) + 1;
+    }
+};
+PHP
+    );
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyAppliedMigrations'), null);
+
+    // Two different path strings pointing at the same file — source dedupe (array_unique)
+    // keeps both, but they resolve to the same migration identity.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($file);
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration($tmpDir . '/./2026_08_01_000000_dup.php');
+
+    $GLOBALS['__dup_runs'] = 0;
+
+    try {
+        Installer::install();
+
+        expect($GLOBALS['__dup_runs'])->toBe(1);
+    } finally {
+        unset($GLOBALS['__dup_runs']);
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
 });

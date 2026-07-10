@@ -24,6 +24,10 @@ class MockUpgradeMigration130 implements MigrationInterface
 
     public function down(): void
     {
+        if (isset($GLOBALS['__down_order'])) {
+            $GLOBALS['__down_order'][] = $this->getVersion();
+        }
+
         $this->settingsRepository->store($this->getSettingKey(), 300);
     }
 
@@ -34,6 +38,10 @@ class MockUpgradeMigration130 implements MigrationInterface
 
     public function up(): void
     {
+        if (isset($GLOBALS['__migration_order'])) {
+            $GLOBALS['__migration_order'][] = $this->getVersion();
+        }
+
         $this->settingsRepository->store($this->getSettingKey(), 400);
     }
 

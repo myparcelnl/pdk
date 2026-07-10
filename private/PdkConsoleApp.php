@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Console;
 use MyParcelNL\Pdk\Console\Command\GenerateDocumentationCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateFactoryCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateIdeHelperCommand;
+use MyParcelNL\Pdk\Console\Command\GenerateMigrationCommand;
 use MyParcelNL\Pdk\Console\Command\GenerateTypeScriptTypesCommand;
 use MyParcelNL\Pdk\Console\Command\ParseSourceCommand;
 use Symfony\Component\Console\Application;
@@ -25,6 +26,7 @@ final class PdkConsoleApp
         $app = new Application();
 
         $app->addCommands([
+            new GenerateMigrationCommand(),
             new ParseSourceCommand(),
             new GenerateDocumentationCommand(),
             new GenerateFactoryCommand(),
