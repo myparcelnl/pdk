@@ -98,6 +98,7 @@ const SHIPPING_ADDRESS_NL = [
     'postalCode' => '1000 BB',
     'region'     => 'Drenthe',
     'state'      => 'DT',
+    'isBusiness' => false,
 ];
 
 const SHIPPING_ADDRESS_EU = [

@@ -101,6 +101,7 @@
         "city": "Hoofddorp",
         "postalCode": "2132JE",
         "street": "Antareslaan 31",
+        "isBusiness": true,
         "email": "test@myparcel.nl",
         "phone": "0612345678",
         "person": "Felicia Parcel",

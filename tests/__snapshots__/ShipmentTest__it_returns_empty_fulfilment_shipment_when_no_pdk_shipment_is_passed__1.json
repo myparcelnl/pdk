@@ -58,6 +58,8 @@
     "options": {
         "labelDescription": ""
     },
-    "recipient": [],
+    "recipient": {
+        "isBusiness": false
+    },
     "physicalProperties": []
 }

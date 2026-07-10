@@ -96,6 +96,41 @@ function calculateOrder(string $carrier, array $shipmentOptions = []): PdkOrder
     return $service->calculate($order);
 }
 
+it('sends isBusiness on the capabilities request based on the shipping address company', function (?string $company, bool $expected) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $reset = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, []),
+    ]));
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL')->with(['company' => $company]))
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME)
+        )
+        ->make();
+
+    Pdk::get(PdkOrderOptionsServiceInterface::class)->calculate($order);
+
+    $body = json_decode((string) MockSdkApiHandler::getHandler()->getLastRequest()->getBody(), true);
+
+    expect($body['recipient'])->toHaveKey('isBusiness', $expected);
+
+    $reset();
+})->with([
+    'business (company entered)' => ['Acme B.V.', true],
+    'consumer (no company)'      => [null, false],
+]);
+
 it('forces isRequired option to ENABLED', function () {
     $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
 

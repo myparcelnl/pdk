@@ -67,6 +67,7 @@ it('can be instantiated', function () {
             'priceStandardDelivery'             => \floatval(0),
             'closedDays'                        => null,
             'excludeParcelLockers'              => false,
+            'isBusiness'                        => false,
         ]);
 });
 
@@ -210,7 +211,8 @@ it('uses correct price when price is shown as surcharge', function () {
             'priceStandardDelivery'             => 695.0,
             'allowPickupLocationsViewSelection' => true,
             'closedDays'                        => [],
-            'excludeParcelLockers'              => false
+            'excludeParcelLockers'              => false,
+            'isBusiness'                        => false,
         ]);
 });
 

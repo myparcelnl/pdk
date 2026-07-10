@@ -87,6 +87,7 @@
                     "number": "31",
                     "postalCode": "2132 JE",
                     "street": "Antareslaan",
+                    "isBusiness": true,
                     "email": "support@myparcel.nl",
                     "person": "Felicia Parcel",
                     "company": "MyParcel"
@@ -97,6 +98,7 @@
                     "number": "31",
                     "postalCode": "2132 JE",
                     "street": "Antareslaan",
+                    "isBusiness": true,
                     "email": "support@myparcel.nl",
                     "person": "Felicia Parcel",
                     "company": "MyParcel"
@@ -405,6 +407,7 @@
                             "number": "31",
                             "postalCode": "2132 JE",
                             "street": "Antareslaan",
+                            "isBusiness": true,
                             "email": "support@myparcel.nl",
                             "person": "Felicia Parcel",
                             "company": "MyParcel"
@@ -951,7 +954,9 @@
                     "deliveryType": "STANDARD_DELIVERY",
                     "packageType": "PACKAGE"
                 },
-                "shippingAddress": [],
+                "shippingAddress": {
+                    "isBusiness": false
+                },
                 "shipments": [],
                 "physicalProperties": {
                     "initialWeight": 0,
