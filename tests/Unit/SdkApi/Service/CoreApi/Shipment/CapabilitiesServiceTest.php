@@ -119,8 +119,8 @@ it('getCapabilities serializes nested arrays to V2 wire keys via SDK attributeMa
         ->toMatchArray(['value' => 1500, 'unit' => 'g']);
 });
 
-// INT-1690 workaround: isBusiness must reach the wire as three distinct states —
-// true, false, or omitted — never a forced default.
+// isBusiness reaches the wire as three distinct states — true, false, or omitted (SDK
+// beta.30+ defaults it to null, so an unset flag is left off rather than forced to true).
 it('omits isBusiness from the wire when the caller did not set it', function () {
     TestBootstrapper::hasApiKey('test-key');
 
