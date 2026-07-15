@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\CarrierSettingsView;
@@ -20,6 +21,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use Throwable;
 
 /**
  * @property array{name: string, label: string, type: string}[]   $order
@@ -61,11 +63,26 @@ class PluginSettingsViewContext implements Arrayable
             return;
         }
 
-        foreach (self::ID_VIEW_MAP as $id => $viewClass) {
-            /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
-            $view = Pdk::get($viewClass);
+        try {
+            foreach (self::ID_VIEW_MAP as $id => $viewClass) {
+                /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
+                $view = Pdk::get($viewClass);
 
-            $this->views[$id] = $view->toArray();
+                $this->views[$id] = $view->toArray();
+            }
+        } catch (Throwable $e) {
+            // Never let a failing settings view prevent the page from rendering,
+            // otherwise the account settings (including the api key form) would
+            // not be shown at all.
+            Logger::error('Failed to create settings views', ['exception' => $e]);
+
+            Notifications::error(
+                'Failed to load settings',
+                $e->getMessage(),
+                Notification::CATEGORY_GENERAL
+            );
+
+            $this->views = [];
         }
     }
 

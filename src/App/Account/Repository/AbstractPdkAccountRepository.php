@@ -8,8 +8,12 @@ use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Repository\AccountRepository;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Repository\Repository;
+use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\Facade\Notifications;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use Throwable;
 
 abstract class AbstractPdkAccountRepository extends Repository implements PdkAccountRepositoryInterface
 {
@@ -65,7 +69,23 @@ abstract class AbstractPdkAccountRepository extends Repository implements PdkAcc
                 return null;
             }
 
-            return $this->accountRepository->getAccount();
+            try {
+                return $this->accountRepository->getAccount();
+            } catch (Throwable $e) {
+                // Treat a failed account fetch as "no account" instead of letting the
+                // exception bubble up. Rendering must never break on an api failure,
+                // otherwise the settings page (including the api key form needed to
+                // fix the problem) would not be shown at all.
+                Logger::error('Failed to fetch account', ['exception' => $e]);
+
+                Notifications::error(
+                    'Failed to fetch account',
+                    $e->getMessage(),
+                    Notification::CATEGORY_API
+                );
+
+                return null;
+            }
         }, $force);
     }
 }
