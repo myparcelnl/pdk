@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Facade\AccountSettings;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\View\CarrierSettingsView;
@@ -20,6 +21,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use Throwable;
 
 /**
  * @property array{name: string, label: string, type: string}[]   $order
@@ -62,10 +64,27 @@ class PluginSettingsViewContext implements Arrayable
         }
 
         foreach (self::ID_VIEW_MAP as $id => $viewClass) {
-            /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
-            $view = Pdk::get($viewClass);
+            try {
+                /** @var \MyParcelNL\Pdk\Frontend\View\AbstractSettingsView $view */
+                $view = Pdk::get($viewClass);
 
-            $this->views[$id] = $view->toArray();
+                $this->views[$id] = $view->toArray();
+            } catch (Throwable $e) {
+                // A single broken settings view (e.g. corrupt carrier capabilities in the stored
+                // account) must not take down the whole settings page. Log the real cause, tell
+                // the user which section failed, and keep every other view - including the box
+                // that lets them re-save their API key or refresh their data to recover.
+                Logger::error(
+                    sprintf('Failed to build the "%s" settings view: %s', $id, $e->getMessage()),
+                    ['exception' => $e, 'trace' => $e->getTraceAsString()]
+                );
+
+                Notifications::error(
+                    sprintf('Could not load %s settings', $id),
+                    'Please try re-saving your API key or refreshing your data.',
+                    Notification::CATEGORY_GENERAL
+                );
+            }
         }
     }
 
