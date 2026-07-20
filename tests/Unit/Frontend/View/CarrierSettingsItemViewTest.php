@@ -195,6 +195,18 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
         ],
     ],
 
+    'delivery type: same day' => [
+        function () {
+            return factory(Carrier::class)
+                ->withDeliveryTypes([RefTypesDeliveryTypeV2::SAME_DAY]);
+        },
+        [
+            (new SameDayDeliveryDefinition())->getAllowSettingsKey(),
+            SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY),
+            CarrierSettings::CUTOFF_TIME_SAME_DAY,
+        ],
+    ],
+
     'shipment option: insurance' => [
         function () {
             return factory(Carrier::class)
@@ -223,6 +235,43 @@ it('shows settings based on capabilities', function (CarrierFactory $carrierFact
                 ->withOptions(['frozen' => ['enabled' => true]]);
         },
         [(new FrozenDefinition())->getCarrierSettingsKey()],
+    ],
+]);
+
+it('renders same day delivery settings exactly once', function (CarrierFactory $carrierFactory) {
+    $names  = getViewSettings($carrierFactory);
+    $counts = array_count_values(array_filter($names));
+
+    $sameDayKeys = [
+        (new SameDayDeliveryDefinition())->getAllowSettingsKey(),
+        SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY),
+        CarrierSettings::CUTOFF_TIME_SAME_DAY,
+    ];
+
+    foreach ($sameDayKeys as $key) {
+        expect($counts[$key] ?? 0)->toBe(1);
+    }
+})->with([
+    'as shipment option' => [
+        function () {
+            return factory(Carrier::class)
+                ->withOptions(['sameDayDelivery' => ['enabled' => true]]);
+        },
+    ],
+
+    'as delivery type' => [
+        function () {
+            return factory(Carrier::class)
+                ->withDeliveryTypes([RefTypesDeliveryTypeV2::SAME_DAY]);
+        },
+    ],
+
+    'as both delivery type and shipment option' => [
+        function () {
+            return factory(Carrier::class)
+                ->withDeliveryTypes([RefTypesDeliveryTypeV2::SAME_DAY])
+                ->withOptions(['sameDayDelivery' => ['enabled' => true]]);
+        },
     ],
 ]);
 

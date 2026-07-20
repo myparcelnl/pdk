@@ -482,7 +482,17 @@ class CarrierSettingsItemView extends AbstractSettingsView
      */
     private function getSameDayDeliverySettings(): array
     {
-        if (!$this->carrierValidationService->supportsShipmentOption($this->carrier, SameDayDeliveryDefinition::class)) {
+        // Same-day is exposed either as a shipment option (e.g. DHL For You) or as a
+        // delivery type (e.g. Trunkrs), depending on the carrier's contract. This
+        // section is the single owner of the same-day fields for both representations;
+        // getDeliveryTypeSettings() and getShipmentOptionsSettings() skip same-day.
+        $hasSameDayDeliveryType = $this->carrier->deliveryTypes
+            && in_array(RefTypesDeliveryTypeV2::SAME_DAY, $this->carrier->deliveryTypes, true);
+
+        if (
+            ! $hasSameDayDeliveryType
+            && ! $this->carrierValidationService->supportsShipmentOption($this->carrier, SameDayDeliveryDefinition::class)
+        ) {
             return [];
         }
 
@@ -547,8 +557,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
         }
 
         foreach ($this->carrier->deliveryTypes as $deliveryType) {
-            // Pickup has its own section in getDeliveryOptionsFields(), so skip it here.
-            if ($deliveryType === RefTypesDeliveryTypeV2::PICKUP) {
+            // Pickup has its own section in getDeliveryOptionsFields() and same-day has its
+            // own section in getSameDayDeliverySettings() (with the cutoff time field), so
+            // skip both here.
+            if (in_array($deliveryType, [RefTypesDeliveryTypeV2::PICKUP, RefTypesDeliveryTypeV2::SAME_DAY], true)) {
                 continue;
             }
 
@@ -575,6 +587,12 @@ class CarrierSettingsItemView extends AbstractSettingsView
         $settings    = [];
 
         foreach ($definitions as $definition) {
+            // Same-day has its own section in getSameDayDeliverySettings() (with the
+            // cutoff time field), so skip it here to avoid a duplicate toggle.
+            if ($definition instanceof SameDayDeliveryDefinition) {
+                continue;
+            }
+
             $allowKey = $definition->getAllowSettingsKey();
             $priceKey = $definition->getPriceSettingsKey();
 
