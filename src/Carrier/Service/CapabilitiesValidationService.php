@@ -81,25 +81,35 @@ class CapabilitiesValidationService
      * $filterByEnabledCarriers = false for use cases that need the raw API view
      * across all carriers the merchant has access to.
      *
-     * @param  string $cc                       ISO 3166-1 alpha-2 country code
-     * @param  array  $allowedTypes             PDK name => V2 name
-     * @param  bool   $filterByEnabledCarriers  When true, exclude carriers without
-     *                                          CarrierSettings::DELIVERY_OPTIONS_ENABLED
+     * @param  string    $cc                      ISO 3166-1 alpha-2 country code
+     * @param  array     $allowedTypes            PDK name => V2 name
+     * @param  bool      $filterByEnabledCarriers When true, exclude carriers without
+     *                                            CarrierSettings::DELIVERY_OPTIONS_ENABLED
+     * @param  null|bool $isBusiness              Business flag of the recipient when known (checkout).
+     *                                            Pass it so the aggregation matches the carrier-filter
+     *                                            call and shares its cache; leave null when there is no
+     *                                            recipient identity (the flag is then omitted from the wire).
      *
      * @return array<string, null|int> PDK package type name => max weight in grams, or null if unconstrained
      */
     public function getPackageTypeWeights(
         string $cc,
         array $allowedTypes,
-        bool $filterByEnabledCarriers = true
+        bool $filterByEnabledCarriers = true,
+        ?bool $isBusiness = null
     ): array {
         $enabledCarriers = $filterByEnabledCarriers ? $this->getEnabledCarrierNames() : null;
         $weights         = [];
 
+        $recipient = ['country_code' => $cc];
+        if ($isBusiness !== null) {
+            $recipient['is_business'] = $isBusiness;
+        }
+
         foreach ($allowedTypes as $packageTypeName => $v2PackageType) {
             $capabilities = $this->indexByCarrier(
                 $this->capabilitiesRepository->getCapabilities([
-                    'recipient'    => ['country_code' => $cc],
+                    'recipient'    => $recipient,
                     'package_type' => $v2PackageType,
                 ])
             );

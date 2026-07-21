@@ -31,6 +31,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property bool   $showPriceSurcharge
  * @property array  $closedDays
  * @property bool   $excludeParcelLockers
+ * @property bool   $isBusiness
  */
 class DeliveryOptionsConfig extends Model
 {
@@ -49,6 +50,7 @@ class DeliveryOptionsConfig extends Model
         'showPriceSurcharge'                => false,
         'closedDays'                        => [],
         'excludeParcelLockers'              => false,
+        'isBusiness'                        => false,
     ];
 
     protected $casts      = [
@@ -66,6 +68,7 @@ class DeliveryOptionsConfig extends Model
         'showPriceSurcharge'                => 'boolean',
         'closedDays'                        => 'array',
         'excludeParcelLockers'              => 'boolean',
+        'isBusiness'                        => 'boolean',
     ];
 
     /**
@@ -119,6 +122,10 @@ class DeliveryOptionsConfig extends Model
         if (isset($cart->shippingMethod->excludeParcelLockers)) {
             $config->excludeParcelLockers = $cart->shippingMethod->excludeParcelLockers;
         }
+
+        // Hand the checkout widget the business flag derived from the recipient's company, so it can
+        // forward isBusiness on its own capabilities calls without handling any PII itself.
+        $config->isBusiness = $cart->shippingMethod->shippingAddress->isBusiness;
 
         return $config;
     }

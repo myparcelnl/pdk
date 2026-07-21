@@ -80,7 +80,9 @@
                 "deliveryType": "STANDARD_DELIVERY",
                 "packageType": "PACKAGE"
             },
-            "shippingAddress": [],
+            "shippingAddress": {
+                "isBusiness": false
+            },
             "shipments": [],
             "physicalProperties": {
                 "initialWeight": 0,
@@ -556,7 +558,9 @@
                 "deliveryType": "STANDARD_DELIVERY",
                 "packageType": "PACKAGE"
             },
-            "shippingAddress": [],
+            "shippingAddress": {
+                "isBusiness": false
+            },
             "shipments": [],
             "physicalProperties": {
                 "initialWeight": 0,

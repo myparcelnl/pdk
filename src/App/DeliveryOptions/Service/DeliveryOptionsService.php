@@ -231,7 +231,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     {
         $allCarriers           = $this->carrierRepository->all();
         $carrierSettings       = Settings::get(CarrierSettings::ID);
-        $cc                    = $cart->shippingMethod->shippingAddress->cc ?? null;
+        $shippingAddress       = $cart->shippingMethod->shippingAddress;
+        $cc                    = $shippingAddress->cc ?? null;
+        $isBusiness            = $shippingAddress->isBusiness;
         $candidatePackageTypes = $this->getCandidatePackageTypes($cart);
 
         foreach ($candidatePackageTypes as $packageTypeName => $v2PackageType) {
@@ -241,7 +243,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 $carrierSettings,
                 $cc,
                 $v2PackageType,
-                $weight
+                $weight,
+                $isBusiness
             );
 
             if ($filteredCarriers->isNotEmpty()) {
@@ -269,14 +272,17 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getCandidatePackageTypes(PdkCart $cart): array
     {
-        $cc            = $cart->shippingMethod->shippingAddress->cc ?? null;
-        $allowedTypes  = $this->getAvailablePackageTypes($cart);
-        $cartTypes     = $this->cartCalculationService->getCartPackageTypes($cart);
+        $shippingAddress = $cart->shippingMethod->shippingAddress;
+        $cc              = $shippingAddress->cc ?? null;
+        $isBusiness      = $shippingAddress->isBusiness;
+        $allowedTypes    = $this->getAvailablePackageTypes($cart);
+        $cartTypes       = $this->cartCalculationService->getCartPackageTypes($cart);
 
         // Fetch capabilities for each allowed type to determine weight-based ordering.
-        // Cached per cc+packageType — subsequent use in filterCarriersForPackageType hits cache.
+        // Passing the recipient's business flag keeps the same cache key as
+        // filterCarriersForPackageType, so that later per-type carrier lookup hits this cache.
         $typeWeights = $cc
-            ? $this->capabilitiesValidation->getPackageTypeWeights($cc, $allowedTypes)
+            ? $this->capabilitiesValidation->getPackageTypeWeights($cc, $allowedTypes, true, $isBusiness)
             : [];
 
         // The desired type is the heaviest type among the cart's product types.
@@ -356,6 +362,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * @param  null|string                                           $cc
      * @param  string                                                $v2PackageType
      * @param  int                                                   $weight
+     * @param  bool                                                  $isBusiness Whether the checkout recipient is a business.
      *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
@@ -364,14 +371,16 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         array $carrierSettings,
         ?string $cc,
         string $v2PackageType,
-        int $weight
+        int $weight,
+        bool $isBusiness
     ) {
-        // Cache key: cc+package_type — shareable across orders with different weights.
+        // Cache key: cc+package_type+isBusiness — shareable across orders with different weights.
+        // The recipient is known at checkout, so the business flag is sent explicitly (never omitted).
         // Carrier presence and weight constraints are evaluated client-side per carrier.
         $capabilitiesByCarrier = $cc
             ? $this->capabilitiesValidation->indexByCarrier(
                 $this->capabilitiesValidation->getRepository()->getCapabilities([
-                    'recipient'    => ['country_code' => $cc],
+                    'recipient'    => ['country_code' => $cc, 'is_business' => $isBusiness],
                     'package_type' => $v2PackageType,
                 ])
             )

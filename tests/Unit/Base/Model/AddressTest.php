@@ -25,7 +25,8 @@ it('correctly transforms deprecated fields', function (array $input, array $outp
             'full_street' => 'street 123 b',
         ],
         'output' => [
-            'street' => 'street 123 b',
+            'street'     => 'street 123 b',
+            'isBusiness' => false,
         ],
     ],
     'address1' => [
@@ -33,7 +34,8 @@ it('correctly transforms deprecated fields', function (array $input, array $outp
             'address1' => 'Wegstraat 2F',
         ],
         'output' => [
-            'street' => 'Wegstraat 2F',
+            'street'     => 'Wegstraat 2F',
+            'isBusiness' => false,
         ],
     ],
 
@@ -42,7 +44,8 @@ it('correctly transforms deprecated fields', function (array $input, array $outp
             'address2' => 'Wegstraat 2',
         ],
         'output' => [
-            'street' => 'Wegstraat 2',
+            'street'     => 'Wegstraat 2',
+            'isBusiness' => false,
         ],
     ],
 
@@ -54,9 +57,56 @@ it('correctly transforms deprecated fields', function (array $input, array $outp
         'output' => [
             'street'        => 'street 123 b',
             'streetAdditionalInfo' => 'b',
+            'isBusiness'    => false,
         ],
     ],
 ]);
+
+it('derives isBusiness from a company name', function () {
+    $address = new Address(['cc' => 'NL', 'company' => 'Acme B.V.']);
+
+    expect($address->isBusiness)->toBeTrue();
+});
+
+it('treats an empty or whitespace-only company as not a business', function (?string $company) {
+    $address = new Address(['cc' => 'NL', 'company' => $company]);
+
+    expect($address->isBusiness)->toBeFalse();
+})->with([
+    'empty string'    => [''],
+    'whitespace only' => ['   '],
+    'null'            => [null],
+]);
+
+it('defaults isBusiness to false when no company is provided', function () {
+    $address = new Address(['cc' => 'NL']);
+
+    expect($address->isBusiness)->toBeFalse();
+});
+
+it('derives isBusiness on a bare Address without storing or serialising the company', function () {
+    $address = new Address(['cc' => 'NL', 'company' => 'Acme B.V.']);
+
+    expect($address->isBusiness)->toBeTrue()
+        ->and($address->company)->toBeNull()
+        ->and($address->toArray())
+        ->toHaveKey('isBusiness', true)
+        ->not->toHaveKey('company');
+});
+
+it('keeps an explicit isBusiness flag when no company is present (rehydration)', function () {
+    $address = new Address(['cc' => 'NL', 'isBusiness' => true]);
+
+    expect($address->isBusiness)->toBeTrue();
+});
+
+it('lets a present company override a stale isBusiness flag', function () {
+    $business = new Address(['cc' => 'NL', 'company' => 'Acme B.V.', 'isBusiness' => false]);
+    $consumer = new Address(['cc' => 'NL', 'company' => '', 'isBusiness' => true]);
+
+    expect($business->isBusiness)->toBeTrue()
+        ->and($consumer->isBusiness)->toBeFalse();
+});
 
 it('does not log deprecation warnings for address1 or address2', function (array $input) {
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */

@@ -10,6 +10,16 @@
         "baseUrl": "BACKEND_URL",
         "bootstrapId": "myparcel-pdk-boot",
         "endpoints": {
+            "fetchContext": {
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchContext"
+                },
+                "path": "",
+                "property": "context",
+                "useDataEnvelope": true
+            },
             "deleteAccount": {
                 "headers": [],
                 "method": "POST",
@@ -234,16 +244,6 @@
                 "path": "",
                 "useDataEnvelope": true
             },
-            "fetchContext": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "fetchContext"
-                },
-                "path": "",
-                "property": "context",
-                "useDataEnvelope": true
-            },
             "proxyCapabilities": {
                 "headers": [],
                 "method": "POST",
@@ -282,6 +282,7 @@
                 "number": "31",
                 "postalCode": "2132 JE",
                 "street": "Antareslaan",
+                "isBusiness": true,
                 "email": "support@myparcel.nl",
                 "person": "Felicia Parcel",
                 "company": "MyParcel"
@@ -1203,6 +1204,7 @@
                         "number": "31",
                         "postalCode": "2132 JE",
                         "street": "Antareslaan",
+                        "isBusiness": true,
                         "email": "support@myparcel.nl",
                         "person": "Felicia Parcel",
                         "company": "MyParcel"
@@ -4204,6 +4206,7 @@
                 "number": "31",
                 "postalCode": "2132 JE",
                 "street": "Antareslaan",
+                "isBusiness": true,
                 "email": "support@myparcel.nl",
                 "person": "Felicia Parcel",
                 "company": "MyParcel"

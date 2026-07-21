@@ -79,7 +79,9 @@
             "labelDescription": "",
             "packageType": 1
         },
-        "recipient": [],
+        "recipient": {
+            "isBusiness": false
+        },
         "physicalProperties": {
             "weight": 0
         }

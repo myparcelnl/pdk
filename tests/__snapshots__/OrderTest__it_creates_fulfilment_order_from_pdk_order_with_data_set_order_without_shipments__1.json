@@ -122,6 +122,7 @@
             "region": "Noord-Holland",
             "state": "Noord-Holland",
             "street": "Antareslaan 31",
+            "isBusiness": true,
             "email": "test@myparcel.nl",
             "phone": "0612356789",
             "person": "Ms. Parcel",

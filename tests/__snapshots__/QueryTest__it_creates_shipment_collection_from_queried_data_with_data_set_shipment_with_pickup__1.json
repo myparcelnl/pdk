@@ -169,6 +169,7 @@
         "numberSuffix": "a",
         "postalCode": "2771AX",
         "street": "Azalealaan",
+        "isBusiness": false,
         "email": "mooieplanten@kweker.nl",
         "phone": "0613124565",
         "person": "Piet Boomkweker"
@@ -179,6 +180,7 @@
         "number": "31",
         "postalCode": "2132JE",
         "street": "Antareslaan",
+        "isBusiness": true,
         "email": "mrparcel@myparcel.nl",
         "phone": "0606607834",
         "person": "Mister Parcel",

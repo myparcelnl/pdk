@@ -67,6 +67,7 @@ it('can be instantiated', function () {
             'priceStandardDelivery'             => \floatval(0),
             'closedDays'                        => null,
             'excludeParcelLockers'              => false,
+            'isBusiness'                        => false,
         ]);
 });
 
@@ -210,7 +211,8 @@ it('uses correct price when price is shown as surcharge', function () {
             'priceStandardDelivery'             => 695.0,
             'allowPickupLocationsViewSelection' => true,
             'closedDays'                        => [],
-            'excludeParcelLockers'              => false
+            'excludeParcelLockers'              => false,
+            'isBusiness'                        => false,
         ]);
 });
 
@@ -240,6 +242,22 @@ it('returns AccountDefsPlatformName platform name for sendmyparcel', function ()
     expect($config->platform)->toBe(AccountDefsPlatformName::BELGIE)
         ->and($config->proposition)->toBe(Proposition::SENDMYPARCEL_NAME);
 });
+
+it('exposes the recipient business flag from the cart so the checkout widget can forward it', function (
+    ?string $company,
+    bool    $expected
+) {
+    TestBootstrapper::hasAccount();
+
+    $cart = new PdkCart([
+        'shippingMethod' => ['shippingAddress' => null !== $company ? ['company' => $company] : []],
+    ]);
+
+    expect(DeliveryOptionsConfig::fromCart($cart)->isBusiness)->toBe($expected);
+})->with([
+    'business (company entered)' => ['Acme B.V.', true],
+    'consumer (no company)'      => [null, false],
+]);
 
 it('returns AccountDefsPlatformName platform name for myparcel', function () {
     TestBootstrapper::forProposition(Proposition::MYPARCEL_ID);

@@ -122,7 +122,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 
         $args = [
             'carrier'      => $carrier->carrier,
-            'recipient'    => ['country_code' => $cc],
+            'recipient'    => $this->capabilitiesRecipient(),
             'package_type' => $v2PackageType,
         ];
 

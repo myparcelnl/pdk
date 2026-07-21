@@ -173,6 +173,47 @@ it('excludes carrier when package type is not in capabilities', function () {
         ->and($result['carrierSettings'])->not->toHaveKey($dhlId);
 });
 
+it('sends isBusiness on the checkout carrier-filter request based on the recipient company', function (?string $company, bool $expected) {
+    storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
+
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)
+                    ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+                    ->withCapabilityPackageTypes(['PACKAGE']))
+        )
+        ->store();
+
+    resetStorageCache();
+
+    // Enough responses for the per-type weight aggregation plus the carrier-filter call.
+    foreach (range(1, 5) as $ignored) {
+        MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([capabilityResult('POSTNL', 100, ['PACKAGE'])]));
+    }
+
+    $cart = new PdkCart([
+        'shippingMethod' => [
+            'shippingAddress' => ['cc' => 'NL', 'company' => $company],
+        ],
+        'lines' => [
+            ['quantity' => 1, 'product' => ['weight' => 1000, 'isDeliverable' => true]],
+        ],
+    ]);
+
+    // The cart address is a bare Address: it derives the flag but never stores the company (PII-free).
+    expect($cart->shippingMethod->shippingAddress->toArray())->not->toHaveKey('company');
+
+    Pdk::get(DeliveryOptionsServiceInterface::class)->createAllCarrierSettings($cart);
+
+    $body = json_decode((string) MockSdkApiHandler::getHandler()->getLastRequest()->getBody(), true);
+
+    expect($body['recipient'])->toHaveKey('isBusiness', $expected);
+})->with([
+    'business (company entered)' => ['Acme B.V.', true],
+    'consumer (no company)'      => [null, false],
+]);
+
 it('excludes carriers when weight exceeds maximum', function () {
     storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
 
