@@ -13,6 +13,15 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 
 final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculator
 {
+    /*
+     * These carriers *require* customer information to be shared; ignore any global setting.
+     * There is no API exposing this type of requirement at this point in time (July 2026).
+     */
+    private const CARRIERS_WITH_MANDATORY_CUSTOMER_INFO = [
+        RefTypesCarrierV2::DPD,
+        RefTypesCarrierV2::TRUNKRS,
+    ];
+
     public function calculate(): void
     {
         $orderCarrier = $this->order->deliveryOptions->carrier;
@@ -46,8 +55,7 @@ final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculat
     protected function sharingCustomerInformation(Carrier $carrier): bool
     {
         // @TODO this is a specific carrier check as there is currently no endpoint exposing this information
-        if ($carrier->carrier === RefTypesCarrierV2::DPD) {
-            // DPD *requires* customer information to be shared, ignore any global setting
+        if (\in_array($carrier->carrier, self::CARRIERS_WITH_MANDATORY_CUSTOMER_INFO, true)) {
             return true;
         }
 
