@@ -14,8 +14,8 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculator
 {
     /*
-     * These carriers *requires* customer information to be shared, ignore any global setting.
-     * There is no API exposing this type of requirement at this point in time (july 2026)
+     * These carriers *require* customer information to be shared; ignore any global setting.
+     * There is no API exposing this type of requirement at this point in time (July 2026).
      */
     private const CARRIERS_WITH_MANDATORY_CUSTOMER_INFO = [
         RefTypesCarrierV2::DPD,
