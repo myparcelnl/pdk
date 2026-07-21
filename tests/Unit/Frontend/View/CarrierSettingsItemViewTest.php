@@ -374,6 +374,39 @@ it('marks required option form elements as readOnly', function () {
     expect($hasReadOnly)->toBeTrue('required option form element must be readOnly');
 });
 
+it('marks a required same-day option as readOnly', function () {
+    $carrier = factory(Carrier::class)
+        ->withOptions(['sameDayDelivery' => ['enabled' => true]])
+        ->withOptionRequired('sameDayDelivery')
+        ->store()
+        ->make();
+
+    $view     = new CarrierSettingsItemView($carrier);
+    $elements = $view->toArray()['elements'];
+
+    $allowKey = (new SameDayDeliveryDefinition())->getAllowSettingsKey();
+    $element  = null;
+
+    foreach ($elements as $el) {
+        if (isset($el['name']) && $el['name'] === $allowKey) {
+            $element = $el;
+            break;
+        }
+    }
+
+    expect($element)->not->toBeNull();
+
+    $hasReadOnly = false;
+
+    foreach ($element['$builders'] ?? [] as $builder) {
+        if (array_key_exists('$readOnlyWhen', $builder)) {
+            $hasReadOnly = true;
+        }
+    }
+
+    expect($hasReadOnly)->toBeTrue('required same-day form element must be readOnly');
+});
+
 it('adds afterUpdate logic to delivery options enabled toggle', function () {
     $carrier = factory(Carrier::class)->make();
     $view    = new CarrierSettingsItemView($carrier);
