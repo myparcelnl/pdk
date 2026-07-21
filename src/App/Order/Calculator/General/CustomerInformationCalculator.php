@@ -19,7 +19,7 @@ final class CustomerInformationCalculator extends AbstractPdkOrderOptionCalculat
      */
     private const CARRIERS_WITH_MANDATORY_CUSTOMER_INFO = [
         RefTypesCarrierV2::DPD,
-        RefTypesCarrierV2::TRUNKRS
+        RefTypesCarrierV2::TRUNKRS,
     ];
 
     public function calculate(): void
