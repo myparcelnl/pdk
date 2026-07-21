@@ -486,21 +486,33 @@ class CarrierSettingsItemView extends AbstractSettingsView
         // delivery type (e.g. Trunkrs), depending on the carrier's contract. This
         // section is the single owner of the same-day fields for both representations;
         // getDeliveryTypeSettings() and getShipmentOptionsSettings() skip same-day.
+        $definition = new SameDayDeliveryDefinition();
+
         $hasSameDayDeliveryType = $this->carrier->deliveryTypes
             && in_array(RefTypesDeliveryTypeV2::SAME_DAY, $this->carrier->deliveryTypes, true);
 
-        if (
-            ! $hasSameDayDeliveryType
-            && ! $this->carrierValidationService->supportsShipmentOption($this->carrier, SameDayDeliveryDefinition::class)
-        ) {
+        $hasSameDayShipmentOption = $this->carrierValidationService->supportsShipmentOption(
+            $this->carrier,
+            SameDayDeliveryDefinition::class
+        );
+
+        if (! $hasSameDayDeliveryType && ! $hasSameDayShipmentOption) {
             return [];
         }
 
+        $elements = $this->createSettingWithPriceFields(
+            $definition->getAllowSettingsKey(),
+            SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY)
+        );
+
+        $capabilitiesKey = $definition->getCapabilitiesOptionsKey();
+
+        if ($capabilitiesKey) {
+            $this->makeReadOnlyWhenRequired($elements[0], $capabilitiesKey);
+        }
+
         return array_merge(
-            $this->createSettingWithPriceFields(
-                (new SameDayDeliveryDefinition())->getAllowSettingsKey(),
-                SettingKey::priceDeliveryType(RefTypesDeliveryTypeV2::SAME_DAY)
-            ),
+            $elements,
             [new InteractiveElement(CarrierSettings::CUTOFF_TIME_SAME_DAY, Components::INPUT_TIME)]
         );
     }
