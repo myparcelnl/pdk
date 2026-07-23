@@ -26,6 +26,11 @@ namespace MyParcelNL\Pdk\Tests\SdkApi\Response;
  * Pass a custom $items array to the constructor to override defaults for a specific test:
  *   new ExampleContractDefinitionsResponse([['carrier' => 'POSTNL', ...]]);
  *
+ * Note: contract-definitions options carry ONLY isSelectedByDefault and isRequired. The
+ * requires/excludes relations between options exist exclusively on the live capabilities
+ * response (RefCapabilitiesResponseOptionsOptionV2) — that asymmetry mirrors the real API,
+ * so do not add requires/excludes here.
+ *
  * @see \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesContractDefinitionsV2
  * @see \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2
  * @see \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2

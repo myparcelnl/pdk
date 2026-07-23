@@ -6,7 +6,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\App\Api\Contract\FrontendEndpointServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
-use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
+use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Request\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
@@ -15,27 +15,37 @@ use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
- * @property null|DeliveryOptionsConfig $config
- * @property array{string,string}       $strings
- * @property array                      $settings
+ * @property null|DeliveryOptionsConfig                            $config
+ * @property Collection<array<string, bool>>                       $cartShipmentOptions
+ * @property array{string,string}                                  $strings
+ * @property array                                                 $settings
  */
 class CheckoutContext extends Model
 {
     public $attributes = [
-        'config'    => null,
-        'strings'   => [],
-        'settings'  => [],
-        'endpoints' => EndpointRequestCollection::class,
+        'config'              => null,
+        /**
+         * The shipment options this cart would be exported with, calculated per carrier —
+         * cart state, deliberately next to `config` rather than inside it. The checkout
+         * widget uses it to show and lock options that are already decided on the merchant
+         * side (e.g. 18+ forcing signature and only recipient on).
+         */
+        'cartShipmentOptions' => Collection::class,
+        'strings'             => [],
+        'settings'            => [],
+        'endpoints'           => EndpointRequestCollection::class,
     ];
 
     protected $casts      = [
-        'config'    => DeliveryOptionsConfig::class,
-        'strings'   => 'array',
-        'settings'  => 'array',
-        'endpoints' => EndpointRequestCollection::class,
+        'config'              => DeliveryOptionsConfig::class,
+        'cartShipmentOptions' => Collection::class,
+        'strings'             => 'array',
+        'settings'            => 'array',
+        'endpoints'           => EndpointRequestCollection::class,
     ];
 
     /**
@@ -56,10 +66,23 @@ class CheckoutContext extends Model
      */
     public static function fromCart(PdkCart $cart): self
     {
-        return new self([
+        /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $deliveryOptionsService */
+        $deliveryOptionsService = Pdk::get(DeliveryOptionsServiceInterface::class);
 
-            'config'   => DeliveryOptionsConfig::fromCart($cart),
-            'settings' => [
+        // The widget represents shipment options as booleans (its DeliveryOptionsOutput
+        // format), so the calculated models are converted at this wire boundary. Built as a
+        // plain array on purpose: mapping on the typed collection would cast the boolean
+        // arrays straight back into ShipmentOptions models.
+        $cartShipmentOptions = [];
+
+        foreach ($deliveryOptionsService->createCartShipmentOptions($cart)->all() as $identifier => $shipmentOptions) {
+            $cartShipmentOptions[$identifier] = ShipmentOptions::toBooleanOptions($shipmentOptions);
+        }
+
+        return new self([
+            'config'              => DeliveryOptionsConfig::fromCart($cart),
+            'cartShipmentOptions' => $cartShipmentOptions,
+            'settings'            => [
                 'hasDeliveryOptions' => $cart->shippingMethod->hasDeliveryOptions,
             ],
         ]);
