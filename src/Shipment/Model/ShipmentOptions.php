@@ -132,4 +132,38 @@ class ShipmentOptions extends Model
 
         return $data;
     }
+
+    /**
+     * Return the tri-state option attributes as booleans — the format the delivery options
+     * widget uses for shipment options (enabled => true, disabled => false). Unset (inherit)
+     * options and non-boolean attributes such as the insurance amount and label description
+     * are left out.
+     *
+     * @param  ShipmentOptions $shipmentOptions
+     *
+     * @return array<string, bool> keyed by shipment option key (e.g. `onlyRecipient`)
+     */
+    public static function toBooleanOptions(ShipmentOptions $shipmentOptions): array
+    {
+        $data = [];
+
+        /** @var OrderOptionDefinitionInterface[] $definitions */
+        $definitions = Pdk::get('orderOptionDefinitions');
+
+        foreach ($definitions as $definition) {
+            $shipmentOptionsKey = $definition->getShipmentOptionsKey();
+
+            if (! $shipmentOptionsKey || TriStateService::TYPE_STRICT !== $definition->getShipmentOptionsCast()) {
+                continue;
+            }
+
+            $value = $shipmentOptions->getAttribute($shipmentOptionsKey);
+
+            if (TriStateService::ENABLED === $value || TriStateService::DISABLED === $value) {
+                $data[$shipmentOptionsKey] = TriStateService::ENABLED === $value;
+            }
+        }
+
+        return $data;
+    }
 }
