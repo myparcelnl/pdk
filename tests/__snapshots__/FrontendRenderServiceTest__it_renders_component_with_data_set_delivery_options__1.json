@@ -16,6 +16,7 @@
             "excludeParcelLockers": false,
             "apiBaseUrl": "https:\/\/api.myparcel.nl"
         },
+        "cartShipmentOptions": [],
         "strings": {
             "morning": "Ochtend"
         },

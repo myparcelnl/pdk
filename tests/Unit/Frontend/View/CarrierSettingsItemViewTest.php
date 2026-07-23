@@ -342,3 +342,110 @@ it('adds afterUpdate logic to delivery options enabled toggle', function () {
 
     expect($deliveryOptionsFound)->toBeTrue();
 });
+
+/**
+ * Find a form element by name in a view's array representation.
+ */
+function findCarrierSettingsElement(array $viewArray, string $name): ?array
+{
+    foreach ($viewArray['elements'] as $element) {
+        if (($element['name'] ?? null) === $name) {
+            return $element;
+        }
+    }
+
+    return null;
+}
+
+it('emits strict tri-state operations on the age check toggle', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->store()
+        ->make();
+
+    $view    = new CarrierSettingsItemView($carrier);
+    $element = findCarrierSettingsElement($view->toArray(Arrayable::SKIP_NULL), 'exportAgeCheck');
+
+    expect($element)->not->toBeNull();
+
+    $afterUpdate = null;
+
+    foreach ($element['$builders'] ?? [] as $builder) {
+        if (isset($builder['$afterUpdate'])) {
+            $afterUpdate = $builder['$afterUpdate'];
+        }
+    }
+
+    expect($afterUpdate)->toEqual([
+        [
+            '$setValue' => [
+                '$value'  => \MyParcelNL\Pdk\Types\Service\TriStateService::ENABLED,
+                '$target' => 'exportSignature',
+                '$if'     => [['$eq' => \MyParcelNL\Pdk\Types\Service\TriStateService::ENABLED]],
+            ],
+        ],
+        [
+            '$setValue' => [
+                '$value'  => \MyParcelNL\Pdk\Types\Service\TriStateService::ENABLED,
+                '$target' => 'exportOnlyRecipient',
+                '$if'     => [['$eq' => \MyParcelNL\Pdk\Types\Service\TriStateService::ENABLED]],
+            ],
+        ],
+    ])
+        // Guard against boolean operands sneaking back in: `toEqual` would accept true == 1.
+        ->and($afterUpdate[0]['$setValue']['$value'])->toBeInt()
+        ->and($afterUpdate[0]['$setValue']['$if'][0]['$eq'])->toBeInt();
+});
+
+it('locks signature and only recipient only while age check is explicitly enabled', function () {
+    $carrier = factory(Carrier::class)
+        ->withAllCapabilities()
+        ->store()
+        ->make();
+
+    $view      = new CarrierSettingsItemView($carrier);
+    $viewArray = $view->toArray(Arrayable::SKIP_NULL);
+
+    foreach (['exportSignature', 'exportOnlyRecipient'] as $name) {
+        $element = findCarrierSettingsElement($viewArray, $name);
+
+        expect($element)->not->toBeNull();
+
+        $readOnlyWhen = null;
+
+        foreach ($element['$builders'] ?? [] as $builder) {
+            if (isset($builder['$readOnlyWhen'])) {
+                $readOnlyWhen = $builder['$readOnlyWhen'];
+            }
+        }
+
+        expect($readOnlyWhen)->toEqual([
+            '$if' => [['$target' => 'exportAgeCheck', '$eq' => \MyParcelNL\Pdk\Types\Service\TriStateService::ENABLED]],
+        ])
+            ->and($readOnlyWhen['$if'][0]['$eq'])->toBeInt();
+    }
+});
+
+it('emits no age check rules when the carrier lacks age verification', function () {
+    $carrier = factory(Carrier::class)
+        ->withMinimalCapabilities()
+        ->withCapabilityShipmentOptions([
+            'requiresSignature'     => ['isSelectedByDefault' => false, 'isRequired' => false],
+            'recipientOnlyDelivery' => ['isSelectedByDefault' => false, 'isRequired' => false],
+        ])
+        ->store()
+        ->make();
+
+    $view      = new CarrierSettingsItemView($carrier);
+    $viewArray = $view->toArray(Arrayable::SKIP_NULL);
+
+    expect(findCarrierSettingsElement($viewArray, 'exportAgeCheck'))->toBeNull();
+
+    $signatureElement = findCarrierSettingsElement($viewArray, 'exportSignature');
+
+    expect($signatureElement)->not->toBeNull();
+
+    foreach ($signatureElement['$builders'] ?? [] as $builder) {
+        expect($builder['$readOnlyWhen']['$if'][0]['$target'] ?? null)->not->toBe('exportAgeCheck');
+    }
+});

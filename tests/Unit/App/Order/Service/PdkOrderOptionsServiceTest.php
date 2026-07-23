@@ -6,12 +6,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Service;
 
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
@@ -214,6 +214,51 @@ it('isSelectedByDefault applies in inherited delivery options flow', function ()
     $newOrder = $service->calculateShipmentOptions($order, $flags);
 
     expect($newOrder->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);
+});
+
+it('forces signature and only recipient through capabilities requires when age check comes from carrier settings', function () {
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:POSTNL');
+    $storage->delete('carrier:all');
+
+    factory(Settings::class)
+        ->withCarrier('POSTNL', [(new AgeCheckDefinition())->getCarrierSettingsKey() => TriStateService::ENABLED])
+        ->store();
+
+    // Mirror an order placed through the checkout: the consumer left signature and only
+    // recipient unchecked (explicit DISABLED); age check is merchant-only and unset on the
+    // order, so it comes in through the carrier settings.
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(['cc' => 'NL'])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('POSTNL')
+                ->withPackageType('package')
+                ->withDeliveryType('standard')
+                ->withShipmentOptions(
+                    factory(ShipmentOptions::class)
+                        ->withAgeCheck(TriStateService::INHERIT)
+                        ->withSignature(TriStateService::DISABLED)
+                        ->withOnlyRecipient(TriStateService::DISABLED)
+                        ->withReceiptCode(TriStateService::INHERIT)
+                )
+        )
+        ->make();
+
+    /** @var PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
+
+    $shipmentOptions = $newOrder->deliveryOptions->shipmentOptions;
+
+    expect($shipmentOptions->ageCheck)->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->signature)->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->onlyRecipient)->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->receiptCode)->toBe(TriStateService::DISABLED);
 });
 
 it('isRequired resolves to ENABLED via capabilities default when carrier setting is INHERIT', function () {
