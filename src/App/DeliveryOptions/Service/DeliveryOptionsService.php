@@ -149,8 +149,11 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * Calculate, per carrier, the shipment options this cart would be exported with, so the
      * checkout can show and lock options that are already decided on the merchant side. Runs
      * the same full calculation pipeline as an export (settings chain plus capabilities
-     * requires/excludes rules) on an order built from the cart, and converts the result to
-     * the capabilities key-space through the same converter the admin context uses.
+     * requires/excludes rules) on an order built from the cart.
+     *
+     * The result holds calculated ShipmentOptions models with tri-state values; converting
+     * them to the widget's boolean format happens at the CheckoutContext boundary
+     * ({@see \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions::toBooleanOptions()}).
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *

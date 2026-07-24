@@ -244,7 +244,8 @@ it('exports order with age check setting enabled', function (bool $orderMode) {
     // signature and only recipient on with it, and receipt code off.
     expect($options['age_check'])->toBe(1)
         ->and($options['signature'])->toBe(1)
-        ->and($options['only_recipient'])->toBe(1);
+        ->and($options['only_recipient'])->toBe(1)
+        ->and($options['receipt_code'] ?? 0)->toBe(0);
 })
     ->with('order mode toggle');
 
