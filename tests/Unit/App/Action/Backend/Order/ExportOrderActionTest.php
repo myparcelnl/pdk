@@ -239,10 +239,13 @@ it('exports order with age check setting enabled', function (bool $orderMode) {
     $body    = exportWithSetting($orderMode, factory(CarrierSettings::class)->withExportAgeCheck(true));
     $options = getRequestOptions($body, $orderMode);
 
-    // Age check is enabled via export setting.
-    // Cascade behavior (age_check requires signature + only_recipient) is now driven
-    // by the capabilities API requires field, tested in CapabilitiesOptionCalculatorTest.
-    expect($options['age_check'])->toBe(1);
+    // Age check is enabled via the export setting. The capabilities requires/excludes
+    // relations (the permissive mock carries the real age verification rules) force
+    // signature and only recipient on with it, and receipt code off.
+    expect($options['age_check'])->toBe(1)
+        ->and($options['signature'])->toBe(1)
+        ->and($options['only_recipient'])->toBe(1)
+        ->and($options['receipt_code'] ?? 0)->toBe(0);
 })
     ->with('order mode toggle');
 

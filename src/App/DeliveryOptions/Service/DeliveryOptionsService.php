@@ -9,6 +9,8 @@ use DateTimeZone;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
@@ -23,8 +25,10 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Shipment\Collection\ShipmentOptionsCollection;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
@@ -63,18 +67,24 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private $dropOffService;
 
     /**
+     * @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface
+     */
+    private $orderOptionsService;
+
+    /**
      * @var \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface
      */
     private $taxService;
 
     /**
-     * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface $cartCalculationService
-     * @param  \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService     $capabilitiesValidation
-     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface       $carrierRepository
-     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface             $countryService
-     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface            $currencyService
-     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface         $dropOffService
-     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface              $taxService
+     * @param  \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface   $cartCalculationService
+     * @param  \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService       $capabilitiesValidation
+     * @param  \MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface         $carrierRepository
+     * @param  \MyParcelNL\Pdk\Base\Contract\CountryServiceInterface               $countryService
+     * @param  \MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface              $currencyService
+     * @param  \MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface           $dropOffService
+     * @param  \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface  $orderOptionsService
+     * @param  \MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface                $taxService
      */
     public function __construct(
         CartCalculationServiceInterface  $cartCalculationService,
@@ -83,6 +93,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         CountryServiceInterface          $countryService,
         CurrencyServiceInterface         $currencyService,
         DropOffServiceInterface          $dropOffService,
+        PdkOrderOptionsServiceInterface  $orderOptionsService,
         TaxServiceInterface              $taxService
     ) {
         $this->cartCalculationService  = $cartCalculationService;
@@ -91,6 +102,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $this->countryService          = $countryService;
         $this->currencyService         = $currencyService;
         $this->dropOffService          = $dropOffService;
+        $this->orderOptionsService     = $orderOptionsService;
         $this->taxService              = $taxService;
     }
 
@@ -131,6 +143,75 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         return $settings;
+    }
+
+    /**
+     * Calculate, per carrier, the shipment options this cart would be exported with, so the
+     * checkout can show and lock options that are already decided on the merchant side. Runs
+     * the same full calculation pipeline as an export (settings chain plus capabilities
+     * requires/excludes rules) on an order built from the cart.
+     *
+     * The result holds calculated ShipmentOptions models with tri-state values; converting
+     * them to the widget's boolean format happens at the CheckoutContext boundary
+     * ({@see \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions::toBooleanOptions()}).
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Collection\ShipmentOptionsCollection keyed by legacy
+     *         carrier identifier.
+     */
+    public function createCartShipmentOptions(PdkCart $cart): ShipmentOptionsCollection
+    {
+        if (! $cart->shippingMethod->hasDeliveryOptions) {
+            return new ShipmentOptionsCollection();
+        }
+
+        [$packageType, $carriers] = $this->getValidCarrierOptions($cart);
+
+        $cartShipmentOptions = new ShipmentOptionsCollection();
+
+        foreach ($carriers as $carrier) {
+            if (null === $carrier->carrier) {
+                continue;
+            }
+
+            // Use the legacy identifier, matching the carrierSettings keys in the config.
+            $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
+
+            $cartShipmentOptions->put($identifier, $this->calculateCartShipmentOptions($carrier, $cart, $packageType));
+        }
+
+        return $cartShipmentOptions;
+    }
+
+    /**
+     * Build an order representing what this cart would ship with for the given carrier, run
+     * the full calculation pipeline on it, and return its calculated shipment options.
+     * Mirrors the per-carrier synthetic order the admin context uses for inherited delivery
+     * options ({@see \MyParcelNL\Pdk\Context\Model\OrderDataContext}).
+     *
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier     Carrier to calculate for.
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart        Cart supplying the order
+     *                                                             lines (product settings,
+     *                                                             weight) and shipping address.
+     * @param  string                                 $packageType Package type name resolved
+     *                                                             for this cart, e.g. 'package'.
+     *
+     * @return \MyParcelNL\Pdk\Shipment\Model\ShipmentOptions
+     */
+    private function calculateCartShipmentOptions(Carrier $carrier, PdkCart $cart, string $packageType): ShipmentOptions
+    {
+        $order = new PdkOrder([
+            'lines'           => $cart->lines,
+            'shippingAddress' => $cart->shippingMethod->shippingAddress,
+            'deliveryOptions' => ['packageType' => $packageType],
+        ]);
+
+        $order->deliveryOptions->carrier = $carrier;
+
+        $calculatedOrder = $this->orderOptionsService->calculate($order);
+
+        return $calculatedOrder->deliveryOptions->shipmentOptions;
     }
 
     /**
