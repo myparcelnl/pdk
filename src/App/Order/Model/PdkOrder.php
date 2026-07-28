@@ -220,6 +220,13 @@ class PdkOrder extends Model
             return $this->getCastAttributeValue('notes');
         }
 
+        // Notes belong to the order in the shop, looked up by its identifier. Orders that only
+        // exist in memory (like the one built from a cart) have none, and asking the shop for
+        // the notes of a null identifier throws — which broke the checkout once.
+        if (null === $this->externalIdentifier) {
+            return new PdkOrderNoteCollection();
+        }
+
         /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface $orderNoteRepository */
         $orderNoteRepository = Pdk::get(PdkOrderNoteRepositoryInterface::class);
 

@@ -206,6 +206,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             'lines'           => $cart->lines,
             'shippingAddress' => $cart->shippingMethod->shippingAddress,
             'deliveryOptions' => ['packageType' => $packageType],
+            // A cart has no order notes yet, and calculators may read them (the label
+            // description can include the customer note).
+            'notes'           => [],
         ]);
 
         $order->deliveryOptions->carrier = $carrier;

@@ -9,22 +9,34 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Context\Model\CheckoutContext;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockStrictPdkOrderNoteRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
+use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('checkout');
 
-usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
+// The note repository rejects orders without an identifier, like the WooCommerce and
+// PrestaShop ones do, so a lookup for the cart's in-memory order fails these tests instead of
+// passing silently.
+usesShared(
+    new UsesMockPdkInstance([
+        PdkOrderNoteRepositoryInterface::class => autowire(MockStrictPdkOrderNoteRepository::class),
+    ]),
+    new UsesAccountMock()
+);
 
 /**
  * A deliverable single-line cart with an NL shipping address — the minimum a capabilities
@@ -137,4 +149,21 @@ it('always contains an entry per carrier with definitive values', function () {
     expect($options)->toBeInstanceOf(ShipmentOptions::class)
         ->and($options->ageCheck)->toBe(TriStateService::DISABLED)
         ->and($options->signature)->toBe(TriStateService::DISABLED);
+});
+
+it('calculates the options while the label description asks for the customer note', function () {
+    storeShopWithCarrier('POSTNL');
+
+    // [CUSTOMER_NOTE] makes the label description calculator read the order's notes, which is
+    // how this broke the checkout: the cart's order has no identifier to look notes up by.
+    factory(LabelSettings::class)
+        ->withDescription('[CUSTOMER_NOTE]')
+        ->store();
+
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createCartShipmentOptions(cartWithNlAddress());
+
+    expect($result->get('postnl'))->toBeInstanceOf(ShipmentOptions::class);
 });
