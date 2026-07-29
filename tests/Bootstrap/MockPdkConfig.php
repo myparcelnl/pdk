@@ -24,9 +24,10 @@ use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookServiceInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Contract\AuditServiceInterface;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
-use MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment\CapabilitiesService;
+use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule\ImplicationsService;
 use MyParcelNL\Pdk\SdkApi\Service\Iam\WhoamiService;
+use MyParcelNL\Pdk\Tests\SdkApi\MockSdkClientFactory;
 use MyParcelNL\Pdk\Audit\Contract\PdkAuditRepositoryInterface;
 use MyParcelNL\Pdk\Audit\Service\AuditService;
 use MyParcelNL\Pdk\Base\Concern\PdkInterface;
@@ -108,7 +109,10 @@ class MockPdkConfig
             TaxServiceInterface::class                  => get(MockTaxService::class),
             ViewServiceInterface::class                 => get(MockViewService::class),
 
-            CapabilitiesService::class                  => get(MockCapabilitiesService::class),
+            // Covers every SdkApi service at once, so none of them can reach the network.
+            SdkClientFactoryInterface::class            => get(MockSdkClientFactory::class),
+
+            // Still bound individually: these two stub canned return values, not just transport.
             ImplicationsService::class                  => get(MockImplicationsService::class),
             WhoamiService::class                        => get(MockWhoamiService::class),
             CarrierCapabilitiesRepository::class        => get(MockCarrierCapabilitiesRepository::class),
