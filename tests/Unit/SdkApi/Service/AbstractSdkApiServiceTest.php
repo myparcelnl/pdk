@@ -28,6 +28,13 @@ use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleContractDefinitionsResponse;
 
 usesShared(new UsesMockPdkInstance());
 
+afterEach(function () {
+    // The handler queue is static, so it outlives the per-test PDK instance. Clearing it here
+    // rather than at the end of each test means an unconsumed response cannot leak into a later
+    // test when an assertion fails partway through.
+    MockSdkApiHandler::reset();
+});
+
 // Create a concrete test implementation for testing abstract methods
 class ConcreteSdkApiServiceForTest extends AbstractSdkApiService
 {
@@ -200,15 +207,17 @@ it('createGuzzleClient returns a Guzzle Client', function () {
 
 // Tests for the injected transport
 it('sends through the injected factory rather than building its own client', function () {
-    $stack = HandlerStack::create();
-
     $factory = new class implements SdkClientFactoryInterface {
         /** @var int */
         public $calls = 0;
 
+        /** @var null|HandlerStack */
+        public $receivedStack;
+
         public function create(HandlerStack $stack): Client
         {
             $this->calls++;
+            $this->receivedStack = $stack;
 
             return new Client(['handler' => $stack]);
         }
@@ -234,14 +243,14 @@ it('sends through the injected factory rather than building its own client', fun
     $service->publicCreateGuzzleClient();
 
     // The service must delegate: building the client inline would leave the factory untouched,
-    // which is what let SdkApi services reach the network from tests.
-    expect($factory->calls)->toBe(1);
-    expect($stack)->toBeInstanceOf(HandlerStack::class);
+    // which is what let SdkApi services reach the network from tests. The stack has to come
+    // from the service too, otherwise its middleware would be lost when the transport is swapped.
+    expect($factory->calls)->toBe(1)
+        ->and($factory->receivedStack)->toBeInstanceOf(HandlerStack::class);
 });
 
 it('resolves container-bound services onto the mock transport so no request leaves the process', function () {
     TestBootstrapper::hasApiKey('test-key');
-    MockSdkApiHandler::reset();
     MockSdkApiHandler::enqueue(new ExampleContractDefinitionsResponse());
 
     /** @var CapabilitiesService $service */
@@ -251,6 +260,4 @@ it('resolves container-bound services onto the mock transport so no request leav
     // Answered from the queue. Before the transport was injectable this call went to the live
     // API, because CapabilitiesService built its own Guzzle client.
     expect($items)->not->toBeEmpty();
-
-    MockSdkApiHandler::reset();
 });
