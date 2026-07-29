@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Base\Support\Utils;
+use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
@@ -229,8 +230,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
+        $carrierSettings = Settings::get(CarrierSettings::ID);
+        $carrierSettings = is_array($carrierSettings) ? $carrierSettings : [];
+
+        if (empty($carrierSettings)) {
+            return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
+        }
+
         $allCarriers           = $this->carrierRepository->all();
-        $carrierSettings       = Settings::get(CarrierSettings::ID);
         $cc                    = $cart->shippingMethod->shippingAddress->cc ?? null;
         $candidatePackageTypes = $this->getCandidatePackageTypes($cart);
 
