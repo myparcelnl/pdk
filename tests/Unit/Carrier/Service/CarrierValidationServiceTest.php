@@ -140,6 +140,20 @@ it('getAllowedInsuranceAmounts returns an empty array when insurance is not avai
     expect($service->getAllowedInsuranceAmounts($carrier))->toEqual([]);
 });
 
+it('getAllowedInsuranceAmounts returns an empty array when insurance carries no bounds', function () {
+    // What a carrier looks like before its stored data has been refreshed: the insurance
+    // option is advertised, but without the flat bounds to build a ladder from.
+    $carrier = factory(Carrier::class)
+        ->withCarrier('POSTNL')
+        ->withOptions(['insurance' => ['isRequired' => false, 'isSelectedByDefault' => false]])
+        ->make();
+
+    /** @var CarrierValidationService $service */
+    $service = Pdk::get(CarrierValidationService::class);
+
+    expect($service->getAllowedInsuranceAmounts($carrier))->toEqual([]);
+});
+
 it('getAllowedInsuranceAmounts returns the tier ladder when insurance is available', function () {
     $carrier = factory(Carrier::class)
         ->withCarrier('POSTNL')

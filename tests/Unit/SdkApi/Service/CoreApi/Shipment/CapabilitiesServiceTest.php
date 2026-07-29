@@ -430,6 +430,88 @@ it('response body is logged as decoded JSON array via middleware', function () {
     expect($responseLog[0]['context']['body'])->toBe(['items' => []]);
 });
 
+// Tests for dropping the deprecated nested insurance wrapper
+it('getCapabilities keeps the flat insurance bounds and drops the nested wrapper', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    // Mirrors what the API sends today: flat bounds AND the deprecated nested wrapper.
+    // The nested one carries different amounts so we can prove which set survived.
+    $service->mockHandler->append(new Response(200, [], json_encode([
+        'results' => [
+            [
+                'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
+                'options' => [
+                    'insurance' => [
+                        'isSelectedByDefault' => false,
+                        'isRequired'          => false,
+                        'requires'            => [],
+                        'excludes'            => [],
+                        'min'                 => ['amount' => 10000, 'currency' => 'EUR'],
+                        'max'                 => ['amount' => 200000, 'currency' => 'EUR'],
+                        'default'             => ['amount' => 50000, 'currency' => 'EUR'],
+                        'insuredAmount'       => [
+                            'min'     => ['amount' => 1, 'currency' => 'EUR'],
+                            'max'     => ['amount' => 2, 'currency' => 'EUR'],
+                            'default' => ['amount' => 3, 'currency' => 'EUR'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ])));
+
+    $results   = $service->getCapabilities([
+        'carrier'      => 'POSTNL',
+        'recipient'    => ['country_code' => 'NL'],
+        'package_type' => 'PACKAGE',
+    ]);
+    $insurance = $results[0]->getOptions()
+        ->getInsurance();
+
+    expect($insurance->getInsuredAmount())->toBeNull()
+        ->and($insurance->getMin()->getAmount())->toBe(10000)
+        ->and($insurance->getMax()->getAmount())->toBe(200000)
+        ->and($insurance->getDefault()->getAmount())->toBe(50000)
+        // Serialization is what reaches stored carrier data and the admin payload.
+        ->and((array) $insurance->jsonSerialize())->not->toHaveKey('insuredAmount');
+});
+
+it('getContractDefinitions drops the nested insurance wrapper', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode([
+        'items' => [
+            [
+                'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
+                'options' => [
+                    'insurance' => [
+                        'isSelectedByDefault' => false,
+                        'isRequired'          => false,
+                        'min'                 => ['amount' => 0, 'currency' => 'EUR'],
+                        'max'                 => ['amount' => 500000, 'currency' => 'EUR'],
+                        'default'             => ['amount' => 0, 'currency' => 'EUR'],
+                        'insuredAmount'       => [
+                            'min'     => ['amount' => 1, 'currency' => 'EUR'],
+                            'max'     => ['amount' => 2, 'currency' => 'EUR'],
+                            'default' => ['amount' => 3, 'currency' => 'EUR'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ])));
+
+    $items     = $service->getContractDefinitions(null);
+    $insurance = $items[0]->getOptions()
+        ->getInsurance();
+
+    expect($insurance->getInsuredAmount())->toBeNull()
+        ->and($insurance->getMax()->getAmount())->toBe(500000)
+        ->and((array) $insurance->jsonSerialize())->not->toHaveKey('insuredAmount');
+});
+
 // Tests for Accept-header middleware in CapabilitiesService
 it('sets version-2 Accept header for all capabilities endpoints', function () {
     TestBootstrapper::hasApiKey('test-key');

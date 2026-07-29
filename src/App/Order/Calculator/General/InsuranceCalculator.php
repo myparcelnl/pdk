@@ -65,6 +65,10 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      * narrow below the carrier-wide contract range. Tier resolution and clamping
      * use those shipment-specific bounds.
      *
+     * The capability advertises them as flat `min`/`max`/`default` money objects, each
+     * optional. An absent minimum means the carrier imposes no floor, an absent maximum
+     * means it imposes no ceiling, and an absent default falls back to the minimum.
+     *
      * - NULL or DISABLED (0): use carrier minimum.
      * - INHERIT (-1) or ENABLED (1): fall back to settings; if settings do not enable insurance,
      *   use carrier default.
@@ -84,10 +88,13 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return 0;
         }
 
-        $insuredAmount  = $carrierInsurance->getInsuredAmount();
-        $carrierMin     = $insuredAmount->getMin()->getAmount();
-        $carrierMax     = $insuredAmount->getMax()->getAmount();
-        $carrierDefault = $insuredAmount->getDefault()->getAmount();
+        $min     = $carrierInsurance->getMin();
+        $max     = $carrierInsurance->getMax();
+        $default = $carrierInsurance->getDefault();
+
+        $carrierMin     = $min ? $min->getAmount() : 0;
+        $carrierMax     = $max ? $max->getAmount() : null;
+        $carrierDefault = $default ? $default->getAmount() : $carrierMin;
 
         // No insurance set? We still need to respect the carrier's minimum insurance amount or the request will fail.
         if (null === $amount || TriStateService::DISABLED === $amount) {
@@ -103,11 +110,32 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $this->calculateFromSettings($carrier, $carrierMin, $carrierMax, $carrierDefault);
         }
 
-        // Explicit amount: resolve to nearest valid tier, clamp to shipment range.
-        $allowedAmounts = InsuranceTierMath::buildTiers($carrierMin, $carrierMax);
+        return $this->resolveToTier($amount, $carrierMin, $carrierMax);
+    }
+
+    /**
+     * Resolve a requested amount to a value the carrier accepts.
+     *
+     * Snaps the amount up to the nearest tier in the carrier's range, then clamps it to that
+     * range. Without a carrier maximum there is no ladder to snap to, so the amount passes
+     * through with only the carrier minimum applied as a floor.
+     *
+     * @param  int      $amount
+     * @param  int      $min
+     * @param  null|int $max
+     *
+     * @return int
+     */
+    private function resolveToTier(int $amount, int $min, ?int $max): int
+    {
+        if (null === $max) {
+            return max($min, $amount);
+        }
+
+        $allowedAmounts = InsuranceTierMath::buildTiers($min, $max);
         $validated      = $this->getMinimumInsuranceAmount($allowedAmounts, $amount);
 
-        return $this->clampToCarrierRange($validated, $carrierMin, $carrierMax);
+        return $this->clampToCarrierRange($validated, $min, $max);
     }
 
     /**
@@ -150,15 +178,22 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * Calculate insurance from carrier settings when the shipment option is set to INHERIT.
      *
+     * When the carrier advertises no maximum, the "insure up to" setting is the only ceiling
+     * that applies — the settings cap is what bounds an otherwise unbounded carrier.
+     *
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      * @param  int                                    $carrierMin
-     * @param  int                                    $carrierMax
+     * @param  null|int                               $carrierMax
      * @param  int                                    $carrierDefault
      *
      * @return int
      */
-    private function calculateFromSettings(Carrier $carrier, int $carrierMin, int $carrierMax, int $carrierDefault): int
-    {
+    private function calculateFromSettings(
+        Carrier $carrier,
+        int $carrierMin,
+        ?int $carrierMax,
+        int $carrierDefault
+    ): int {
         $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
         if (! $carrierSettings->exportInsurance) {
@@ -177,8 +212,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $carrierMin;
         }
 
-        $allowedAmounts = InsuranceTierMath::buildTiers($carrierMin, $carrierMax);
-        $validated      = $this->getMinimumInsuranceAmount($allowedAmounts, $orderAmount);
+        $validated = $this->resolveToTier($orderAmount, $carrierMin, $carrierMax);
 
         $insuranceUpToKey  = $this->getInsuranceUpToKey($this->order->shippingAddress->cc);
         $maxInsuranceValue = $carrierSettings->getAttribute($insuranceUpToKey) ?? 0;
@@ -190,15 +224,19 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * Clamp the given amount to the carrier's allowed insurance range.
      *
-     * @param  int $amount
-     * @param  int $min
-     * @param  int $max
+     * A null maximum means the carrier advertises no ceiling, so only the floor applies.
+     *
+     * @param  int      $amount
+     * @param  int      $min
+     * @param  null|int $max
      *
      * @return int
      */
-    private function clampToCarrierRange(int $amount, int $min, int $max): int
+    private function clampToCarrierRange(int $amount, int $min, ?int $max): int
     {
-        return max($min, min($amount, $max));
+        $floored = max($min, $amount);
+
+        return null === $max ? $floored : min($floored, $max);
     }
 
     /**

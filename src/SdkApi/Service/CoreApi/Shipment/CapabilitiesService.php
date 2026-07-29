@@ -115,7 +115,7 @@ class CapabilitiesService extends AbstractShipmentApiService
 
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
         $response = $this->shipmentApi->postCapabilities($request, $this->getUserAgent());
-        $results  = $response->getResults();
+        $results  = $this->dropDeprecatedInsuranceShape($response->getResults());
 
         return $filterSupported ? $this->filterSupportedCapabilities($results) : $results;
     }
@@ -263,8 +263,46 @@ class CapabilitiesService extends AbstractShipmentApiService
             $request,
             $this->getUserAgent()
         );
-        $items = $response->getItems();
+        $items = $this->dropDeprecatedInsuranceShape($response->getItems());
 
         return $filterSupported ? $this->filterSupportedCapabilities($items) : $items;
+    }
+
+    /**
+     * Remove the deprecated nested insurance wrapper so only the flat bounds survive.
+     *
+     * The API still returns `insured_amount` alongside the flat `min`/`max`/`default`. We drop
+     * it on the way in so nothing downstream can start depending on it again: stored carrier
+     * data and the payload handed to the admin end up flat-only, on the migration refresh and
+     * on every refresh after it.
+     *
+     * Uses the same trick as {@see stripUnregisteredOptions()}: `insured_amount` is declared
+     * non-nullable, and the serializer omits non-nullable nulls, so setting it to null makes
+     * the key disappear from `jsonSerialize()` entirely.
+     *
+     * @TODO: Remove this method and both call sites once INT-1696 has regenerated the SDK
+     *        against the schema without the nested wrapper — there is nothing left to strip
+     *        then, and the property no longer exists on the model.
+     *
+     * @param  array<int, RefCapabilitiesResponseCapabilityV2|RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2> $models
+     *
+     * @return array<int, RefCapabilitiesResponseCapabilityV2|RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2>
+     */
+    private function dropDeprecatedInsuranceShape(array $models): array
+    {
+        foreach ($models as $model) {
+            $options = $model->getOptions();
+
+            if (null !== $options) {
+                $insurance = $options->getInsurance();
+
+                if (null !== $insurance && null !== $insurance->getInsuredAmount()) {
+                    // @phpstan-ignore argument.type
+                    $insurance->offsetSet('insured_amount', null);
+                }
+            }
+        }
+
+        return $models;
     }
 }

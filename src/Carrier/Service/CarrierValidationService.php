@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Util\InsuranceTierMath;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 
 /**
@@ -83,7 +84,8 @@ class CarrierValidationService
     /**
      * Insurance tier ladder allowed for the carrier (cents).
      *
-     * Returns an empty array when the carrier does not support insurance.
+     *  Returns an empty array when the carrier does not support insurance
+     *  or when it does not advertise any maximum amount.
      *
      * @return int[]
      */
@@ -93,12 +95,21 @@ class CarrierValidationService
             return [];
         }
 
-        $insured = $carrier->options->getInsurance()->getInsuredAmount();
+        $insurance = $carrier->options->getInsurance();
+        $max       = $insurance ? $insurance->getMax() : null;
 
-        return InsuranceTierMath::buildTiers(
-            $insured->getMin()->getAmount(),
-            $insured->getMax()->getAmount()
-        );
+        if (! $max) {
+            Logger::warning(
+                'Carrier advertises insurance without a maximum, so no insurance amounts can be offered',
+                ['carrier' => $carrier->carrier]
+            );
+
+            return [];
+        }
+
+        $min = $insurance->getMin();
+
+        return InsuranceTierMath::buildTiers($min ? $min->getAmount() : 0, $max->getAmount());
     }
 
     /**
