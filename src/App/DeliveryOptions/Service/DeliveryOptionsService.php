@@ -231,10 +231,15 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     private function getValidCarrierOptions(PdkCart $cart): array
     {
         $carrierSettings = Settings::get(CarrierSettings::ID);
-        $carrierSettings = is_array($carrierSettings) ? $carrierSettings : [];
 
-        if (empty($carrierSettings)) {
+        if (! is_array($carrierSettings) || empty($carrierSettings)) {
             return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
+        }
+
+        foreach ($carrierSettings as $settings) {
+            if (! is_array($settings)) {
+                return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
+            }
         }
 
         $allCarriers           = $this->carrierRepository->all();

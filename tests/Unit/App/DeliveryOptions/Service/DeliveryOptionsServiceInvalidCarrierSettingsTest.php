@@ -58,8 +58,10 @@ it('does not expose carriers when carrier settings are missing or invalid', func
     expect($result['packageType'])->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME)
         ->and($result['carrierSettings'])->toBe([]);
 })->with([
-    'missing'       => [null],
-    'empty array'   => [[]],
-    'boolean value' => [false],
-    'string value'  => ['invalid'],
+    'missing'                 => [null],
+    'empty array'             => [[]],
+    'malformed carrier entry' => [['carrier' => 'invalid']],
+    'mixed carrier entries'   => [['valid' => [], 'invalid' => 'invalid']],
+    'boolean value'           => [false],
+    'string value'            => ['invalid'],
 ]);
