@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
+use MyParcelNL\Pdk\SdkApi\Middleware\FeatureFlagMiddleware;
 use MyParcelNL\Pdk\SdkApi\Middleware\LoggingMiddleware;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
@@ -201,6 +202,8 @@ abstract class AbstractSdkApiService
     {
         $stack = HandlerStack::create();
         $stack->push(LoggingMiddleware::forApiRequests());
+        // Pushed after logging so the logged request shows the flags that were actually sent.
+        $stack->push(FeatureFlagMiddleware::forApiRequests());
 
         return $stack;
     }
