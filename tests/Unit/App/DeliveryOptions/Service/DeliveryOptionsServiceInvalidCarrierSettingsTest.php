@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
-use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -36,10 +35,6 @@ it('does not expose carriers when carrier settings are missing or invalid', func
                 ? $carrierSettings
                 : $default;
         });
-    $settingsManager
-        ->shouldReceive('all')
-        ->andReturn(new Settings());
-
     Pdk::set(SettingsManagerInterface::class, $settingsManager);
 
     /** @var DeliveryOptionsServiceInterface $service */
