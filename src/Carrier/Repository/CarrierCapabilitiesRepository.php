@@ -34,10 +34,16 @@ class CarrierCapabilitiesRepository extends Repository
      *
      * If a carrier name is provided, only return the contract definition for that carrier.
      *
+     * Results are cached per carrier, because a single page can ask for them many times. Pass $fresh
+     * when the caller knows the cached copy is stale — an upgrade that changes the shape of the
+     * response, for example — so the API is called again and the cache is rewritten rather than
+     * merely bypassed.
+     *
      * @param null|string $carrier Carrier name in v2 format (eg. "POSTNL")
+     * @param bool        $fresh   Skip the cached copy and fetch from the API
      * @return CarrierCollection
      */
-    public function getContractDefinitions(?string $carrier = null): CarrierCollection
+    public function getContractDefinitions(?string $carrier = null, bool $fresh = false): CarrierCollection
     {
         $cacheKey = "contractDefinitions.$carrier";
 
@@ -52,7 +58,7 @@ class CarrierCapabilitiesRepository extends Repository
 
             // Convert the array of contract definitions to a CarrierCollection of Carrier models
             return new CarrierCollection($contractDefinitions);
-        });
+        }, $fresh);
     }
 
     /**
