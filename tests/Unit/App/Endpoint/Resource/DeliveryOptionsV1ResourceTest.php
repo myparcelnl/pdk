@@ -315,56 +315,10 @@ it('maps shipment option keys to Order API format', function () {
         ->not()->toHaveKey('labelDescription');
 });
 
-it('handles tracked option with inverted no_tracking logic when disabled', function () {
-    $shipmentOptions = new ShipmentOptions([
-        'tracked' => TriStateService::DISABLED,
-        'signature' => TriStateService::ENABLED,
-    ]);
+it('never sends the retired tracked option', function () {
+    $options = formatWithNoTracking(TriStateService::ENABLED);
 
-    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
-
-    // When tracked is disabled, no_tracking should be present
-    expect($result['shipmentOptions'])
-        ->toHaveKey('noTracking')
-        ->toHaveKey('requiresSignature')
-        ->not()->toHaveKey('tracked');
-
-    expect($result['shipmentOptions']['noTracking'])->toBeInstanceOf(ArrayObject::class);
-});
-
-it('handles tracked option when enabled by not including no_tracking', function () {
-    $shipmentOptions = new ShipmentOptions([
-        'tracked' => TriStateService::ENABLED,
-        'signature' => TriStateService::ENABLED,
-    ]);
-
-    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
-
-    // When tracked is enabled, no_tracking should NOT be present
-    expect($result['shipmentOptions'])
-        ->not()->toHaveKey('noTracking')
-        ->not()->toHaveKey('tracked')
-        ->toHaveKey('requiresSignature');
-});
-
-it('handles tracked option when not set by not including no_tracking', function () {
-    $shipmentOptions = new ShipmentOptions([
-        'signature' => TriStateService::ENABLED,
-    ]);
-
-    $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
-
-    // When tracked is not set, no_tracking should NOT be present (tracking enabled by default)
-    expect($result['shipmentOptions'])
-        ->not()->toHaveKey('noTracking')
-        ->not()->toHaveKey('tracked')
-        ->toHaveKey('requiresSignature');
+    expect($options)->not->toHaveKey('tracked');
 });
 
 it('maps all supported shipment options correctly', function () {
@@ -403,4 +357,36 @@ it('maps all supported shipment options correctly', function () {
     foreach ($result['shipmentOptions'] as $key => $value) {
         expect($value)->toBeInstanceOf(ArrayObject::class, "Expected {$key} to be an ArrayObject");
     }
+});
+
+/**
+ * Tracking is the default wherever the carrier supports it, so noTracking is only ever sent as an
+ * explicit opt-out. Getting the direction of this wrong would silently disable tracking for every
+ * merchant, hence a case per tri-state value.
+ */
+function formatWithNoTracking(int $noTracking): array
+{
+    $deliveryOptions = new DeliveryOptions([
+        'carrier'         => factory(Carrier::class)->withCarrier('POSTNL')->make(),
+        'packageType'     => 'package',
+        'deliveryType'    => 'standard',
+        'shipmentOptions' => new ShipmentOptions(['noTracking' => $noTracking]),
+    ]);
+
+    return (new DeliveryOptionsV1Resource($deliveryOptions))->format()['shipmentOptions'];
+}
+
+it('omits no tracking when the option is not set', function () {
+    expect(formatWithNoTracking(TriStateService::INHERIT))->not->toHaveKey('noTracking');
+});
+
+it('omits no tracking when the merchant wants tracking', function () {
+    expect(formatWithNoTracking(TriStateService::DISABLED))->not->toHaveKey('noTracking');
+});
+
+it('sends an empty object when the merchant opts out of tracking', function () {
+    $options = formatWithNoTracking(TriStateService::ENABLED);
+
+    expect($options)->toHaveKey('noTracking')
+        ->and($options['noTracking'])->toBeInstanceOf(ArrayObject::class);
 });

@@ -154,8 +154,8 @@ it('saves carrier capabilities as account->shop->carriers correctly', function (
     expect($options->getReturnOnFirstFailedDelivery()->getIsSelectedByDefault())->toBeFalse();
     expect($options->getReturnOnFirstFailedDelivery()->getIsRequired())->toBeFalse();
 
-    expect($options->getTracked()->getIsSelectedByDefault())->toBeFalse();
-    expect($options->getTracked()->getIsRequired())->toBeFalse();
+    expect($options->getNoTracking()->getIsSelectedByDefault())->toBeFalse();
+    expect($options->getNoTracking()->getIsRequired())->toBeFalse();
 
     $insurance = $options->getInsurance();
     expect($insurance->getIsSelectedByDefault())->toBeFalse();

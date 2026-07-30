@@ -13,7 +13,7 @@ use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
@@ -70,7 +70,7 @@ it('saves settings', function (string $productId, array $settings, array $newSet
             (new OnlyRecipientDefinition())->getProductSettingsKey() => TriStateService::ENABLED,
             (new DirectReturnDefinition())->getProductSettingsKey()  => TriStateService::ENABLED,
             (new SignatureDefinition())->getProductSettingsKey()     => TriStateService::ENABLED,
-            (new TrackedDefinition())->getProductSettingsKey()       => TriStateService::ENABLED,
+            (new NoTrackingDefinition())->getProductSettingsKey()       => TriStateService::ENABLED,
             ProductSettings::FIT_IN_DIGITAL_STAMP     => TriStateService::ENABLED,
             ProductSettings::FIT_IN_MAILBOX           => 10,
             ProductSettings::PACKAGE_TYPE             => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,

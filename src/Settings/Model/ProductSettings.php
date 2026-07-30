@@ -21,7 +21,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1|0|1>    $exportOnlyRecipient
  * @property int<-1|0|1>    $exportReturn
  * @property int<-1|0|1>    $exportSignature
- * @property int<-1|0|1>    $exportTracked
+ * @property int<-1|0|1>    $exportNoTracking
  * @property int            $fitInDigitalStamp
  * @property int            $fitInMailbox
  * @property int<-1>|string $packageType

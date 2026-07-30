@@ -91,7 +91,7 @@ it('exposes inherited options', function () {
             'returnOnFirstFailedDelivery' => TriStateService::ENABLED,
             'sameDayDelivery'             => TriStateService::INHERIT,
             'requiresSignature'           => TriStateService::INHERIT,
-            'tracked'                     => TriStateService::INHERIT,
+            'noTracking'                     => TriStateService::INHERIT,
             'requiresReceiptCode'         => TriStateService::INHERIT,
             'scheduledCollection'         => TriStateService::INHERIT,
             'freshFood'                   => TriStateService::INHERIT,
@@ -118,7 +118,7 @@ it('exposes inherited options', function () {
                     // Enabled by carrier
                     'requiresSignature'           => TriStateService::ENABLED,
                     // Disabled by default
-                    'tracked'                     => TriStateService::DISABLED,
+                    'noTracking'                     => TriStateService::DISABLED,
                     'requiresReceiptCode'         => TriStateService::DISABLED,
                     'scheduledCollection'         => TriStateService::DISABLED,
                     'freshFood'                   => TriStateService::DISABLED,
@@ -143,7 +143,7 @@ it('exposes inherited options', function () {
                     'returnOnFirstFailedDelivery' => TriStateService::DISABLED,
                     'sameDayDelivery'             => TriStateService::DISABLED,
                     'requiresSignature'           => TriStateService::DISABLED,
-                    'tracked'                     => TriStateService::DISABLED,
+                    'noTracking'                     => TriStateService::DISABLED,
                     'requiresReceiptCode'         => TriStateService::DISABLED,
                     'scheduledCollection'         => TriStateService::DISABLED,
                     'freshFood'                   => TriStateService::DISABLED,

@@ -15,7 +15,7 @@
                 "exportOnlyRecipient": -1,
                 "exportPriorityDelivery": -1,
                 "exportSignature": -1,
-                "exportTracked": -1,
+                "exportNoTracking": -1,
                 "excludeParcelLockers": -1,
                 "exportFreshFood": -1,
                 "exportFrozen": -1,
@@ -37,7 +37,7 @@
                 "exportOnlyRecipient": -1,
                 "exportPriorityDelivery": -1,
                 "exportSignature": -1,
-                "exportTracked": -1,
+                "exportNoTracking": -1,
                 "excludeParcelLockers": -1,
                 "exportFreshFood": -1,
                 "exportFrozen": -1,
@@ -1229,10 +1229,10 @@
                     "description": "settings_product_export_signature_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "TriStateInput",
-                    "label": "settings_product_export_tracked",
-                    "description": "settings_product_export_tracked_description"
+                    "label": "settings_product_export_no_tracking",
+                    "description": "settings_product_export_no_tracking_description"
                 },
                 {
                     "name": "exportFreshFood",

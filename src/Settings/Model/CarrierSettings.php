@@ -48,7 +48,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
  * @property int<-1|0|1>          $exportReturn
  * @property int<-1|0|1>          $exportReturnLargeFormat
  * @property int<-1|0|1>          $exportSignature
- * @property int<-1|0|1>          $exportTracked
+ * @property int<-1|0|1>          $exportNoTracking
  * @property int<-1|0|1>          $exportCollect
  * @property int<-1|0|1>          $exportFreshFood
  * @property int<-1|0|1>          $exportFrozen

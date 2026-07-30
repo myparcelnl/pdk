@@ -17,7 +17,7 @@ use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesDeliveryTypeCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesPackageTypeCalculator;
@@ -77,7 +77,7 @@ return [
             new SameDayDeliveryDefinition(),
             new SaturdayDeliveryDefinition(),
             new SignatureDefinition(),
-            new TrackedDefinition(),
+            new NoTrackingDefinition(),
             new ReceiptCodeDefinition(),
             new CollectDefinition(),
             new ExcludeParcelLockersDefinition(),
