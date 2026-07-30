@@ -1175,10 +1175,10 @@
             "description": "settings_product_export_signature_description"
         },
         {
-            "name": "exportTracked",
+            "name": "exportNoTracking",
             "$component": "TriStateInput",
-            "label": "settings_product_export_tracked",
-            "description": "settings_product_export_tracked_description"
+            "label": "settings_product_export_no_tracking",
+            "description": "settings_product_export_no_tracking_description"
         },
         {
             "name": "exportFreshFood",

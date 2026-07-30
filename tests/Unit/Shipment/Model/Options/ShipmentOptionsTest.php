@@ -13,14 +13,14 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 usesShared(new UsesMockPdkInstance());
 
 it('fromCapabilitiesDefinitions preserves values when capabilities key matches model key', function () {
-    // When the capabilities key and model key are the same (e.g. 'tracked', 'insurance'),
+    // When the capabilities key and model key are the same (e.g. 'noTracking', 'insurance'),
     // fromCapabilitiesDefinitions must not lose the value.
     $result = ShipmentOptions::fromCapabilitiesDefinitions([
-        'tracked'   => TriStateService::DISABLED,
+        'noTracking'   => TriStateService::DISABLED,
         'insurance' => TriStateService::DISABLED,
     ]);
 
-    expect($result->tracked)->toBe(TriStateService::DISABLED)
+    expect($result->noTracking)->toBe(TriStateService::DISABLED)
         ->and($result->insurance)->toBe(TriStateService::DISABLED);
 });
 
@@ -38,12 +38,12 @@ it('fromCapabilitiesDefinitions preserves all values in export-like merge scenar
     // Simulate merge of existing order shipmentOptions (model keys) with request data (capability keys)
     $existingOptions = [
         'signature' => TriStateService::ENABLED,
-        'tracked'   => TriStateService::INHERIT,
+        'noTracking'   => TriStateService::INHERIT,
     ];
 
     $requestOptions = [
         'requiresSignature' => TriStateService::DISABLED,
-        'tracked'           => TriStateService::DISABLED,
+        'noTracking'           => TriStateService::DISABLED,
         'insurance'         => TriStateService::INHERIT,
     ];
 
@@ -54,7 +54,7 @@ it('fromCapabilitiesDefinitions preserves all values in export-like merge scenar
     // requiresSignature:0 → mapped to signature, overwriting existing 1
     expect($result->signature)->toBe(TriStateService::DISABLED)
         // tracked:0 → same key as model, must not be lost
-        ->and($result->tracked)->toBe(TriStateService::DISABLED)
+        ->and($result->noTracking)->toBe(TriStateService::DISABLED)
         // insurance:-1 → same key as model, must not be lost
         ->and($result->insurance)->toBe(TriStateService::INHERIT);
 });
