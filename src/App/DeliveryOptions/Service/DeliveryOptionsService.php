@@ -22,6 +22,7 @@ use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\FrontendData;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
@@ -33,6 +34,7 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
+use Throwable;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
@@ -176,10 +178,22 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 continue;
             }
 
-            // Use the legacy identifier, matching the carrierSettings keys in the config.
-            $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
+            /*
+             * The config here is only passed to the JS Context for the delivery options.
+             * A failure should not be fatal: the delivery options degrades gracefully and will continue functioning without applying shipment option restrictions from the merchant.
+             */
+            try {
+                // Use the legacy identifier, matching the carrierSettings keys in the config.
+                $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
 
-            $cartShipmentOptions->put($identifier, $this->calculateCartShipmentOptions($carrier, $cart, $packageType));
+                $cartShipmentOptions->put($identifier, $this->calculateCartShipmentOptions($carrier, $cart, $packageType));
+            } catch (Throwable $e) {
+                Logger::error('An error occured when trying to calculate a pending carts shipment options for the delivery options', [
+                    'carrier' => $carrier->carrier,
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
         }
 
         return $cartShipmentOptions;
