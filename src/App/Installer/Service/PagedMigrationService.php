@@ -84,6 +84,11 @@ class PagedMigrationService
 
             $chunks++;
             $page++;
+
+            // A page that came back short is the last one, so stop rather than asking for another.
+            if (count($ids) < $pageSize) {
+                break;
+            }
         }
 
         return $chunks;
