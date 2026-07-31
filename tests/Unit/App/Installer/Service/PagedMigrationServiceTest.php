@@ -44,14 +44,30 @@ function pagesOf(array ...$pages): callable
     };
 }
 
+/**
+ * Schedule the given pages, sizing the page limit to the first page.
+ *
+ * The service treats a short page as the last one, so the limit has to match the fixture for these
+ * pages to be walked the way a real paged query would be.
+ */
+function schedulePagesOf(array ...$pages): int
+{
+    return pagedMigrationService()->schedulePages(
+        'migrate_things',
+        pagesOf(...$pages),
+        'ids',
+        count($pages[0] ?? [1])
+    );
+}
+
 it('schedules one task per page', function () {
-    pagedMigrationService()->schedulePages('migrate_things', pagesOf([1, 2], [3, 4], [5]));
+    schedulePagesOf([1, 2], [3, 4], [5]);
 
     expect(scheduledTasks())->toHaveCount(3);
 });
 
 it('gives each task the ids of its own page', function () {
-    pagedMigrationService()->schedulePages('migrate_things', pagesOf([1, 2], [3]));
+    schedulePagesOf([1, 2], [3]);
 
     $tasks = scheduledTasks();
 
@@ -60,7 +76,7 @@ it('gives each task the ids of its own page', function () {
 });
 
 it('numbers the chunks from one so logs are readable', function () {
-    pagedMigrationService()->schedulePages('migrate_things', pagesOf([1], [2]));
+    schedulePagesOf([1], [2]);
 
     $tasks = scheduledTasks();
 
@@ -69,7 +85,7 @@ it('numbers the chunks from one so logs are readable', function () {
 });
 
 it('schedules every task against the given action', function () {
-    pagedMigrationService()->schedulePages('migrate_things', pagesOf([1], [2]));
+    schedulePagesOf([1], [2]);
 
     foreach (scheduledTasks() as $task) {
         expect($task['callback'])->toBe('migrate_things');
@@ -77,7 +93,7 @@ it('schedules every task against the given action', function () {
 });
 
 it('staggers the chunks so a large shop does not run them all at once', function () {
-    pagedMigrationService()->schedulePages('migrate_things', pagesOf([1], [2], [3]), 'ids', 100, 5);
+    schedulePagesOf([1], [2], [3]);
 
     $tasks = scheduledTasks();
 
@@ -86,14 +102,14 @@ it('staggers the chunks so a large shop does not run them all at once', function
 });
 
 it('schedules nothing when there is nothing to migrate', function () {
-    $chunks = pagedMigrationService()->schedulePages('migrate_things', pagesOf());
+    $chunks = schedulePagesOf();
 
     expect(scheduledTasks())->toBeEmpty()
         ->and($chunks)->toBe(0);
 });
 
 it('reports how many chunks it scheduled', function () {
-    $chunks = pagedMigrationService()->schedulePages('migrate_things', pagesOf([1], [2]));
+    $chunks = schedulePagesOf([1], [2]);
 
     expect($chunks)->toBe(2);
 });
@@ -106,13 +122,33 @@ it('passes the page size to the fetcher so the caller can size its own query', f
         static function (int $page, int $pageSize) use (&$seen): array {
             $seen[] = [$page, $pageSize];
 
-            return 1 === $page ? [1] : [];
+            return 1 === $page ? [1, 2] : [3];
         },
         'ids',
-        25
+        2
     );
 
-    expect($seen)->toBe([[1, 25], [2, 25]]);
+    expect($seen)->toBe([[1, 2], [2, 2]]);
+});
+
+it('stops after a short page instead of asking for another', function () {
+    $pagesFetched = 0;
+
+    pagedMigrationService()->schedulePages(
+        'migrate_things',
+        static function () use (&$pagesFetched): array {
+            $pagesFetched++;
+
+            return [1];
+        },
+        'ids',
+        10
+    );
+
+    // One id against a page size of ten means there is nothing after it. Querying again would cost a
+    // pointless round trip on every shop that runs the migration.
+    expect($pagesFetched)->toBe(1)
+        ->and(scheduledTasks())->toHaveCount(1);
 });
 
 it('lets the caller name the ids key, so already scheduled jobs keep working', function () {
