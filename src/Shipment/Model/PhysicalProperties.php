@@ -7,10 +7,14 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use MyParcelNL\Pdk\Base\Model\Model;
 
 /**
- * @property null|int $height
- * @property null|int $length
- * @property null|int $width
- * @property null|int $weight
+ * Dimensions are in centimeters and the weight is in grams — the units the MyParcel API expects, so
+ * they are sent as-is. Dimensions are optional: null means the merchant left the field empty and the
+ * key is omitted from the request entirely, rather than sent as 0.
+ *
+ * @property null|int $height In centimeters.
+ * @property null|int $length In centimeters.
+ * @property null|int $width  In centimeters.
+ * @property null|int $weight In grams.
  */
 class PhysicalProperties extends Model
 {

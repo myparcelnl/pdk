@@ -10,9 +10,9 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
- * @property null|int $height
- * @property null|int $length
- * @property null|int $width
+ * @property null|int $height        In centimeters, as entered by the merchant. Null when not filled in.
+ * @property null|int $length        In centimeters, as entered by the merchant. Null when not filled in.
+ * @property null|int $width         In centimeters, as entered by the merchant. Null when not filled in.
  * @property int      $initialWeight
  * @property int      $manualWeight
  * @property int      $totalWeight
