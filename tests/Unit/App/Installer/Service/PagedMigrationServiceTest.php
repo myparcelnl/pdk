@@ -55,7 +55,6 @@ function schedulePagesOf(array ...$pages): int
     return pagedMigrationService()->schedulePages(
         'migrate_things',
         pagesOf(...$pages),
-        'ids',
         count($pages[0] ?? [1])
     );
 }
@@ -124,7 +123,6 @@ it('passes the page size to the fetcher so the caller can size its own query', f
 
             return 1 === $page ? [1, 2] : [3];
         },
-        'ids',
         2
     );
 
@@ -141,7 +139,6 @@ it('stops after a short page instead of asking for another', function () {
 
             return [1];
         },
-        'ids',
         10
     );
 
@@ -151,14 +148,9 @@ it('stops after a short page instead of asking for another', function () {
         ->and(scheduledTasks())->toHaveCount(1);
 });
 
-it('lets the caller name the ids key, so already scheduled jobs keep working', function () {
-    // Migration6_5_1 scheduled its chunks with an "orderIds" key. Jobs queued on a live shop before
-    // an upgrade still carry that key, so the caller has to be able to keep using it.
-    pagedMigrationService()->schedulePages('migrate_things', pagesOf([7]), 'orderIds');
+it('passes the ids under a fixed key', function () {
+    schedulePagesOf([7]);
 
-    $context = scheduledTasks()[0]['args'][0];
-
-    expect($context)->toHaveKey('orderIds')
-        ->and($context['orderIds'])->toBe([7])
-        ->and($context)->not->toHaveKey('ids');
+    expect(scheduledTasks()[0]['args'][0])->toHaveKey('ids')
+        ->and(scheduledTasks()[0]['args'][0]['ids'])->toBe([7]);
 });
