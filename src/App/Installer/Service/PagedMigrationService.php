@@ -38,13 +38,11 @@ class PagedMigrationService
     /**
      * Schedule $cronAction once per page of ids, until the fetcher returns an empty page.
      *
-     * Each scheduled task receives one argument: an array holding the page's ids under $idsKey and the
-     * 1-based chunk number under "chunk". $idsKey is configurable so a caller can keep an existing key
-     * that queued jobs already rely on, rather than stranding work scheduled before an upgrade.
+     * Each scheduled task receives one argument: an array holding the page's ids under "ids" and the
+     * 1-based chunk number under "chunk".
      *
      * @param  string   $cronAction           Registered action the platform dispatches per chunk
      * @param  callable $fetchPage            fn(int $page, int $pageSize): int[]
-     * @param  string   $idsKey               Key the ids are passed under
      * @param  int      $pageSize             How many records per chunk
      * @param  int      $secondsBetweenChunks Delay added per chunk, so they do not all fire at once
      *
@@ -53,7 +51,6 @@ class PagedMigrationService
     public function schedulePages(
         string   $cronAction,
         callable $fetchPage,
-        string   $idsKey = 'ids',
         int      $pageSize = 100,
         int      $secondsBetweenChunks = 5
     ): int {
@@ -71,7 +68,7 @@ class PagedMigrationService
             $timestamp = $now + $chunks * $secondsBetweenChunks;
 
             $this->cronService->schedule($cronAction, $timestamp, [
-                $idsKey => $ids,
+                'ids'   => $ids,
                 'chunk' => $chunks + 1,
             ]);
 
