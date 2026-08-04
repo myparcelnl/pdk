@@ -509,6 +509,61 @@ it('runs timestamp-based migrations after version-based ones within the same exe
     unset($GLOBALS['__migration_order']);
 });
 
+it('leaves a migration that reports failure unrecorded, so it runs again', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockFailingTimestampedMigration::class
+    );
+
+    Installer::install();
+
+    // Recording it would strand the shop: nothing would ever attempt the work again.
+    expect($settingsRepository->get($appliedMigrationsKey))
+        ->not->toContain('2025_01_01_000000_mock_failing');
+});
+
+it('keeps running later migrations after one reports failure', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    $settingsRepository->store($installedVersionKey, '1.1.0');
+    $settingsRepository->store($appliedMigrationsKey, null);
+
+    // The failing one sorts first by id, so the other only runs if failure does not halt the pass.
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockFailingTimestampedMigration::class
+    );
+    \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::addUpgradeMigration(
+        \MyParcelNL\Pdk\Tests\Bootstrap\MockTimestampedMigration20260101::class
+    );
+
+    $GLOBALS['__migration_order'] = [];
+
+    Installer::install();
+
+    $order = $GLOBALS['__migration_order'];
+
+    expect($order)
+        ->toContain('2025_01_01_000000_mock_failing')
+        ->toContain('2026_01_01_000000_mock_timestamped');
+
+    // The one that succeeded is still recorded, so only the failure is retried.
+    expect($settingsRepository->get($appliedMigrationsKey))
+        ->toContain('2026_01_01_000000_mock_timestamped')
+        ->not->toContain('2025_01_01_000000_mock_failing');
+
+    unset($GLOBALS['__migration_order']);
+});
+
 it('runs a new timestamp migration even when current version is an RC below installed version', function () {
     // Simulate the WC test environment: installed is 1.3.0, but this build reports 1.3.0-rc.999
     Pdk::set('appInfo', new AppInfo([

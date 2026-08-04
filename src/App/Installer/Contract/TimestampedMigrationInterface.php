@@ -13,4 +13,17 @@ interface TimestampedMigrationInterface extends MigrationInterface
      * a timestamp, sorting ids alphabetically also sorts the migrations oldest-to-newest.
      */
     public function getId(): string;
+
+    /**
+     * Whether the migration ran but did not finish its work.
+     *
+     * A migration that depends on something outside the shop — an API call, say — can fail for reasons
+     * that will clear up on their own. Throwing would abort the upgrade and, because the installer never
+     * records a migration that throws, leave the shop retrying a fatal on every load. Reporting failure
+     * instead lets the upgrade continue while keeping the migration unrecorded, so it is picked up again
+     * next time.
+     *
+     * @see \MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration::markFailed()
+     */
+    public function hasFailed(): bool;
 }
