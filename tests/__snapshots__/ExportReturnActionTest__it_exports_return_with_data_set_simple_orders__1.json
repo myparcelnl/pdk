@@ -87,6 +87,7 @@
                     "number": "31",
                     "postalCode": "2132 JE",
                     "street": "Antareslaan",
+                    "isBusiness": true,
                     "email": "support@myparcel.nl",
                     "person": "Felicia Parcel",
                     "company": "MyParcel"
@@ -97,6 +98,7 @@
                     "number": "31",
                     "postalCode": "2132 JE",
                     "street": "Antareslaan",
+                    "isBusiness": true,
                     "email": "support@myparcel.nl",
                     "person": "Felicia Parcel",
                     "company": "MyParcel"
@@ -405,6 +407,7 @@
                             "number": "31",
                             "postalCode": "2132 JE",
                             "street": "Antareslaan",
+                            "isBusiness": true,
                             "email": "support@myparcel.nl",
                             "person": "Felicia Parcel",
                             "company": "MyParcel"
@@ -957,6 +960,7 @@
                     "number": "31",
                     "postalCode": "2132 JE",
                     "street": "Antareslaan",
+                    "isBusiness": true,
                     "email": "support@myparcel.nl",
                     "person": "Felicia Parcel",
                     "company": "MyParcel"
@@ -967,6 +971,7 @@
                     "number": "31",
                     "postalCode": "2132 JE",
                     "street": "Antareslaan",
+                    "isBusiness": true,
                     "email": "support@myparcel.nl",
                     "person": "Felicia Parcel",
                     "company": "MyParcel"

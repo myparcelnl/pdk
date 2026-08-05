@@ -48,7 +48,7 @@ final class CapabilitiesDeliveryTypeCalculator extends AbstractPdkOrderOptionCal
         // Cache key: cc+carrier+package_type — same shape as the package-type calc's calls.
         $capabilities = $this->capabilitiesService->getRepository()->getCapabilities([
             'carrier'      => $carrier->carrier,
-            'recipient'    => ['country_code' => $cc],
+            'recipient'    => $this->capabilitiesRecipient(),
             'package_type' => $v2PackageType,
         ]);
         $capability = $capabilities[0] ?? null;

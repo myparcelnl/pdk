@@ -158,6 +158,7 @@
         "number": "31",
         "postalCode": "2132JE",
         "street": "Antareslaan",
+        "isBusiness": false,
         "person": "Jaap Krekel"
     },
     "sender": {
@@ -166,6 +167,7 @@
         "number": "31",
         "postalCode": "2132 JE",
         "street": "Antareslaan",
+        "isBusiness": true,
         "email": "spam@myparcel.nl",
         "phone": "0612345678",
         "person": "Bye Felicia",

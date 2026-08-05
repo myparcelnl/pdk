@@ -21,6 +21,7 @@ use MyParcelNL\Pdk\Base\Support\Utils;
  * @property null|string $state Depending on the carrier and destination this field should contain address state. Up to 2 characters long.
  * @property null|string $street
  * @property null|string $streetAdditionalInfo
+ * @property bool        $isBusiness Whether the recipient is a business, derived from the presence of a company name.
  */
 class Address extends Model
 {
@@ -41,6 +42,7 @@ class Address extends Model
         'state'         => null,
         'street'        => null,
         'streetAdditionalInfo' => null,
+        'isBusiness'    => false,
     ];
 
     protected $casts = [
@@ -54,6 +56,7 @@ class Address extends Model
         'state'         => 'string',
         'street'        => 'string',
         'streetAdditionalInfo' => 'string',
+        'isBusiness'    => 'boolean',
     ];
 
     /*
@@ -82,6 +85,35 @@ class Address extends Model
         $convertedData = $data ? $this->handleDeprecatedFields(Utils::changeArrayKeysCase($data)) : $data;
 
         parent::__construct($convertedData);
+
+        // INT-1690 support: settle the business flag deterministically after fill. A supplied
+        // company name is authoritative — it always dictates the flag, so a stale/round-tripped
+        // isBusiness cannot override it. An explicit isBusiness only applies when no company is
+        // given. `company` is not an Address attribute, so it is read here only to derive the flag
+        // and is never stored or serialised on a bare Address — it lives on ContactDetails, the
+        // PII-bearing model.
+        if (is_array($convertedData)) {
+            if (array_key_exists('company', $convertedData)) {
+                $this->attributes['isBusiness'] = self::deriveIsBusiness($convertedData['company']);
+            } elseif (array_key_exists('isBusiness', $convertedData)) {
+                $this->attributes['isBusiness'] = $convertedData['isBusiness'];
+            }
+        }
+    }
+
+    /**
+     * Whether a recipient counts as a business, based on the presence of a (trimmed) company name.
+     *
+     * The single home for this rule; ContactDetails::setCompanyAttribute() reuses it so the flag
+     * stays consistent whether the company arrives at construction or is changed afterwards.
+     *
+     * @param  null|string $company
+     *
+     * @return bool
+     */
+    protected static function deriveIsBusiness(?string $company): bool
+    {
+        return '' !== trim((string) $company);
     }
 
     /**

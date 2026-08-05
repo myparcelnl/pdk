@@ -104,7 +104,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
         $args = [
             'carrier'      => $carrierName,
-            'recipient'    => ['country_code' => $cc],
+            'recipient'    => $this->capabilitiesRecipient(),
             'package_type' => $v2PackageType,
         ];
 

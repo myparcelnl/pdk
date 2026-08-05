@@ -168,6 +168,7 @@
         "numberSuffix": "c",
         "postalCode": "7345AB",
         "street": "Wieselsedwarsweg",
+        "isBusiness": false,
         "email": "test@webshopje.nl",
         "phone": "0172765435",
         "person": "Epke Zonderland"
@@ -178,6 +179,7 @@
         "number": "31",
         "postalCode": "2132JE",
         "street": "Antareslaan",
+        "isBusiness": true,
         "email": "mrparcel@myparcel.nl",
         "phone": "0606607834",
         "person": "Mister Parcel",

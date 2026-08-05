@@ -119,6 +119,52 @@ it('getCapabilities serializes nested arrays to V2 wire keys via SDK attributeMa
         ->toMatchArray(['value' => 1500, 'unit' => 'g']);
 });
 
+// isBusiness reaches the wire as three distinct states — true, false, or omitted (SDK
+// beta.30+ defaults it to null, so an unset flag is left off rather than forced to true).
+it('omits isBusiness from the wire when the caller did not set it', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities(['recipient' => ['country_code' => 'NL']]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'])
+        ->toHaveKey('countryCode', 'NL')
+        ->not->toHaveKey('isBusiness');
+});
+
+it('sends an explicit isBusiness value on the wire', function (bool $value) {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities(['recipient' => ['country_code' => 'NL', 'is_business' => $value]]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'])->toHaveKey('isBusiness', $value);
+})->with([
+    'business' => [true],
+    'consumer' => [false],
+]);
+
+it('honours a camelCase isBusiness input identically', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities(['recipient' => ['countryCode' => 'NL', 'isBusiness' => true]]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'])->toHaveKey('isBusiness', true);
+});
+
 it('getCapabilities accepts API-style camelCase keys at every nesting level and produces correct V2 wire format', function () {
     TestBootstrapper::hasApiKey('test-key');
 

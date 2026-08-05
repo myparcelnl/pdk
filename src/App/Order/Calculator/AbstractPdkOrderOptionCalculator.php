@@ -21,4 +21,22 @@ abstract class AbstractPdkOrderOptionCalculator implements PdkOrderOptionCalcula
     {
         $this->order = $order;
     }
+
+    /**
+     * Build the capabilities recipient for this order's shipping address.
+     *
+     * The recipient is always known at order-processing time, so the business flag is always sent
+     * explicitly (true or false) — capabilities are then resolved for the correct B2B/B2C context.
+     *
+     * @return array{country_code: null|string, is_business: bool}
+     */
+    protected function capabilitiesRecipient(): array
+    {
+        $address = $this->order->shippingAddress;
+
+        return [
+            'country_code' => $address->cc,
+            'is_business'  => $address->isBusiness,
+        ];
+    }
 }
