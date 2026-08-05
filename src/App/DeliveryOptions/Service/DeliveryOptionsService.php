@@ -236,10 +236,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
         }
 
-        foreach ($carrierSettings as $settings) {
-            if (! is_array($settings)) {
-                return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
-            }
+        $carrierSettings = array_filter($carrierSettings, static function ($settings): bool {
+            return is_array($settings);
+        });
+
+        if (empty($carrierSettings)) {
+            return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
         }
 
         $allCarriers           = $this->carrierRepository->all();

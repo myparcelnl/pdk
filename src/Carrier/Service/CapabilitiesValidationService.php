@@ -123,11 +123,16 @@ class CapabilitiesValidationService
     {
         $carrierSettings = Settings::get(CarrierSettings::ID) ?? [];
 
+        if (! is_array($carrierSettings)) {
+            return [];
+        }
+
         return array_keys(
             array_filter(
                 $carrierSettings,
                 static function ($settings): bool {
-                    return ! empty($settings[CarrierSettings::DELIVERY_OPTIONS_ENABLED]);
+                    return is_array($settings)
+                        && ! empty($settings[CarrierSettings::DELIVERY_OPTIONS_ENABLED]);
                 }
             )
         );
