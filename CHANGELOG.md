@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.0](https://github.com/myparcelnl/pdk/compare/v4.4.2...v4.5.0) (2026-08-05)
+
+
+### :sparkles: New Features
+
+* correct B2B/B2C capabilities via an address-based isBusiness flag ([#504](https://github.com/myparcelnl/pdk/issues/504)) ([2bc58a5](https://github.com/myparcelnl/pdk/commit/2bc58a5bb6271c14606498ff48b295371856d149)), closes [myparcelnl/core-api#4658](https://github.com/myparcelnl/core-api/issues/4658) [sdk#631](https://github.com/myparcelnl/sdk/issues/631)
+
 ## [4.4.2](https://github.com/myparcelnl/pdk/compare/v4.4.1...v4.4.2) (2026-07-17)
 
 ## [4.4.1](https://github.com/myparcelnl/pdk/compare/v4.4.0...v4.4.1) (2026-07-16)
