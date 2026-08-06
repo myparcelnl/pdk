@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\App\Installer\Migration;
 
 use LogicException;
 use MyParcelNL\Pdk\App\Installer\Contract\TimestampedMigrationInterface;
+use MyParcelNL\Pdk\Facade\Logger;
 
 /**
  * Base for file-based, timestamp-named migrations.
@@ -20,6 +21,35 @@ abstract class AbstractTimestampedMigration implements TimestampedMigrationInter
 {
     /** @var string */
     private $id = '';
+
+    /** @var bool */
+    private $failed = false;
+
+    /**
+     * @inheritDoc
+     */
+    public function hasFailed(): bool
+    {
+        return $this->failed;
+    }
+
+    /**
+     * Report that this run did not finish, so the installer leaves the migration unrecorded.
+     *
+     * Call this instead of throwing when the work could not be completed for a reason that may resolve
+     * itself, so the upgrade carries on and the migration is attempted again on the next load. The reason
+     * is logged as an error, because a migration that quietly keeps failing is worse than one that fails
+     * loudly.
+     *
+     * @param  string $reason  What could not be done, in terms a reader of the log will understand
+     * @param  array  $context Extra detail for the log entry
+     */
+    protected function markFailed(string $reason, array $context = []): void
+    {
+        $this->failed = true;
+
+        Logger::error($reason, $context + ['migration' => $this->id]);
+    }
 
     /**
      * Called by the InstallerService loader once the migration file has been required.

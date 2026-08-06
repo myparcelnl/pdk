@@ -68,7 +68,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
         // weight are filtered client-side so the cache stays warm regardless of order weight.
         $currentCapability = $this->capabilitiesService->indexByCarrier(
             $this->capabilitiesService->getRepository()->getCapabilities([
-                'recipient'    => ['country_code' => $cc],
+                'recipient'    => $this->capabilitiesRecipient(),
                 'package_type' => $v2CurrentType,
             ])
         )[$carrier->carrier] ?? null;
@@ -138,7 +138,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
 
             $capability = $this->capabilitiesService->indexByCarrier(
                 $this->capabilitiesService->getRepository()->getCapabilities([
-                    'recipient'    => ['country_code' => $cc],
+                    'recipient'    => $this->capabilitiesRecipient(),
                     'package_type' => $v2Name,
                 ])
             )[$carrier->carrier] ?? null;

@@ -58,6 +58,8 @@ use MyParcelNL\Pdk\Frontend\Service\ScriptService;
 use MyParcelNL\Pdk\Notification\Contract\NotificationServiceInterface;
 use MyParcelNL\Pdk\Notification\Service\NotificationService;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
+use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
+use MyParcelNL\Pdk\SdkApi\Service\GuzzleSdkClientFactory;
 use MyParcelNL\Pdk\Settings\Contract\SettingsManagerInterface;
 use MyParcelNL\Pdk\Settings\Contract\SettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\SettingsManager;
@@ -170,6 +172,12 @@ return [
      * Handles retrieving settings.
      */
     SettingsManagerInterface::class            => autowire(SettingsManager::class),
+
+    /**
+     * Builds the HTTP client every SdkApi service sends its requests through. Replace this to
+     * route all SdkApi traffic elsewhere, for example at a mock queue in tests.
+     */
+    SdkClientFactoryInterface::class            => autowire(GuzzleSdkClientFactory::class),
 
     /**
      * Default storage driver for all repositories. Defaults to in-memory storage. Can be replaced with a proper cache driver.

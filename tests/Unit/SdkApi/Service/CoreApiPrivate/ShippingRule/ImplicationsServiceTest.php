@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Psr\Http\Message\RequestInterface;
 
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\SdkApi\MockSdkClientFactory;
 
 usesShared(new UsesMockPdkInstance());
 
@@ -33,7 +34,10 @@ class MockableImplicationsService extends ImplicationsService
     public function __construct()
     {
         $this->mockHandler = new MockHandler();
-        parent::__construct();
+
+        // Unused: createGuzzleClient() below is overridden to build the client from this
+        // instance's own handler so requests can be captured per instance.
+        parent::__construct(new MockSdkClientFactory());
     }
 
     protected function createGuzzleClient(): \GuzzleHttp\Client

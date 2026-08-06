@@ -10,9 +10,9 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
 /**
- * @property null|int $height
- * @property null|int $length
- * @property null|int $width
+ * @property null|int $height        In centimeters, as entered by the merchant. Null when not filled in.
+ * @property null|int $length        In centimeters, as entered by the merchant. Null when not filled in.
+ * @property null|int $width         In centimeters, as entered by the merchant. Null when not filled in.
  * @property int      $initialWeight
  * @property int      $manualWeight
  * @property int      $totalWeight
@@ -55,6 +55,9 @@ class PdkPhysicalProperties extends Model
     public function toStorableArray(): array
     {
         return Utils::filterNull([
+            'height'       => $this->height,
+            'length'       => $this->length,
+            'width'        => $this->width,
             'manualWeight' => TriStateService::INHERIT === $this->manualWeight ? null : $this->manualWeight,
         ]);
     }
@@ -69,5 +72,56 @@ class PdkPhysicalProperties extends Model
         $triStateService = Pdk::get(TriStateService::class);
 
         return $triStateService->resolve($this->manualWeight, $this->initialWeight);
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return self
+     * @noinspection PhpUnused
+     */
+    protected function setHeightAttribute($value): self
+    {
+        return $this->setDimension('height', $value);
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return self
+     * @noinspection PhpUnused
+     */
+    protected function setLengthAttribute($value): self
+    {
+        return $this->setDimension('length', $value);
+    }
+
+    /**
+     * @param  mixed $value
+     *
+     * @return self
+     * @noinspection PhpUnused
+     */
+    protected function setWidthAttribute($value): self
+    {
+        return $this->setDimension('width', $value);
+    }
+
+    /**
+     * Dimensions are optional and intentionally not validated: 0 and -1 are passed through to the
+     * API unchanged. An empty field must not become 0 though, and the admin's number input emits
+     * an empty string when cleared, which the int cast would silently turn into 0. Anything
+     * non-numeric therefore becomes null, so the key is omitted from storage and from the request.
+     *
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return self
+     */
+    private function setDimension(string $key, $value): self
+    {
+        $this->attributes[$key] = is_numeric($value) ? (int) $value : null;
+
+        return $this;
     }
 }

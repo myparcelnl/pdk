@@ -12,6 +12,7 @@ use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Logger\Contract\PdkLoggerInterface;
+use MyParcelNL\Pdk\SdkApi\Service\GuzzleSdkClientFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
@@ -40,7 +41,10 @@ class MockableCapabilitiesService extends CapabilitiesService
     public function __construct()
     {
         $this->mockHandler = new MockHandler();
-        parent::__construct();
+
+        // The factory handed up is never used: createGuzzleClient() below is overridden to build
+        // the client from this class's own handler so requests can be captured per instance.
+        parent::__construct(new GuzzleSdkClientFactory());
     }
 
     protected function createGuzzleClient(): \GuzzleHttp\Client
@@ -69,7 +73,7 @@ class MockableCapabilitiesService extends CapabilitiesService
 it('can be instantiated', function () {
     TestBootstrapper::hasApiKey('valid-key');
 
-    expect(new CapabilitiesService())->toBeInstanceOf(CapabilitiesService::class);
+    expect(new CapabilitiesService(new GuzzleSdkClientFactory()))->toBeInstanceOf(CapabilitiesService::class);
 });
 
 it('getCapabilities returns array of results from API response', function () {
@@ -117,6 +121,52 @@ it('getCapabilities serializes nested arrays to V2 wire keys via SDK attributeMa
         // Nested physical_properties.weight: untranslated leaf keys (value/unit) match V2 schema as-is.
         ->and($body['physicalProperties']['weight'])
         ->toMatchArray(['value' => 1500, 'unit' => 'g']);
+});
+
+// isBusiness reaches the wire as three distinct states — true, false, or omitted (SDK
+// beta.30+ defaults it to null, so an unset flag is left off rather than forced to true).
+it('omits isBusiness from the wire when the caller did not set it', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities(['recipient' => ['country_code' => 'NL']]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'])
+        ->toHaveKey('countryCode', 'NL')
+        ->not->toHaveKey('isBusiness');
+});
+
+it('sends an explicit isBusiness value on the wire', function (bool $value) {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities(['recipient' => ['country_code' => 'NL', 'is_business' => $value]]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'])->toHaveKey('isBusiness', $value);
+})->with([
+    'business' => [true],
+    'consumer' => [false],
+]);
+
+it('honours a camelCase isBusiness input identically', function () {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode(['results' => []])));
+
+    $service->getCapabilities(['recipient' => ['countryCode' => 'NL', 'isBusiness' => true]]);
+
+    $body = json_decode((string) $service->capturedRequests[0]->getBody(), true);
+
+    expect($body['recipient'])->toHaveKey('isBusiness', true);
 });
 
 it('getCapabilities accepts API-style camelCase keys at every nesting level and produces correct V2 wire format', function () {
@@ -170,7 +220,7 @@ it('getCapabilities silently drops legacy V1 recipient.cc input under V2', funct
 it('getCapabilities rejects incorrect parameter types before making a request', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    $service = new CapabilitiesService();
+    $service = new CapabilitiesService(new GuzzleSdkClientFactory());
 
     $allowedValuesString = implode("', '", RefCapabilitiesSharedCarrierV2::getAllowableEnumValues());
 
@@ -288,7 +338,7 @@ it('getContractDefinitions accepts null carrier to retrieve all definitions', fu
 it('getContractDefinitions rejects unknown carrier names before making a request', function () {
     TestBootstrapper::hasApiKey('valid-key');
 
-    $service = new CapabilitiesService();
+    $service = new CapabilitiesService(new GuzzleSdkClientFactory());
 
     expect(fn() => $service->getContractDefinitions('unknown_carrier'))
         ->toThrow(\InvalidArgumentException::class, 'carrier');

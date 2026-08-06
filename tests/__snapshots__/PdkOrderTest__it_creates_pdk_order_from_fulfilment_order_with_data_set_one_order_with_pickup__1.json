@@ -78,7 +78,9 @@
             "deliveryType": "standard",
             "packageType": "package"
         },
-        "shippingAddress": [],
+        "shippingAddress": {
+            "isBusiness": false
+        },
         "shipments": [],
         "physicalProperties": {
             "initialWeight": 3500,

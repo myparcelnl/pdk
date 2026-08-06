@@ -55,6 +55,66 @@ it('creates a storable array', function (int $manualWeight, array $result) {
 
     expect($physicalProperties->toStorableArray())->toBe($result);
 })->with([
-    'manual weight set' => [2000, ['manualWeight' => 2000]],
-    'manual weight -1'  => [TriStateService::INHERIT, []],
+    'manual weight set' => [
+        2000,
+        ['height' => 30, 'length' => 40, 'width' => 20, 'manualWeight' => 2000],
+    ],
+    'manual weight -1'  => [
+        TriStateService::INHERIT,
+        ['height' => 30, 'length' => 40, 'width' => 20],
+    ],
 ]);
+
+it('only stores dimensions the merchant filled in', function ($input, array $result) {
+    $physicalProperties = factory(PdkPhysicalProperties::class)
+        ->fromScratch()
+        ->make();
+
+    $physicalProperties->fill(['height' => $input, 'length' => $input, 'width' => $input]);
+
+    expect($physicalProperties->toStorableArray())->toBe($result);
+})->with([
+    'empty string is omitted, not stored as 0' => [
+        '',
+        [],
+    ],
+
+    'null is omitted' => [
+        null,
+        [],
+    ],
+
+    'non-numeric input is omitted' => [
+        'abc',
+        [],
+    ],
+
+    'zero is stored as-is' => [
+        0,
+        ['height' => 0, 'length' => 0, 'width' => 0],
+    ],
+
+    'negative values are stored as-is' => [
+        -1,
+        ['height' => -1, 'length' => -1, 'width' => -1],
+    ],
+
+    'numeric strings are cast to int' => [
+        '30',
+        ['height' => 30, 'length' => 30, 'width' => 30],
+    ],
+]);
+
+it('clears a previously filled dimension when the field is emptied', function () {
+    $physicalProperties = factory(PdkPhysicalProperties::class)
+        ->fromScratch()
+        ->with(['height' => 30, 'length' => 40, 'width' => 20])
+        ->make();
+
+    $physicalProperties->fill(['height' => '']);
+
+    expect($physicalProperties->height)
+        ->toBeNull()
+        ->and($physicalProperties->toStorableArray())
+        ->toBe(['length' => 40, 'width' => 20]);
+});

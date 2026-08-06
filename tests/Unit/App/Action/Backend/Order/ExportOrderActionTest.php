@@ -87,6 +87,61 @@ function getRequestOptions(array $body, bool $orderMode, int $idx = 0): array
 }
 
 /**
+ * Returns the physical properties array from the API request body, accounting for order vs shipment
+ * mode. Dimensions must reach both APIs, so every dimension test runs against both.
+ */
+function getRequestPhysicalProperties(array $body, bool $orderMode, int $idx = 0): array
+{
+    return $orderMode
+        ? ($body['data']['orders'][$idx]['shipment']['physical_properties'] ?? [])
+        : ($body['data']['shipments'][$idx]['physical_properties'] ?? []);
+}
+
+/**
+ * Stores a single order with the given physical properties, fires the export and returns the API
+ * request body.
+ *
+ * Concept shipments are enabled so the export stops after the create call — otherwise it goes on to
+ * fetch labels and shipments, and the last recorded request would no longer be the one under test.
+ */
+function exportWithPhysicalProperties(bool $orderMode, array $physicalProperties): array
+{
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+    );
+
+    $fakeCarrier = factory(Carrier::class)
+        ->withCarrier('POSTNL')
+        ->withAllCapabilities()
+        ->make();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withConceptShipments(true))
+        ->store();
+
+    $collection = factory(PdkOrderCollection::class)
+        ->push(
+            factory(PdkOrder::class)
+                ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($fakeCarrier))
+                ->withPhysicalProperties($physicalProperties)
+        )
+        ->store()
+        ->make();
+
+    MockApi::enqueue(
+        ...$orderMode
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
+    );
+
+    Actions::execute(PdkBackendActions::EXPORT_ORDERS, [
+        'orderIds' => Arr::pluck($collection->toArray(), 'externalIdentifier'),
+    ]);
+
+    return json_decode(MockApi::ensureLastRequest()->getBody()->getContents(), true);
+}
+
+/**
  * In order mode all option keys are always present (disabled ones === 0). Asserts that the target
  * option equals 1 and every other integer-valued option (except structural keys) equals 0.
  */
@@ -1112,3 +1167,120 @@ it(
         // explicit mock API responses.
     ])
     ->with('order mode toggle');
+
+/**
+ * Manual dimensions: whatever the merchant typed is forwarded verbatim and unvalidated, in
+ * centimeters. Both the shipment API and the legacy order v1 API must receive them, hence the order
+ * mode toggle on every case.
+ */
+it('sends only the dimensions the merchant filled in', function (bool $orderMode) {
+    $body = exportWithPhysicalProperties($orderMode, ['height' => '', 'length' => 40, 'width' => 20]);
+
+    $physicalProperties = getRequestPhysicalProperties($body, $orderMode);
+
+    expect($physicalProperties)
+        ->toHaveKey('length')
+        ->and($physicalProperties['length'])
+        ->toBe(40)
+        ->and($physicalProperties)
+        ->toHaveKey('width')
+        ->and($physicalProperties['width'])
+        ->toBe(20)
+        // An emptied field must be omitted entirely, never sent as 0.
+        ->and($physicalProperties)
+        ->not->toHaveKey('height');
+})->with('order mode toggle');
+
+it('omits all dimensions when the merchant filled in none', function (bool $orderMode) {
+    $body = exportWithPhysicalProperties($orderMode, []);
+
+    $physicalProperties = getRequestPhysicalProperties($body, $orderMode);
+
+    expect($physicalProperties)
+        ->not->toHaveKey('height')
+        ->and($physicalProperties)
+        ->not->toHaveKey('length')
+        ->and($physicalProperties)
+        ->not->toHaveKey('width')
+        // Weight is unconditional and must keep being sent.
+        ->and($physicalProperties)
+        ->toHaveKey('weight');
+})->with('order mode toggle');
+
+it('sends zero and negative dimensions unchanged', function (bool $orderMode) {
+    $body = exportWithPhysicalProperties($orderMode, ['height' => 0, 'length' => -1, 'width' => 20]);
+
+    $physicalProperties = getRequestPhysicalProperties($body, $orderMode);
+
+    expect($physicalProperties['height'])
+        ->toBe(0)
+        ->and($physicalProperties['length'])
+        ->toBe(-1)
+        ->and($physicalProperties['width'])
+        ->toBe(20);
+})->with('order mode toggle');
+
+/**
+ * The admin form always posts a physicalProperties object, and it is empty whenever the merchant did
+ * not touch the dimension fields (the form serializer emits the enabled fields as undefined, which
+ * JSON.stringify drops). That empty object must merge to a no-op and leave stored dimensions intact.
+ */
+it('keeps stored dimensions when the form posts an empty physicalProperties object', function (bool $orderMode) {
+    TestBootstrapper::hasSubscriptionFeatures(
+        $orderMode ? [PdkAccountFeaturesService::FEATURE_LEGACY_ORDER_MANAGEMENT] : []
+    );
+
+    $fakeCarrier = factory(Carrier::class)
+        ->withCarrier('POSTNL')
+        ->withAllCapabilities()
+        ->make();
+
+    factory(Settings::class)
+        ->withOrder(factory(OrderSettings::class)->withConceptShipments(true))
+        ->store();
+
+    $orderFactory = factory(PdkOrderCollection::class)->push(
+        factory(PdkOrder::class)
+            ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier($fakeCarrier))
+            ->withPhysicalProperties(['height' => 30, 'length' => 40, 'width' => 20])
+    );
+
+    $orders = new Collection($orderFactory->make());
+
+    $orderFactory->store();
+
+    MockApi::enqueue(
+        ...$orderMode
+            ? [new ExamplePostOrdersResponse(), new ExamplePostOrderNotesResponse()]
+            : [new ExamplePostShipmentsResponse()]
+    );
+
+    Actions::execute(
+        new Request(
+            [
+                'action'   => PdkBackendActions::EXPORT_ORDERS,
+                'orderIds' => $orders
+                    ->pluck('externalIdentifier')
+                    ->toArray(),
+            ],
+            [],
+            [],
+            [],
+            [],
+            [],
+            json_encode(['data' => ['orders' => [['physicalProperties' => []]]]])
+        )
+    );
+
+    $physicalProperties = getRequestPhysicalProperties(
+        json_decode(MockApi::ensureLastRequest()->getBody()->getContents(), true),
+        $orderMode
+    );
+
+    expect($physicalProperties['height'])
+        ->toBe(30)
+        ->and($physicalProperties['length'])
+        ->toBe(40)
+        ->and($physicalProperties['width'])
+        ->toBe(20);
+})->with('order mode toggle');

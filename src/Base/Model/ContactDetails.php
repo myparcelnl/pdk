@@ -39,4 +39,21 @@ class ContactDetails extends Address
 
         parent::__construct($data);
     }
+
+    /**
+     * Keep the derived {@see Address::$isBusiness} flag in sync whenever the company changes —
+     * at construction (fill routes through here) and on any later assignment or fill. Reuses the
+     * shared rule so business detection lives in one place.
+     *
+     * @param  null|string $company
+     *
+     * @return self
+     */
+    protected function setCompanyAttribute($company): self
+    {
+        $this->attributes['company']    = $company;
+        $this->attributes['isBusiness'] = self::deriveIsBusiness($company);
+
+        return $this;
+    }
 }

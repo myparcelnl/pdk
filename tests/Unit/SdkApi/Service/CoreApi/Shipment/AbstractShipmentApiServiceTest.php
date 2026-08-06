@@ -14,12 +14,18 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\SdkApi\MockSdkClientFactory;
 
 usesShared(new UsesMockPdkInstance());
 
 // Concrete implementation for testing
 class ConcreteShipmentApiServiceForTest extends AbstractShipmentApiService
 {
+    public function __construct()
+    {
+        parent::__construct(new MockSdkClientFactory());
+    }
+
     public function getShipmentApiInstance(): ShipmentApi
     {
         return $this->shipmentApi;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\Iam;
 
+use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
 use MyParcelNL\Sdk\Client\Generated\IamApi\Api\DefaultApi;
 use MyParcelNL\Sdk\Client\Generated\IamApi\Model\FixedPrincipal;
 use Override;
@@ -29,8 +30,10 @@ class WhoamiService extends AbstractIamApiService
      */
     private $iamApi;
 
-    public function __construct()
+    public function __construct(SdkClientFactoryInterface $clientFactory)
     {
+        parent::__construct($clientFactory);
+
         $this->iamApi = new DefaultApi($this->createGuzzleClient(), $this->getApiConfig());
     }
 

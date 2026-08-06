@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.0](https://github.com/myparcelnl/pdk/compare/v4.6.0...v4.7.0) (2026-08-06)
+
+
+### :sparkles: New Features
+
+* **installer:** let a migration report that it did not finish ([#519](https://github.com/myparcelnl/pdk/issues/519)) ([6d622e2](https://github.com/myparcelnl/pdk/commit/6d622e2da5619a0eb065a09895bf4d3bda7e2e4c))
+
+## [4.6.0](https://github.com/myparcelnl/pdk/compare/v4.5.1...v4.6.0) (2026-08-06)
+
+
+### :sparkles: New Features
+
+* send width height length during export ([#516](https://github.com/myparcelnl/pdk/issues/516)) ([3431147](https://github.com/myparcelnl/pdk/commit/3431147f5ec3572f973dc49ef005e7f77463642a))
+
+## [4.5.1](https://github.com/myparcelnl/pdk/compare/v4.5.0...v4.5.1) (2026-08-06)
+
+## [4.5.0](https://github.com/myparcelnl/pdk/compare/v4.4.2...v4.5.0) (2026-08-05)
+
+
+### :sparkles: New Features
+
+* correct B2B/B2C capabilities via an address-based isBusiness flag ([#504](https://github.com/myparcelnl/pdk/issues/504)) ([2bc58a5](https://github.com/myparcelnl/pdk/commit/2bc58a5bb6271c14606498ff48b295371856d149)), closes [myparcelnl/core-api#4658](https://github.com/myparcelnl/core-api/issues/4658) [sdk#631](https://github.com/myparcelnl/sdk/issues/631)
+
 ## [4.4.2](https://github.com/myparcelnl/pdk/compare/v4.4.1...v4.4.2) (2026-07-17)
 
 ## [4.4.1](https://github.com/myparcelnl/pdk/compare/v4.4.0...v4.4.1) (2026-07-16)

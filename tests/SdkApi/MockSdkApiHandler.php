@@ -42,7 +42,7 @@ final class MockSdkApiHandler
      * Called by UsesSdkApiMock before and after each test.
      *
      * Must clear the existing instance rather than replacing it, because
-     * MockCapabilitiesService captures the handler reference at construction
+     * MockSdkClientFactory captures the handler reference at construction
      * time (via HandlerStack). Replacing the static would leave the Client
      * pointing at a stale, empty handler.
      *

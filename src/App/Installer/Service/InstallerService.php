@@ -556,8 +556,20 @@ class InstallerService implements InstallerServiceInterface
                 }
 
                 $migration->up();
-                $this->markMigrationApplied($migration);
                 $ran[] = $id;
+
+                // A migration that reports failure is deliberately left unrecorded, so it runs again on
+                // the next load. The remaining migrations still run: one that could not finish should not
+                // hold up the rest of the upgrade.
+                if ($migration instanceof TimestampedMigrationInterface && $migration->hasFailed()) {
+                    Logger::warning('Migration did not finish and will be attempted again.', [
+                        'migration' => $id,
+                    ]);
+
+                    return;
+                }
+
+                $this->markMigrationApplied($migration);
             });
     }
 }
