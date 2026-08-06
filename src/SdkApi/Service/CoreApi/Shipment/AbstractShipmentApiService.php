@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment;
 
+use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApi\AbstractCoreApiService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 
@@ -54,8 +55,10 @@ abstract class AbstractShipmentApiService extends AbstractCoreApiService
     /**
      * Initialize the service with a configured ShipmentApi instance.
      */
-    public function __construct()
+    public function __construct(SdkClientFactoryInterface $clientFactory)
     {
+        parent::__construct($clientFactory);
+
         $this->shipmentApi = new ShipmentApi($this->createGuzzleClient(), $this->getApiConfig());
     }
 

@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\Base\Config;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
+use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
 use MyParcelNL\Pdk\SdkApi\Middleware\LoggingMiddleware;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
@@ -40,6 +41,23 @@ use Throwable;
  */
 abstract class AbstractSdkApiService
 {
+    /**
+     * @var \MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface
+     */
+    private $clientFactory;
+
+    /**
+     * Subclasses that declare their own constructor to build their generated API class must
+     * accept the factory and hand it up, the same way legacy services pass their client adapter
+     * to {@see \MyParcelNL\Pdk\Api\Service\AbstractApiService}.
+     *
+     * @param  \MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface $clientFactory
+     */
+    public function __construct(SdkClientFactoryInterface $clientFactory)
+    {
+        $this->clientFactory = $clientFactory;
+    }
+
     /**
      * @return mixed A generated Configuration class appropriate to the API you're using
      */
@@ -195,12 +213,14 @@ abstract class AbstractSdkApiService
      * response is automatically logged at the transport layer.
      *
      * Uses {@see createGuzzleClientHandlerStack()} to build the middleware stack, which can
-     * be overridden in child classes to add custom middleware.
+     * be overridden in child classes to add custom middleware. Wrapping the stack in a client
+     * is delegated to the injected factory, so the transport can be swapped for every SdkApi
+     * service at once without losing that middleware.
      *
      * @return Client
      */
     protected function createGuzzleClient(): Client
     {
-        return new Client(['handler' => $this->createGuzzleClientHandlerStack()]);
+        return $this->clientFactory->create($this->createGuzzleClientHandlerStack());
     }
 }

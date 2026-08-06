@@ -14,12 +14,18 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Configuration as CoreApiConfiguratio
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Pdk\Tests\SdkApi\MockSdkClientFactory;
 
 usesShared(new UsesMockPdkInstance());
 
 // Concrete implementation for testing
 class ConcreteCoreApiServiceForTest extends AbstractCoreApiService
 {
+    public function __construct()
+    {
+        parent::__construct(new MockSdkClientFactory());
+    }
+
     public function publicGetApiConfig(): CoreApiConfiguration
     {
         return $this->getApiConfig();

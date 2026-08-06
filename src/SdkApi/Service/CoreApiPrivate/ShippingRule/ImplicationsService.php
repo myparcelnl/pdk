@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\ShippingRule;
 
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
 use MyParcelNL\Pdk\SdkApi\Service\CoreApiPrivate\AbstractCoreApiPrivateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\Api\ShippingRuleApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApiPrivate\ApiException;
@@ -21,8 +22,10 @@ class ImplicationsService extends AbstractCoreApiPrivateService
      */
     private $api;
 
-    public function __construct()
+    public function __construct(SdkClientFactoryInterface $clientFactory)
     {
+        parent::__construct($clientFactory);
+
         $this->api = new ShippingRuleApi($this->createGuzzleClient(), $this->getApiConfig());
     }
 
