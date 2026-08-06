@@ -232,13 +232,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     {
         $carrierSettings = Settings::get(CarrierSettings::ID);
 
-        if (! is_array($carrierSettings) || empty($carrierSettings)) {
-            return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
-        }
-
-        $carrierSettings = array_filter($carrierSettings, static function ($settings): bool {
-            return is_array($settings);
-        });
+        $carrierSettings = array_filter(
+            is_array($carrierSettings) ? $carrierSettings : [],
+            static fn($settings): bool => is_array($settings)
+        );
 
         if (empty($carrierSettings)) {
             return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
