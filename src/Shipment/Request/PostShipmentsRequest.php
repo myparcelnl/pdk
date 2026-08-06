@@ -102,7 +102,7 @@ class PostShipmentsRequest extends Request
                 'save_recipient_address' => (int) Settings::get('order.saveCustomerAddress'),
             ],
             'options'              => $this->getOptions($shipment),
-            'physical_properties'  => ['weight' => $this->getWeight($shipment)],
+            'physical_properties'  => $this->encodePhysicalProperties($shipment),
             'pickup'               => $this->getPickupLocation($shipment),
             'recipient'            => $this->encodeRecipient($shipment->recipient),
             'reference_identifier' => $shipment->referenceIdentifier,
@@ -216,6 +216,27 @@ class PostShipmentsRequest extends Request
             'city'              => $address->city,
             'region'            => $address->region,
             'state'             => $address->state,
+        ]);
+    }
+
+    /**
+     * Dimensions are in centimeters, the same unit the API expects and the admin shows, so they are
+     * passed through unconverted and unvalidated. Only dimensions the merchant actually filled in
+     * are sent: empty ones are null and get filtered out, so an empty field never becomes a 0.
+     *
+     * @param  \MyParcelNL\Pdk\Shipment\Model\Shipment $shipment
+     *
+     * @return array
+     */
+    private function encodePhysicalProperties(Shipment $shipment): array
+    {
+        $physicalProperties = $shipment->physicalProperties;
+
+        return Utils::filterNull([
+            'weight' => $this->getWeight($shipment),
+            'length' => $physicalProperties ? $physicalProperties->length : null,
+            'width'  => $physicalProperties ? $physicalProperties->width : null,
+            'height' => $physicalProperties ? $physicalProperties->height : null,
         ]);
     }
 
