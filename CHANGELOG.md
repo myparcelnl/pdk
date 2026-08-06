@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.0](https://github.com/myparcelnl/pdk/compare/v4.6.0...v4.7.0) (2026-08-06)
+
+
+### :sparkles: New Features
+
+* **installer:** let a migration report that it did not finish ([#519](https://github.com/myparcelnl/pdk/issues/519)) ([6d622e2](https://github.com/myparcelnl/pdk/commit/6d622e2da5619a0eb065a09895bf4d3bda7e2e4c))
+
 ## [4.6.0](https://github.com/myparcelnl/pdk/compare/v4.5.1...v4.6.0) (2026-08-06)
 
 
