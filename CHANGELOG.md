@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.0](https://github.com/myparcelnl/pdk/compare/v4.5.1...v4.6.0) (2026-08-06)
+
+
+### :sparkles: New Features
+
+* send width height length during export ([#516](https://github.com/myparcelnl/pdk/issues/516)) ([3431147](https://github.com/myparcelnl/pdk/commit/3431147f5ec3572f973dc49ef005e7f77463642a))
+
 ## [4.5.1](https://github.com/myparcelnl/pdk/compare/v4.5.0...v4.5.1) (2026-08-06)
 
 ## [4.5.0](https://github.com/myparcelnl/pdk/compare/v4.4.2...v4.5.0) (2026-08-05)
