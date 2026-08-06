@@ -38,7 +38,9 @@ class FeatureFlagMiddleware
         return static function (callable $handler): callable {
             return static function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
                 foreach (ApiFeatureFlags::getHeaders() as $name => $value) {
-                    $request = $request->withHeader($name, $value);
+                    if (! $request->hasHeader($name)) {
+                        $request = $request->withHeader($name, $value);
+                    }
                 }
 
                 return $handler($request, $options);
