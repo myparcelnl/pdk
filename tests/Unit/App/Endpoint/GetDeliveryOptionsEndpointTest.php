@@ -351,10 +351,11 @@ it('insurance: resolves to exportInsuranceUpTo amount in micro-units when shipme
 
     $content = json_decode($response->getContent(), true);
 
-    // After TriStateOptionCalculator resolves INHERIT → ENABLED (1), InsuranceCalculator treats
-    // the value as an explicit amount. Tier lookup: first capabilities tier ≥ 1 = 10000 (€100 floor).
-    // 10000 cents (€100) → 100_000_000 micros
-    expect($content['shipmentOptions']['insurance']['amount'])->toBe(10000 * 10_000);
+    // TriStateOptionCalculator resolves INHERIT → ENABLED (1), which InsuranceCalculator reads as
+    // "derive the amount from the carrier settings" rather than as a literal 1-cent amount.
+    // Order price 100000 → nearest tier in [0,10000,25000,50000,100000] = 100000, capped by
+    // exportInsuranceUpTo (50000). 50000 cents (€500) → 500_000_000 micros.
+    expect($content['shipmentOptions']['insurance']['amount'])->toBe(50000 * 10_000);
 
     Pdk::get(PdkSettingsRepositoryInterface::class)->reset();
 });
