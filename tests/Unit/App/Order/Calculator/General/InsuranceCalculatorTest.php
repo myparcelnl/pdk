@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Tests\App\Order\Calculator;
 
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
@@ -756,3 +757,73 @@ it('carrier bounds: settings fromAmount threshold still returns carrier min, not
     // orderPrice 5000 < fromAmount 10000 → would return 0, but carrier min=50000 takes precedence
     expect($newOrder->deliveryOptions->shipmentOptions->insurance)->toBe(50000);
 });
+
+/**
+ * Every other test in this file runs InsuranceCalculator in isolation, which leaves
+ * shipmentOptions->insurance at INHERIT. In production TriStateOptionCalculator runs first and
+ * resolves it from the exportInsurance setting to ENABLED (1), so the ENABLED branch — not the
+ * INHERIT one — is what real exports take. These cases run both calculators together to cover it.
+ */
+it('applies the insure-from threshold when insurance is enabled via carrier settings', function (
+    array $input,
+    int   $result
+) {
+    mockPdkProperty('orderCalculators', [TriStateOptionCalculator::class, InsuranceCalculator::class]);
+
+    factory(Settings::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL, [
+            (new InsuranceDefinition())->getCarrierSettingsKey() => true,
+            CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT        => 700,
+            CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE   => 100,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO              => $input['upTo'],
+        ])
+        ->store();
+
+    factory(PdkProduct::class)
+        ->withExternalIdentifier('threshold-product')
+        ->withPrice($input['orderPrice'])
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withDeliveryOptions(factory(DeliveryOptions::class)->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL))
+        ->withLines([
+            factory(PdkOrderLine::class)
+                ->withProduct('threshold-product')
+                ->withPrice($input['orderPrice']),
+        ])
+        ->make();
+
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
+
+    expect($newOrder->deliveryOptions->shipmentOptions->insurance)->toBe($result);
+})
+    ->with([
+        'value € 100, insured from € 700 -> not insured' => [
+            [
+                'orderPrice' => 10000,
+                'upTo'       => 500000,
+            ],
+            'result' => 0,
+        ],
+
+        'value € 800, insured from € 700 -> rounded up to € 1000' => [
+            [
+                'orderPrice' => 80000,
+                'upTo'       => 500000,
+            ],
+            'result' => 100000,
+        ],
+
+        // € 0,00 is the lowest option of the "insure up to" select, so selecting it is an explicit
+        // merchant choice to cap insurance at zero rather than an unconfigured value to ignore.
+        'value € 800, insured up to € 0 -> not insured' => [
+            [
+                'orderPrice' => 80000,
+                'upTo'       => 0,
+            ],
+            'result' => 0,
+        ],
+    ]);

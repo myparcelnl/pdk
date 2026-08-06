@@ -66,8 +66,9 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      * use those shipment-specific bounds.
      *
      * - NULL or DISABLED (0): use carrier minimum.
-     * - INHERIT (-1): fall back to settings; if settings do not enable insurance, use carrier default.
-     * - Explicit amount: resolve to nearest valid tier.
+     * - INHERIT (-1) or ENABLED (1): fall back to settings; if settings do not enable insurance,
+     *   use carrier default.
+     * - Explicit amount (> 1): resolve to nearest valid tier.
      *
      * @param  null|int $amount
      *
@@ -93,7 +94,12 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
             return $carrierMin;
         }
 
-        if (TriStateService::INHERIT === $amount) {
+        // ENABLED means "insurance is on, derive the amount from the carrier settings" — never a
+        // literal insured amount of 1 cent. TriStateOptionCalculator resolves INHERIT to ENABLED
+        // from the exportInsurance setting before this calculator runs, and
+        // CapabilitiesOptionCalculator forces ENABLED for required options, so this is the value
+        // real exports arrive with.
+        if (TriStateService::INHERIT === $amount || TriStateService::ENABLED === $amount) {
             return $this->calculateFromSettings($carrier, $carrierMin, $carrierMax, $carrierDefault);
         }
 
