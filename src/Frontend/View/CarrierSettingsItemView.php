@@ -637,6 +637,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
     {
         $insuranceAmounts = $this->carrierValidationService->getAllowedInsuranceAmounts($this->carrier);
 
+        // The insurance fields are tier dropdowns built from this ladder, so there is nothing to
+        // render without one: no carrier maximum means no tiers, and a single tier means no choice.
+        // Carriers without a maximum do not occur in practice — CarrierValidationService logs a
+        // warning if one ever shows up.
         if (count($insuranceAmounts) <= 1) {
             return [];
         }

@@ -178,8 +178,11 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     /**
      * Calculate insurance from carrier settings when the shipment option is set to INHERIT.
      *
-     * When the carrier advertises no maximum, the "insure up to" setting is the only ceiling
-     * that applies — the settings cap is what bounds an otherwise unbounded carrier.
+     * With insurance switched off in the settings the carrier default applies. Otherwise the
+     * "insure up to" setting caps the calculated amount; it defaults to 0 when unset, which
+     * brings the result down to the carrier minimum.
+     *
+     * Without a carrier maximum the amount is not snapped to a tier.
      *
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      * @param  int                                    $carrierMin
