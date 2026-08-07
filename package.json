@@ -192,10 +192,10 @@
   },
   "volta": {
     "node": "24.14.0",
-    "yarn": "4.12.0"
+    "yarn": "4.17.1"
   },
   "resolutions": {
     "tar": "7.5.11"
   },
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.17.1"
 }
