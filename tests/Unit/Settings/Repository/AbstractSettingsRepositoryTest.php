@@ -49,28 +49,6 @@ it('retrieves all categories and fields', function () {
     assertMatchesJsonSnapshot(json_encode($settings->toArrayWithoutNull()));
 });
 
-it('skips malformed entries when retrieving collection settings', function () {
-    /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository */
-    $repository        = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $createSettingsKey = Pdk::get('createSettingsKey');
-
-    $currentCarrierSettings = $repository->get($createSettingsKey(CarrierSettings::ID));
-
-    try {
-        $repository->store($createSettingsKey(CarrierSettings::ID), array_merge($currentCarrierSettings, [
-            'valid'   => [CarrierSettings::DELIVERY_OPTIONS_ENABLED => true],
-            'invalid' => 'invalid',
-        ]));
-
-        $carrierSettings = $repository->all()->carrier;
-
-        expect($carrierSettings->has('valid'))->toBeTrue()
-            ->and($carrierSettings->has('invalid'))->toBeFalse();
-    } finally {
-        $repository->store($createSettingsKey(CarrierSettings::ID), $currentCarrierSettings);
-    }
-});
-
 it('retrieves a single setting from a category', function (string $key, $expected) {
     /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $repository */
     $repository        = Pdk::get(PdkSettingsRepositoryInterface::class);

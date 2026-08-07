@@ -15,7 +15,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Proposition;
-use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
@@ -134,10 +133,6 @@ it('uses correct price when price is shown as surcharge', function () {
     factory(CheckoutSettings::class)
         ->withPriceType(CheckoutSettings::PRICE_TYPE_INCLUDED)
         ->withAllowPickupLocationsViewSelection(true)
-        ->store();
-
-    factory(CarrierSettings::class, RefCapabilitiesSharedCarrierV2::POSTNL)
-        ->withDeliveryOptionsEnabled(true)
         ->store();
 
     /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository $productRepository */

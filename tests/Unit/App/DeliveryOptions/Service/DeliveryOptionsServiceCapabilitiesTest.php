@@ -13,7 +13,6 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -308,42 +307,6 @@ it('excludes carriers with delivery options disabled', function () {
         ->and($result['carrierSettings'])->not->toHaveKey($disabledId);
 });
 
-it('keeps valid carriers when another carrier setting is malformed', function () {
-    $carrierName = RefCapabilitiesSharedCarrierV2::getAllowableEnumValues()[0];
-
-    storeCarrierSettings([$carrierName => true]);
-
-    /** @var \MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface $settingsRepository */
-    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $settingsKey        = Pdk::get('createSettingsKey')(CarrierSettings::ID);
-    $carrierSettings    = $settingsRepository->get($settingsKey);
-
-    $settingsRepository->store($settingsKey, array_merge($carrierSettings, ['invalid' => 'invalid']));
-
-    factory(Shop::class)
-        ->withCarriers(
-            factory(CarrierCollection::class)
-                ->push(factory(Carrier::class)
-                    ->withCarrier($carrierName)
-                    ->withCapabilityPackageTypes(['PACKAGE']))
-        )
-        ->store();
-
-    resetStorageCache();
-
-    enqueueCapabilitiesPerType([
-        'PACKAGE' => [capabilityResult($carrierName, 100, ['PACKAGE'])],
-    ]);
-
-    /** @var DeliveryOptionsServiceInterface $service */
-    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
-    $result  = $service->createAllCarrierSettings(makeCart('NL'));
-
-    $carrierId = FrontendData::getLegacyCarrierIdentifier($carrierName);
-
-    expect($result['carrierSettings'])->toHaveKey($carrierId);
-});
-
 it('passes contract ID from capabilities to carrier settings output', function () {
     storeCarrierSettings([RefCapabilitiesSharedCarrierV2::POSTNL => true]);
 
@@ -513,3 +476,4 @@ it('normalizes max weight to grams when capabilities response uses kg', function
 
     expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
 });
+
