@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.1](https://github.com/myparcelnl/pdk/compare/v4.7.0...v4.7.1) (2026-08-07)
+
+
+### :bug: Bug Fixes
+
+* respect insure from setting ([#515](https://github.com/myparcelnl/pdk/issues/515)) ([a611219](https://github.com/myparcelnl/pdk/commit/a6112198afb28d6523275490d8f0488a5aebe3bb))
+
 ## [4.7.0](https://github.com/myparcelnl/pdk/compare/v4.6.0...v4.7.0) (2026-08-06)
 
 
