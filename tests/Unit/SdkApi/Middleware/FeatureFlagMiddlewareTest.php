@@ -79,3 +79,15 @@ it('keeps headers the request already had', function () {
     expect($mock->getLastRequest()->getHeaderLine('Authorization'))->toBe('bearer abc')
         ->and($mock->getLastRequest()->getHeaderLine('x-dmp-no-tracking'))->toBe('true');
 });
+
+it('lets a request keep its own value for a flag it already set', function () {
+    mockPdkProperty('apiFeatureFlags', ['x-dmp-no-tracking']);
+
+    [$client, $mock] = makeFeatureFlagClient();
+    $mock->append(new Response(200, [], '{}'));
+
+    $client->get('https://api.myparcel.nl/test', ['headers' => ['x-dmp-no-tracking' => 'false']]);
+
+    // Same precedence as the legacy header merge in MyParcelApiService: the request wins.
+    expect($mock->getLastRequest()->getHeaderLine('x-dmp-no-tracking'))->toBe('false');
+});
