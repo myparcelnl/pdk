@@ -3099,57 +3099,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -3377,30 +3326,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -4881,57 +4806,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -5159,30 +5033,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -6663,57 +6513,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -6941,30 +6740,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -8445,57 +8220,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -8723,30 +8447,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -10227,57 +9927,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -10505,30 +10154,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -12009,57 +11634,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -12287,30 +11861,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -13791,57 +13341,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -14069,30 +13568,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -15573,57 +15048,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -15851,30 +15275,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -17355,57 +16755,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -17633,30 +16982,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -19137,57 +18462,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -19415,30 +18689,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -20970,57 +20220,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -21248,30 +20447,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -22752,57 +21927,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -23030,30 +22154,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -24534,57 +23634,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -24812,30 +23861,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -26316,57 +25341,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -26594,30 +25568,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -28098,57 +27048,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -28376,30 +27275,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",
@@ -29880,57 +28755,6 @@
                             "description": "settings_carrier_price_delivery_type_evening_description"
                         },
                         {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
-                        },
-                        {
-                            "name": "priceDeliveryTypeSameDay",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$target": "allowSameDayDelivery"
-                                            },
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "CurrencyInput",
-                            "label": "settings_carrier_price_delivery_type_same_day",
-                            "description": "settings_carrier_price_delivery_type_same_day_description"
-                        },
-                        {
                             "name": "allowDeliveryTypeExpress",
                             "$builders": [
                                 {
@@ -30158,30 +28982,6 @@
                             "$component": "CurrencyInput",
                             "label": "settings_carrier_price_priority_delivery",
                             "description": "settings_carrier_price_priority_delivery_description"
-                        },
-                        {
-                            "name": "allowSameDayDelivery",
-                            "$builders": [
-                                {
-                                    "$visibleWhen": {
-                                        "$if": [
-                                            {
-                                                "$and": [
-                                                    {
-                                                        "$target": "deliveryOptionsEnabled"
-                                                    },
-                                                    {
-                                                        "$target": "allowDeliveryOptions"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ],
-                            "$component": "ToggleInput",
-                            "label": "settings_carrier_allow_same_day_delivery",
-                            "description": "settings_carrier_allow_same_day_delivery_description"
                         },
                         {
                             "name": "allowSaturdayDelivery",

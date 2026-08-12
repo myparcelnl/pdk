@@ -339,3 +339,52 @@ it('uses international mailbox price when shipping address is non-local', functi
     $carrierId   = FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier);
     expect($result['carrierSettings'][$carrierId]['pricePackageTypeMailbox'])->toBe(1.05);
 });
+
+it('passes allow* for deliveryTypes without looking at the cutoff times', function () {
+    $fakeCarrier = factory(Carrier::class)->withCarrier('POSTNL')->make();
+
+    // Same-day is switched on, and conditions are applied that in the past would block sameDayDelivery globally.
+    // Whether same-day is still achievable today is the widget's call, so the settings have to arrive as
+    // the merchant set them rather than pre-judged here.
+    factory(CarrierSettings::class, $fakeCarrier->carrier)
+        ->withDeliveryOptions()
+        ->withAllowSameDayDelivery(true)
+        ->withAllowMorningDelivery(true)
+        ->withAllowEveningDelivery(true)
+        ->withCutoffTimeSameDay('02:00')
+        ->withDropOffDelay(2)
+        ->store();
+
+    factory(Shop::class)
+        ->withCarriers(factory(CarrierCollection::class)->push(factory(Carrier::class)->withCarrier('POSTNL')))
+        ->store();
+
+    /** @var \MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface $service */
+    $service = Pdk::get(DeliveryOptionsServiceInterface::class);
+
+    $result = $service->createAllCarrierSettings(new PdkCart([
+        'lines' => [
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 1,
+                    'isDeliverable' => true,
+                    'settings'      => [
+                        ProductSettings::DROP_OFF_DELAY => 5,
+                    ],
+                ],
+            ],
+        ],
+    ]));
+
+    $carrierId = FrontendData::getLegacyCarrierIdentifier($fakeCarrier->carrier);
+    $settings  = $result['carrierSettings'][$carrierId];
+
+    // dropOffDelay proves the delay really reached the service, so the same-day assertion cannot pass
+    // just because nothing was delaying drop-off in the first place.
+    expect($settings['dropOffDelay'])->toBe(5)
+        ->and($settings['allowSameDayDelivery'])->toBeTrue()
+        ->and($settings['allowMorningDelivery'])->toBeTrue()
+        ->and($settings['allowEveningDelivery'])->toBeTrue()
+        ->and($settings['cutoffTimeSameDay'])->toBe('02:00');
+});
