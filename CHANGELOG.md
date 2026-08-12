@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.2](https://github.com/myparcelnl/pdk/compare/v4.7.1...v4.7.2) (2026-08-12)
+
+
+### :bug: Bug Fixes
+
+* **settings:** render same-day settings for carriers (trunkrs) with same-day delivery type ([#508](https://github.com/myparcelnl/pdk/issues/508)) ([f2cf84c](https://github.com/myparcelnl/pdk/commit/f2cf84cc91a37624b849471c8f61f92b6d51b96b)), closes [#356](https://github.com/myparcelnl/pdk/issues/356)
+
 ## [4.7.1](https://github.com/myparcelnl/pdk/compare/v4.7.0...v4.7.1) (2026-08-07)
 
 
