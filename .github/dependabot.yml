@@ -16,6 +16,9 @@ updates:
     commit-message:
       prefix: 'build'
       include: 'scope'
+    cooldown:
+      exclude:
+        - 'myparcelnl/*'
     groups:
       minor-php-updates:
         applies-to: version-updates
