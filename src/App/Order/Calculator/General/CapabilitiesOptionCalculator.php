@@ -27,6 +27,14 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
     private $capabilitiesService;
 
     /**
+     * Options read from the capabilities response, keyed by capability key. Filled while one
+     * calculation runs.
+     *
+     * @var array<string, mixed>
+     */
+    private $optionValues = [];
+
+    /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
     public function __construct(PdkOrder $order)
@@ -41,6 +49,8 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
      */
     public function calculate(): void
     {
+        $this->optionValues = [];
+
         $capability = $this->getCarrierCapabilities();
 
         /** @var OrderOptionDefinitionInterface[] $definitions */
@@ -173,7 +183,8 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
     }
 
     /**
-     * Propagate requires/excludes constraints for all enabled options, cascading through the dependency chain.
+     * Apply the requires and excludes rules of the enabled options. If two rules disagree, the
+     * first rule has effect. The calculator writes a warning about the other rule.
      *
      * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[]                  $definitions
      * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2 $options
@@ -186,6 +197,134 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         RefCapabilitiesResponseOptionsOptionsV2 $options,
         array $definitionsByCapKey
     ): void {
+        $activeKeys   = $this->collectEnabledCapabilitiesKeys($definitions);
+        $requiredKeys = $this->collectRequiredCapabilitiesKeys($definitionsByCapKey, $options);
+
+        // The capabilities data requires these options. These options are on and locked.
+        $forcedOn  = array_fill_keys($requiredKeys, true);
+        $forcedOff = [];
+
+        // The rules come from two groups of options: the group that capabilities require, and the
+        // group that is enabled on the order. An option can be in both groups, and thus this
+        // removes the duplicates. An enabled option is a source of rules only. It does not force
+        // its own value, and the merchant keeps control of that value.
+        $ruleSources = array_unique(array_merge($requiredKeys, $activeKeys));
+
+        // The queue holds the options that the loop must still read. The visited list prevents an
+        // endless loop if two options require each other.
+        $queue   = $ruleSources;
+        $visited = array_fill_keys($ruleSources, true);
+
+        while ($queue) {
+            $capabilitiesKey = array_shift($queue);
+            $optionValue     = $this->getCapabilityOption($options, $capabilitiesKey);
+
+            if (! $optionValue) {
+                continue;
+            }
+
+            foreach ($optionValue->getRequires() ?? [] as $requiredCapKey) {
+                if (isset($forcedOff[$requiredCapKey])) {
+                    $this->logConflict($requiredCapKey, $capabilitiesKey, 'require', 'excluded');
+
+                    continue;
+                }
+
+                $forcedOn[$requiredCapKey] = true;
+
+                if (! isset($visited[$requiredCapKey])) {
+                    // Add the option to the end of the queue. The rules of the enabled options
+                    // apply first. The rules of an option from a requires chain apply after them.
+                    $visited[$requiredCapKey] = true;
+                    $queue[]                  = $requiredCapKey;
+                }
+            }
+
+            foreach ($optionValue->getExcludes() ?? [] as $excludedCapKey) {
+                if (isset($forcedOn[$excludedCapKey])) {
+                    $this->logConflict($excludedCapKey, $capabilitiesKey, 'exclude', 'required');
+
+                    continue;
+                }
+
+                $forcedOff[$excludedCapKey] = true;
+            }
+        }
+
+        foreach (array_keys($forcedOff) as $capabilitiesKey) {
+            $this->forceOptionByCapabilitiesKey($capabilitiesKey, $definitionsByCapKey, TriStateService::DISABLED);
+        }
+
+        foreach (array_keys($forcedOn) as $capabilitiesKey) {
+            $this->forceOptionByCapabilitiesKey($capabilitiesKey, $definitionsByCapKey, TriStateService::ENABLED);
+        }
+    }
+
+    /**
+     * Write a warning about a rule that the calculator does not apply. The capabilities data has
+     * a conflict. Correct the data at the source.
+     *
+     * @param  string $capabilitiesKey Option the rule points at.
+     * @param  string $sourceKey       Option that holds the rule.
+     * @param  string $action          `require` or `exclude`.
+     * @param  string $state           `required` or `excluded`.
+     *
+     * @return void
+     */
+    private function logConflict(string $capabilitiesKey, string $sourceKey, string $action, string $state): void
+    {
+        Logger::warning(
+            sprintf(
+                'Can\'t %s "%s", it\'s already %s by another option; capabilities rules contradict each other.',
+                $action,
+                $capabilitiesKey,
+                $state
+            ),
+            [
+                'option' => $capabilitiesKey,
+                'source' => $sourceKey,
+                'action' => $action,
+                'state'  => $state,
+            ]
+        );
+    }
+
+    /**
+     * Get the capability keys of the options that the capabilities data requires.
+     *
+     * @param  array<string, OrderOptionDefinitionInterface>                                           $definitionsByCapKey
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2 $options
+     *
+     * @return string[]
+     */
+    private function collectRequiredCapabilitiesKeys(
+        array $definitionsByCapKey,
+        RefCapabilitiesResponseOptionsOptionsV2 $options
+    ): array {
+        $keys = [];
+
+        foreach (array_keys($definitionsByCapKey) as $capabilitiesKey) {
+            $optionValue = $this->getCapabilityOption($options, $capabilitiesKey);
+
+            if ($optionValue && $optionValue->getIsRequired()) {
+                $keys[] = $capabilitiesKey;
+            }
+        }
+
+        return $keys;
+    }
+
+    /**
+     * Get the capability keys of the options that are enabled on the order.
+     *
+     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface[] $definitions
+     *
+     * @return string[]
+     */
+    private function collectEnabledCapabilitiesKeys(array $definitions): array
+    {
+        $keys = [];
+
         foreach ($definitions as $definition) {
             $shipmentKey     = $definition->getShipmentOptionsKey();
             $capabilitiesKey = $definition->getCapabilitiesOptionsKey();
@@ -196,65 +335,52 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
             $currentValue = $this->order->deliveryOptions->shipmentOptions->getAttribute($shipmentKey);
 
-            if ($currentValue !== TriStateService::ENABLED) {
-                continue;
+            if ($currentValue === TriStateService::ENABLED) {
+                $keys[] = $capabilitiesKey;
             }
+        }
 
-            $this->applyRequiresChain($capabilitiesKey, $options, $definitionsByCapKey, []);
+        return $keys;
+    }
 
-            $optionValue = $this->getCapabilityOption($options, $capabilitiesKey);
+    /**
+     * Force the option a capability key belongs to, when a definition maps it to a shipment option.
+     *
+     * @param  string                                        $capabilitiesKey
+     * @param  array<string, OrderOptionDefinitionInterface> $definitionsByCapKey
+     * @param  int                                            $value
+     *
+     * @return void
+     */
+    private function forceOptionByCapabilitiesKey(
+        string $capabilitiesKey,
+        array $definitionsByCapKey,
+        int $value
+    ): void {
+        $definition  = $definitionsByCapKey[$capabilitiesKey] ?? null;
+        $shipmentKey = $definition ? $definition->getShipmentOptionsKey() : null;
 
-            if (! $optionValue) {
-                continue;
-            }
-
-            foreach ($optionValue->getExcludes() ?? [] as $excludedCapKey) {
-                $excludedDef = $definitionsByCapKey[$excludedCapKey] ?? null;
-
-                if ($excludedDef && $excludedDef->getShipmentOptionsKey()) {
-                    $this->forceOption($excludedDef->getShipmentOptionsKey(), TriStateService::DISABLED);
-                }
-            }
+        if ($shipmentKey) {
+            $this->forceOption($shipmentKey, $value);
         }
     }
 
     /**
-     * Recursively enable options in a requires chain.
+     * Read one option from the capabilities response. The result of each key is kept, and thus a
+     * key that has no getter gives one warning only.
      *
+     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2 $options
      * @param  string                                                                                  $capabilitiesKey
-     * @param  \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2  $options
-     * @param  array<string, OrderOptionDefinitionInterface>                                            $definitionsByCapKey
-     * @param  string[]                                                                                $visited Prevents infinite loops on circular requires
      *
-     * @return void
+     * @return mixed
      */
-    private function applyRequiresChain(
-        string $capabilitiesKey,
-        RefCapabilitiesResponseOptionsOptionsV2 $options,
-        array $definitionsByCapKey,
-        array $visited
-    ): void {
-        $optionValue = $this->getCapabilityOption($options, $capabilitiesKey);
-
-        if (! $optionValue) {
-            return;
+    private function getCapabilityOption(RefCapabilitiesResponseOptionsOptionsV2 $options, string $capabilitiesKey)
+    {
+        if (array_key_exists($capabilitiesKey, $this->optionValues)) {
+            return $this->optionValues[$capabilitiesKey];
         }
 
-        foreach ($optionValue->getRequires() ?? [] as $requiredCapKey) {
-            if (in_array($requiredCapKey, $visited, true)) {
-                continue;
-            }
-
-            $requiredDef = $definitionsByCapKey[$requiredCapKey] ?? null;
-
-            if (! $requiredDef || ! $requiredDef->getShipmentOptionsKey()) {
-                continue;
-            }
-
-            $this->forceOption($requiredDef->getShipmentOptionsKey(), TriStateService::ENABLED);
-
-            $this->applyRequiresChain($requiredCapKey, $options, $definitionsByCapKey, array_merge($visited, [$requiredCapKey]));
-        }
+        return $this->optionValues[$capabilitiesKey] = $this->readCapabilityOption($options, $capabilitiesKey);
     }
 
     /**
@@ -263,7 +389,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
      *
      * @return mixed
      */
-    private function getCapabilityOption(RefCapabilitiesResponseOptionsOptionsV2 $options, string $capabilitiesKey)
+    private function readCapabilityOption(RefCapabilitiesResponseOptionsOptionsV2 $options, string $capabilitiesKey)
     {
         $getter = 'get' . ucfirst($capabilitiesKey);
 
