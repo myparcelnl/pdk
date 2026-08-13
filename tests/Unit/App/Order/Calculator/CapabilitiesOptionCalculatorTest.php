@@ -7,7 +7,10 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\App\Order\Calculator;
 
 use MyParcelNL\Pdk\App\Options\Definition\AbstractOrderOptionDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
@@ -496,3 +499,229 @@ it('logs a warning when a definition references a capabilities key that has no S
     $resetDefinitions();
     $resetCalculators();
 });
+
+/**
+ * Capability options that have a conflict, as the live PostNL response also has. Receipt code
+ * requires insurance. Insurance requires signature and only recipient. Receipt code excludes
+ * signature and only recipient.
+ */
+function conflictingOptions(): array
+{
+    $plain = ['isRequired' => false, 'isSelectedByDefault' => false, 'requires' => [], 'excludes' => []];
+
+    return [
+        'requiresReceiptCode'   => [
+            'isRequired'          => false,
+            'isSelectedByDefault' => false,
+            'requires'            => ['insurance'],
+            'excludes'            => ['recipientOnlyDelivery', 'requiresSignature'],
+        ],
+        'insurance'             => [
+            'isRequired'          => false,
+            'isSelectedByDefault' => false,
+            'requires'            => ['requiresSignature', 'recipientOnlyDelivery'],
+            'excludes'            => [],
+            'insuredAmount'       => [
+                'default' => ['amount' => 0, 'currency' => 'EUR'],
+                'min'     => ['amount' => 0, 'currency' => 'EUR'],
+                'max'     => ['amount' => 500000, 'currency' => 'EUR'],
+            ],
+        ],
+        'requiresSignature'     => array_merge($plain, ['excludes' => ['requiresReceiptCode']]),
+        'recipientOnlyDelivery' => array_merge($plain, ['excludes' => ['requiresReceiptCode']]),
+    ];
+}
+
+it('does not enable an option that an enabled option excludes, even when a requires chain asks for it', function () {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $resetCalculators = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, conflictingOptions()),
+    ]));
+
+    $order = calculateOrder($carrier, [
+        'receiptCode'   => TriStateService::ENABLED,
+        'signature'     => TriStateService::DISABLED,
+        'onlyRecipient' => TriStateService::DISABLED,
+    ]);
+
+    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
+
+    // The excludes of the enabled option win over the chain that runs through insurance.
+    expect($shipmentOptions->signature)->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->onlyRecipient)->toBe(TriStateService::DISABLED)
+        // The enabled option keeps its value, and what it does require is still enabled.
+        ->and($shipmentOptions->receiptCode)->toBe(TriStateService::ENABLED)
+        ->and($shipmentOptions->insurance)->toBe(TriStateService::ENABLED);
+
+    $resetCalculators();
+});
+
+it('resolves the same option values whatever the order of the definition list', function (array $definitionClasses) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $resetCalculators = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+    $resetDefinitions = mockPdkProperty(
+        'orderOptionDefinitions',
+        array_map(static function (string $class) {
+            return new $class();
+        }, $definitionClasses)
+    );
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, conflictingOptions()),
+    ]));
+
+    $order = calculateOrder($carrier, [
+        'receiptCode'   => TriStateService::ENABLED,
+        'signature'     => TriStateService::DISABLED,
+        'onlyRecipient' => TriStateService::DISABLED,
+    ]);
+
+    $shipmentOptions = $order->deliveryOptions->shipmentOptions;
+
+    expect($shipmentOptions->signature)->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->onlyRecipient)->toBe(TriStateService::DISABLED)
+        ->and($shipmentOptions->receiptCode)->toBe(TriStateService::ENABLED);
+
+    $resetDefinitions();
+    $resetCalculators();
+})->with([
+    // In the first data set, the chained option comes before the enabled option. In the second data
+    // set, it comes after the enabled option. The calculator reads the enabled options one time,
+    // and thus the result is the same.
+    'chained option declared first' => [
+        [
+            InsuranceDefinition::class,
+            ReceiptCodeDefinition::class,
+            SignatureDefinition::class,
+            OnlyRecipientDefinition::class,
+        ],
+    ],
+    'chained option declared last'  => [
+        [
+            ReceiptCodeDefinition::class,
+            SignatureDefinition::class,
+            OnlyRecipientDefinition::class,
+            InsuranceDefinition::class,
+        ],
+    ],
+]);
+
+it('warns when a requires and an excludes contradict each other', function () {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $resetCalculators = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, conflictingOptions()),
+    ]));
+
+    calculateOrder($carrier, [
+        'receiptCode'   => TriStateService::ENABLED,
+        'signature'     => TriStateService::DISABLED,
+        'onlyRecipient' => TriStateService::DISABLED,
+    ]);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger   = Pdk::get(PdkLoggerInterface::class);
+    $matching = array_values(array_filter(
+        $logger->getLogs(LogLevel::WARNING),
+        static function (array $log) {
+            return strpos($log['message'], 'Can\'t require') !== false;
+        }
+    ));
+
+    // Insurance requires the two options that receipt code excludes.
+    expect($matching)->not->toBeEmpty()
+        ->and($matching[0]['context']['source'])->toBe('insurance')
+        ->and($matching[0]['context']['state'])->toBe('excluded')
+        ->and(array_column(array_column($matching, 'context'), 'option'))
+        ->toContain('requiresSignature', 'recipientOnlyDelivery');
+
+    $resetCalculators();
+});
+
+it('applies whichever rule comes first when two enabled options disagree', function (
+    array $definitionClasses,
+    int $expected
+) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $resetCalculators = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+    $resetDefinitions = mockPdkProperty(
+        'orderOptionDefinitions',
+        array_map(static function (string $class) {
+            return new $class();
+        }, $definitionClasses)
+    );
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    // Age check requires signature. Receipt code excludes signature. Both options are on, and thus
+    // the option that the calculator reads first has effect. It writes a warning about the other
+    // rule.
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, [
+            'requiresAgeVerification' => [
+                'isRequired'          => false,
+                'isSelectedByDefault' => false,
+                'requires'            => ['requiresSignature'],
+                'excludes'            => [],
+            ],
+            'requiresReceiptCode'     => [
+                'isRequired'          => false,
+                'isSelectedByDefault' => false,
+                'requires'            => [],
+                'excludes'            => ['requiresSignature'],
+            ],
+            'requiresSignature'       => [
+                'isRequired'          => false,
+                'isSelectedByDefault' => false,
+                'requires'            => [],
+                'excludes'            => [],
+            ],
+        ]),
+    ]));
+
+    $order = calculateOrder($carrier, [
+        'ageCheck'    => TriStateService::ENABLED,
+        'receiptCode' => TriStateService::ENABLED,
+        'signature'   => TriStateService::DISABLED,
+    ]);
+
+    expect($order->deliveryOptions->shipmentOptions->signature)->toBe($expected);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
+    $logger = Pdk::get(PdkLoggerInterface::class);
+
+    expect($logger->getLogs(LogLevel::WARNING))->not->toBeEmpty();
+
+    $resetDefinitions();
+    $resetCalculators();
+})->with([
+    'requiring option read first' => [
+        [AgeCheckDefinition::class, ReceiptCodeDefinition::class, SignatureDefinition::class],
+        TriStateService::ENABLED,
+    ],
+    'excluding option read first' => [
+        [ReceiptCodeDefinition::class, AgeCheckDefinition::class, SignatureDefinition::class],
+        TriStateService::DISABLED,
+    ],
+]);
