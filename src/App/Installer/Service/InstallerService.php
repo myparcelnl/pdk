@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\TimestampedMigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -50,21 +51,136 @@ class InstallerService implements InstallerServiceInterface
         $installedVersion = $this->getInstalledVersion();
         $currentVersion   = Pdk::getAppInfo()->version;
 
-        if ($installedVersion === $currentVersion) {
+        // A pending migration is reason enough to run, whatever the version says. Gating on the
+        // version alone skips a migration that ships without a bump, and permanently skips one
+        // that reported failure, because the version is written even when a migration fails.
+        if ($installedVersion === $currentVersion && ! $this->hasPendingMigrations()) {
             return;
         }
 
-        Pdk::clearCache();
+        $lock = $this->acquireMigrationLock();
 
-        if ($installedVersion) {
-            Logger::debug("Migrating from $installedVersion to $currentVersion");
-            $this->migrateUp($currentVersion);
-        } else {
-            Logger::debug("Installing $currentVersion");
-            $this->executeInstallation(...$args);
+        if (null === $lock) {
+            Logger::debug('Another run holds the migration lock. Skipping this pass.');
+
+            return;
         }
 
-        $this->updateInstalledVersion($currentVersion);
+        try {
+            Pdk::clearCache();
+
+            if ($installedVersion) {
+                Logger::debug("Migrating from $installedVersion to $currentVersion");
+                $this->migrateUp($currentVersion);
+            } else {
+                Logger::debug("Installing $currentVersion");
+                $this->executeInstallation(...$args);
+            }
+
+            $this->updateInstalledVersion($currentVersion);
+        } finally {
+            $this->releaseMigrationLock($lock);
+        }
+    }
+
+    /**
+     * Reports whether any registered or auto-discovered upgrade migration is not yet recorded
+     * as applied. Plugins that decide for themselves when to run an upgrade should ask this
+     * instead of comparing version strings.
+     *
+     * @return bool
+     */
+    public function hasPendingMigrations(): bool
+    {
+        return $this->getUpgradeMigrations(Pdk::getAppInfo()->version)
+            ->isNotEmpty();
+    }
+
+    /**
+     * Claims the migration run by creating the lock file. Creation is exclusive, so this
+     * returns null when another run already holds it.
+     *
+     * @return null|resource
+     */
+    protected function acquireMigrationLock()
+    {
+        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
+        $fileSystem = Pdk::get(FileSystemInterface::class);
+        /** @var string $lockFile */
+        $lockFile   = Pdk::get('migrationLockFile');
+
+        $fileSystem->mkdir($fileSystem->dirname($lockFile), true);
+
+        $lock = $fileSystem->openStream($lockFile, 'x') ?: null;
+
+        if (null === $lock) {
+            $lock = $this->reclaimMigrationLock($lockFile);
+        }
+
+        return $lock;
+    }
+
+    /**
+     * Retries a claim that failed. A lock that is gone was released between the claim and this
+     * retry, so it is simply claimed again. A lock that is still there is taken over only when
+     * it is older than the timeout, which means its holder died without releasing it.
+     *
+     * @param  string $lockFile
+     *
+     * @return null|resource
+     */
+    private function reclaimMigrationLock(string $lockFile)
+    {
+        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
+        $fileSystem = Pdk::get(FileSystemInterface::class);
+
+        if ($fileSystem->fileExists($lockFile)) {
+            if (! $this->migrationLockIsAbandoned($lockFile)) {
+                return null;
+            }
+
+            Logger::warning('Taking over an abandoned migration lock.', ['file' => $lockFile]);
+
+            $fileSystem->unlink($lockFile);
+        }
+
+        return $fileSystem->openStream($lockFile, 'x') ?: null;
+    }
+
+    /**
+     * Reports whether the lock was claimed longer ago than the timeout allows. Only call this
+     * for a lock file that exists.
+     *
+     * @param  string $lockFile
+     *
+     * @return bool
+     */
+    private function migrationLockIsAbandoned(string $lockFile): bool
+    {
+        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
+        $fileSystem = Pdk::get(FileSystemInterface::class);
+
+        // The filesystem dates the lock when it creates it, in the same step. Reading the claim
+        // time from a payload instead would need a second write, and a run arriving between the
+        // two would see an undated lock with no way to tell a live claim from a dead one.
+        $claimedAt = $fileSystem->mtime($lockFile);
+
+        return null !== $claimedAt
+            && time() - $claimedAt > (int) Pdk::get('migrationLockTimeout');
+    }
+
+    /**
+     * @param  resource $lock
+     *
+     * @return void
+     */
+    protected function releaseMigrationLock($lock): void
+    {
+        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
+        $fileSystem = Pdk::get(FileSystemInterface::class);
+
+        $fileSystem->closeStream($lock);
+        $fileSystem->unlink(Pdk::get('migrationLockFile'));
     }
 
     /**

@@ -217,4 +217,28 @@ return [
     'migrationDirectory' => factory(function () {
         return rtrim(PdkFacade::get('rootDir'), '/') . '/src/Migration';
     }),
+
+    /**
+     * File the installer creates to claim the migration run. Creation is exclusive, so a
+     * second run that finds the file present skips instead of migrating alongside the first.
+     * Plugins can point this at any writable path they prefer.
+     *
+     * Deliberately not in the cache directory: install() clears that right after taking the
+     * lock, which would delete the lock out from under the run holding it. The path is keyed by
+     * rootDir so two installations on one host never share a lock.
+     */
+    'migrationLockFile' => factory(function () {
+        return sprintf(
+            '%s/myparcel-pdk-migrations-%s.lock',
+            rtrim(sys_get_temp_dir(), '/'),
+            md5(PdkFacade::get('rootDir'))
+        );
+    }),
+
+    /**
+     * Seconds after which a migration lock counts as abandoned. A run killed mid-migration
+     * cannot clean up after itself, so without a timeout its lock would block every later
+     * migration for good. Keep this above the slowest migration.
+     */
+    'migrationLockTimeout' => value(900),
 ];
