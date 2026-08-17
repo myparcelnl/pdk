@@ -35,6 +35,16 @@ interface FileSystemInterface
     public function get(string $path): string;
 
     /**
+     * Last modification time as a unix timestamp, or null when it cannot be read. Set by the
+     * filesystem when the file is created, so it dates a file without needing a payload.
+     *
+     * @param  string $path
+     *
+     * @return null|int
+     */
+    public function mtime(string $path): ?int;
+
+    /**
      * @param  string $path
      *
      * @return bool
