@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.3](https://github.com/myparcelnl/pdk/compare/v4.7.2...v4.7.3) (2026-08-18)
+
+
+### :bug: Bug Fixes
+
+* **checkout:** guard invalid carrier settings ([#521](https://github.com/myparcelnl/pdk/issues/521)) ([a95545d](https://github.com/myparcelnl/pdk/commit/a95545d0af25b79e8aa1b9d534f514db4ea820c2))
+
 ## [4.7.2](https://github.com/myparcelnl/pdk/compare/v4.7.1...v4.7.2) (2026-08-12)
 
 
