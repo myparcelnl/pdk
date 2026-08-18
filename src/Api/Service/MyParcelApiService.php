@@ -27,6 +27,7 @@ class MyParcelApiService extends AbstractApiService
      */
     public function getHeaders(): array
     {
+        // Union rather than array_merge, so these headers win if a flag ever shares a name.
         return [
             'Authorization' => $this->getAuthorizationHeader(),
             'User-Agent'    => $this->getUserAgentHeader(),

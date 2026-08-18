@@ -65,16 +65,17 @@ class PagedMigrationService
                 break;
             }
 
-            $timestamp = $now + $chunks * $secondsBetweenChunks;
+            $chunkNumber = $chunks + 1;
+            $timestamp   = $now + $chunks * $secondsBetweenChunks;
 
             $this->cronService->schedule($cronAction, $timestamp, [
                 'ids'   => $ids,
-                'chunk' => $chunks + 1,
+                'chunk' => $chunkNumber,
             ]);
 
             Logger::debug('Scheduled migration chunk', [
                 'action'    => $cronAction,
-                'chunk'     => $chunks + 1,
+                'chunk'     => $chunkNumber,
                 'records'   => count($ids),
                 'timestamp' => $timestamp,
             ]);
