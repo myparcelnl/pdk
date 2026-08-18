@@ -45,7 +45,7 @@ foreach (glob($definitionsDir . '/*Definition.php') ?: [] as $file) {
     $shipmentOptionsKey = $definition->getShipmentOptionsKey();
 
     if ($cap !== null && $cap !== '') {
-        $key            = "shipment_options_{$cap}";
+        $key            = "shipment_options_{$snake($cap)}";
         $legacy         = null;
         if ($shipmentOptionsKey !== null && $shipmentOptionsKey !== '') {
             $legacyCandidate = "shipment_options_{$snake($shipmentOptionsKey)}";
