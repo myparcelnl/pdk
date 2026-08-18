@@ -137,10 +137,18 @@ abstract class AbstractPdkSettingsRepository extends Repository implements PdkSe
     ): Settings {
         $category = $this->get($this->createSettingsKey($settingsId)) ?? [];
 
-        foreach ($category as $key => $item) {
-            $values = ['id' => $key] + $this->get($this->createSettingsKey("$settingsId.$key"));
+        if (! is_array($category)) {
+            $category = [];
+        }
 
-            $collection->offsetSet($key, $values);
+        foreach (array_keys($category) as $key) {
+            $values = $this->get($this->createSettingsKey("$settingsId.$key"));
+
+            if (! is_array($values)) {
+                continue;
+            }
+
+            $collection->offsetSet($key, ['id' => $key] + $values);
         }
 
         $settings->setAttribute($settingsId, $collection);
