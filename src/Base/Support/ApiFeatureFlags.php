@@ -32,10 +32,6 @@ final class ApiFeatureFlags
         /** @var null|string[] $flags */
         $flags = Pdk::get('apiFeatureFlags');
 
-        if (empty($flags)) {
-            return [];
-        }
-
-        return array_fill_keys($flags, 'true');
+        return array_fill_keys($flags ?? [], 'true');
     }
 }
