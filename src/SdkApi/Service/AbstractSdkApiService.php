@@ -201,9 +201,10 @@ abstract class AbstractSdkApiService
     protected function createGuzzleClientHandlerStack(): HandlerStack
     {
         $stack = HandlerStack::create();
-        $stack->push(LoggingMiddleware::forApiRequests());
-        // Pushed after logging so the logged request shows the flags that were actually sent.
+        // Guzzle runs the last pushed middleware closest to the handler, so the flags have to go on
+        // before logging is pushed for the logged request to show them.
         $stack->push(FeatureFlagMiddleware::forApiRequests());
+        $stack->push(LoggingMiddleware::forApiRequests());
 
         return $stack;
     }
