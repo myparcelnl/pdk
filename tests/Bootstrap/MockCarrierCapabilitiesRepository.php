@@ -113,7 +113,7 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                 'returnOnFirstFailedDelivery' => $option,
                 'sameDayDelivery'             => $option,
                 'saturdayDelivery'            => $option,
-                'tracked'                     => $option,
+                'noTracking'                     => $option,
                 'insurance'                   => array_merge($option, [
                     'insuredAmount' => $this->resolveInsuredAmountFromCarrier($carrierName),
                 ]),

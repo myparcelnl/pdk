@@ -77,7 +77,6 @@ class ExampleContractDefinitionsResponse extends SdkJsonResponse
                     'returnOnFirstFailedDelivery'  => ['isSelectedByDefault' => false, 'isRequired' => false],
                     'requiresSignature'            => ['isSelectedByDefault' => false, 'isRequired' => false],
                     'noTracking'                   => ['isSelectedByDefault' => false, 'isRequired' => false],
-                    'tracked'                      => ['isSelectedByDefault' => false, 'isRequired' => false], // Tracked is deprecated but may still be included in the response
                 ],
                 'collo'            => ['max' => 10],
             ],

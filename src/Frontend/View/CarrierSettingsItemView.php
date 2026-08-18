@@ -12,13 +12,11 @@ use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
 use MyParcelNL\Pdk\App\Service\DeliveryOptionsResetService;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
-use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormAfterUpdateBuilder;
 use MyParcelNL\Pdk\Frontend\Form\Builder\FormOperationBuilder;
@@ -170,16 +168,6 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $allowInternationalMailboxKey,
             SettingKey::price(DeliveryOptions::DELIVERY_OPTION_INTERNATIONAL_MAILBOX)
         );
-
-        // Add tracked toggle for carriers with custom mailbox contract, only visible when international mailbox is enabled
-        if ($this->carrierValidationService->supportsShipmentOption($this->carrier, TrackedDefinition::class) && AccountSettings::hasCarrierSmallPackageContract()) {
-            $trackedElement = (new InteractiveElement((new TrackedDefinition())->getCarrierSettingsKey(), Components::INPUT_TOGGLE))
-                ->builder(function (FormOperationBuilder $builder) use ($allowInternationalMailboxKey) {
-                    $builder->visibleWhen($allowInternationalMailboxKey);
-                });
-            $this->makeReadOnlyWhenRequired($trackedElement, 'tracked');
-            $fields[] = $trackedElement;
-        }
 
         return $fields;
     }

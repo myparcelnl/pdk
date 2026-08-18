@@ -36,6 +36,7 @@
                 "freshFood": [],
                 "frozen": [],
                 "hideSender": [],
+                "noTracking": [],
                 "oversizedPackage": [],
                 "priorityDelivery": [],
                 "recipientOnlyDelivery": [],
@@ -46,7 +47,6 @@
                 "sameDayDelivery": [],
                 "saturdayDelivery": [],
                 "scheduledCollection": [],
-                "tracked": [],
                 "insurance": {
                     "insuredAmount": {
                         "default": {
@@ -106,7 +106,7 @@
             "sameDayDelivery": false,
             "saturdayDelivery": false,
             "signature": true,
-            "tracked": false,
+            "noTracking": false,
             "receiptCode": false,
             "collect": false,
             "freshFood": false,

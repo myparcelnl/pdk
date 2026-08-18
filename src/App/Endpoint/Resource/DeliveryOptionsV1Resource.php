@@ -18,7 +18,7 @@ use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\TrackedDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
@@ -85,13 +85,12 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
         $orderApiShipmentOptions = ModelShipmentOptions::attributeMap();
 
         /*
-         * Handle the inversion of tracked to no_tracking
-         * New tracking implementation: When tracked option is not present or explicitly enabled we do nothing (tracking is enabled by default in the order service)
-         * Only when tracking is explicitly disabled we include the "noTracking" option with an ADR-0013 compliant empty object as value
+         * Tracking is enabled by default in the order service, so the key is only sent when a merchant
+         * explicitly opted out. The value is an ADR-0013 compliant empty object.
          */
-        $trackedKey = (new TrackedDefinition())->getShipmentOptionsKey();
+        $noTrackingKey = (new NoTrackingDefinition())->getShipmentOptionsKey();
 
-        if ($shipmentOptions->{$trackedKey} === TriStateService::DISABLED) {
+        if ($shipmentOptions->{$noTrackingKey} === TriStateService::ENABLED) {
             $formattedOptions[$orderApiShipmentOptions['no_tracking']] = new ArrayObject();
         }
 

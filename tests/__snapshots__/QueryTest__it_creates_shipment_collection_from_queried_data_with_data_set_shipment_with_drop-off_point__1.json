@@ -19,6 +19,7 @@
             "freshFood": [],
             "frozen": [],
             "hideSender": [],
+            "noTracking": [],
             "oversizedPackage": [],
             "priorityDelivery": [],
             "recipientOnlyDelivery": [],
@@ -29,7 +30,6 @@
             "sameDayDelivery": [],
             "saturdayDelivery": [],
             "scheduledCollection": [],
-            "tracked": [],
             "insurance": {
                 "insuredAmount": {
                     "default": {
@@ -78,6 +78,7 @@
                 "freshFood": [],
                 "frozen": [],
                 "hideSender": [],
+                "noTracking": [],
                 "oversizedPackage": [],
                 "priorityDelivery": [],
                 "recipientOnlyDelivery": [],
@@ -88,7 +89,6 @@
                 "sameDayDelivery": [],
                 "saturdayDelivery": [],
                 "scheduledCollection": [],
-                "tracked": [],
                 "insurance": {
                     "insuredAmount": {
                         "default": {
@@ -131,7 +131,7 @@
             "sameDayDelivery": 1,
             "saturdayDelivery": 0,
             "signature": 0,
-            "tracked": -1,
+            "noTracking": -1,
             "receiptCode": -1,
             "collect": 0,
             "freshFood": -1,

@@ -40,6 +40,14 @@ return [
     'addressesServiceUrl'    => env('PDK_ADDRESSES_SERVICE_URL', 'https://address.api.myparcel.nl'),
 
     /**
+     * Feature flags sent as `x-dmp-*` headers on every MyParcel API request. What a flag changes
+     * differs per flag, so check the overview before adding or removing one.
+     *
+     * @see https://myparcelnl.atlassian.net/wiki/spaces/MD/pages/12779590/API+feature+flags
+     */
+    'apiFeatureFlags'        => value(['x-dmp-no-tracking']),
+
+    /**
      * Security settings for the proxy
      */
     'allowedProxyHosts'      => env('PDK_ALLOWED_PROXY_HOSTS', ['self']),

@@ -13,6 +13,8 @@ use function DI\value;
 it('gets correct headers', function () {
     $pdk = MockPdkFactory::create([
         'userAgent'                => value(['MyParcelNL-Platform' => '2.0.0', 'Platform' => '1.2.3']),
+        // No feature flags, so these are the only headers the service adds.
+        'apiFeatureFlags'          => value([]),
         ApiServiceInterface::class => get(MyParcelApiService::class),
     ]);
 
@@ -28,6 +30,23 @@ it('gets correct headers', function () {
         ->toMatch(
             '/MyParcelNL-Platform\/2\.0\.0 Platform\/1\.2\.3 MyParcelNL-PDK\/[\d.]+ php\/[\d.]+/'
         );
+});
+
+it('adds the configured feature flags to the headers', function () {
+    $pdk = MockPdkFactory::create([
+        'apiFeatureFlags'          => value(['x-dmp-no-tracking']),
+        ApiServiceInterface::class => get(MyParcelApiService::class),
+    ]);
+
+    /** @var \MyParcelNL\Pdk\Api\Service\MyParcelApiService $api */
+    $api = $pdk->get(ApiServiceInterface::class);
+
+    $headers = $api->getHeaders();
+
+    expect(array_keys($headers))
+        ->toEqual(['Authorization', 'User-Agent', 'x-dmp-no-tracking'])
+        ->and($headers['x-dmp-no-tracking'])
+        ->toBe('true');
 });
 
 it('gets base url', function () {
