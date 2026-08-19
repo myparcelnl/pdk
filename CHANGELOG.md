@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.4](https://github.com/myparcelnl/pdk/compare/v4.7.3...v4.7.4) (2026-08-19)
+
+
+### :bug: Bug Fixes
+
+* **insurance:** read insurance limits from the flat capabilities format ([#511](https://github.com/myparcelnl/pdk/issues/511)) ([1fd3b69](https://github.com/myparcelnl/pdk/commit/1fd3b69d17727e8370d90d034c6f0f16adf51e04))
+
 ## [4.7.3](https://github.com/myparcelnl/pdk/compare/v4.7.2...v4.7.3) (2026-08-18)
 
 
