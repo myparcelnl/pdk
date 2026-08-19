@@ -758,6 +758,46 @@ it('carrier bounds: settings fromAmount threshold still returns carrier min, not
     expect($newOrder->deliveryOptions->shipmentOptions->insurance)->toBe(50000);
 });
 
+it('keeps the requested amount when the shipment capability advertises insurance without bounds', function () {
+    mockPdkProperty('orderCalculators', [InsuranceCalculator::class]);
+
+    // What an install looks like before its stored carrier data has been refreshed: the
+    // insurance option is present, but the flat bounds are missing. No maximum means no
+    // carrier ceiling, so the requested amount survives — and no fatal on a null money object.
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(factory(Carrier::class)->withAllCapabilities(RefCapabilitiesSharedCarrierV2::POSTNL))
+                ->push(
+                    factory(Carrier::class)
+                        ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS)
+                        ->withOptions(['insurance' => ['isRequired' => false, 'isSelectedByDefault' => false]])
+                )
+        )
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS, [
+            (new InsuranceDefinition())->getCarrierSettingsKey() => true,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO              => 200000,
+        ])
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier(RefCapabilitiesSharedCarrierV2::TRUNKRS)
+                ->withShipmentOptions(factory(ShipmentOptions::class)->withInsurance(10000))
+        )
+        ->make();
+
+    /** @var \MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface $service */
+    $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
+    $newOrder = $service->calculate($order);
+
+    expect($newOrder->deliveryOptions->shipmentOptions->insurance)->toBe(10000);
+});
+
 /**
  * Every other test in this file runs InsuranceCalculator in isolation, which leaves
  * shipmentOptions->insurance at INHERIT. In production TriStateOptionCalculator runs first and

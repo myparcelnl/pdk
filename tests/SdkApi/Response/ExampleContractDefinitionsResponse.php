@@ -60,9 +60,15 @@ class ExampleContractDefinitionsResponse extends SdkJsonResponse
                 'transactionTypes' => ['B2C', 'B2B'],
                 'options'          => [
                     'requiresAgeVerification'      => ['isSelectedByDefault' => false, 'isRequired' => false],
+                    // Insurance bounds appear twice, matching what the API sends today: the flat
+                    // fields plus the deprecated nested wrapper. The PDK drops the nested one on
+                    // the way in, so only the flat bounds should reach stored carrier data.
                     'insurance'                    => [
                         'isSelectedByDefault' => false,
                         'isRequired'          => false,
+                        'default'             => ['amount' => 0,      'currency' => 'EUR'],
+                        'max'                 => ['amount' => 500000, 'currency' => 'EUR'],
+                        'min'                 => ['amount' => 0,      'currency' => 'EUR'],
                         'insuredAmount'       => [
                             'default' => ['amount' => 0,      'currency' => 'EUR'],
                             'max'     => ['amount' => 500000, 'currency' => 'EUR'],

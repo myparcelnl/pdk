@@ -160,12 +160,13 @@ it('saves carrier capabilities as account->shop->carriers correctly', function (
     $insurance = $options->getInsurance();
     expect($insurance->getIsSelectedByDefault())->toBeFalse();
     expect($insurance->getIsRequired())->toBeFalse();
-    expect($insurance->getInsuredAmount()->getDefault()->getCurrency())->toBe('EUR');
-    expect($insurance->getInsuredAmount()->getDefault()->getAmount())->toBe(0);
-    expect($insurance->getInsuredAmount()->getMin()->getCurrency())->toBe('EUR');
-    expect($insurance->getInsuredAmount()->getMin()->getAmount())->toBe(0);
-    expect($insurance->getInsuredAmount()->getMax()->getCurrency())->toBe('EUR');
-    expect($insurance->getInsuredAmount()->getMax()->getAmount())->toBe(500000);
+    expect($insurance->getInsuredAmount())->toBeNull();
+    expect($insurance->getDefault()->getCurrency())->toBe('EUR');
+    expect($insurance->getDefault()->getAmount())->toBe(0);
+    expect($insurance->getMin()->getCurrency())->toBe('EUR');
+    expect($insurance->getMin()->getAmount())->toBe(0);
+    expect($insurance->getMax()->getCurrency())->toBe('EUR');
+    expect($insurance->getMax()->getAmount())->toBe(500000);
 
     expect($firstCarrier->collo->getMax())->toBe(10);
 });

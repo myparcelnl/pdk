@@ -14,7 +14,6 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinit
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCollo;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesMoney;
 use function expect;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -253,15 +252,13 @@ it('round-trips a carrier through toArray and back without corrupting typed prop
         ->and($reload->collo->getMax())->toBe(4);
 });
 
-it('hydrates insurance option with nested insuredAmount from plain arrays', function () {
+it('hydrates insurance option bounds from plain arrays', function () {
     $carrier = new Carrier([
         'options' => [
             'insurance' => [
-                'insuredAmount' => [
-                    'default' => ['currency' => 'EUR', 'amount' => 0],
-                    'min'     => ['currency' => 'EUR', 'amount' => 0],
-                    'max'     => ['currency' => 'EUR', 'amount' => 500000],
-                ],
+                'default' => ['currency' => 'EUR', 'amount' => 0],
+                'min'     => ['currency' => 'EUR', 'amount' => 0],
+                'max'     => ['currency' => 'EUR', 'amount' => 500000],
             ],
         ],
     ]);
@@ -272,13 +269,10 @@ it('hydrates insurance option with nested insuredAmount from plain arrays', func
     $insurance = $options->getInsurance();
     expect($insurance)->toBeInstanceOf(RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2::class);
 
-    $insuredAmount = $insurance->getInsuredAmount();
-    expect($insuredAmount)->toBeInstanceOf(RefCapabilitiesSharedOptionsInsuranceBaseInsuranceV2InsuredAmount::class);
-
-    expect($insuredAmount->getMax())->toBeInstanceOf(RefTypesMoney::class)
-        ->and($insuredAmount->getMax()->getAmount())->toBe(500000)
-        ->and($insuredAmount->getMin())->toBeInstanceOf(RefTypesMoney::class)
-        ->and($insuredAmount->getMin()->getAmount())->toBe(0)
-        ->and($insuredAmount->getDefault())->toBeInstanceOf(RefTypesMoney::class)
-        ->and($insuredAmount->getDefault()->getAmount())->toBe(0);
+    expect($insurance->getMax())->toBeInstanceOf(RefTypesMoney::class)
+        ->and($insurance->getMax()->getAmount())->toBe(500000)
+        ->and($insurance->getMin())->toBeInstanceOf(RefTypesMoney::class)
+        ->and($insurance->getMin()->getAmount())->toBe(0)
+        ->and($insurance->getDefault())->toBeInstanceOf(RefTypesMoney::class)
+        ->and($insurance->getDefault()->getAmount())->toBe(0);
 });

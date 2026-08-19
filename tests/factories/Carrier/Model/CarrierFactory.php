@@ -131,11 +131,9 @@ final class CarrierFactory extends AbstractModelFactory
 
         return $this->withOptions(array_merge($existingOptions, [
             'insurance' => [
-                'insuredAmount' => [
-                    'default' => ['currency' => $currency, 'amount' => $default],
-                    'min'     => ['currency' => $currency, 'amount' => $min],
-                    'max'     => ['currency' => $currency, 'amount' => $max],
-                ],
+                'default' => ['currency' => $currency, 'amount' => $default],
+                'min'     => ['currency' => $currency, 'amount' => $min],
+                'max'     => ['currency' => $currency, 'amount' => $max],
             ],
         ]));
     }
@@ -161,15 +159,13 @@ final class CarrierFactory extends AbstractModelFactory
                 continue;
             }
 
-            // Insurance requires a populated insuredAmount; all other options can be empty arrays.
+            // Insurance requires populated bounds; all other options can be empty arrays.
             // openAPITypes() returns class names with a leading backslash, while ::class does not — trim before comparing.
             if (ltrim($model, '\\') === RefCapabilitiesContractDefinitionsResponseOptionsInsuranceOptionV2::class) {
                 $allShipmentOptions[$optionKey] = [
-                    'insuredAmount' => [
-                        'default' => ['currency' => 'EUR', 'amount' => 0],
-                        'min'     => ['currency' => 'EUR', 'amount' => 0],
-                        'max'     => ['currency' => 'EUR', 'amount' => 500000],
-                    ],
+                    'default' => ['currency' => 'EUR', 'amount' => 0],
+                    'min'     => ['currency' => 'EUR', 'amount' => 0],
+                    'max'     => ['currency' => 'EUR', 'amount' => 500000],
                 ];
             } else {
                 $allShipmentOptions[$optionKey] = [];

@@ -114,9 +114,10 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                 'sameDayDelivery'             => $option,
                 'saturdayDelivery'            => $option,
                 'tracked'                     => $option,
-                'insurance'                   => array_merge($option, [
-                    'insuredAmount' => $this->resolveInsuredAmountFromCarrier($carrierName),
-                ]),
+                'insurance'                   => array_merge(
+                    $option,
+                    $this->resolveInsuranceBoundsFromCarrier($carrierName)
+                ),
                 'priorityDelivery'            => $option,
                 'requiresReceiptCode'         => $option,
                 'scheduledCollection'         => $option,
@@ -154,12 +155,13 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
      * using `factory(Carrier::class)->withInsurance($default, $min, $max)` keep working
      * after the calculator switched to per-shipment capability bounds.
      *
-     * Falls back to a permissive 0–500000 range when the carrier or its insurance option
-     * is not configured.
+     * Returns the flat `default`/`min`/`max` keys the capabilities response uses, ready to
+     * merge into the insurance option. Falls back to a permissive 0–500000 range when the
+     * carrier or its insurance option is not configured.
      *
      * @return array<string, array<string, int|string>>
      */
-    private function resolveInsuredAmountFromCarrier(string $carrierName): array
+    private function resolveInsuranceBoundsFromCarrier(string $carrierName): array
     {
         try {
             $shop     = Pdk::get(AccountSettingsServiceInterface::class)->getShop();
@@ -170,15 +172,20 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
                 })
                 : null;
 
-            $insured = $carrier && $carrier->options
-                ? $carrier->options->getInsurance()->getInsuredAmount() // @phpstan-ignore-line SDK declares non-nullable but may be missing
+            $insurance = $carrier && $carrier->options
+                ? $carrier->options->getInsurance() // @phpstan-ignore-line SDK declares non-nullable but may be missing
                 : null;
 
-            if ($insured) {
+            $min = $insurance ? $insurance->getMin() : null;
+            $max = $insurance ? $insurance->getMax() : null;
+
+            if ($min && $max) {
+                $default = $insurance->getDefault();
+
                 return [
-                    'default' => ['currency' => 'EUR', 'amount' => $insured->getDefault()->getAmount()],
-                    'min'     => ['currency' => 'EUR', 'amount' => $insured->getMin()->getAmount()],
-                    'max'     => ['currency' => 'EUR', 'amount' => $insured->getMax()->getAmount()],
+                    'default' => ['currency' => 'EUR', 'amount' => $default ? $default->getAmount() : 0],
+                    'min'     => ['currency' => 'EUR', 'amount' => $min->getAmount()],
+                    'max'     => ['currency' => 'EUR', 'amount' => $max->getAmount()],
                 ];
             }
         } catch (Throwable $e) {

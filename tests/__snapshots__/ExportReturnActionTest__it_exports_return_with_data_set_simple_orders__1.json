@@ -31,19 +31,17 @@
                             "scheduledCollection": [],
                             "tracked": [],
                             "insurance": {
-                                "insuredAmount": {
-                                    "default": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "min": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "max": {
-                                        "currency": "EUR",
-                                        "amount": 500000
-                                    }
+                                "default": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "min": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "max": {
+                                    "currency": "EUR",
+                                    "amount": 500000
                                 }
                             }
                         },
@@ -136,19 +134,17 @@
                                 "scheduledCollection": [],
                                 "tracked": [],
                                 "insurance": {
-                                    "insuredAmount": {
-                                        "default": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "min": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "max": {
-                                            "currency": "EUR",
-                                            "amount": 500000
-                                        }
+                                    "default": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "min": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "max": {
+                                        "currency": "EUR",
+                                        "amount": 500000
                                     }
                                 }
                             },
@@ -195,19 +191,17 @@
                                     "scheduledCollection": [],
                                     "tracked": [],
                                     "insurance": {
-                                        "insuredAmount": {
-                                            "default": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "min": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "max": {
-                                                "currency": "EUR",
-                                                "amount": 500000
-                                            }
+                                        "default": {
+                                            "currency": "EUR",
+                                            "amount": 0
+                                        },
+                                        "min": {
+                                            "currency": "EUR",
+                                            "amount": 0
+                                        },
+                                        "max": {
+                                            "currency": "EUR",
+                                            "amount": 500000
                                         }
                                     }
                                 },
@@ -285,19 +279,17 @@
                                 "scheduledCollection": [],
                                 "tracked": [],
                                 "insurance": {
-                                    "insuredAmount": {
-                                        "default": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "min": {
-                                            "currency": "EUR",
-                                            "amount": 0
-                                        },
-                                        "max": {
-                                            "currency": "EUR",
-                                            "amount": 500000
-                                        }
+                                    "default": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "min": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "max": {
+                                        "currency": "EUR",
+                                        "amount": 500000
                                     }
                                 }
                             },
@@ -344,19 +336,17 @@
                                     "scheduledCollection": [],
                                     "tracked": [],
                                     "insurance": {
-                                        "insuredAmount": {
-                                            "default": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "min": {
-                                                "currency": "EUR",
-                                                "amount": 0
-                                            },
-                                            "max": {
-                                                "currency": "EUR",
-                                                "amount": 500000
-                                            }
+                                        "default": {
+                                            "currency": "EUR",
+                                            "amount": 0
+                                        },
+                                        "min": {
+                                            "currency": "EUR",
+                                            "amount": 0
+                                        },
+                                        "max": {
+                                            "currency": "EUR",
+                                            "amount": 500000
                                         }
                                     }
                                 },
@@ -904,19 +894,17 @@
                             "scheduledCollection": [],
                             "tracked": [],
                             "insurance": {
-                                "insuredAmount": {
-                                    "default": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "min": {
-                                        "currency": "EUR",
-                                        "amount": 0
-                                    },
-                                    "max": {
-                                        "currency": "EUR",
-                                        "amount": 500000
-                                    }
+                                "default": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "min": {
+                                    "currency": "EUR",
+                                    "amount": 0
+                                },
+                                "max": {
+                                    "currency": "EUR",
+                                    "amount": 500000
                                 }
                             }
                         },
