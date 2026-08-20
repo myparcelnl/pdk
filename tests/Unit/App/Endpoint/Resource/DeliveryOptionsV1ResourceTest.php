@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryType as OrderApiDeliveryType;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -264,6 +265,15 @@ it('maps package types using direct mapping', function () {
     }
 });
 
+it('maps every known delivery type to an Order API value', function (string $deliveryTypeName) {
+    $deliveryOptions = new DeliveryOptions(['deliveryType' => $deliveryTypeName]);
+    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
+    $result = $resource->format();
+
+    expect($result['deliveryType'])->not->toBeNull();
+    expect(OrderApiDeliveryType::getAllowableEnumValues())->toContain($result['deliveryType']);
+})->with('deliveryTypeNames');
+
 it('maps delivery types using direct mapping', function () {
     $deliveryTypes = [
         'standard' => 'STANDARD_DELIVERY',
@@ -271,6 +281,8 @@ it('maps delivery types using direct mapping', function () {
         'evening' => 'EVENING_DELIVERY',
         'pickup' => 'PICKUP_DELIVERY',
         'express' => 'EXPRESS_DELIVERY',
+        'same_day' => 'SAME_DAY_DELIVERY',
+        'early_morning' => 'EARLY_MORNING_DELIVERY',
     ];
 
     foreach ($deliveryTypes as $deliveryType => $expected) {
@@ -380,6 +392,8 @@ it('maps all supported shipment options correctly', function () {
         'sameDayDelivery' => TriStateService::ENABLED,
         'saturdayDelivery' => TriStateService::ENABLED,
         'collect' => TriStateService::ENABLED,
+        'freshFood' => TriStateService::ENABLED,
+        'frozen' => TriStateService::ENABLED,
     ]);
 
     $deliveryOptions = new DeliveryOptions(['shipmentOptions' => $shipmentOptions]);
@@ -397,7 +411,9 @@ it('maps all supported shipment options correctly', function () {
         ->toHaveKey('requiresReceiptCode')
         ->toHaveKey('sameDayDelivery')
         ->toHaveKey('saturdayDelivery')
-        ->toHaveKey('scheduledCollection');
+        ->toHaveKey('scheduledCollection')
+        ->toHaveKey('freshFood')
+        ->toHaveKey('frozen');
 
     // Verify all are empty objects
     foreach ($result['shipmentOptions'] as $key => $value) {

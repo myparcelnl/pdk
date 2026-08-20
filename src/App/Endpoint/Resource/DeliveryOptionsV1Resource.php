@@ -41,6 +41,8 @@ use MyParcelNL\Sdk\Support\Str;
  */
 final class DeliveryOptionsV1Resource extends AbstractVersionedResource
 {
+    private const ORDER_API_DELIVERY_TYPE_SUFFIX = '_DELIVERY';
+
     /**
      * Get the API version this resource handles.
      */
@@ -241,25 +243,36 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatDeliveryType(string $deliveryType): ?string
     {
-        // If the delivery type already equals one of the order service constants, return it directly
-        if (\in_array($deliveryType, OrderApiDeliveryType::getAllowableEnumValues(), true)) {
-            return $deliveryType;
-        } else {
-            // Attempt to convert it to SCREAMING_SNAKE_CASE and check again
-            $convertedName = Str::upper(Str::snake($deliveryType));
-            if (\in_array($convertedName, OrderApiDeliveryType::getAllowableEnumValues(), true)) {
-                return $convertedName;
-            }
-        }
-        // Otherwise, use our mapping
-        $deliveryTypeMapping = [
-            DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME => OrderApiDeliveryType::STANDARD_DELIVERY,
-            DeliveryOptions::DELIVERY_TYPE_MORNING_NAME => OrderApiDeliveryType::MORNING_DELIVERY,
-            DeliveryOptions::DELIVERY_TYPE_EVENING_NAME => OrderApiDeliveryType::EVENING_DELIVERY,
-            DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME => OrderApiDeliveryType::PICKUP_DELIVERY,
-            DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME => OrderApiDeliveryType::EXPRESS_DELIVERY,
-        ];
+        $allowedValues = OrderApiDeliveryType::getAllowableEnumValues();
 
-        return \array_key_exists($deliveryType, $deliveryTypeMapping) ? $deliveryTypeMapping[$deliveryType] : null;
+        // If the delivery type already equals one of the order service constants, return it directly
+        if (\in_array($deliveryType, $allowedValues, true)) {
+            return $deliveryType;
+        }
+
+        // Attempt to convert it to SCREAMING_SNAKE_CASE and check again
+        $convertedName = Str::upper(Str::snake($deliveryType));
+        if (\in_array($convertedName, $allowedValues, true)) {
+            return $convertedName;
+        }
+
+        // Every Order API delivery type carries the suffix, so same_day => SAME_DAY_DELIVERY
+        $suffixedName = $convertedName . self::ORDER_API_DELIVERY_TYPE_SUFFIX;
+        if (\in_array($suffixedName, $allowedValues, true)) {
+            return $suffixedName;
+        }
+
+        // Kept as the layer for a name that none of the conversions above can reach. Empty because
+        // all seven names in DeliveryOptions resolve through the suffix.
+        /** @var array<string, string> $deliveryTypeMapping */
+        $deliveryTypeMapping = [];
+
+        if (\array_key_exists($deliveryType, $deliveryTypeMapping)) {
+            return $deliveryTypeMapping[$deliveryType];
+        }
+
+        Logger::warning("Unmapped delivery type: {$deliveryType} - this delivery type will be null in the API response");
+
+        return null;
     }
 }
