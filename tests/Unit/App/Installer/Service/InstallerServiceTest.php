@@ -6,14 +6,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Installer\Service;
 
-use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Model\AppInfo;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Installer;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
-use MyParcelNL\Pdk\Tests\Bootstrap\MockFileSystem;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesSettingsMock;
@@ -46,7 +44,6 @@ usesShared(
 
 afterEach(function () {
     \MyParcelNL\Pdk\Tests\Bootstrap\MockMigrationService::resetExtraUpgrades();
-    MockFileSystem::clearExclusiveCreateFailures();
 });
 
 function expectSettingsToContain(array $values): void
@@ -932,12 +929,11 @@ PHP
         @rmdir($tmpDir);
     }
 });
-
-it('skips the migration run while another run holds the lock', function () {
-    $tmpDir = sys_get_temp_dir() . '/pdk_locked_' . uniqid();
+it('skips the migration run while another run has the claim', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_claimed_' . uniqid();
     mkdir($tmpDir, 0777, true);
 
-    $file = $tmpDir . '/2026_08_02_000000_locked_test.php';
+    $file = $tmpDir . '/2026_08_02_000000_claimed_test.php';
     file_put_contents($file, <<<'PHP'
 <?php
 use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
@@ -949,7 +945,7 @@ return new class extends AbstractTimestampedMigration {
     {
         /** @var PdkSettingsRepositoryInterface $repo */
         $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
-        $repo->store('order.lockedMarker', 'applied');
+        $repo->store('order.claimedMarker', 'applied');
     }
 };
 PHP
@@ -958,86 +954,23 @@ PHP
     $originalMigrationDir = Pdk::get('migrationDirectory');
     Pdk::set('migrationDirectory', $tmpDir);
 
-    /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-    $fileSystem = Pdk::get(FileSystemInterface::class);
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
     $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
 
-    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
     $settingsRepository->store($appliedMigrationsKey, ['AlreadyAppliedMigration']);
 
-    // Stand in for a concurrent run that took the lock and is still working.
-    $fileSystem->put(Pdk::get('migrationLockFile'), '');
+    // Stand in for a concurrent run that claimed the migration and is still working.
+    $settingsRepository->store(Pdk::get('settingKeyMigrationLock'), time());
 
     try {
         Installer::install();
 
-        expect($settingsRepository->get('order.lockedMarker'))
+        expect($settingsRepository->get('order.claimedMarker'))
             ->toBeNull()
             ->and($settingsRepository->get($appliedMigrationsKey))
-            ->not->toContain('2026_08_02_000000_locked_test');
-    } finally {
-        $fileSystem->unlink(Pdk::get('migrationLockFile'));
-        Pdk::set('migrationDirectory', $originalMigrationDir);
-        @unlink($file);
-        @rmdir($tmpDir);
-    }
-});
-
-it('claims a lock released mid-race without reporting a takeover', function () {
-    $tmpDir = sys_get_temp_dir() . '/pdk_race_' . uniqid();
-    mkdir($tmpDir, 0777, true);
-
-    $file = $tmpDir . '/2026_08_05_000000_race_test.php';
-    file_put_contents($file, <<<'PHP'
-<?php
-use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
-
-return new class extends AbstractTimestampedMigration {
-    public function up(): void
-    {
-        /** @var PdkSettingsRepositoryInterface $repo */
-        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
-        $repo->store('order.raceMarker', 'applied');
-    }
-};
-PHP
-    );
-
-    $originalMigrationDir = Pdk::get('migrationDirectory');
-    Pdk::set('migrationDirectory', $tmpDir);
-
-    /** @var PdkSettingsRepositoryInterface $settingsRepository */
-    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
-    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
-
-    $settingsRepository->store($installedVersionKey, '1.2.0');
-    $settingsRepository->store($appliedMigrationsKey, ['AlreadyAppliedMigration']);
-
-    // The competing run holds the lock at create time and releases it straight after, so the
-    // claim fails but no lock file is there to inspect. Nothing was abandoned.
-    MockFileSystem::failNextExclusiveCreate(Pdk::get('migrationLockFile'));
-
-    try {
-        Installer::install();
-
-        /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockLogger $logger */
-        $logger = Pdk::get(LoggerInterface::class);
-
-        // The logger prefixes every message, so match on a substring rather than the whole line.
-        $takeoverWarnings = array_filter($logger->getLogs(LogLevel::WARNING), function (array $log) {
-            return false !== strpos($log['message'], 'abandoned migration lock');
-        });
-
-        expect($settingsRepository->get('order.raceMarker'))
-            ->toBe('applied')
-            ->and($takeoverWarnings)
-            ->toBeEmpty();
+            ->not->toContain('2026_08_02_000000_claimed_test');
     } finally {
         Pdk::set('migrationDirectory', $originalMigrationDir);
         @unlink($file);
@@ -1045,70 +978,7 @@ PHP
     }
 });
 
-it('keeps the migration lock outside the directory clearCache wipes', function () {
-    // install() takes the lock and then calls Pdk::clearCache(), which empties the cache dir.
-    // A lock stored in there would be deleted by the run holding it, letting a second run in.
-    $cacheDir = rtrim(\MyParcelNL\Pdk\Base\Pdk::getCacheDir(), '/');
-
-    expect(Pdk::get('migrationLockFile'))->not->toStartWith($cacheDir . '/');
-});
-
-it('leaves a lock alone while it is still inside the timeout', function () {
-    $tmpDir = sys_get_temp_dir() . '/pdk_unstamped_' . uniqid();
-    mkdir($tmpDir, 0777, true);
-
-    $file = $tmpDir . '/2026_08_06_000000_unstamped_test.php';
-    file_put_contents($file, <<<'PHP'
-<?php
-use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
-use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
-
-return new class extends AbstractTimestampedMigration {
-    public function up(): void
-    {
-        /** @var PdkSettingsRepositoryInterface $repo */
-        $repo = Pdk::get(PdkSettingsRepositoryInterface::class);
-        $repo->store('order.unstampedMarker', 'applied');
-    }
-};
-PHP
-    );
-
-    $originalMigrationDir = Pdk::get('migrationDirectory');
-    Pdk::set('migrationDirectory', $tmpDir);
-
-    /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-    $fileSystem = Pdk::get(FileSystemInterface::class);
-    /** @var PdkSettingsRepositoryInterface $settingsRepository */
-    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
-    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
-
-    $settingsRepository->store($installedVersionKey, '1.2.0');
-    $settingsRepository->store($appliedMigrationsKey, ['AlreadyAppliedMigration']);
-
-    // One second inside the timeout. Pairs with the takeover test, which sits one second the
-    // other side of it, so the boundary is pinned from both directions.
-    $fileSystem->put(Pdk::get('migrationLockFile'), '');
-    MockFileSystem::setMtime(
-        Pdk::get('migrationLockFile'),
-        time() - Pdk::get('migrationLockTimeout') + 1
-    );
-
-    try {
-        Installer::install();
-
-        expect($settingsRepository->get('order.unstampedMarker'))->toBeNull();
-    } finally {
-        $fileSystem->unlink(Pdk::get('migrationLockFile'));
-        Pdk::set('migrationDirectory', $originalMigrationDir);
-        @unlink($file);
-        @rmdir($tmpDir);
-    }
-});
-
-it('takes over a migration lock left behind by a run that died', function () {
+it('migrates when the claim is older than the timeout', function () {
     $tmpDir = sys_get_temp_dir() . '/pdk_stale_' . uniqid();
     mkdir($tmpDir, 0777, true);
 
@@ -1133,21 +1003,17 @@ PHP
     $originalMigrationDir = Pdk::get('migrationDirectory');
     Pdk::set('migrationDirectory', $tmpDir);
 
-    /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-    $fileSystem = Pdk::get(FileSystemInterface::class);
     /** @var PdkSettingsRepositoryInterface $settingsRepository */
     $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
-    $installedVersionKey  = Pdk::get('settingKeyInstalledVersion');
     $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
 
-    $settingsRepository->store($installedVersionKey, '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
     $settingsRepository->store($appliedMigrationsKey, ['AlreadyAppliedMigration']);
 
-    // A lock dated beyond the timeout. The run that took it is gone, so nothing will ever
-    // release it. Without takeover the shop never migrates again.
-    $fileSystem->put(Pdk::get('migrationLockFile'), '');
-    MockFileSystem::setMtime(
-        Pdk::get('migrationLockFile'),
+    // A claim from a run that was killed mid-migration. Without the timeout it would block
+    // every later migration for good.
+    $settingsRepository->store(
+        Pdk::get('settingKeyMigrationLock'),
         time() - Pdk::get('migrationLockTimeout') - 1
     );
 
@@ -1163,4 +1029,72 @@ PHP
         @unlink($file);
         @rmdir($tmpDir);
     }
+});
+
+it('clears the claim after the run', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+
+    Installer::install();
+
+    expect($settingsRepository->get(Pdk::get('settingKeyMigrationLock')))->toBe(0);
+});
+
+it('clears the claim when a migration throws', function () {
+    $tmpDir = sys_get_temp_dir() . '/pdk_throwing_' . uniqid();
+    mkdir($tmpDir, 0777, true);
+
+    $file = $tmpDir . '/2026_08_06_000000_throwing_test.php';
+    file_put_contents($file, <<<'PHP'
+<?php
+use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
+
+return new class extends AbstractTimestampedMigration {
+    public function up(): void
+    {
+        throw new RuntimeException('migration blew up');
+    }
+};
+PHP
+    );
+
+    $originalMigrationDir = Pdk::get('migrationDirectory');
+    Pdk::set('migrationDirectory', $tmpDir);
+
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository = Pdk::get(PdkSettingsRepositoryInterface::class);
+
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+    $settingsRepository->store(Pdk::get('settingKeyAppliedMigrations'), ['AlreadyAppliedMigration']);
+
+    try {
+        expect(function () {
+            Installer::install();
+        })->toThrow(\RuntimeException::class);
+
+        // A claim left behind by a failed run would block every later migration until the
+        // timeout expires.
+        expect($settingsRepository->get(Pdk::get('settingKeyMigrationLock')))->toBe(0);
+    } finally {
+        Pdk::set('migrationDirectory', $originalMigrationDir);
+        @unlink($file);
+        @rmdir($tmpDir);
+    }
+});
+
+it('reports pending migrations without writing the applied list', function () {
+    /** @var PdkSettingsRepositoryInterface $settingsRepository */
+    $settingsRepository   = Pdk::get(PdkSettingsRepositoryInterface::class);
+    $appliedMigrationsKey = Pdk::get('settingKeyAppliedMigrations');
+
+    // An install that predates per-migration tracking: a version, but no applied list. Seeding
+    // that list writes, and this call runs on every request before anything is claimed.
+    $settingsRepository->store(Pdk::get('settingKeyInstalledVersion'), '1.2.0');
+
+    expect(Installer::hasPendingMigrations())
+        ->toBeTrue()
+        ->and($settingsRepository->get($appliedMigrationsKey))
+        ->toBeEmpty();
 });
