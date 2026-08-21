@@ -146,12 +146,13 @@ components:
           description: |
             Shipment options following the Order API ShipmentOptions schema
             (https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptions)
-            with one key difference: the insurance.amount property uses integer micro format
-            (e.g., 50000000 for €50) instead of the Money object format with integral/fractional parts.
+            with one key difference: insurance is flat. The amount is an integer in micros
+            (e.g., 50000000 for €50) with currency next to it, instead of the Order API's nested
+            amount object that holds micros and currency.
 
             All other properties follow ADR-0013 (empty object format for enabled options).
           properties:
-            # Insurance with integer micro format (differs from Order API's Money object format)
+            # Flat insurance: integer micros plus currency, see the description above
             insurance:
               type: object
               properties:
@@ -169,6 +170,10 @@ components:
               $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/additionalInsurance
             deliverAtPostalPoint:
               $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/deliverAtPostalPoint
+            freshFood:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/freshFood
+            frozen:
+              $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/frozen
             hideSender:
               $ref: https://order.api.myparcel.nl/openapi.yaml#/components/schemas/ShipmentOptionsCommon/properties/hideSender
             noTracking:

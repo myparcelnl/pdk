@@ -29,7 +29,9 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions as OrderApiShipmentOptions;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Yaml\Yaml;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -283,6 +285,22 @@ it('returns a response which matches the openApi schema', function (string $pack
         $this->fail($e->getVerboseMessage());
     }
 })->with('packageTypeNames', 'deliveryTypeNames', 'retailLocationTypes');
+
+it('documents every Order API shipment option in the openApi spec', function () {
+    $spec = Yaml::parseFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml');
+
+    $documented = array_keys(
+        $spec['components']['schemas']['DeliveryOptions']['properties']['shipmentOptions']['properties']
+    );
+    $orderApi = array_values(OrderApiShipmentOptions::attributeMap());
+
+    sort($documented);
+    sort($orderApi);
+
+    // The spec lists each option explicitly because OpenAPI cannot inherit the remote schema
+    // and override insurance at the same time. This test fails when the SDK gains an option.
+    expect($documented)->toBe($orderApi);
+});
 
 it('insurance: calls calculate() on the options service when handling a delivery options request', function () {
     // Spy test: verifies the endpoint calls PdkOrderOptionsServiceInterface::calculate(), which runs
