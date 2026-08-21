@@ -268,8 +268,11 @@ class CarrierSettingsItemView extends AbstractSettingsView
             $ageCheckElement = (new InteractiveElement($ageCheckDefinition->getCarrierSettingsKey(), Components::INPUT_TOGGLE))
                 ->builder(function (FormOperationBuilder $builder) use ($signatureKey, $onlyRecipientKey) {
                     $builder->afterUpdate(function (FormAfterUpdateBuilder $afterUpdate) use ($signatureKey, $onlyRecipientKey) {
-                        // Toggle settings are stored as TriState integers (-1/0/1); operands
-                        // must match so the frontend's strict `$eq` check succeeds.
+                        // The admin form normalizes toggle values to TriState ints (1/0/-1)
+                        // at the component boundary, so the strict `$eq` checks below compare
+                        // int against int. Turning age check OFF deliberately leaves signature
+                        // and only recipient stored as enabled — they just unlock again, so
+                        // what the merchant sees is exactly what is stored.
                         if ($signatureKey) {
                             $afterUpdate->setValue(TriStateService::ENABLED)->on($signatureKey)->if->eq(TriStateService::ENABLED);
                         }
@@ -303,7 +306,10 @@ class CarrierSettingsItemView extends AbstractSettingsView
                 if (! $ageCheckDefinition || ! $this->carrierValidationService->supportsShipmentOption($this->carrier, $ageCheckDefinition)) {
                     return;
                 }
-                $builder->readOnlyWhen($ageCheckDefinition->getCarrierSettingsKey());
+                // Lock only while age check is explicitly enabled. A bare (truthy) check
+                // would also match INHERIT (-1) and lock the fields while age check was
+                // never turned on.
+                $builder->readOnlyWhen($ageCheckDefinition->getCarrierSettingsKey(), TriStateService::ENABLED);
             },
             $signatureElements,
             $onlyRecipientElements
