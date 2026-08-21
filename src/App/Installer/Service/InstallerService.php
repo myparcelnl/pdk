@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Installer\Contract\MigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\MigrationServiceInterface;
 use MyParcelNL\Pdk\App\Installer\Contract\TimestampedMigrationInterface;
 use MyParcelNL\Pdk\App\Installer\Migration\AbstractTimestampedMigration;
-use MyParcelNL\Pdk\Base\FileSystemInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -58,10 +57,8 @@ class InstallerService implements InstallerServiceInterface
             return;
         }
 
-        $lock = $this->acquireMigrationLock();
-
-        if (null === $lock) {
-            Logger::debug('Another run holds the migration lock. Skipping this pass.');
+        if (! $this->claimMigrationRun()) {
+            Logger::debug('Another run is migrating. Skipping this pass.');
 
             return;
         }
@@ -79,7 +76,7 @@ class InstallerService implements InstallerServiceInterface
 
             $this->updateInstalledVersion($currentVersion);
         } finally {
-            $this->releaseMigrationLock($lock);
+            $this->releaseMigrationRun();
         }
     }
 
@@ -92,95 +89,60 @@ class InstallerService implements InstallerServiceInterface
      */
     public function hasPendingMigrations(): bool
     {
-        return $this->getUpgradeMigrations(Pdk::getAppInfo()->version)
+        $collection = $this->getUpgradeMigrations();
+
+        if ($collection->isEmpty()) {
+            return false;
+        }
+
+        $applied = $this->getAppliedMigrations();
+
+        // An empty list on an install that predates per-migration tracking means "not seeded
+        // yet", not "nothing to do". Seeding writes to the settings, so it waits for the
+        // claimed run in migrateUp().
+        if (empty($applied)) {
+            return true;
+        }
+
+        return $this->filterUnapplied($collection, $applied)
             ->isNotEmpty();
     }
 
     /**
-     * Claims the migration run by creating the lock file. Creation is exclusive, so this
-     * returns null when another run already holds it.
-     *
-     * @return null|resource
-     */
-    protected function acquireMigrationLock()
-    {
-        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-        $fileSystem = Pdk::get(FileSystemInterface::class);
-        /** @var string $lockFile */
-        $lockFile   = Pdk::get('migrationLockFile');
-
-        $fileSystem->mkdir($fileSystem->dirname($lockFile), true);
-
-        $lock = $fileSystem->openStream($lockFile, 'x') ?: null;
-
-        if (null === $lock) {
-            $lock = $this->reclaimMigrationLock($lockFile);
-        }
-
-        return $lock;
-    }
-
-    /**
-     * Retries a claim that failed. A lock that is gone was released between the claim and this
-     * retry, so it is simply claimed again. A lock that is still there is taken over only when
-     * it is older than the timeout, which means its holder died without releasing it.
-     *
-     * @param  string $lockFile
-     *
-     * @return null|resource
-     */
-    private function reclaimMigrationLock(string $lockFile)
-    {
-        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-        $fileSystem = Pdk::get(FileSystemInterface::class);
-
-        if ($fileSystem->fileExists($lockFile)) {
-            if (! $this->migrationLockIsAbandoned($lockFile)) {
-                return null;
-            }
-
-            Logger::warning('Taking over an abandoned migration lock.', ['file' => $lockFile]);
-
-            $fileSystem->unlink($lockFile);
-        }
-
-        return $fileSystem->openStream($lockFile, 'x') ?: null;
-    }
-
-    /**
-     * Reports whether the lock was claimed longer ago than the timeout allows. Only call this
-     * for a lock file that exists.
-     *
-     * @param  string $lockFile
+     * Claims the migration run by storing the current time, and reports whether this run got
+     * it. A claim older than the timeout is treated as abandoned: a run killed mid-migration
+     * cannot clear its own claim, and without this every later migration would be blocked for
+     * good.
      *
      * @return bool
      */
-    private function migrationLockIsAbandoned(string $lockFile): bool
+    protected function claimMigrationRun(): bool
     {
-        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-        $fileSystem = Pdk::get(FileSystemInterface::class);
+        $key     = Pdk::get('settingKeyMigrationLock');
+        $timeout = (int) Pdk::get('migrationLockTimeout');
 
-        // The filesystem dates the lock when it creates it, in the same step. Reading the claim
-        // time from a payload instead would need a second write, and a run arriving between the
-        // two would see an undated lock with no way to tell a live claim from a dead one.
-        $claimedAt = $fileSystem->mtime($lockFile);
+        // Known gap: two runs that both read the claim before either stores it will both
+        // migrate. Closing it needs a write that fails when a value is already there, which
+        // the settings repository cannot do and every platform would have to build itself.
+        // Accepted because the gap is one database round trip wide, is only open in the
+        // minutes after an update, and before this there was no claim at all.
+        $claimedAt = (int) $this->settingsRepository->get($key);
 
-        return null !== $claimedAt
-            && time() - $claimedAt > (int) Pdk::get('migrationLockTimeout');
+        if (time() - $claimedAt < $timeout) {
+            return false;
+        }
+
+        $this->settingsRepository->store($key, time());
+
+        return true;
     }
 
     /**
-     * @param  resource $lock
-     *
      * @return void
      */
-    protected function releaseMigrationLock($lock): void
+    protected function releaseMigrationRun(): void
     {
-        /** @var \MyParcelNL\Pdk\Base\FileSystemInterface $fileSystem */
-        $fileSystem = Pdk::get(FileSystemInterface::class);
-
-        $fileSystem->closeStream($lock);
-        $fileSystem->unlink(Pdk::get('migrationLockFile'));
+        $this->settingsRepository->store(Pdk::get('settingKeyMigrationLock'), 0);
     }
 
     /**
@@ -319,9 +281,9 @@ class InstallerService implements InstallerServiceInterface
         $installedVersion = $this->getInstalledVersion();
 
         if (! $installedVersion) {
-            // Defensive: both callers (getUpgradeMigrations with a version, and migrateDown
-            // on uninstall) only run when installed_version is set, so this is never reached
-            // in practice — a fresh install seeds via markAllUpgradeMigrationsApplied().
+            // Defensive: both callers (migrateUp on upgrade, and migrateDown on uninstall)
+            // only run when installed_version is set, so this is never reached in practice.
+            // A fresh install seeds via markAllUpgradeMigrationsApplied().
             return; // @codeCoverageIgnore
         }
 
@@ -388,13 +350,22 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
+     * $version is unused: what runs is decided by the applied list. Keep the parameter,
+     * PsInstallerService overrides this method and calls parent::migrateUp($version).
+     *
      * @param  string $version
      *
      * @return void
      */
     protected function migrateUp(string $version): void
     {
-        $this->runUpMigrations($this->getUpgradeMigrations($version));
+        $collection = $this->getUpgradeMigrations();
+
+        // Seeding writes to the settings, so it happens here, inside the claimed run, and not
+        // in hasPendingMigrations(), which runs on every request before the claim.
+        $this->seedAppliedMigrationsFromInstalledVersion($collection);
+
+        $this->runUpMigrations($this->filterUnapplied($collection, $this->getAppliedMigrations()));
     }
 
     /**
@@ -506,12 +477,12 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * @param  null|string $version
+     * Every registered and auto-discovered upgrade migration, applied or not.
      *
      * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\App\Installer\Contract\UpgradeMigrationInterface>
      * @todo v3.0.0 remove legacy support
      */
-    private function getUpgradeMigrations(?string $version = null): Collection
+    private function getUpgradeMigrations(): Collection
     {
         $useLegacy = ! method_exists($this->migrationService, 'getUpgradeMigrations');
 
@@ -526,16 +497,20 @@ class InstallerService implements InstallerServiceInterface
             ? $this->migrationService->all()
             : $this->migrationService->getUpgradeMigrations();
 
-        $collection = $this->createMigrationCollection($this->mergeMigrationSources($registered));
+        return $this->createMigrationCollection($this->mergeMigrationSources($registered));
+    }
 
-        if (! $version) {
-            return $collection;
-        }
-
-        $this->seedAppliedMigrationsFromInstalledVersion($collection);
-        $applied = $this->getAppliedMigrations();
-
-        return $collection->filter(function (MigrationInterface $migration) use ($applied) {
+    /**
+     * The migrations from $migrations whose identity is not in $applied.
+     *
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $migrations
+     * @param  string[]                                 $applied
+     *
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
+     */
+    private function filterUnapplied(Collection $migrations, array $applied): Collection
+    {
+        return $migrations->filter(function (MigrationInterface $migration) use ($applied) {
             return ! in_array($this->resolveMigrationId($migration), $applied, true);
         });
     }

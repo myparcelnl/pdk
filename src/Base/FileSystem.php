@@ -58,18 +58,6 @@ final class FileSystem implements FileSystemInterface
     /**
      * @param  string $path
      *
-     * @return null|int
-     */
-    public function mtime(string $path): ?int
-    {
-        $mtime = @filemtime($path);
-
-        return false === $mtime ? null : $mtime;
-    }
-
-    /**
-     * @param  string $path
-     *
      * @return bool
      */
     public function isDir(string $path): bool
