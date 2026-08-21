@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.5](https://github.com/myparcelnl/pdk/compare/v4.7.4...v4.7.5) (2026-08-21)
+
+
+### :bug: Bug Fixes
+
+* **orderv2:** fix same-day, early-morning, fresh and frozen delivery being omitted from order imports ([#526](https://github.com/myparcelnl/pdk/issues/526)) ([f4faa50](https://github.com/myparcelnl/pdk/commit/f4faa502509e4e98cd878ac5dfe8fe891e15c525))
+
 ## [4.7.4](https://github.com/myparcelnl/pdk/compare/v4.7.3...v4.7.4) (2026-08-19)
 
 
