@@ -31,11 +31,16 @@ use MyParcelNL\Pdk\Base\Factory\PdkFactory;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockAction;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApiExceptionAction;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApiExceptionWithHumanErrorsAction;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApiExceptionWithInfoNotificationAction;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockApiExceptionWithNotificationAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionAction;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkConfig;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function DI\get;
 use function DI\value;
@@ -134,8 +139,10 @@ it('returns and logs error response when error is thrown', function () {
         ->and(Arr::get($responseContent, 'errors.0.line'))
         ->toBeInt();
 
-    // Remove trace properties before comparing as they are not static.
+    // Remove trace properties before comparing as they are not static. The notification is
+    // asserted separately, see "it adds an error notification when an action fails".
     Arr::forget($responseContent, 'errors.0.trace');
+    Arr::forget($responseContent, 'notifications');
     Arr::forget($logs, '0.context.response.errors.0.trace');
 
     $responseContext = [
@@ -222,6 +229,10 @@ it('returns error response on api exception', function () {
 
     $responseContent = json_decode($response->getContent(), true);
 
+    // The notification is asserted separately, see "it adds an error notification when an action
+    // fails with an api exception".
+    Arr::forget($responseContent, 'notifications');
+
     expect($response)
         ->getStatusCode()
         ->toBe(Response::HTTP_BAD_REQUEST)
@@ -266,6 +277,7 @@ it('returns error response on unknown exception', function () {
     Arr::forget($responseContent, 'errors.1.trace');
     Arr::forget($responseContent, 'errors.1.file');
     Arr::forget($responseContent, 'errors.1.line');
+    Arr::forget($responseContent, 'notifications');
 
     expect($response)
         ->getStatusCode()
@@ -285,3 +297,137 @@ it('returns error response on unknown exception', function () {
             ],
         ]);
 });
+
+it('adds an error notification when an action fails with an api exception', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockApiExceptionAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $notifications = Arr::get(json_decode($response->getContent(), true), 'notifications');
+
+    expect($notifications)
+        ->toBe([
+            [
+                'category' => Notification::CATEGORY_ACTION,
+                'content'  => ['Something went wrong', 'Something else also went wrong'],
+                'tags'     => ['action' => PdkBackendActions::FETCH_ORDERS],
+                'timeout'  => false,
+                'title'    => 'boom',
+                'variant'  => Notification::VARIANT_ERROR,
+            ],
+        ]);
+});
+
+it('uses the human readable messages of an api exception', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockApiExceptionWithHumanErrorsAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $notification = Arr::get(json_decode($response->getContent(), true), 'notifications.0');
+
+    expect($notification['title'])
+        ->toBe('The given data was invalid.')
+        ->and($notification['content'])
+        ->toBe(['Street is required.', 'House number is required.']);
+});
+
+it('adds an error notification when an action fails with an unknown exception', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockExceptionAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $notification = Arr::get(json_decode($response->getContent(), true), 'notifications.0');
+
+    expect($notification['title'])
+        ->toBe('Something went terribly wrong')
+        ->and($notification['category'])
+        ->toBe(Notification::CATEGORY_ACTION)
+        ->and($notification['variant'])
+        ->toBe(Notification::VARIANT_ERROR);
+});
+
+it('does not add a second notification when the action already added one', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockApiExceptionWithNotificationAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $notifications = Arr::get(json_decode($response->getContent(), true), 'notifications');
+
+    expect($notifications)
+        ->toHaveCount(1)
+        ->and($notifications[0]['title'])
+        ->toBe('Could not create shipment');
+});
+
+it('still reports the failure when the action only added an info notification', function () {
+    mockPdkProperties([FetchOrdersAction::class => get(MockApiExceptionWithInfoNotificationAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call(PdkBackendActions::FETCH_ORDERS, PdkEndpoint::CONTEXT_BACKEND);
+
+    $notifications = Arr::get(json_decode($response->getContent(), true), 'notifications');
+
+    expect($notifications)
+        ->toHaveCount(2)
+        ->and($notifications[1])
+        ->toMatchArray([
+            'title'   => 'boom',
+            'variant' => Notification::VARIANT_ERROR,
+        ]);
+});
+
+it('reports a failing print action to the user', function (string $action, string $actionClass) {
+    mockPdkProperties([$actionClass => get(MockApiExceptionWithHumanErrorsAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+    $response = $endpoint->call($action, PdkEndpoint::CONTEXT_BACKEND);
+
+    $notification = Arr::get(json_decode($response->getContent(), true), 'notifications.0');
+
+    expect($response->getStatusCode())
+        ->toBe(Response::HTTP_BAD_REQUEST)
+        ->and($notification)
+        ->toMatchArray([
+            'category' => Notification::CATEGORY_ACTION,
+            'content'  => ['Street is required.', 'House number is required.'],
+            'title'    => 'The given data was invalid.',
+            'variant'  => Notification::VARIANT_ERROR,
+        ]);
+})->with([
+    'print orders'    => [PdkBackendActions::PRINT_ORDERS, PrintOrdersAction::class],
+    'print shipments' => [PdkBackendActions::PRINT_SHIPMENTS, PrintShipmentsAction::class],
+]);
+
+it('tags the notification with the order ids so the order list can show it', function (string $requestValue, string $expected) {
+    mockPdkProperties([PrintOrdersAction::class => get(MockApiExceptionAction::class)]);
+
+    /** @var PdkEndpoint $endpoint */
+    $endpoint = Pdk::get(PdkEndpoint::class);
+
+    $request = Request::create('/', 'POST', [
+        'action'   => PdkBackendActions::PRINT_ORDERS,
+        'orderIds' => $requestValue,
+    ]);
+
+    $response     = $endpoint->call($request, PdkEndpoint::CONTEXT_BACKEND);
+    $notification = Arr::get(json_decode($response->getContent(), true), 'notifications.0');
+
+    expect($notification['tags'])
+        ->toBe([
+            'action'   => PdkBackendActions::PRINT_ORDERS,
+            'orderIds' => $expected,
+        ]);
+})->with([
+    'single order'          => ['123', '123'],
+    'multiple orders'       => ['123;456', '123,456'],
+]);
