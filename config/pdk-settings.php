@@ -217,4 +217,19 @@ return [
     'migrationDirectory' => factory(function () {
         return rtrim(PdkFacade::get('rootDir'), '/') . '/src/Migration';
     }),
+
+    /**
+     * Settings key where the installer stores the time it claimed the migration run, as a unix
+     * timestamp. 0 means no run is busy.
+     */
+    'settingKeyMigrationLock' => factory(function () {
+        return PdkFacade::get('createSettingsKey')('migration_lock');
+    }),
+
+    /**
+     * Seconds after which a migration claim counts as abandoned. A run killed mid-migration
+     * cannot clear its own claim, so without a timeout it would block every later migration for
+     * good. Keep this above the slowest migration.
+     */
+    'migrationLockTimeout' => value(900),
 ];

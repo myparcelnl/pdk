@@ -50,21 +50,99 @@ class InstallerService implements InstallerServiceInterface
         $installedVersion = $this->getInstalledVersion();
         $currentVersion   = Pdk::getAppInfo()->version;
 
-        if ($installedVersion === $currentVersion) {
+        // A pending migration is reason enough to run, whatever the version says. Gating on the
+        // version alone skips a migration that ships without a bump, and permanently skips one
+        // that reported failure, because the version is written even when a migration fails.
+        if ($installedVersion === $currentVersion && ! $this->hasPendingMigrations()) {
             return;
         }
 
-        Pdk::clearCache();
+        if (! $this->claimMigrationRun()) {
+            Logger::debug('Another run is migrating. Skipping this pass.');
 
-        if ($installedVersion) {
-            Logger::debug("Migrating from $installedVersion to $currentVersion");
-            $this->migrateUp($currentVersion);
-        } else {
-            Logger::debug("Installing $currentVersion");
-            $this->executeInstallation(...$args);
+            return;
         }
 
-        $this->updateInstalledVersion($currentVersion);
+        try {
+            Pdk::clearCache();
+
+            if ($installedVersion) {
+                Logger::debug("Migrating from $installedVersion to $currentVersion");
+                $this->migrateUp($currentVersion);
+            } else {
+                Logger::debug("Installing $currentVersion");
+                $this->executeInstallation(...$args);
+            }
+
+            $this->updateInstalledVersion($currentVersion);
+        } finally {
+            $this->releaseMigrationRun();
+        }
+    }
+
+    /**
+     * Reports whether any registered or auto-discovered upgrade migration is not yet recorded
+     * as applied. Plugins that decide for themselves when to run an upgrade should ask this
+     * instead of comparing version strings.
+     *
+     * @return bool
+     */
+    public function hasPendingMigrations(): bool
+    {
+        $collection = $this->getUpgradeMigrations();
+
+        if ($collection->isEmpty()) {
+            return false;
+        }
+
+        $applied = $this->getAppliedMigrations();
+
+        // An empty list on an install that predates per-migration tracking means "not seeded
+        // yet", not "nothing to do". Seeding writes to the settings, so it waits for the
+        // claimed run in migrateUp().
+        if (empty($applied)) {
+            return true;
+        }
+
+        return $this->filterUnapplied($collection, $applied)
+            ->isNotEmpty();
+    }
+
+    /**
+     * Claims the migration run by storing the current time, and reports whether this run got
+     * it. A claim older than the timeout is treated as abandoned: a run killed mid-migration
+     * cannot clear its own claim, and without this every later migration would be blocked for
+     * good.
+     *
+     * @return bool
+     */
+    protected function claimMigrationRun(): bool
+    {
+        $key     = Pdk::get('settingKeyMigrationLock');
+        $timeout = (int) Pdk::get('migrationLockTimeout');
+
+        // Known gap: two runs that both read the claim before either stores it will both
+        // migrate. Closing it needs a write that fails when a value is already there, which
+        // the settings repository cannot do and every platform would have to build itself.
+        // Accepted because the gap is one database round trip wide, is only open in the
+        // minutes after an update, and before this there was no claim at all.
+        $claimedAt = (int) $this->settingsRepository->get($key);
+
+        if (time() - $claimedAt < $timeout) {
+            return false;
+        }
+
+        $this->settingsRepository->store($key, time());
+
+        return true;
+    }
+
+    /**
+     * @return void
+     */
+    protected function releaseMigrationRun(): void
+    {
+        $this->settingsRepository->store(Pdk::get('settingKeyMigrationLock'), 0);
     }
 
     /**
@@ -203,9 +281,9 @@ class InstallerService implements InstallerServiceInterface
         $installedVersion = $this->getInstalledVersion();
 
         if (! $installedVersion) {
-            // Defensive: both callers (getUpgradeMigrations with a version, and migrateDown
-            // on uninstall) only run when installed_version is set, so this is never reached
-            // in practice — a fresh install seeds via markAllUpgradeMigrationsApplied().
+            // Defensive: both callers (migrateUp on upgrade, and migrateDown on uninstall)
+            // only run when installed_version is set, so this is never reached in practice.
+            // A fresh install seeds via markAllUpgradeMigrationsApplied().
             return; // @codeCoverageIgnore
         }
 
@@ -272,13 +350,22 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
+     * $version is unused: what runs is decided by the applied list. Keep the parameter,
+     * PsInstallerService overrides this method and calls parent::migrateUp($version).
+     *
      * @param  string $version
      *
      * @return void
      */
     protected function migrateUp(string $version): void
     {
-        $this->runUpMigrations($this->getUpgradeMigrations($version));
+        $collection = $this->getUpgradeMigrations();
+
+        // Seeding writes to the settings, so it happens here, inside the claimed run, and not
+        // in hasPendingMigrations(), which runs on every request before the claim.
+        $this->seedAppliedMigrationsFromInstalledVersion($collection);
+
+        $this->runUpMigrations($this->filterUnapplied($collection, $this->getAppliedMigrations()));
     }
 
     /**
@@ -390,12 +477,12 @@ class InstallerService implements InstallerServiceInterface
     }
 
     /**
-     * @param  null|string $version
+     * Every registered and auto-discovered upgrade migration, applied or not.
      *
      * @return \MyParcelNL\Pdk\Base\Support\Collection<\MyParcelNL\Pdk\App\Installer\Contract\UpgradeMigrationInterface>
      * @todo v3.0.0 remove legacy support
      */
-    private function getUpgradeMigrations(?string $version = null): Collection
+    private function getUpgradeMigrations(): Collection
     {
         $useLegacy = ! method_exists($this->migrationService, 'getUpgradeMigrations');
 
@@ -410,16 +497,20 @@ class InstallerService implements InstallerServiceInterface
             ? $this->migrationService->all()
             : $this->migrationService->getUpgradeMigrations();
 
-        $collection = $this->createMigrationCollection($this->mergeMigrationSources($registered));
+        return $this->createMigrationCollection($this->mergeMigrationSources($registered));
+    }
 
-        if (! $version) {
-            return $collection;
-        }
-
-        $this->seedAppliedMigrationsFromInstalledVersion($collection);
-        $applied = $this->getAppliedMigrations();
-
-        return $collection->filter(function (MigrationInterface $migration) use ($applied) {
+    /**
+     * The migrations from $migrations whose identity is not in $applied.
+     *
+     * @param  \MyParcelNL\Pdk\Base\Support\Collection $migrations
+     * @param  string[]                                 $applied
+     *
+     * @return \MyParcelNL\Pdk\Base\Support\Collection
+     */
+    private function filterUnapplied(Collection $migrations, array $applied): Collection
+    {
+        return $migrations->filter(function (MigrationInterface $migration) use ($applied) {
             return ! in_array($this->resolveMigrationId($migration), $applied, true);
         });
     }
