@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.0](https://github.com/myparcelnl/pdk/compare/v4.7.5...v4.8.0) (2026-08-27)
+
+
+### :sparkles: New Features
+
+* **installer:** gate migrations on the applied-migrations list ([#525](https://github.com/myparcelnl/pdk/issues/525)) ([d131ee4](https://github.com/myparcelnl/pdk/commit/d131ee437e1f345c840260192a4a120f8ee14b9a))
+
 ## [4.7.5](https://github.com/myparcelnl/pdk/compare/v4.7.4...v4.7.5) (2026-08-21)
 
 
