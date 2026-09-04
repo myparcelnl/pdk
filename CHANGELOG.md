@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.1](https://github.com/myparcelnl/pdk/compare/v4.8.0...v4.8.1) (2026-09-04)
+
+
+### :bug: Bug Fixes
+
+* **delivery-date:** drop the delivery date when collect is enabled ([#527](https://github.com/myparcelnl/pdk/issues/527)) ([2c71b37](https://github.com/myparcelnl/pdk/commit/2c71b37d7bb32343505bf85ea51b020d3e26c45b))
+
 ## [4.8.0](https://github.com/myparcelnl/pdk/compare/v4.7.5...v4.8.0) (2026-08-27)
 
 
