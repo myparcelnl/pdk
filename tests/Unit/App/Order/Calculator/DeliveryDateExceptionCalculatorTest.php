@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use function MyParcelNL\Pdk\Tests\factory;
@@ -55,6 +56,54 @@ it('preserves delivery date for PostNL', function () use ($futureDate) {
         'deliveryOptions' => [
             'carrier' => RefCapabilitiesSharedCarrierV2::POSTNL,
             'date'    => $futureDate,
+        ],
+    ]);
+
+    (new DeliveryDateExceptionCalculator($order))->calculate();
+
+    expect($order->deliveryOptions->date)->not->toBeNull();
+});
+
+it('nulls delivery date when collect is enabled', function () use ($futureDate) {
+    factory(Carrier::class)->withAllCapabilities(RefCapabilitiesSharedCarrierV2::POSTNL)->store();
+
+    $order = new PdkOrder([
+        'deliveryOptions' => [
+            'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
+            'date'            => $futureDate,
+            'shipmentOptions' => ['collect' => TriStateService::ENABLED],
+        ],
+    ]);
+
+    (new DeliveryDateExceptionCalculator($order))->calculate();
+
+    expect($order->deliveryOptions->date)->toBeNull();
+});
+
+it('preserves delivery date when collect is disabled', function () use ($futureDate) {
+    factory(Carrier::class)->withAllCapabilities(RefCapabilitiesSharedCarrierV2::POSTNL)->store();
+
+    $order = new PdkOrder([
+        'deliveryOptions' => [
+            'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
+            'date'            => $futureDate,
+            'shipmentOptions' => ['collect' => TriStateService::DISABLED],
+        ],
+    ]);
+
+    (new DeliveryDateExceptionCalculator($order))->calculate();
+
+    expect($order->deliveryOptions->date)->not->toBeNull();
+});
+
+it('preserves delivery date when collect is inherit', function () use ($futureDate) {
+    factory(Carrier::class)->withAllCapabilities(RefCapabilitiesSharedCarrierV2::POSTNL)->store();
+
+    $order = new PdkOrder([
+        'deliveryOptions' => [
+            'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
+            'date'            => $futureDate,
+            'shipmentOptions' => ['collect' => TriStateService::INHERIT],
         ],
     ]);
 
