@@ -9,9 +9,11 @@ use DateTimeZone;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Tax\Contract\TaxServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
+use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Base\Support\Utils;
@@ -20,18 +22,25 @@ use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\FrontendData;
+use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\PackageType;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
+use Throwable;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
+    private const PICKUP_CAPABILITIES_TIMEOUT = 2.0;
+
+    private const PICKUP_CAPABILITIES_CONNECT_TIMEOUT = 1.0;
 
     /**
      * @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface
@@ -107,7 +116,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             return [];
         }
 
-        [$packageType, $carriers] = $this->getValidCarrierOptions($cart);
+        [$packageType, $carriers, $knownWeight] = $this->getValidCarrierOptions($cart);
+
+        $pickupUnavailableByCarrier = $this->getWeightSpecificPickupRestrictions(
+            $cart,
+            $packageType,
+            $carriers,
+            $knownWeight
+        );
 
         $showPriceSurcharge =
             Settings::get(CheckoutSettings::PRICE_TYPE, CheckoutSettings::ID) === CheckoutSettings::PRICE_TYPE_INCLUDED;
@@ -126,7 +142,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             // Use the legacy identifier for the delivery options, as that endpoint does not yet support the new identifiers.
             $identifier = FrontendData::getLegacyCarrierIdentifier($carrier->carrier);
             $settings['carrierSettings'][$identifier] = array_merge(
-                $this->createCarrierSettings($carrier, $cart, $packageType),
+                $this->createCarrierSettings(
+                    $carrier,
+                    $cart,
+                    $packageType,
+                    isset($pickupUnavailableByCarrier[$carrier->carrier])
+                ),
                 ['contractId' => $carrier->contractId ?? null]
             );
         }
@@ -138,11 +159,17 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      * Create the settings for a specific carrier based on the cart.
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     * @param  string                                    $packageType
+     * @param  bool                                      $isPickupUnavailable
      *
      * @return array
      */
-    private function createCarrierSettings(Carrier $carrier, PdkCart $cart, string $packageType): array
-    {
+    private function createCarrierSettings(
+        Carrier $carrier,
+        PdkCart $cart,
+        string $packageType,
+        bool $isPickupUnavailable
+    ): array {
         $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
         $dropOff           = $this->dropOffService->getForDate($carrierSettings);
@@ -164,6 +191,10 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         }
 
         $settings = $this->getBaseSettings($carrierSettings, $cart);
+
+        if ($isPickupUnavailable) {
+            $settings[SettingKey::allow(RefTypesDeliveryTypeV2::PICKUP)] = false;
+        }
 
         return array_merge(
             $settings,
@@ -219,7 +250,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      *
-     * @return array{0: string, 1: \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection}
+     * @return array{0: string, 1: \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection, 2: null|int}
      */
     private function getValidCarrierOptions(PdkCart $cart): array
     {
@@ -231,7 +262,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         );
 
         if (empty($carrierSettings)) {
-            return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection()];
+            return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, new CarrierCollection(), null];
         }
 
         $allCarriers           = $this->carrierRepository->all();
@@ -252,11 +283,216 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             );
 
             if ($filteredCarriers->isNotEmpty()) {
-                return [$packageTypeName, $filteredCarriers];
+                return [
+                    $packageTypeName,
+                    $filteredCarriers,
+                    $this->getKnownCartWeight($cart, $packageTypeName),
+                ];
             }
         }
 
-        return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers];
+        return [DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME, $allCarriers, null];
+    }
+
+    /**
+     * Resolve an exact cart weight only when every deliverable line has a positive product weight.
+     *
+     * Product weight zero is indistinguishable from "not configured" in the shared model. Treating a
+     * partially known sum as exact can hide valid checkout options. Empty-package weight is therefore
+     * added only after all product weights are known; packaging weight alone does not make the total
+     * known. The nullable result also keeps a real one-gram product distinct from the API-safe one-gram
+     * placeholder used elsewhere for an unknown zero total.
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     * @param  string                                  $packageTypeName
+     *
+     * @return null|int Exact weight in grams, including configured empty-package weight
+     */
+    private function getKnownCartWeight(PdkCart $cart, string $packageTypeName): ?int
+    {
+        $deliverableLines = $cart->lines
+            ->onlyDeliverable()
+            ->filter(static function (PdkOrderLine $line): bool {
+                return $line->quantity > 0;
+            });
+
+        if (
+            $deliverableLines->isEmpty()
+            || ! $deliverableLines->every(static function (PdkOrderLine $line): bool {
+                return null !== $line->product && $line->product->weight > 0;
+            })
+        ) {
+            return null;
+        }
+
+        return Pdk::get(WeightServiceInterface::class)->addEmptyPackageWeight(
+            $deliverableLines->getTotalWeight(),
+            new PackageType([
+                'name' => $packageTypeName,
+                'id'   => DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$packageTypeName] ?? null,
+            ])
+        );
+    }
+
+    /**
+     * Fetch weight-aware delivery types after the existing package/carrier selection has completed.
+     *
+     * This is an optional checkout refinement. The established unweighted lookup remains the source
+     * for package selection, carrier filtering and contract selection. Consequently this method makes
+     * at most one extra request, only for merchants who enabled pickup. Any request failure, ambiguous
+     * contract or incomplete response fails open and leaves the configured checkout options unchanged.
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart                   $cart
+     * @param  string                                                    $packageTypeName
+     * @param  \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection    $carriers
+     * @param  null|int                                                  $knownWeight
+     *
+     * @return array<string, true> Carrier names for which pickup is proven unavailable at this weight
+     */
+    private function getWeightSpecificPickupRestrictions(
+        PdkCart $cart,
+        string $packageTypeName,
+        CarrierCollection $carriers,
+        ?int $knownWeight
+    ): array {
+        $shippingAddress = $cart->shippingMethod->shippingAddress;
+        $cc              = $shippingAddress->cc ?? null;
+        $v2PackageType   = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$packageTypeName] ?? null;
+
+        if (
+            null === $knownWeight
+            || ! $cc
+            || ! $v2PackageType
+            || $carriers->isEmpty()
+            || ! $this->isPickupEnabledForAnyCarrier($carriers)
+        ) {
+            return [];
+        }
+
+        $baseRequest = [
+            'recipient'    => [
+                'country_code' => $cc,
+                'is_business'  => $shippingAddress->isBusiness,
+            ],
+            'package_type' => $v2PackageType,
+        ];
+
+        try {
+            // This exact unweighted request was already made during carrier selection and is served from cache.
+            $unweightedCapabilities = $this->capabilitiesValidation->getRepository()->getCapabilities($baseRequest);
+            $weightedCapabilities   = $this->capabilitiesValidation->getRepository()->getCapabilitiesWithTimeout(
+                $baseRequest + ['physical_properties' => [
+                    'weight' => [
+                        'value' => $knownWeight,
+                        'unit'  => WeightServiceInterface::UNIT_GRAMS,
+                    ],
+                ]],
+                self::PICKUP_CAPABILITIES_TIMEOUT,
+                self::PICKUP_CAPABILITIES_CONNECT_TIMEOUT
+            );
+
+            $pickupUnavailableByCarrier = [];
+
+            foreach ($carriers as $carrier) {
+                $unweightedCapability = $this->getMatchingCapability($unweightedCapabilities, $carrier);
+                $weightedCapability   = $this->getMatchingCapability($weightedCapabilities, $carrier);
+
+                if (! $unweightedCapability || ! $weightedCapability) {
+                    continue;
+                }
+
+                /** @var mixed $unweightedDeliveryTypes Runtime responses can violate the generated SDK PHPDoc. */
+                $unweightedDeliveryTypes = $unweightedCapability->getDeliveryTypes();
+                /** @var mixed $weightedDeliveryTypes Runtime responses can violate the generated SDK PHPDoc. */
+                $weightedDeliveryTypes = $weightedCapability->getDeliveryTypes();
+
+                if (
+                    ! $this->hasValidDeliveryTypes($unweightedDeliveryTypes)
+                    || ! $this->hasValidDeliveryTypes($weightedDeliveryTypes)
+                ) {
+                    continue;
+                }
+
+                /** @var string[] $unweightedDeliveryTypes The generated SDK documents enum values as objects. */
+                /** @var string[] $weightedDeliveryTypes The generated SDK documents enum values as objects. */
+
+                // Only a pickup-to-no-pickup delta proves that the weight caused the restriction.
+                if (! in_array(RefTypesDeliveryTypeV2::PICKUP, $unweightedDeliveryTypes, true)) {
+                    continue;
+                }
+
+                if (! in_array(RefTypesDeliveryTypeV2::PICKUP, $weightedDeliveryTypes, true)) {
+                    $pickupUnavailableByCarrier[$carrier->carrier] = true;
+                }
+            }
+
+            return $pickupUnavailableByCarrier;
+        } catch (Throwable $exception) {
+            Logger::warning(
+                'Could not resolve weight-specific delivery types; preserving configured checkout options',
+                ['error' => $exception->getMessage()]
+            );
+
+            return [];
+        }
+    }
+
+    /**
+     * An empty list is valid and authoritative; any non-string or empty value makes the response ambiguous.
+     *
+     * @param  mixed $deliveryTypes
+     */
+    private function hasValidDeliveryTypes($deliveryTypes): bool
+    {
+        if (! is_array($deliveryTypes)) {
+            return false;
+        }
+
+        foreach ($deliveryTypes as $deliveryType) {
+            if (! is_string($deliveryType) || '' === $deliveryType) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param  RefCapabilitiesResponseCapabilityV2[] $capabilities
+     * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier  $carrier
+     *
+     * @return null|RefCapabilitiesResponseCapabilityV2
+     */
+    private function getMatchingCapability(array $capabilities, Carrier $carrier): ?RefCapabilitiesResponseCapabilityV2
+    {
+        $matches = array_values(array_filter(
+            $capabilities,
+            static function ($capability) use ($carrier): bool {
+                /** @var mixed $capabilityCarrier Runtime value is a string despite the generated SDK PHPDoc. */
+                $capabilityCarrier = $capability->getCarrier();
+
+                if ($capabilityCarrier !== $carrier->carrier) {
+                    return false;
+                }
+
+                if (! $carrier->contractId) {
+                    return true;
+                }
+
+                $contract = $capability->getContract();
+
+                return $contract && (int) $contract->getId() === (int) $carrier->contractId;
+            }
+        ));
+
+        return 1 === count($matches) ? $matches[0] : null;
+    }
+
+    private function isPickupEnabledForAnyCarrier(CarrierCollection $carriers): bool
+    {
+        return $carriers->contains(static function (Carrier $carrier): bool {
+            return CarrierSettings::fromCarrier($carrier)->allowPickupLocations;
+        });
     }
 
     /**

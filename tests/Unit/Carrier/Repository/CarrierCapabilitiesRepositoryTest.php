@@ -71,3 +71,23 @@ it('caches capabilities by recipient country', function () {
         // Only one HTTP request was made — the second call was served from cache
         ->and($mockService->capturedRequests)->toHaveCount(1);
 });
+
+it('shares successful bounded results with ordinary lookups without caching timeouts', function () {
+    TestBootstrapper::hasApiKey('test-key');
+    $service = new MockableCapabilitiesService();
+    $repository = new CarrierCapabilitiesRepository(Pdk::get(StorageInterface::class), $service);
+    $args = ['recipient' => ['country_code' => 'NL'], 'physical_properties' => ['weight' => ['value' => 20001, 'unit' => 'g']]];
+
+    $service->mockHandler->append(new \GuzzleHttp\Exception\ConnectException(
+        'Operation timed out', new \GuzzleHttp\Psr7\Request('POST', '/shipments/capabilities')
+    ));
+    expect(static function () use ($repository, $args) {
+        $repository->getCapabilitiesWithTimeout($args, 2.0, 1.0);
+    })->toThrow(\MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException::class);
+
+    $service->mockHandler->append(new Response(200, [], '{"results":[]}'));
+    expect($repository->getCapabilitiesWithTimeout($args, 2.0, 1.0))->toBe([])
+        ->and($repository->getCapabilities($args))->toBe([])
+        ->and($repository->getCapabilitiesWithTimeout($args, 2.0, 1.0))->toBe([])
+        ->and($service->capturedRequests)->toHaveCount(2);
+});

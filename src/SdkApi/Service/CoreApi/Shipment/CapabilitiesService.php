@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+use InvalidArgumentException;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Api\ShipmentApi;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
@@ -110,11 +113,41 @@ class CapabilitiesService extends AbstractShipmentApiService
      */
     public function getCapabilities(array $parameters, bool $filterSupported = false): array
     {
+        return $this->fetchCapabilities($this->shipmentApi, $parameters, $filterSupported);
+    }
+
+    /**
+     * Bound an optional lookup without changing the shared SDK client or other API calls.
+     * Retain the injected transport, middleware, authentication and environment configuration.
+     *
+     * @return RefCapabilitiesResponseCapabilityV2[]
+     */
+    public function getCapabilitiesWithTimeout(array $parameters, float $timeout, float $connectTimeout): array
+    {
+        if ($timeout <= 0 || $connectTimeout <= 0) {
+            throw new InvalidArgumentException('Capabilities timeouts must be positive');
+        }
+
+        $client = new Client(array_replace($this->createGuzzleClient()->getConfig(), [
+            'timeout'         => $timeout,
+            'connect_timeout' => min($connectTimeout, $timeout),
+        ]));
+
+        $api = new ShipmentApi($client, $this->shipmentApi->getConfig());
+
+        return $this->fetchCapabilities($api, $parameters, false);
+    }
+
+    /**
+     * @return RefCapabilitiesResponseCapabilityV2[]
+     */
+    private function fetchCapabilities(ShipmentApi $api, array $parameters, bool $filterSupported): array
+    {
         /** @var CapabilitiesPostCapabilitiesRequestV2 $request */
         $request = $this->hydrateModel(CapabilitiesPostCapabilitiesRequestV2::class, $parameters);
 
         /** @var CapabilitiesResponsesCapabilitiesV2 $response */
-        $response = $this->shipmentApi->postCapabilities($request, $this->getUserAgent());
+        $response = $api->postCapabilities($request, $this->getUserAgent());
         $results  = $this->dropDeprecatedInsuranceShape($response->getResults());
 
         return $filterSupported ? $this->filterSupportedCapabilities($results) : $results;

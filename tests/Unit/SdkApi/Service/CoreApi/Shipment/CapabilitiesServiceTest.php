@@ -534,3 +534,38 @@ it('sets version-2 Accept header for all capabilities endpoints', function () {
         expect($request->getHeaderLine('Accept'))->toBe('application/json;charset=utf-8;version=2');
     }
 });
+
+it('bounds optional requests while preserving headers and ordinary request timeouts', function (bool $fails) {
+    TestBootstrapper::hasApiKey('test-key');
+    $service = new MockableCapabilitiesService();
+    $parameters = ['recipient' => ['country_code' => 'NL'], 'package_type' => 'PACKAGE'];
+    $boundedOptions = null;
+
+    $service->mockHandler->append(static function ($request, $options) use (&$boundedOptions, $fails) {
+        $boundedOptions = $options;
+        if ($fails) {
+            throw new \GuzzleHttp\Exception\ConnectException('Operation timed out', $request, null, ['errno' => 28]);
+        }
+
+        return new Response(200, [], '{"results":[]}');
+    });
+
+    try {
+        $service->getCapabilitiesWithTimeout($parameters, 2.0, 1.0);
+        expect($fails)->toBeFalse();
+    } catch (\MyParcelNL\Sdk\Client\Generated\CoreApi\ApiException $exception) {
+        expect($fails)->toBeTrue();
+    }
+
+    expect($boundedOptions['timeout'])->toBe(2.0)
+        ->and($boundedOptions['connect_timeout'])->toBe(1.0)
+        ->and($service->capturedRequests[0]->getHeaderLine('Accept'))->toContain('version=2')
+        ->and($service->capturedRequests[0]->getHeaderLine('Authorization'))->not->toBeEmpty();
+
+    $service->mockHandler->append(new Response(200, [], '{"results":[]}'));
+    $service->getCapabilities($parameters);
+    $options = $service->mockHandler->getLastOptions();
+
+    expect($options['timeout'] ?? 0)->toBe(0)
+        ->and($options['connect_timeout'] ?? 0)->toBe(0);
+})->with(['success' => false, 'timeout' => true]);
