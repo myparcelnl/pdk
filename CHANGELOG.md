@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.2](https://github.com/myparcelnl/pdk/compare/v4.8.1...v4.8.2) (2026-09-09)
+
+
+### :bug: Bug Fixes
+
+* **notifications:** report failing actions to the user ([#528](https://github.com/myparcelnl/pdk/issues/528)) ([d6df92a](https://github.com/myparcelnl/pdk/commit/d6df92a01cc4c888f40f831b9ecc1eae47a145a8))
+
 ## [4.8.1](https://github.com/myparcelnl/pdk/compare/v4.8.0...v4.8.1) (2026-09-04)
 
 
