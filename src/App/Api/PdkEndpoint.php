@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\Api\Contract\PdkApiInterface;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Notifications;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Pdk\Notification\Model\Notification;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -46,14 +47,21 @@ class PdkEndpoint implements PdkApiInterface
      */
     public function call($input, string $context): Response
     {
+        $action   = is_string($input) ? $input : $input->get('action') ?? 'unknown';
+        $orderIds = is_string($input) ? null : $input->get('orderIds');
+
         try {
             return $this->actions
                 ->setContext($context)
                 ->execute($input);
         } catch (ApiException $e) {
             // In case of an ApiException, AbstractApiService has already logged the error.
+            $this->addErrorNotification($e, $action, $orderIds);
+
             return $this->createApiErrorResponse($e);
         } catch (Throwable $e) {
+            $this->addErrorNotification($e, $action, $orderIds);
+
             if ($e instanceof PdkEndpointException) {
                 $response = $this->createErrorResponse($context, $e, $e->getStatusCode());
             } else {
@@ -61,7 +69,7 @@ class PdkEndpoint implements PdkApiInterface
             }
 
             Logger::error('An exception was thrown while executing an action', [
-                'action'   => is_string($input) ? $input : $input->get('action') ?? 'unknown',
+                'action'   => $action,
                 'context'  => $context,
                 // Pass backend context to log stack traces.
                 'response' => $this->createErrorContext(self::CONTEXT_BACKEND, $e),
@@ -104,7 +112,52 @@ class PdkEndpoint implements PdkApiInterface
         Throwable $throwable,
         int       $statusCode = Response::HTTP_BAD_REQUEST
     ): JsonResponse {
-        return new JsonResponse($this->createErrorContext($context, $throwable), $statusCode);
+        $data = $this->createErrorContext($context, $throwable);
+
+        if (Notifications::isNotEmpty()) {
+            $data['notifications'] = Notifications::all()
+                ->toArrayWithoutNull();
+        }
+
+        return new JsonResponse($data, $statusCode);
+    }
+
+    /**
+     * Make sure every failed action reports something readable to the user. Actions that handle
+     * their own errors, like exporting orders, have already added a more specific notification;
+     * don't add a second one on top of it.
+     *
+     * @param  \Throwable            $throwable
+     * @param  string                $action
+     * @param  null|string|string[]  $orderIds
+     *
+     * @return void
+     */
+    private function addErrorNotification(Throwable $throwable, string $action, $orderIds = null): void
+    {
+        $reported = Notifications::all()
+            ->firstWhere('variant', Notification::VARIANT_ERROR);
+
+        if ($reported) {
+            return;
+        }
+
+        $title   = $throwable->getMessage();
+        $content = [];
+
+        if ($throwable instanceof ApiException) {
+            $title   = $throwable->getBodyMessage() ?? $title;
+            $content = $throwable->getHumanMessages();
+        }
+
+        $tags = ['action' => $action];
+
+        // The order list only renders notifications that carry the id of the order they belong to.
+        if (null !== $orderIds && [] !== $orderIds) {
+            $tags['orderIds'] = implode(',', preg_split('/[;,]/', implode(',', (array) $orderIds)));
+        }
+
+        Notifications::error($title, $content, Notification::CATEGORY_ACTION, $tags);
     }
 
     /**
