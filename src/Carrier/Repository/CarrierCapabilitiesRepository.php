@@ -68,4 +68,19 @@ class CarrierCapabilitiesRepository extends Repository
             return $this->apiService->getCapabilities($args);
         });
     }
+
+    /**
+     * Optional lookup with a bounded request time. Successful results share the ordinary cache;
+     * transport timeouts do not change the capabilities and failures are never cached.
+     *
+     * @return \MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2[]
+     */
+    public function getCapabilitiesWithTimeout(array $args, float $timeout, float $connectTimeout): array
+    {
+        $cacheKey = 'capabilities.' . md5(json_encode($args));
+
+        return $this->retrieve($cacheKey, function () use ($args, $timeout, $connectTimeout) {
+            return $this->apiService->getCapabilitiesWithTimeout($args, $timeout, $connectTimeout);
+        });
+    }
 }

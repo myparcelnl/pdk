@@ -53,6 +53,13 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
         $this->passthrough = false;
     }
 
+    public function getCapabilitiesWithTimeout(array $args, float $timeout, float $connectTimeout): array
+    {
+        return $this->passthrough
+            ? parent::getCapabilitiesWithTimeout($args, $timeout, $connectTimeout)
+            : $this->getCapabilities($args);
+    }
+
     /**
      * Return permissive capabilities for the requested carrier (or all known carriers).
      *
