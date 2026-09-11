@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.0](https://github.com/myparcelnl/pdk/compare/v4.8.3...v4.9.0) (2026-09-11)
+
+
+### :sparkles: New Features
+
+* **options:** replace the tracked option with no tracking ([#514](https://github.com/myparcelnl/pdk/issues/514)) ([4b0a7bc](https://github.com/myparcelnl/pdk/commit/4b0a7bc7bd8dfa0d96434f95938f08e732ee86ae))
+
 ## [4.8.3](https://github.com/myparcelnl/pdk/compare/v4.8.2...v4.8.3) (2026-09-10)
 
 ## [4.8.2](https://github.com/myparcelnl/pdk/compare/v4.8.1...v4.8.2) (2026-09-09)
