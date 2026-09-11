@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\SdkApi\Contract\SdkClientFactoryInterface;
+use MyParcelNL\Pdk\SdkApi\Middleware\FeatureFlagMiddleware;
 use MyParcelNL\Pdk\SdkApi\Middleware\LoggingMiddleware;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\AccountSettings;
@@ -200,6 +201,9 @@ abstract class AbstractSdkApiService
     protected function createGuzzleClientHandlerStack(): HandlerStack
     {
         $stack = HandlerStack::create();
+        // Guzzle runs the last pushed middleware closest to the handler, so the flags have to go on
+        // before logging is pushed for the logged request to show them.
+        $stack->push(FeatureFlagMiddleware::forApiRequests());
         $stack->push(LoggingMiddleware::forApiRequests());
 
         return $stack;

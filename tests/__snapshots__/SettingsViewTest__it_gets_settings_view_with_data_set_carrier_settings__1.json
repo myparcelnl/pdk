@@ -110,10 +110,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -1817,10 +1817,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -3524,10 +3524,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -5231,10 +5231,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -6938,10 +6938,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -8645,10 +8645,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -10352,10 +10352,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -12059,10 +12059,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -13766,10 +13766,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -15473,10 +15473,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -17180,10 +17180,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -18938,10 +18938,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -20645,10 +20645,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -22352,10 +22352,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -24059,10 +24059,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",
@@ -25766,10 +25766,10 @@
                     "description": "settings_carrier_export_priority_delivery_description"
                 },
                 {
-                    "name": "exportTracked",
+                    "name": "exportNoTracking",
                     "$component": "ToggleInput",
-                    "label": "settings_carrier_export_tracked",
-                    "description": "settings_carrier_export_tracked_description"
+                    "label": "settings_carrier_export_no_tracking",
+                    "description": "settings_carrier_export_no_tracking_description"
                 },
                 {
                     "name": "exportReceiptCode",

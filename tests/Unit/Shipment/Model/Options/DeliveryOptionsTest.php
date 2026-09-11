@@ -81,7 +81,7 @@ it('instantiates shipment options', function () {
             'return'           => TriStateService::ENABLED,
             'sameDayDelivery'  => TriStateService::ENABLED,
             'signature'        => TriStateService::ENABLED,
-            'tracked'          => TriStateService::INHERIT,
+            'noTracking'          => TriStateService::INHERIT,
             'receiptCode'      => TriStateService::ENABLED,
             'collect'          => TriStateService::ENABLED,
             'priorityDelivery' => TriStateService::ENABLED,

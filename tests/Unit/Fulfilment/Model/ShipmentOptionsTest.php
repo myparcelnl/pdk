@@ -42,7 +42,7 @@ it('can create instance from pdk delivery options', function () {
         'saturdayDelivery' => false,
         'signature'        => true,
         'receiptCode'      => true,
-        'tracked'          => false,
+        'noTracking'          => false,
         'freshFood'        => false,
         'frozen'           => false,
     ]);
