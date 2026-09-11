@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Order\Model;
 
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderLineCollection;
@@ -13,8 +14,11 @@ use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
+use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockStrictPdkOrderNoteRepository;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
@@ -219,3 +223,19 @@ it('can check whether an order is deliverable', function (array $lines, bool $re
             'result' => false,
         ],
     ]);
+
+it('has no notes when the order only exists in memory', function () {
+    // Notes are looked up in the shop by order identifier. This repository rejects a missing
+    // identifier like the WooCommerce and PrestaShop ones do, so the test fails if the model
+    // asks for them anyway — which used to break the checkout through the cart's order.
+    $reset = mockPdkProperty(
+        PdkOrderNoteRepositoryInterface::class,
+        new MockStrictPdkOrderNoteRepository(new MemoryCacheStorage())
+    );
+
+    $order = new PdkOrder(['lines' => []]);
+
+    expect($order->notes->isEmpty())->toBeTrue();
+
+    $reset();
+});

@@ -107,7 +107,14 @@ class MockCarrierCapabilitiesRepository extends CarrierCapabilitiesRepository
             'options'            => [
                 'requiresSignature'           => $option,
                 'recipientOnlyDelivery'       => $option,
-                'requiresAgeVerification'     => $option,
+                // Age verification carries its real relations (verified against the live
+                // capabilities API): it requires signature + only recipient and excludes
+                // receipt code. `printReturnLabelAtDropOff` has no PDK option definition and
+                // is dropped by the calculator — realistic, the live data contains it too.
+                'requiresAgeVerification'     => array_merge($option, [
+                    'requires' => ['recipientOnlyDelivery', 'requiresSignature'],
+                    'excludes' => ['printReturnLabelAtDropOff', 'requiresReceiptCode'],
+                ]),
                 'oversizedPackage'            => $option,
                 'hideSender'                  => $option,
                 'returnOnFirstFailedDelivery' => $option,
