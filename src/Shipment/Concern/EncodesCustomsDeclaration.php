@@ -41,8 +41,7 @@ trait EncodesCustomsDeclaration
 
             $customsDeclaration['items'][$index]['description'] = Str::limit(
                 $item['description'],
-                self::$maxCustomsItemDescriptionLength,
-                ''
+                self::$maxCustomsItemDescriptionLength
             );
         }
 
