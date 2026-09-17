@@ -40,5 +40,8 @@ docker-compose.override.yml
 !/.idea/prettier.xml
 !/.idea/vcs.xml
 
+# Generated per machine, with a timestamp in the filename
+/.idea/commandlinetools/
+
 .claude/settings.local.json
 .claude/worktrees
