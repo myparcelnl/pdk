@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/myparcelnl/pdk/compare/v4.9.0...v4.9.1) (2026-09-17)
+
+### :bug: Bug Fixes
+
+* **security:** bump nx and override smol-toml ([#538](https://github.com/myparcelnl/pdk/issues/538)) ([adc4afa](https://github.com/myparcelnl/pdk/commit/adc4afaa3dc2eebaca55a47961cf161500d75b60))
+* **security:** let tar float past the 7.5.11 pin ([#537](https://github.com/myparcelnl/pdk/issues/537)) ([f8e8bf8](https://github.com/myparcelnl/pdk/commit/f8e8bf8ed14f762b35e2afd13b77a4f31c17da15)), closes [#425](https://github.com/myparcelnl/pdk/issues/425)
+* **security:** move to @myparcel-dev/semantic-release-config 7 ([#541](https://github.com/myparcelnl/pdk/issues/541)) ([b386bc0](https://github.com/myparcelnl/pdk/commit/b386bc064e28c5806ddf39fcc853d147e2c22b04))
+
 ## [4.9.0](https://github.com/myparcelnl/pdk/compare/v4.8.3...v4.9.0) (2026-09-11)
 
 
