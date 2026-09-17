@@ -45,11 +45,11 @@
     "*.php": "yarn quality:fix"
   },
   "release": {
-    "extends": "@myparcel/semantic-release-config/github-composer"
+    "extends": "@myparcel-dev/semantic-release-config/github-composer"
   },
   "devDependencies": {
+    "@myparcel-dev/semantic-release-config": "^7.0.0",
     "@myparcel/prettier-config": "^1.1.0",
-    "@myparcel/semantic-release-config": "^5.1.0",
     "husky": "^9.0.0",
     "is-ci": "^3.0.1",
     "lint-staged": "^15.0.0",
@@ -195,8 +195,7 @@
     "yarn": "4.17.1"
   },
   "resolutions": {
-    "smol-toml": "^1.8.0",
-    "tar": "^7.5.22"
+    "smol-toml": "^1.8.0"
   },
   "packageManager": "yarn@4.17.1"
 }
