@@ -195,7 +195,7 @@
     "yarn": "4.17.1"
   },
   "resolutions": {
-    "tar": "7.5.11"
+    "tar": "^7.5.22"
   },
   "packageManager": "yarn@4.17.1"
 }
