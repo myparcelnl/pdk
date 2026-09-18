@@ -146,7 +146,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
         $dropOff           = $this->dropOffService->getForDate($carrierSettings);
-        $dropOffCollection = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
+        $dropOffCollection = $carrierSettings->dropOffPossibilities->dropOffDaysDeviations->isEmpty()
+            ? $carrierSettings->dropOffPossibilities->dropOffDays->where('dispatch', true)
+            : $this->dropOffService->getPossibleDropOffDays($carrierSettings);
         $dropOffDays       = (new Collection($dropOffCollection))
             ->pluck('weekday')
             ->toArray();
