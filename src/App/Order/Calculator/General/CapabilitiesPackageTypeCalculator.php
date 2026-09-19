@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * Validates the order's package type against carrier capabilities and falls back
@@ -58,7 +59,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
         $carrier       = $this->order->deliveryOptions->carrier;
         $cc            = $this->order->shippingAddress->cc;
         $currentType   = $this->order->deliveryOptions->packageType;
-        $v2CurrentType = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$currentType] ?? null;
+        $v2CurrentType = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $currentType);
 
         if (! $cc || ! $v2CurrentType) {
             return;
@@ -127,12 +128,16 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
     private function fallbackToNextAvailableType(string $cc, Carrier $carrier): void
     {
         $availableByType = [];
-        $v2ToPdkName     = array_flip(DeliveryOptions::PACKAGE_TYPES_V2_MAP);
+        $mapper          = ApiMapperService::forPackageType();
 
         foreach (($carrier->packageTypes ?? []) as $v2Name) {
-            $pdkName = $v2ToPdkName[$v2Name] ?? null;
+            $pdkName = $mapper->legacyNameFromV2Name($v2Name);
 
-            if ($pdkName === null || $this->isInternationalMailboxBlocked($pdkName, $cc, $carrier)) {
+            if (
+                $pdkName === null
+                || null === $mapper->idFromV2Name($v2Name)
+                || $this->isInternationalMailboxBlocked($pdkName, $cc, $carrier)
+            ) {
                 continue;
             }
 
