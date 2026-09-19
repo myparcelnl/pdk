@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * Validates the order's delivery type against carrier capabilities and resets
@@ -39,7 +40,7 @@ final class CapabilitiesDeliveryTypeCalculator extends AbstractPdkOrderOptionCal
         $deliveryOptions = $this->order->deliveryOptions;
         $carrier         = $deliveryOptions->carrier;
         $cc              = $this->order->shippingAddress->cc;
-        $v2PackageType   = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$deliveryOptions->packageType] ?? null;
+        $v2PackageType   = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $deliveryOptions->packageType);
 
         if (! $cc || ! $v2PackageType) {
             return;
@@ -57,7 +58,7 @@ final class CapabilitiesDeliveryTypeCalculator extends AbstractPdkOrderOptionCal
         // string constants and may be null when the API omits the field — coalesce defensively.
         $supportedV2Types = $capability ? ($capability->getDeliveryTypes() ?? []) : []; // @phpstan-ignore-line
 
-        $currentV2DeliveryType = DeliveryOptions::DELIVERY_TYPES_V2_MAP[$deliveryOptions->deliveryType] ?? null;
+        $currentV2DeliveryType = ApiMapperService::forDeliveryType()->v2NameFromLegacyName((string) $deliveryOptions->deliveryType);
 
         if ($currentV2DeliveryType && in_array($currentV2DeliveryType, $supportedV2Types, true)) { // @phpstan-ignore-line SDK enum type vs runtime string
             return;
@@ -74,19 +75,22 @@ final class CapabilitiesDeliveryTypeCalculator extends AbstractPdkOrderOptionCal
      */
     private static function pickFallbackDeliveryType(array $supportedV2Types): string
     {
-        $v2ToPdkName = array_flip(DeliveryOptions::DELIVERY_TYPES_V2_MAP);
+        $mapper = ApiMapperService::forDeliveryType();
 
         if (in_array(RefTypesDeliveryTypeV2::STANDARD, $supportedV2Types, true)) {
-            return $v2ToPdkName[RefTypesDeliveryTypeV2::STANDARD];
+            return $mapper->legacyNameFromV2Name(RefTypesDeliveryTypeV2::STANDARD)
+                ?? DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME;
         }
 
         $firstKnown = Arr::first(
             $supportedV2Types,
-            static function ($v2Type) use ($v2ToPdkName) {
-                return isset($v2ToPdkName[$v2Type]);
+            static function ($v2Type) {
+                return DeliveryOptions::isDeliveryTypeSupported($v2Type);
             }
         );
 
-        return $firstKnown ? $v2ToPdkName[$firstKnown] : DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME;
+        return $firstKnown
+            ? $mapper->legacyNameFromV2Name($firstKnown)
+            : DeliveryOptions::DEFAULT_DELIVERY_TYPE_NAME;
     }
 }
