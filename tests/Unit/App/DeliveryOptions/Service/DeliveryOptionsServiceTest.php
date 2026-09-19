@@ -28,6 +28,7 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 
 uses()->group('checkout');
 
@@ -39,8 +40,8 @@ usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock(
 // method allows. The default account (UsesAccountMock) uses CarrierFactory's
 // withAllCapabilities, which declares every SDK V2 package type on the carrier;
 // the shipping method INHERITs those — so allowedPackageTypes ends up equal to
-// PACKAGE_TYPES_V2_MAP in this fixture. We loop over the map to size the queue
-// because the carrier mirrors it; tests using a narrower carrier should size
+// the SDK package-type enum in this fixture. Size the queue from the supported types;
+// tests using a narrower carrier should size
 // their own queue to that carrier's packageTypes count.
 //
 // Tests without cc won't consume these; UsesSdkApiMock::afterEach() cleans up leftovers.
@@ -63,7 +64,11 @@ beforeEach(function () {
         ],
     ];
 
-    foreach (DeliveryOptions::PACKAGE_TYPES_V2_MAP as $_) {
+    foreach (RefShipmentPackageTypeV2::getAllowableEnumValues() as $packageType) {
+        if (! DeliveryOptions::isPackageTypeSupported($packageType)) {
+            continue;
+        }
+
         MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($responseData));
     }
 });
