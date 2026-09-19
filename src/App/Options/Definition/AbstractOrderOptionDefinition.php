@@ -7,6 +7,9 @@ namespace MyParcelNL\Pdk\App\Options\Definition;
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Base\Support\SettingKey;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
+use MyParcelNL\Sdk\Support\Str;
 
 abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInterface
 {
@@ -28,15 +31,28 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
 
     /**
      * The SDK capabilities key (e.g. 'requiresSignature', 'oversizedPackage').
-     * This is the explicit bridge between PDK option names and SDK-generated type names.
+     * The SDK resolves the API name from the PDK shipment option key.
      * These keys correspond to the V2 naming used by the capabilities API and
      * microservices (e.g. order v2).
      *
      * Return null if this option has no corresponding capabilities entry (e.g.
      * ExcludeParcelLockers). When null, the option cannot be validated against carrier
      * capabilities, and no default value will be resolved from the capabilities response.
+     *
+     * @return null|string
      */
-    abstract public function getCapabilitiesOptionsKey(): ?string;
+    public function getCapabilitiesOptionsKey(): ?string
+    {
+        $key = $this->getShipmentOptionsKey();
+
+        if (null === $key) {
+            return null;
+        }
+
+        $property = (new ShipmentOptionMapper())->v2PropertyFromName(Str::snake($key));
+
+        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()[$property] ?? null;
+    }
 
     /**
      * The carrier-level settings key (e.g. 'exportSignature').

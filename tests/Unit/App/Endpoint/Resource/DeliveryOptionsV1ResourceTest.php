@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryType as OrderApiDeliveryType;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType as OrderApiPackageType;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -247,51 +248,47 @@ it('maps carrier names using direct carrier mapping', function () {
     }
 });
 
-it('maps package types using direct mapping', function () {
-    $packageTypes = [
-        'package' => 'PACKAGE',
-        'mailbox' => 'MAILBOX',
-        'letter' => 'UNFRANKED',
-        'digital_stamp' => 'DIGITAL_STAMP',
-        'package_small' => 'SMALL_PACKAGE',
-    ];
+it('formats all complete SDK type mappings as valid Order API values', function (string $attribute, int $id, string $name, string $v2Name) {
+    $options = new DeliveryOptions([$attribute => $name]);
+    $result  = (new DeliveryOptionsV1Resource($options))->format();
+    $allowed = $attribute === 'packageType'
+        ? OrderApiPackageType::getAllowableEnumValues()
+        : OrderApiDeliveryType::getAllowableEnumValues();
 
-    foreach ($packageTypes as $packageType => $expected) {
-        $deliveryOptions = new DeliveryOptions(['packageType' => $packageType]);
-        $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-        $result = $resource->format();
+    $expected = in_array($v2Name, $allowed, true) ? $v2Name : null;
 
-        expect($result['packageType'])->toBe($expected);
+    expect($result[$attribute])->toBe($expected);
+})->with('apiTypeMappings');
+
+it('preserves valid Order API types outside the Core API map', function (string $attribute) {
+    $allowedValues = $attribute === 'packageType'
+        ? OrderApiPackageType::getAllowableEnumValues()
+        : OrderApiDeliveryType::getAllowableEnumValues();
+
+    foreach ($allowedValues as $v2Name) {
+        $options = new DeliveryOptions();
+        $options->{$attribute} = $v2Name;
+
+        expect((new DeliveryOptionsV1Resource($options))->format()[$attribute])->toBe($v2Name);
     }
+})->with(['packageType', 'deliveryType']);
+
+it('keeps the Order API normalization for delivery names without a Core API mapping', function () {
+    $options = new DeliveryOptions();
+    $options->deliveryType = 'pickup_express';
+
+    expect((new DeliveryOptionsV1Resource($options))->format()['deliveryType'])
+        ->toBe(OrderApiDeliveryType::PICKUP_EXPRESS_DELIVERY);
 });
 
-it('maps every known delivery type to an Order API value', function (string $deliveryTypeName) {
-    $deliveryOptions = new DeliveryOptions(['deliveryType' => $deliveryTypeName]);
-    $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-    $result = $resource->format();
+it('does not send unknown package or delivery types to the Order API', function () {
+    $options = new DeliveryOptions();
+    $options->packageType = 'unknown_package';
+    $options->deliveryType = 'unknown_delivery';
+    $result = (new DeliveryOptionsV1Resource($options))->format();
 
-    expect($result['deliveryType'])->not->toBeNull();
-    expect(OrderApiDeliveryType::getAllowableEnumValues())->toContain($result['deliveryType']);
-})->with('deliveryTypeNames');
-
-it('maps delivery types using direct mapping', function () {
-    $deliveryTypes = [
-        'standard' => 'STANDARD_DELIVERY',
-        'morning' => 'MORNING_DELIVERY',
-        'evening' => 'EVENING_DELIVERY',
-        'pickup' => 'PICKUP_DELIVERY',
-        'express' => 'EXPRESS_DELIVERY',
-        'same_day' => 'SAME_DAY_DELIVERY',
-        'early_morning' => 'EARLY_MORNING_DELIVERY',
-    ];
-
-    foreach ($deliveryTypes as $deliveryType => $expected) {
-        $deliveryOptions = new DeliveryOptions(['deliveryType' => $deliveryType]);
-        $resource = new DeliveryOptionsV1Resource($deliveryOptions);
-        $result = $resource->format();
-
-        expect($result['deliveryType'])->toBe($expected);
-    }
+    expect($result['packageType'])->toBeNull()
+        ->and($result['deliveryType'])->toBeNull();
 });
 
 it('maps shipment option keys to Order API format', function () {

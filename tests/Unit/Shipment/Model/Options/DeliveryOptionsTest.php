@@ -210,3 +210,59 @@ it('can be instantiated from its storable array', function () {
 
     expect($original->toArrayWithoutNull())->toEqual($fromStorable->toArrayWithoutNull());
 });
+
+it('roundtrips every complete SDK mapping through capabilities', function (string $attribute, int $id, string $name, string $v2Name) {
+    $original = new DeliveryOptions([$attribute => $name]);
+    $exported = DeliveryOptions::toCapabilitiesDefinitions($original);
+    $restored = DeliveryOptions::fromCapabilitiesDefinitions($exported);
+    $idGetter = 'get' . ucfirst($attribute) . 'Id';
+
+    expect($exported[$attribute])->toBe($v2Name)
+        ->and($restored->{$attribute})->toBe($name)
+        ->and($restored->{$idGetter}())->toBe($id);
+})->with('apiTypeMappings');
+
+it('accepts numeric strings from stored options and direct assignments', function (string $attribute, int $id, string $name, string $v2Name) {
+    $options  = new DeliveryOptions([$attribute => (string) $id]);
+    $idGetter = 'get' . ucfirst($attribute) . 'Id';
+
+    expect($options->{$attribute})->toBe($name)
+        ->and($options->{$idGetter}())->toBe($id);
+
+    $options->{$attribute} = (string) $id;
+
+    expect($options->{$idGetter}())->toBe($id);
+})->with('apiTypeMappings');
+
+it('keeps model defaults for unmappable stored input', function ($value) {
+    $options = new DeliveryOptions(['packageType' => $value, 'deliveryType' => $value]);
+
+    expect($options->getPackageTypeId())->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID)
+        ->and($options->getDeliveryTypeId())->toBe(DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID);
+})->with([null, '', 'unknown_type', 999999, '999999']);
+
+it('uses canonical package names for SDK input aliases', function (string $alias, string $name) {
+    expect((new DeliveryOptions(['packageType' => $alias]))->packageType)->toBe($name);
+})->with([
+    ['unfranked', 'letter'],
+    ['small_package', 'package_small'],
+]);
+
+it('uses model defaults for incomplete or unknown capabilities data', function () {
+    $options = DeliveryOptions::fromCapabilitiesDefinitions([
+        'packageType'  => 'UNKNOWN_PACKAGE',
+        'deliveryType' => 'UNKNOWN_DELIVERY',
+    ]);
+
+    expect($options->getPackageTypeId())->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID)
+        ->and($options->getDeliveryTypeId())->toBe(DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID);
+});
+
+it('returns null for unknown values assigned after construction', function () {
+    $options = new DeliveryOptions();
+    $options->packageType = 'unknown_package';
+    $options->deliveryType = 'unknown_delivery';
+
+    expect($options->getPackageTypeId())->toBeNull()
+        ->and($options->getDeliveryTypeId())->toBeNull();
+});
