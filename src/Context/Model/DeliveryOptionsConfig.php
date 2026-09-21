@@ -6,6 +6,8 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
+use MyParcelNL\Pdk\App\Cart\Contract\KnownCartWeightServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -22,6 +24,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property array  $carrierSettings
  * @property string $currency
  * @property string $locale
+ * @property null|array $physicalProperties
  * @property string $packageType
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
@@ -42,6 +45,7 @@ class DeliveryOptionsConfig extends Model
         'currency'                       => 'EUR',
         'locale'                         => null,
         'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        'physicalProperties'             => null,
         'pickupLocationsDefaultView'     => null,
         'allowPickupLocationsViewSelection' => true,
         'platform'                          => null,
@@ -60,6 +64,7 @@ class DeliveryOptionsConfig extends Model
         'currency'                          => 'string',
         'locale'                            => 'string',
         'packageType'                       => 'string',
+        'physicalProperties'                => 'array',
         'pickupLocationsDefaultView'        => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
         'platform'                          => 'string',
@@ -117,6 +122,15 @@ class DeliveryOptionsConfig extends Model
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
         $config = new self($service->createAllCarrierSettings($cart));
+
+        $cartCalculationService = Pdk::get(CartCalculationServiceInterface::class);
+        $knownWeight = $cart->shippingMethod->hasDeliveryOptions
+            && $cartCalculationService instanceof KnownCartWeightServiceInterface
+            ? $cartCalculationService->getKnownCartWeightForPackageType($cart, $config->packageType)
+            : null;
+        $config->physicalProperties = null === $knownWeight
+            ? null
+            : ['weight' => ['value' => $knownWeight, 'unit' => 'g']];
 
         // Override excludeParcelLockers based on cart calculation
         if (isset($cart->shippingMethod->excludeParcelLockers)) {
