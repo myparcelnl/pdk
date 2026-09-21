@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.2](https://github.com/myparcelnl/pdk/compare/v4.9.1...v4.9.2) (2026-09-21)
+
+### :bug: Bug Fixes
+
+* **customs:** limit the customs item description to the api maximum ([#534](https://github.com/myparcelnl/pdk/issues/534)) ([1db3d8e](https://github.com/myparcelnl/pdk/commit/1db3d8e49b62ae47677e6cf4c9366143162a9ac2))
+
 ## [4.9.1](https://github.com/myparcelnl/pdk/compare/v4.9.0...v4.9.1) (2026-09-17)
 
 ### :bug: Bug Fixes
