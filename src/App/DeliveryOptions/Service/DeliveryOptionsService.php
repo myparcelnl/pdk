@@ -26,12 +26,15 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Shipment\Model\DropOffDay;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 {
+    // Core API's AbstractDeliveryOptionsAdapter caps time frames at today + 28 days.
+    private const DELIVERY_OPTIONS_HORIZON_DAYS = 28;
 
     /**
      * @var \MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface
@@ -146,9 +149,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $carrierSettings = CarrierSettings::fromCarrier($carrier);
 
         $dropOff           = $this->dropOffService->getForDate($carrierSettings);
-        $dropOffCollection = $carrierSettings->dropOffPossibilities->dropOffDaysDeviations->isEmpty()
-            ? $carrierSettings->dropOffPossibilities->dropOffDays->where('dispatch', true)
-            : $this->dropOffService->getPossibleDropOffDays($carrierSettings);
+        $dropOffCollection = $this->hasRelevantDropOffDeviations($carrierSettings)
+            ? $this->dropOffService->getPossibleDropOffDays($carrierSettings)
+            : $carrierSettings->dropOffPossibilities->dropOffDays->where('dispatch', true);
         $dropOffDays       = (new Collection($dropOffCollection))
             ->pluck('weekday')
             ->toArray();
@@ -176,6 +179,32 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
                 'cutoffTimeSameDay'    => $carrierSettings['cutoffTimeSameDay'] ?? null,
                 'dropOffDays'          => $dropOffDays,
             ]
+        );
+    }
+
+    protected function getToday(): DateTimeImmutable
+    {
+        return new DateTimeImmutable('today', new DateTimeZone(Pdk::get('defaultTimeZone')));
+    }
+
+    private function hasRelevantDropOffDeviations(CarrierSettings $settings): bool
+    {
+        $today    = $this->getToday();
+        $fromDate = $today->format('Y-m-d');
+        $toDate   = $today->modify('+' . self::DELIVERY_OPTIONS_HORIZON_DAYS . ' days')->format('Y-m-d');
+
+        // Keep the existing calculation for any override the API could encounter, not just
+        // the first deliveryDaysWindow dates. Date-specific scheduling needs a separate fix.
+        return $settings->dropOffPossibilities->dropOffDaysDeviations->contains(
+            static function (DropOffDay $deviation) use ($fromDate, $toDate): bool {
+                if (null === $deviation->date) {
+                    return true;
+                }
+
+                $date = $deviation->date->format('Y-m-d');
+
+                return $date >= $fromDate && $date <= $toDate;
+            }
         );
     }
 
