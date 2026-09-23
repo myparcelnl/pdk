@@ -123,6 +123,23 @@ it('returns correct delivery days using a specific date', function (
             '2.dispatch'          => true,
             '2.sameDayCutoffTime' => '10:00',
             '2.weekday'           => 3,
+
+            // A smaller delivery days window still returns at least one full week.
+            '3.cutoffTime'        => '15:00',
+            '3.date'              => '2022-01-06 00:00:00',
+            '3.dispatch'          => true,
+            '3.sameDayCutoffTime' => '10:00',
+            '3.weekday'           => 4,
+            '4.cutoffTime'        => '17:00',
+            '4.date'              => '2022-01-07 00:00:00',
+            '4.dispatch'          => true,
+            '4.sameDayCutoffTime' => '10:00',
+            '4.weekday'           => 5,
+            '5.cutoffTime'        => '15:30',
+            '5.date'              => '2022-01-08 00:00:00',
+            '5.dispatch'          => true,
+            '5.sameDayCutoffTime' => '10:00',
+            '5.weekday'           => 6,
         ],
     ],
 
@@ -210,17 +227,18 @@ it('returns correct delivery days using a specific date', function (
 
 ]);
 
+// DROP_OFF_DAYS has 6 dispatch days per week. At least one full week is always returned.
 $dataset = [
     'deliveryDaysWindow 0' => [
         'settingsOverrides' => ['deliveryDaysWindow' => 1, 'dropOffPossibilities' => ['dropOffDays' => DROP_OFF_DAYS]],
-        'amountOfItems'     => 1,
+        'amountOfItems'     => 6,
     ],
 ];
 
 for ($i = 1; $i < 14; $i++) {
     $dataset["deliveryDaysWindow $i"] = [
         'settingsOverrides' => ['deliveryDaysWindow' => $i, 'dropOffPossibilities' => ['dropOffDays' => DROP_OFF_DAYS]],
-        'amountOfItems'     => $i,
+        'amountOfItems'     => max($i, 6),
     ];
 }
 

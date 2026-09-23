@@ -17,6 +17,12 @@ class DropOffService implements DropOffServiceInterface
     private const DELIVERY_DAYS_WINDOW_MAXIMUM = 14;
 
     /**
+     * The API only accepts weekdays. Check at least one full week, so a small delivery days window does not remove
+     * dispatch weekdays the API needs, for example after the cutoff time.
+     */
+    private const MINIMUM_DAYS_TO_CHECK = 7;
+
+    /**
      * @param  \MyParcelNL\Pdk\Settings\Model\CarrierSettings $settings
      * @param  \DateTimeImmutable|null                        $date
      *
@@ -75,7 +81,7 @@ class DropOffService implements DropOffServiceInterface
                 }
 
                 $day++;
-            } while ($items < $settings->deliveryDaysWindow);
+            } while ($items < $settings->deliveryDaysWindow || $day < self::MINIMUM_DAYS_TO_CHECK);
         }
 
         return new DropOffDayCollection($newDropOffDays);

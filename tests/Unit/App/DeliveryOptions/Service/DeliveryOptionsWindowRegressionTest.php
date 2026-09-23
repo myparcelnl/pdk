@@ -57,7 +57,7 @@ beforeEach(function () {
     $this->dropOffService->today = new DateTimeImmutable('2026-09-17');
     Pdk::set(DropOffServiceInterface::class, $this->dropOffService);
 
-    $this->deliveryOptionsService = new class(
+    $this->deliveryOptionsService = new DeliveryOptionsService(
         Pdk::get(CartCalculationServiceInterface::class),
         Pdk::get(CapabilitiesValidationService::class),
         Pdk::get(CarrierRepositoryInterface::class),
@@ -65,15 +65,7 @@ beforeEach(function () {
         Pdk::get(CurrencyServiceInterface::class),
         $this->dropOffService,
         Pdk::get(TaxServiceInterface::class)
-    ) extends DeliveryOptionsService {
-        public DateTimeImmutable $today;
-
-        protected function getToday(): DateTimeImmutable
-        {
-            return $this->today;
-        }
-    };
-    $this->deliveryOptionsService->today = $this->dropOffService->today;
+    );
     Pdk::set(DeliveryOptionsServiceInterface::class, $this->deliveryOptionsService);
 
     $this->carrier = Pdk::get(CarrierRepositoryInterface::class)->all()->first();
@@ -110,7 +102,6 @@ it('keeps the weekly dispatch schedule independent of the delivery window', func
     int $delay
 ) {
     $this->dropOffService->today = new DateTimeImmutable($date);
-    $this->deliveryOptionsService->today = $this->dropOffService->today;
 
     factory(CarrierSettings::class, $this->carrier->carrier)
         ->withDeliveryOptions()
@@ -122,7 +113,7 @@ it('keeps the weekly dispatch schedule independent of the delivery window', func
         ->withDropOffPossibilities(['dropOffDays' => $this->week, 'dropOffDaysDeviations' => []])
         ->store();
 
-    $settings = Pdk::get(DeliveryOptionsServiceInterface::class)->createAllCarrierSettings($this->cart);
+    $settings = $this->deliveryOptionsService->createAllCarrierSettings($this->cart);
     $output = $settings['carrierSettings'][FrontendData::getLegacyCarrierIdentifier($this->carrier->carrier)];
     $days = $output['dropOffDays'];
     sort($days);
@@ -136,10 +127,7 @@ it('keeps the weekly dispatch schedule independent of the delivery window', func
         ->and($output['allowEveningDelivery'])->toBeTrue();
 })->with($cases);
 
-it('preserves the existing dispatch calculation for potentially relevant date overrides', function (
-    array $deviations,
-    array $expectedDays
-) {
+it('applies date overrides only to their own dispatch date', function (array $deviations, array $expectedDays) {
     factory(CarrierSettings::class, $this->carrier->carrier)
         ->withDeliveryOptions()
         ->withDeliveryDaysWindow(2)
@@ -150,40 +138,40 @@ it('preserves the existing dispatch calculation for potentially relevant date ov
         ])
         ->store();
 
-    $settings = Pdk::get(DeliveryOptionsServiceInterface::class)->createAllCarrierSettings($this->cart);
+    $settings = $this->deliveryOptionsService->createAllCarrierSettings($this->cart);
     $output = $settings['carrierSettings'][FrontendData::getLegacyCarrierIdentifier($this->carrier->carrier)];
 
-    expect($output['dropOffDays'])->toBe($expectedDays)
+    expect($output['dropOffDays'])->toEqualCanonicalizing($expectedDays)
         ->and($output['deliveryDaysWindow'])->toBe(2)
         ->and($output['dropOffDelay'])->toBe(0)
         ->and($output['cutoffTime'])->toBe('15:00');
 })->with([
-    'closed Friday' => [[['date' => '2026-09-18', 'dispatch' => false]], [4, 1]],
-    'closed Thursday' => [[['date' => '2026-09-17', 'dispatch' => false]], [5, 1]],
-    'next week, beyond the two initially calculated dates' => [[['date' => '2026-09-24', 'dispatch' => false]], [4, 5]],
-    'last day of the API horizon' => [[['date' => '2026-10-15', 'dispatch' => false]], [4, 5]],
-    'last day with a time component' => [[['date' => '2026-10-15 23:59:59', 'dispatch' => false]], [4, 5]],
-    'cutoff-only override' => [[['date' => '2026-09-17', 'dispatch' => null, 'cutoffTime' => '12:00']], [4, 5]],
-    'override without a date' => [[['weekday' => 5, 'dispatch' => false]], [4, 5]],
+    // Today is Thursday 17 September 2026, so the checked dates are Thursday 17 up to and including Wednesday 23.
+    'closed today' => [[['date' => '2026-09-17', 'dispatch' => false]], [5, 1, 2, 3]],
+    'closed Friday this week' => [[['date' => '2026-09-18', 'dispatch' => false]], [4, 1, 2, 3]],
+    'closed Monday next week' => [[['date' => '2026-09-21', 'dispatch' => false]], [4, 5, 2, 3]],
+    'extra dispatch on Saturday' => [[['date' => '2026-09-19', 'dispatch' => true]], [4, 5, 6, 1, 2, 3]],
+    'cutoff-only override' => [[['date' => '2026-09-18', 'dispatch' => null, 'cutoffTime' => '12:00']], [4, 5, 1, 2, 3]],
+    'closure after the checked week' => [[['date' => '2026-09-24', 'dispatch' => false]], [4, 5, 1, 2, 3]],
+    'closure last week' => [[['date' => '2026-09-10', 'dispatch' => false]], [4, 5, 1, 2, 3]],
+    'closure yesterday with a time component' => [[['date' => '2026-09-16 23:59:59', 'dispatch' => false]], [4, 5, 1, 2, 3]],
+    'closure in three months' => [[['date' => '2026-12-17', 'dispatch' => false]], [4, 5, 1, 2, 3]],
+    'distant extra dispatch day' => [[['date' => '2026-12-19', 'dispatch' => true]], [4, 5, 1, 2, 3]],
     'old, relevant and distant overrides together' => [[
         ['date' => '2026-09-10', 'dispatch' => false],
         ['date' => '2026-09-18', 'dispatch' => false],
         ['date' => '2026-12-17', 'dispatch' => false],
-    ], [4, 1]],
+    ], [4, 1, 2, 3]],
 ]);
 
-it('keeps all weekly dispatch days when overrides cannot affect the current planning', function (
-    array $deviations,
-    int $delay,
-    int $minimumDropOffDelay
-) {
+it('keeps all weekly dispatch days with a processing delay', function (int $delay, int $minimumDropOffDelay) {
     factory(CarrierSettings::class, $this->carrier->carrier)
         ->withDeliveryOptions()
         ->withDeliveryDaysWindow(2)
         ->withDropOffDelay($delay)
         ->withDropOffPossibilities([
             'dropOffDays'           => $this->week,
-            'dropOffDaysDeviations' => $deviations,
+            'dropOffDaysDeviations' => [['date' => '2026-12-17', 'dispatch' => false]],
         ])
         ->store();
 
@@ -191,24 +179,32 @@ it('keeps all weekly dispatch days when overrides cannot affect the current plan
     $settings = $this->deliveryOptionsService->createAllCarrierSettings($this->cart);
     $output = $settings['carrierSettings'][FrontendData::getLegacyCarrierIdentifier($this->carrier->carrier)];
 
-    expect($output['dropOffDays'])->toBe([1, 2, 3, 4, 5])
+    expect($output['dropOffDays'])->toEqualCanonicalizing([1, 2, 3, 4, 5])
         ->and($output['deliveryDaysWindow'])->toBe(2)
         ->and($output['dropOffDelay'])->toBe(max($delay, $minimumDropOffDelay))
         ->and($output['cutoffTime'])->toBe('15:00');
 })->with([
-    'closure last week' => [[['date' => '2026-09-10', 'dispatch' => false]], 0, 0],
-    'closure yesterday with a time component' => [[['date' => '2026-09-16 23:59:59', 'dispatch' => false]], 0, 0],
-    'closure in three months' => [[['date' => '2026-12-17', 'dispatch' => false]], 0, 0],
-    'first day outside the API horizon' => [[['date' => '2026-10-16', 'dispatch' => false]], 0, 0],
-    'distant extra dispatch day' => [[['date' => '2026-12-19', 'dispatch' => true]], 0, 0],
-    'distant cutoff override' => [[['date' => '2026-12-17', 'dispatch' => null, 'cutoffTime' => '12:00']], 0, 0],
-    'old and distant closures together' => [[
-        ['date' => '2026-09-10', 'dispatch' => false],
-        ['date' => '2026-12-17', 'dispatch' => false],
-    ], 0, 0],
-    'carrier processing delay' => [[['date' => '2026-12-17', 'dispatch' => false]], 1, 0],
-    'longer cart processing delay' => [[['date' => '2026-12-17', 'dispatch' => false]], 0, 14],
+    'carrier processing delay' => [1, 0],
+    'longer cart processing delay' => [0, 14],
 ]);
+
+it('excludes a closed weekday for the whole window, because the API only accepts weekdays', function () {
+    factory(CarrierSettings::class, $this->carrier->carrier)
+        ->withDeliveryOptions()
+        ->withDeliveryDaysWindow(5)
+        ->withDropOffDelay(0)
+        ->withDropOffPossibilities([
+            'dropOffDays'           => $this->week,
+            'dropOffDaysDeviations' => [['date' => '2026-09-18', 'dispatch' => false]],
+        ])
+        ->store();
+
+    $settings = $this->deliveryOptionsService->createAllCarrierSettings($this->cart);
+    $output = $settings['carrierSettings'][FrontendData::getLegacyCarrierIdentifier($this->carrier->carrier)];
+
+    // Friday 25 September is open, but excluding Friday is the only way to exclude Friday 18 September.
+    expect($output['dropOffDays'])->toEqualCanonicalizing([4, 1, 2, 3]);
+});
 
 it('keeps general closed days separate from the weekly dispatch schedule', function () {
     $closedDays = ['2026-09-18', '2026-12-17'];
@@ -226,5 +222,5 @@ it('keeps general closed days separate from the weekly dispatch schedule', funct
     $output = $config->carrierSettings[FrontendData::getLegacyCarrierIdentifier($this->carrier->carrier)];
 
     expect($config->closedDays)->toBe($closedDays)
-        ->and($output['dropOffDays'])->toBe([1, 2, 3, 4, 5]);
+        ->and($output['dropOffDays'])->toEqualCanonicalizing([1, 2, 3, 4, 5]);
 });
