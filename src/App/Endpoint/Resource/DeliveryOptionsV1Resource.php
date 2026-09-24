@@ -6,18 +6,8 @@ namespace MyParcelNL\Pdk\App\Endpoint\Resource;
 
 use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
-use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\CollectDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\PriorityDeliveryDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\ReceiptCodeDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\SameDayDeliveryDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\SaturdayDeliveryDefinition;
-use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\Base\Model\Currency;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -30,6 +20,8 @@ use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier as OrderApiCarrier;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryType as OrderApiDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType as OrderApiPackageType;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions as ModelShipmentOptions;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Services\Mapping\ShipmentOptionMapper;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -99,20 +91,8 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
         $insuranceKey        = (new InsuranceDefinition())->getShipmentOptionsKey();
         $labelDescriptionKey = ShipmentOptions::LABEL_DESCRIPTION;
 
-        $optionMap = [
-            (new AgeCheckDefinition())->getShipmentOptionsKey()         => $orderApiShipmentOptions['requires_age_verification'],
-            (new SignatureDefinition())->getShipmentOptionsKey()        => $orderApiShipmentOptions['requires_signature'],
-            (new OnlyRecipientDefinition())->getShipmentOptionsKey()    => $orderApiShipmentOptions['recipient_only_delivery'],
-            (new LargeFormatDefinition())->getShipmentOptionsKey()      => $orderApiShipmentOptions['oversized_package'],
-            (new DirectReturnDefinition())->getShipmentOptionsKey()     => $orderApiShipmentOptions['print_return_label_at_drop_off'],
-            (new HideSenderDefinition())->getShipmentOptionsKey()       => $orderApiShipmentOptions['hide_sender'],
-            $labelDescriptionKey                                        => $orderApiShipmentOptions['custom_label_text'],
-            (new PriorityDeliveryDefinition())->getShipmentOptionsKey() => $orderApiShipmentOptions['priority_delivery'],
-            (new ReceiptCodeDefinition())->getShipmentOptionsKey()      => $orderApiShipmentOptions['requires_receipt_code'],
-            (new SameDayDeliveryDefinition())->getShipmentOptionsKey()  => $orderApiShipmentOptions['same_day_delivery'],
-            (new SaturdayDeliveryDefinition())->getShipmentOptionsKey() => $orderApiShipmentOptions['saturday_delivery'],
-            (new CollectDefinition())->getShipmentOptionsKey()          => $orderApiShipmentOptions['scheduled_collection'],
-        ];
+        $optionMapper = new ShipmentOptionMapper();
+        $returnKey    = (new DirectReturnDefinition())->getShipmentOptionsKey();
 
         foreach ($filteredOptions as $key => $value) {
             if ($key === $insuranceKey) {
@@ -124,17 +104,14 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
                 // Custom label text option needs to be formatted as an object with a "text" property
                 $formattedOptions[$orderApiShipmentOptions['custom_label_text']] = ['text' => (string) $value];
             } else {
-                $mappedKey = null;
-                // Map our key to Order API service
                 if (in_array($key, $orderApiShipmentOptions, true)) {
-                    // 1:1 match with Order API shipment options, use it directly
                     $mappedKey = $key;
-                } else if (in_array(Str::lower(Str::snake($key)), $orderApiShipmentOptions, true)) {
-                    // If no 1:1 match, attempt to convert to snake_case and check again
-                    $mappedKey = Str::lower(Str::snake($key));
-                } else if (array_key_exists($key, $optionMap)) {
-                    // If no 1:1 match, check our mapping
-                    $mappedKey = $optionMap[$key];
+                } else {
+                    // This resource uses return for label printing at drop-off, unlike capabilities.
+                    $property = $key === $returnKey
+                        ? 'print_return_label_at_drop_off'
+                        : $optionMapper->v2PropertyFromName(Str::snake($key));
+                    $mappedKey = $orderApiShipmentOptions[$property ?? Str::snake($key)] ?? null;
                 }
                 // Format as an empty object as per ADR-0013
                 if ($mappedKey) {
@@ -215,26 +192,21 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatPackageType(string $packageType): ?string
     {
-        // If the package type already equals one of the order service constants, return it directly
-        if (\in_array($packageType, OrderApiPackageType::getAllowableEnumValues(), true)) {
-            return $packageType;
-        } else {
-            // Attempt to convert it to SCREAMING_SNAKE_CASE and check again
-            $convertedName = Str::upper(Str::snake($packageType));
-            if (\in_array($convertedName, OrderApiPackageType::getAllowableEnumValues(), true)) {
-                return $convertedName;
-            }
-        }
-        // Otherwise, use our mapping
-        $packageTypeMapping = [
-            DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME => OrderApiPackageType::PACKAGE,
-            DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME => OrderApiPackageType::MAILBOX,
-            DeliveryOptions::PACKAGE_TYPE_LETTER_NAME => OrderApiPackageType::UNFRANKED,
-            DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => OrderApiPackageType::DIGITAL_STAMP,
-            DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME => OrderApiPackageType::SMALL_PACKAGE,
-        ];
+        $allowedValues = OrderApiPackageType::getAllowableEnumValues();
 
-        return \array_key_exists($packageType, $packageTypeMapping) ? $packageTypeMapping[$packageType] : null;
+        if (in_array($packageType, $allowedValues, true)) {
+            return $packageType;
+        }
+
+        $mappedName = ApiMapperService::forPackageType()->v2NameFromLegacyName($packageType);
+
+        if (in_array($mappedName, $allowedValues, true)) {
+            return $mappedName;
+        }
+
+        $convertedName = Str::upper(Str::snake($packageType));
+
+        return in_array($convertedName, $allowedValues, true) ? $convertedName : null;
     }
 
     /**
@@ -249,6 +221,13 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
             return $deliveryType;
         }
 
+        $mappedName = ApiMapperService::forDeliveryType()->v2NameFromLegacyName($deliveryType);
+
+        if (in_array($mappedName, $allowedValues, true)) {
+            return $mappedName;
+        }
+
+        // Order API types can exist without a matching Core API definition.
         // Attempt to convert it to SCREAMING_SNAKE_CASE and check again
         $convertedName = Str::upper(Str::snake($deliveryType));
         if (\in_array($convertedName, $allowedValues, true)) {
@@ -259,15 +238,6 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
         $suffixedName = $convertedName . self::ORDER_API_DELIVERY_TYPE_SUFFIX;
         if (\in_array($suffixedName, $allowedValues, true)) {
             return $suffixedName;
-        }
-
-        // Kept as the layer for a name that none of the conversions above can reach. Empty because
-        // all seven names in DeliveryOptions resolve through the suffix.
-        /** @var array<string, string> $deliveryTypeMapping */
-        $deliveryTypeMapping = [];
-
-        if (\array_key_exists($deliveryType, $deliveryTypeMapping)) {
-            return $deliveryTypeMapping[$deliveryType];
         }
 
         Logger::warning("Unmapped delivery type: {$deliveryType} - this delivery type will be null in the API response");

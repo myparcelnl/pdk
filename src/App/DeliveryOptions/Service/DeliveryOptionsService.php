@@ -28,6 +28,7 @@ use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Support\Str;
 
 class DeliveryOptionsService implements DeliveryOptionsServiceInterface
@@ -345,7 +346,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
         foreach ($cart->shippingMethod->allowedPackageTypes as $packageType) {
             $name   = is_object($packageType) ? $packageType->name : $packageType;
-            $v2Type = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$name] ?? null;
+            $v2Type = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $name);
 
             if ($v2Type) {
                 $available[$name] = $v2Type;
@@ -445,12 +446,9 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     /**
      * Build the settings map exposed to the Delivery Options checkout widget.
      *
-     * The delivery- and package-type lists below are hand-curated to match the
-     * fields the widget currently understands — they are NOT yet driven from
-     * the carrier's capabilities. Adding a new type means updating these lists
-     * AND making the widget render the new field. When the widget becomes
-     * fully capability-driven, this hand-curation collapses into iteration
-     * over $carrier->deliveryTypes / packageTypes directly.
+     * Derive delivery and package types from SDK definitions when a model name
+     * and v1 export ID are available. SettingKey preserves stored setting names;
+     * widget-specific field names are handled below.
      *
      * @return array<string, string>
      */
