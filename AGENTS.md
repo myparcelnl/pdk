@@ -44,6 +44,7 @@ The marketplace is private, so only MyParcel employees can install it.
 
 - Retain PHP 7.4 compatibility
 - Include suggestions for PHP 8.0+ enhancements with a "@TODO:" prefix marker in docblocks or inline comments for future reference
+- Use strict types
 
 ## Testing
 
