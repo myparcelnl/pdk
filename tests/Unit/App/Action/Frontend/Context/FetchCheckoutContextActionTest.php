@@ -76,6 +76,6 @@ it('serializes refreshed checkout weight and explicitly clears unknown weight', 
         $config = $body['data']['context'][0][Context::ID_CHECKOUT]['config'];
 
         expect($config)->toHaveKey('physicalProperties')
-            ->and($config['physicalProperties'])->toBe($weight ? ['weight' => ['value' => $weight, 'unit' => 'g']] : null);
+            ->and($config['physicalProperties'])->toBe($weight ? ['weight' => $weight] : null);
     }
 });

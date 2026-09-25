@@ -539,7 +539,7 @@ it('adds known weight to config without changing carrier settings or adding a se
     $body = json_decode((string) $handler->getLastRequest()->getBody(), true);
     $carrierId = FrontendData::getLegacyCarrierIdentifier($carrier);
 
-    expect($config->physicalProperties)->toBe(['weight' => ['value' => 30250, 'unit' => 'g']])
+    expect($config->physicalProperties)->toBe(['weight' => 30250])
         ->and($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
         ->and($config->carrierSettings[$carrierId]['contractId'])->toBe(777)
         ->and($config->carrierSettings[$carrierId]['allowPickupLocations'])->toBe($allowPickup)
@@ -571,5 +571,5 @@ it('uses packaging for the selected upgraded package in checkout config', functi
     $config = DeliveryOptionsConfig::fromCart($cart);
 
     expect($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-        ->and($config->physicalProperties)->toBe(['weight' => ['value' => 2750, 'unit' => 'g']]);
+        ->and($config->physicalProperties)->toBe(['weight' => 2750]);
 });

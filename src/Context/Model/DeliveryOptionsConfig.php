@@ -128,9 +128,8 @@ class DeliveryOptionsConfig extends Model
             && $cartCalculationService instanceof KnownCartWeightServiceInterface
             ? $cartCalculationService->getKnownCartWeightForPackageType($cart, $config->packageType)
             : null;
-        $config->physicalProperties = null === $knownWeight
-            ? null
-            : ['weight' => ['value' => $knownWeight, 'unit' => 'g']];
+        // The delivery options widget takes the weight in grams, without a unit.
+        $config->physicalProperties = null === $knownWeight ? null : ['weight' => $knownWeight];
 
         // Override excludeParcelLockers based on cart calculation
         if (isset($cart->shippingMethod->excludeParcelLockers)) {
