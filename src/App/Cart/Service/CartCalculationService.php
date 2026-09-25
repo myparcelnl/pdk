@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\App\Cart\Service;
 
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
+use MyParcelNL\Pdk\App\Cart\Contract\KnownCartWeightServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Options\Definition\AgeCheckDefinition;
 use MyParcelNL\Pdk\App\ShippingMethod\Model\PdkShippingMethod;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
@@ -17,7 +19,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
-class CartCalculationService implements CartCalculationServiceInterface
+class CartCalculationService implements CartCalculationServiceInterface, KnownCartWeightServiceInterface
 {
 
     /**
@@ -153,6 +155,32 @@ class CartCalculationService implements CartCalculationServiceInterface
             ->unique()
             ->values()
             ->toArray();
+    }
+
+    /**
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     * @param  string                                  $packageTypeName
+     *
+     * @return null|int
+     */
+    public function getKnownCartWeightForPackageType(PdkCart $cart, string $packageTypeName): ?int
+    {
+        $lines = $cart->lines->onlyDeliverable()->filter(static function (PdkOrderLine $line): bool {
+            return $line->quantity > 0;
+        });
+
+        // Check products before adding packaging: the legacy weight calculation falls back to 1 g.
+        if ($lines->isEmpty() || ! $lines->every(static function (PdkOrderLine $line): bool {
+            return $line->product->weight > 0;
+        })) {
+            return null;
+        }
+
+        $shippingCart        = clone $cart;
+        $shippingCart->lines = $lines;
+        $weight              = $this->getCartWeightForPackageType($shippingCart, $packageTypeName);
+
+        return $weight > 0 ? $weight : null;
     }
 
     /**

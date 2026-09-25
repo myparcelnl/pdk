@@ -216,3 +216,67 @@ it('resets to standard when carrier capability is missing entirely', function ()
 
     $reset();
 });
+
+it('does not validate an unallocated multi-collo order total as one shipment weight', function () {
+    $carrier = RefCapabilitiesSharedCarrierV2::getAllowableEnumValues()[0];
+
+    $reset = mockPdkProperty('orderCalculators', [CapabilitiesDeliveryTypeCalculator::class]);
+
+    factory(Shop::class)
+        ->withCarriers(
+            factory(CarrierCollection::class)
+                ->push(
+                    factory(Carrier::class)
+                        ->withCarrier($carrier)
+                        ->withCapabilityPackageTypes(['PACKAGE'])
+                        ->withCapabilityMultiCollo(2)
+                )
+        )
+        ->store();
+
+    factory(Settings::class)
+        ->withCarrier($carrier)
+        ->store();
+
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse([
+        deliveryTypeCapabilityResult(
+            $carrier,
+            [RefTypesDeliveryTypeV2::STANDARD, RefTypesDeliveryTypeV2::PICKUP]
+        ),
+    ]));
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withLines([
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 15000,
+                    'isDeliverable' => true,
+                ],
+            ],
+            [
+                'quantity' => 1,
+                'product'  => [
+                    'weight'        => 15000,
+                    'isDeliverable' => true,
+                ],
+            ],
+        ])
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withLabelAmount(2)
+        )
+        ->make();
+
+    $newOrder = Pdk::get(PdkOrderOptionsServiceInterface::class)->calculate($order);
+    $body     = json_decode((string) MockSdkApiHandler::getHandler()->getLastRequest()->getBody(), true);
+
+    expect($body)->not->toHaveKey('physicalProperties')
+        ->and($newOrder->deliveryOptions->deliveryType)->toBe(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME);
+
+    $reset();
+});

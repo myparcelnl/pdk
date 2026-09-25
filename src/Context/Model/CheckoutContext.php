@@ -10,6 +10,7 @@ use MyParcelNL\Pdk\App\DeliveryOptions\Service\DeliveryOptionsService;
 use MyParcelNL\Pdk\App\Request\Collection\EndpointRequestCollection;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Collection;
+use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\AccountSettings;
 use MyParcelNL\Pdk\Facade\Language;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -63,6 +64,24 @@ class CheckoutContext extends Model
                 'hasDeliveryOptions' => $cart->shippingMethod->hasDeliveryOptions,
             ],
         ]);
+    }
+
+    /**
+     * @param  null|int $flags
+     *
+     * @return array
+     */
+    public function toArray(?int $flags = null): array
+    {
+        $attributes = parent::toArray($flags);
+        $configKey  = Utils::changeCase('config', $flags);
+
+        // Checkout updates merge config. Keep this reset value even when other nulls are omitted.
+        if ($this->config && isset($attributes[$configKey])) {
+            $attributes[$configKey][Utils::changeCase('physicalProperties', $flags)] = $this->config->physicalProperties;
+        }
+
+        return $attributes;
     }
 
     /**
