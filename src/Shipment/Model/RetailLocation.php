@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentLocationType;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
 
 /**
@@ -25,10 +26,6 @@ use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
  */
 class RetailLocation extends Model
 {
-    // Pickup location types as sent by the delivery options widget in the checkout.
-    private const CHECKOUT_TYPE_DEFAULT = 'default';
-    private const CHECKOUT_TYPE_LOCKER  = 'locker';
-
     protected $attributes = [
         'locationCode'    => null,
         'locationName'    => null,
@@ -70,11 +67,15 @@ class RetailLocation extends Model
      */
     protected function setTypeAttribute(?string $type): self
     {
-        if (self::CHECKOUT_TYPE_LOCKER === $type) {
-            $type = PickupAnyOfLocation::TYPE_PARCEL_LOCKER;
-        } elseif (self::CHECKOUT_TYPE_DEFAULT === $type) {
-            $type = null;
-        } elseif (null !== $type && ! in_array($type, (new PickupAnyOfLocation())->getTypeAllowableValues(), true)) {
+        foreach ([$this->getCheckoutTypes(), $this->getCoreApiTypes()] as $types) {
+            if (array_key_exists($type, $types)) {
+                $this->attributes['type'] = $types[$type];
+
+                return $this;
+            }
+        }
+
+        if (null !== $type && ! in_array($type, (new PickupAnyOfLocation())->getTypeAllowableValues(), true)) {
             Logger::warning('Unknown pickup location type, storing no type', ['type' => $type]);
             $type = null;
         }
@@ -82,5 +83,33 @@ class RetailLocation extends Model
         $this->attributes['type'] = $type;
 
         return $this;
+    }
+
+    /**
+     * Get the pickup location types the delivery options widget sends in the checkout, as Order API location types.
+     *
+     * @return array<string, null|string>
+     */
+    private function getCheckoutTypes(): array
+    {
+        return [
+            'default' => null,
+            'locker'  => PickupAnyOfLocation::TYPE_PARCEL_LOCKER,
+        ];
+    }
+
+    /**
+     * Get the location types the Core API returns for pickup locations and drop-off points, as Order API location types.
+     *
+     * @return array<string, null|string>
+     */
+    private function getCoreApiTypes(): array
+    {
+        return [
+            RefShipmentLocationType::LOCKER      => PickupAnyOfLocation::TYPE_PARCEL_LOCKER,
+            RefShipmentLocationType::POST_OFFICE => PickupAnyOfLocation::TYPE_POST_OFFICE,
+            // Core API "retail" covers bpost post point, click & collect and parcel point, so it has no single Order API type.
+            RefShipmentLocationType::RETAIL      => null,
+        ];
     }
 }

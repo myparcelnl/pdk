@@ -25,6 +25,9 @@ it('stores the pickup location type as an Order API location type', function (?s
     'checkout other location' => ['default', null],
     'Order API parcel locker' => [PickupAnyOfLocation::TYPE_PARCEL_LOCKER, PickupAnyOfLocation::TYPE_PARCEL_LOCKER],
     'Order API post office'   => [PickupAnyOfLocation::TYPE_POST_OFFICE, PickupAnyOfLocation::TYPE_POST_OFFICE],
+    'Core API locker'         => ['locker', PickupAnyOfLocation::TYPE_PARCEL_LOCKER],
+    'Core API post office'    => ['post_office', PickupAnyOfLocation::TYPE_POST_OFFICE],
+    'Core API retail'         => ['retail', null],
 ]);
 
 it('stores null and logs a warning for an unknown pickup location type', function (string $input) {

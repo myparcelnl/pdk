@@ -38,6 +38,7 @@ class Shipment extends Model
         'pickup'             => null,
         'recipient'          => ContactDetails::class,
         'physicalProperties' => PhysicalProperties::class,
+        // Filled from the API order shipment, or copied from the PDK shipment in fromPdkShipment(), which has none on export.
         'dropOffPoint'       => null,
     ];
 
