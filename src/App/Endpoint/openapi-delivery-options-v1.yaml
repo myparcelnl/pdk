@@ -231,6 +231,17 @@ components:
           type: [string, "null"]
           description: Retail network identifier
           example: "PNPNL-01"
+        type:
+          type: [string, "null"]
+          enum:
+            - CLICK_COLLECT
+            - PARCEL_LOCKER
+            - PARCEL_POINT
+            - POST_OFFICE
+            - POST_POINT
+            - null
+          description: Type of the pickup location
+          example: "PARCEL_LOCKER"
         address:
           $ref: '#/components/schemas/Address'
 

@@ -22,7 +22,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
-use MyParcelNL\Pdk\Shipment\Model\RetailLocationType;
 use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockExceptionPdkOrderRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockNotFoundPdkOrderRepository;
@@ -291,7 +290,7 @@ it('returns a response which matches the openApi schema', function (string $pack
                         ->withPostalCode('12345')
                         ->withCity('Anytown')
                         ->withCountry('NL')
-                        ->withType(new RetailLocationType($retailLocationType))
+                        ->withType($retailLocationType)
                 )
         )
         ->store();
@@ -336,6 +335,31 @@ it('returns a response which matches the openApi schema when the order has no sh
 
     assertMatchesOpenApiSchema($openApiValidator, $response);
 });
+
+it('returns the Order API location type for the pickup location type from the checkout', function (string $checkoutType, ?string $expected) use ($openApiValidator) {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('123')
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('POSTNL')
+                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withPickupLocation(factory(RetailLocation::class)->withType($checkoutType))
+        )
+        ->store();
+
+    $request = new Request(['orderId' => '123']);
+    $request->headers->set('Content-Type', 'application/json; version=1');
+
+    $response = (new GetDeliveryOptionsEndpoint())->handle($request);
+
+    assertMatchesOpenApiSchema($openApiValidator, $response);
+
+    expect(json_decode($response->getContent())->pickupLocation->type)->toBe($expected);
+})->with([
+    'parcel locker'         => ['locker', 'PARCEL_LOCKER'],
+    'other pickup location' => ['default', null],
+]);
 
 it('documents every Order API shipment option in the openApi spec', function () {
     $spec = Yaml::parseFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml');

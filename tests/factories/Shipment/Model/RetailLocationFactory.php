@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
 
 /**
  * @template T of RetailLocation
@@ -24,7 +25,7 @@ use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
  * @method $this withRetailNetworkId(string $retailNetworkId)
  * @method $this withState(string $state)
  * @method $this withStreet(string $street)
- * @method $this withType(RetailLocationType $type)
+ * @method $this withType(string $type)
  */
 final class RetailLocationFactory extends AbstractModelFactory
 {
@@ -44,7 +45,7 @@ final class RetailLocationFactory extends AbstractModelFactory
             ->withLocationCode('215700')
             ->withLocationName('Berghain')
             ->withRetailNetworkId('BGHN-01')
-            ->withType(new RetailLocationType(RetailLocationType::PARCEL_POINT));
+            ->withType(PickupAnyOfLocation::TYPE_PARCEL_POINT);
     }
 
     public function inTheNetherlands(): self
@@ -58,7 +59,7 @@ final class RetailLocationFactory extends AbstractModelFactory
             ->withLocationCode('215795')
             ->withLocationName('Phone House Aalsmeer')
             ->withRetailNetworkId('PNPNL-01')
-            ->withType(new RetailLocationType(RetailLocationType::PARCEL_LOCKER));
+            ->withType(PickupAnyOfLocation::TYPE_PARCEL_LOCKER);
     }
 
     protected function createDefault(): FactoryInterface

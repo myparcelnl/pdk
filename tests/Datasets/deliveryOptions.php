@@ -51,6 +51,6 @@ dataset('retailLocationTypes', function () {
         static function (string $name) {
             return [$name];
         },
-        \MyParcelNL\Pdk\Shipment\Model\RetailLocationType::ALL_TYPES
+        (new \MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation())->getTypeAllowableValues()
     );
 });

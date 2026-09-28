@@ -14,6 +14,8 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -98,3 +100,36 @@ it('preserves a missing customs description while limiting other items', functio
     expect($items[0]['description'] ?? null)->toBeNull()
         ->and($items[1]['description'])->toBe(str_repeat('a', 47) . '...');
 });
+
+it('sends no pickup location type to the shipments api', function (?string $type) {
+    $location = factory(RetailLocation::class)
+        ->inTheNetherlands()
+        ->withType($type)
+        ->make();
+    $shipment = new Shipment([
+        'carrier'         => factory(Carrier::class)
+            ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+            ->make(),
+        'recipient'       => new ContactDetails(['cc' => CountryCodes::CC_NL]),
+        'deliveryOptions' => [
+            'deliveryType'   => 'pickup',
+            'pickupLocation' => $location,
+        ],
+        'dropOffPoint'    => $location,
+    ]);
+
+    $body    = json_decode((new PostShipmentsRequest(new ShipmentCollection([$shipment])))->getBody(), true);
+    $encoded = $body['data']['shipments'][0];
+
+    expect($encoded['pickup'])
+        ->toHaveKey('location_code', '215795')
+        ->not->toHaveKey('type')
+        ->not->toHaveKey('location_type')
+        ->and($encoded['drop_off_point'])
+        ->toHaveKey('location_code', '215795')
+        ->not->toHaveKey('type')
+        ->not->toHaveKey('location_type');
+})->with([
+    'parcel locker' => [PickupAnyOfLocation::TYPE_PARCEL_LOCKER],
+    'no type'       => [null],
+]);

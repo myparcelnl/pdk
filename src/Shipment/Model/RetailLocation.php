@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Model;
 
 use MyParcelNL\Pdk\Base\Model\Model;
+use MyParcelNL\Pdk\Facade\Logger;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
 
 /**
  * @property string|null $locationCode
@@ -23,6 +25,10 @@ use MyParcelNL\Pdk\Base\Model\Model;
  */
 class RetailLocation extends Model
 {
+    // Pickup location types as sent by the delivery options widget in the checkout.
+    private const CHECKOUT_TYPE_DEFAULT = 'default';
+    private const CHECKOUT_TYPE_LOCKER  = 'locker';
+
     protected $attributes = [
         'locationCode'    => null,
         'locationName'    => null,
@@ -52,6 +58,29 @@ class RetailLocation extends Model
         'region'          => 'string',
         'state'           => 'string',
         'street'          => 'string',
-        'type'            => RetailLocationType::class,
+        'type'            => 'string',
     ];
+
+    /**
+     * Store the pickup location type as an Order API location type, or null when the input names no known type.
+     *
+     * @param  null|string $type
+     *
+     * @return self
+     */
+    protected function setTypeAttribute(?string $type): self
+    {
+        if (self::CHECKOUT_TYPE_LOCKER === $type) {
+            $type = PickupAnyOfLocation::TYPE_PARCEL_LOCKER;
+        } elseif (self::CHECKOUT_TYPE_DEFAULT === $type) {
+            $type = null;
+        } elseif (null !== $type && ! in_array($type, (new PickupAnyOfLocation())->getTypeAllowableValues(), true)) {
+            Logger::warning('Unknown pickup location type, storing no type', ['type' => $type]);
+            $type = null;
+        }
+
+        $this->attributes['type'] = $type;
+
+        return $this;
+    }
 }
