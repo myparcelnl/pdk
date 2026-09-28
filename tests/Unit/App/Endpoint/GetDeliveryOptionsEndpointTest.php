@@ -7,6 +7,7 @@ namespace MyParcelNL\Pdk\Tests\Unit\App\Endpoint;
 use GuzzleHttp\Psr7\Response;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\OperationAddress;
+use League\OpenAPIValidation\PSR7\ResponseValidator;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use MyParcelNL\Pdk\App\Endpoint\Handler\GetDeliveryOptionsEndpoint;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
@@ -30,7 +31,10 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions as OrderApiShipmentOptions;
+use PHPUnit\Framework\Assert;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\Yaml\Yaml;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -225,6 +229,38 @@ $openApiValidator = (new ValidatorBuilder())
     ->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')
     ->getResponseValidator();
 
+/**
+ * Assert that a delivery options response matches the openApi schema.
+ */
+function assertMatchesOpenApiSchema(ResponseValidator $openApiValidator, SymfonyResponse $response): void
+{
+    $operation = new OperationAddress('/delivery-options', 'get');
+
+    // Convert Symfony Response to PSR-7 Response using Guzzle for validation
+    $psr7Response = new Response(
+        $response->getStatusCode(),
+        $response->headers->all(),
+        $response->getContent()
+    );
+
+    // Try - catch the validate, so we can print the validation errors if it fails
+    try {
+        $openApiValidator->validate($operation, $psr7Response);
+    } catch (InvalidBody $e) {
+        Assert::fail($e->getVerboseMessage());
+    }
+
+    // The validator decodes {} and [] to the same PHP array, so check object properties on the raw decode
+    $spec = Yaml::parseFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml');
+    $json = json_decode($response->getContent());
+
+    foreach ($spec['components']['schemas']['DeliveryOptions']['properties'] as $name => $property) {
+        if (($property['type'] ?? null) === 'object') {
+            expect($json->{$name})->toBeInstanceOf(stdClass::class);
+        }
+    }
+}
+
 it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) use ($openApiValidator) {
     $signatureKey       = (new SignatureDefinition())->getShipmentOptionsKey();
     $allShipmentOptions = [];
@@ -268,23 +304,38 @@ it('returns a response which matches the openApi schema', function (string $pack
 
     expect($response->getStatusCode())->toBe(200);
 
-    // Validate response against OpenAPI schema
-    $operation  = new OperationAddress('/delivery-options', 'get');
-
-    // Convert Symfony Response to PSR-7 Response using Guzzle for validation
-    $psr7Response = new Response(
-        $response->getStatusCode(),
-        $response->headers->all(),
-        $response->getContent()
-    );
-
-    // Try - catch the validate, so we can print the validation errors if it fails
-    try {
-        $openApiValidator->validate($operation, $psr7Response);
-    } catch (InvalidBody $e) {
-        $this->fail($e->getVerboseMessage());
-    }
+    assertMatchesOpenApiSchema($openApiValidator, $response);
 })->with('packageTypeNames', 'deliveryTypeNames', 'retailLocationTypes');
+
+it('returns a response which matches the openApi schema when the order has no shipment options and a pickup location with only an address', function () use ($openApiValidator) {
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('123')
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier('POSTNL')
+                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withShipmentOptions([])
+                ->withPickupLocation(
+                    factory(RetailLocation::class)
+                        ->fromScratch()
+                        ->withStreet('Main Street')
+                        ->withPostalCode('12345')
+                        ->withCity('Anytown')
+                        ->withCc('NL')
+                )
+        )
+        ->store();
+
+    $request = new Request(['orderId' => '123']);
+    $request->headers->set('Content-Type', 'application/json; version=1');
+
+    $response = (new GetDeliveryOptionsEndpoint())->handle($request);
+
+    expect($response->getStatusCode())->toBe(200);
+
+    assertMatchesOpenApiSchema($openApiValidator, $response);
+});
 
 it('documents every Order API shipment option in the openApi spec', function () {
     $spec = Yaml::parseFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml');

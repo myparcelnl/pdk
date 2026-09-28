@@ -220,15 +220,15 @@ components:
       description: Pickup location details
       properties:
         locationCode:
-          type: string
+          type: [string, "null"]
           description: Unique location code
           example: "NL-12345"
         locationName:
-          type: string
+          type: [string, "null"]
           description: Name of the pickup location
           example: "Albert Heijn Hoofdstraat"
         retailNetworkId:
-          type: string
+          type: [string, "null"]
           description: Retail network identifier
           example: "PNPNL-01"
         address:
