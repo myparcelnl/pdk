@@ -161,3 +161,47 @@ it('prints order as a4 pdf', function (array $settings, string $queryString) {
 
     ],
 ]);
+
+it('returns a link instead of pdf data when the bulk labels endpoint is used', function () {
+    $shipments = array_map(static function (int $id) {
+        return factory(Shipment::class)->withId($id);
+    }, range(40001, 40025));
+
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('300')
+        ->withShipments(factory(ShipmentCollection::class)->push(...$shipments))
+        ->store();
+
+    factory(LabelSettings::class)
+        ->withOutput(LabelSettings::OUTPUT_OPEN)
+        ->store();
+
+    MockApi::enqueue(new ExampleGetShipmentLabelsLinkV2Response());
+
+    $response = Actions::execute(PdkBackendActions::PRINT_ORDERS, [
+        'orderIds' => ['300'],
+    ]);
+
+    $content = json_decode($response->getContent(), true);
+    $uri     = Pdk::get(MockApiService::class)
+        ->ensureLastRequest()
+        ->getUri();
+
+    expect($uri->getPath())
+        ->toStartWith('API/v2/shipment_labels/40001;')
+        ->and($content['data']['pdfs'])
+        ->toBe(['url' => 'API/pdfs/label_hash', 'labelId' => 'label_hash']);
+});
+
+it('returns the label id with the link so the frontend can poll for the pdf', function () {
+    factory(LabelSettings::class)
+        ->withOutput(LabelSettings::OUTPUT_DOWNLOAD)
+        ->store();
+
+    MockApi::enqueue(new ExampleGetShipmentLabelsLinkV2Response());
+
+    $response = Actions::execute(PdkBackendActions::PRINT_ORDERS, ['orderIds' => ['263']]);
+    $content  = json_decode($response->getContent(), true);
+
+    expect($content['data']['pdfs'])->toBe(['url' => 'API/pdfs/label_hash', 'labelId' => 'label_hash']);
+});

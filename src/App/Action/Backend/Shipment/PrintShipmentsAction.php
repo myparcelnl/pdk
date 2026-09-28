@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
+use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -68,6 +69,11 @@ class PrintShipmentsAction extends AbstractOrderAction
 
         switch ($output) {
             case LabelSettings::OUTPUT_OPEN:
+                // The bulk labels endpoint only returns a link, not the pdf itself.
+                if ($shipments->count() >= GetLabelsRequest::LIMIT_TO_USE_V2) {
+                    return $this->getUrlToPdf($shipments, $format, $positions);
+                }
+
                 return $this->getPdf($shipments, $format, $positions);
 
             case LabelSettings::OUTPUT_DOWNLOAD:
@@ -105,9 +111,12 @@ class PrintShipmentsAction extends AbstractOrderAction
      */
     protected function getUrlToPdf(ShipmentCollection $shipments, string $format, array $position): Response
     {
+        $url = $this->shipmentRepository->fetchLabelLink($shipments, $format, $position);
+
         return new JsonResponse([
             'pdfs' => [
-                'url' => $this->shipmentRepository->fetchLabelLink($shipments, $format, $position),
+                'url'     => $url,
+                'labelId' => basename($url),
             ],
         ]);
     }
