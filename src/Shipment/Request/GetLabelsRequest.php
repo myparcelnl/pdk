@@ -9,9 +9,10 @@ use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 
 class GetLabelsRequest extends Request
 {
-    private const PATH            = 'shipment_labels/:ids';
-    private const PATH_V2         = 'v2/shipment_labels/:ids';
-    private const LIMIT_TO_USE_V2 = 25;
+    public const LIMIT_TO_USE_V2 = 25;
+
+    private const PATH    = 'shipment_labels/:ids';
+    private const PATH_V2 = 'v2/shipment_labels/:ids';
 
     /**
      * @var \MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection
