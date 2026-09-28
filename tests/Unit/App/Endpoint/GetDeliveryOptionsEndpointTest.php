@@ -223,15 +223,20 @@ it('handles unsupported version before validating orderId parameter', function (
     expect($content['detail'])->toContain('API version 5 is not supported');
 });
 
+$openApiSpecPath = __DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml';
+
 // Instantiate validator outside of tests so it is only built once, since building the validator is expensive. We can reuse it across tests since the schema does not change.
 $openApiValidator = (new ValidatorBuilder())
-    ->fromYamlFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml')
+    ->fromYamlFile($openApiSpecPath)
     ->getResponseValidator();
+
+// Parse the spec once for the same reason.
+$openApiSpec = Yaml::parseFile($openApiSpecPath);
 
 /**
  * Assert that a delivery options response matches the openApi schema.
  */
-function assertMatchesOpenApiSchema(ResponseValidator $openApiValidator, SymfonyResponse $response): void
+function assertMatchesOpenApiSchema(ResponseValidator $openApiValidator, array $openApiSpec, SymfonyResponse $response): void
 {
     $operation = new OperationAddress('/delivery-options', 'get');
 
@@ -250,17 +255,16 @@ function assertMatchesOpenApiSchema(ResponseValidator $openApiValidator, Symfony
     }
 
     // The validator decodes {} and [] to the same PHP array, so check object properties on the raw decode
-    $spec = Yaml::parseFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml');
     $json = json_decode($response->getContent());
 
-    foreach ($spec['components']['schemas']['DeliveryOptions']['properties'] as $name => $property) {
+    foreach ($openApiSpec['components']['schemas']['DeliveryOptions']['properties'] as $name => $property) {
         if (($property['type'] ?? null) === 'object') {
             expect($json->{$name})->toBeInstanceOf(stdClass::class);
         }
     }
 }
 
-it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) use ($openApiValidator) {
+it('returns a response which matches the openApi schema', function (string $packageTypeName, string $deliveryTypeName, string $retailLocationType) use ($openApiValidator, $openApiSpec) {
     $signatureKey       = (new SignatureDefinition())->getShipmentOptionsKey();
     $allShipmentOptions = [];
 
@@ -303,10 +307,10 @@ it('returns a response which matches the openApi schema', function (string $pack
 
     expect($response->getStatusCode())->toBe(200);
 
-    assertMatchesOpenApiSchema($openApiValidator, $response);
+    assertMatchesOpenApiSchema($openApiValidator, $openApiSpec, $response);
 })->with('packageTypeNames', 'deliveryTypeNames', 'retailLocationTypes');
 
-it('returns a response which matches the openApi schema when the order has no shipment options and a pickup location with only an address', function () use ($openApiValidator) {
+it('returns a response which matches the openApi schema when the order has no shipment options and a pickup location with only an address', function () use ($openApiValidator, $openApiSpec) {
     factory(PdkOrder::class)
         ->withExternalIdentifier('123')
         ->withDeliveryOptions(
@@ -333,10 +337,10 @@ it('returns a response which matches the openApi schema when the order has no sh
 
     expect($response->getStatusCode())->toBe(200);
 
-    assertMatchesOpenApiSchema($openApiValidator, $response);
+    assertMatchesOpenApiSchema($openApiValidator, $openApiSpec, $response);
 });
 
-it('returns the Order API location type for the pickup location type from the checkout', function (string $checkoutType, ?string $expected) use ($openApiValidator) {
+it('returns the Order API location type for the pickup location type from the checkout', function (string $checkoutType, ?string $expected) use ($openApiValidator, $openApiSpec) {
     factory(PdkOrder::class)
         ->withExternalIdentifier('123')
         ->withDeliveryOptions(
@@ -353,7 +357,7 @@ it('returns the Order API location type for the pickup location type from the ch
 
     $response = (new GetDeliveryOptionsEndpoint())->handle($request);
 
-    assertMatchesOpenApiSchema($openApiValidator, $response);
+    assertMatchesOpenApiSchema($openApiValidator, $openApiSpec, $response);
 
     expect(json_decode($response->getContent())->pickupLocation->type)->toBe($expected);
 })->with([
@@ -361,11 +365,9 @@ it('returns the Order API location type for the pickup location type from the ch
     'other pickup location' => ['default', null],
 ]);
 
-it('documents every Order API shipment option in the openApi spec', function () {
-    $spec = Yaml::parseFile(__DIR__ . '/../../../../src/App/Endpoint/openapi-delivery-options-v1.yaml');
-
+it('documents every Order API shipment option in the openApi spec', function () use ($openApiSpec) {
     $documented = array_keys(
-        $spec['components']['schemas']['DeliveryOptions']['properties']['shipmentOptions']['properties']
+        $openApiSpec['components']['schemas']['DeliveryOptions']['properties']['shipmentOptions']['properties']
     );
     $orderApi = array_values(OrderApiShipmentOptions::attributeMap());
 
