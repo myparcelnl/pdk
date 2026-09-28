@@ -133,3 +133,16 @@ it(
             ->toStartWith('%PDF-1.6');
     }
 )->with('collections');
+
+it('reads the bulk label link when the api returns it as a single object', function () {
+    MockApi::enqueue(new ExampleGetShipmentLabelsLinkV2Response(['url' => '/pdfs/label_hash']));
+
+    /** @var \MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository $repository */
+    $repository = Pdk::get(ShipmentRepository::class);
+
+    $collection = new ShipmentCollection(array_map(static function (int $id) {
+        return ['id' => $id];
+    }, range(1, 25)));
+
+    expect($repository->fetchLabelLink($collection, null))->toBe('API/pdfs/label_hash');
+});
