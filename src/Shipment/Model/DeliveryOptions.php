@@ -20,7 +20,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
@@ -83,34 +82,6 @@ class DeliveryOptions extends Model
     public const DELIVERY_OPTION_MONDAY                = 'mondayDelivery';
     public const DELIVERY_OPTION_SATURDAY              = 'saturdayDelivery';
 
-    /**
-     * @deprecated Use ApiMapperService::forDeliveryType() for current mappings.
-     *
-     * @var array
-     */
-    public const DELIVERY_TYPES_NAMES_IDS_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME       => self::DELIVERY_TYPE_MORNING_ID,
-        self::DELIVERY_TYPE_STANDARD_NAME      => self::DELIVERY_TYPE_STANDARD_ID,
-        self::DELIVERY_TYPE_EVENING_NAME       => self::DELIVERY_TYPE_EVENING_ID,
-        self::DELIVERY_TYPE_PICKUP_NAME        => self::DELIVERY_TYPE_PICKUP_ID,
-        self::DELIVERY_TYPE_EXPRESS_NAME       => self::DELIVERY_TYPE_EXPRESS_ID,
-        self::DELIVERY_TYPE_SAME_DAY_NAME      => self::DELIVERY_TYPE_SAME_DAY_ID,
-        self::DELIVERY_TYPE_EARLY_MORNING_NAME => self::DELIVERY_TYPE_EARLY_MORNING_ID,
-    ];
-
-    /**
-     * @deprecated Use ApiMapperService::forDeliveryType() for current mappings.
-     */
-    public const DELIVERY_TYPES_V2_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME       => RefTypesDeliveryTypeV2::MORNING,
-        self::DELIVERY_TYPE_STANDARD_NAME      => RefTypesDeliveryTypeV2::STANDARD,
-        self::DELIVERY_TYPE_EVENING_NAME       => RefTypesDeliveryTypeV2::EVENING,
-        self::DELIVERY_TYPE_PICKUP_NAME        => RefTypesDeliveryTypeV2::PICKUP,
-        self::DELIVERY_TYPE_EXPRESS_NAME       => RefTypesDeliveryTypeV2::EXPRESS,
-        self::DELIVERY_TYPE_SAME_DAY_NAME      => RefTypesDeliveryTypeV2::SAME_DAY,
-        self::DELIVERY_TYPE_EARLY_MORNING_NAME => RefTypesDeliveryTypeV2::EARLY_MORNING,
-    ];
-
     public const DEFAULT_DELIVERY_TYPE_ID     = self::DELIVERY_TYPE_STANDARD_ID;
     public const DEFAULT_DELIVERY_TYPE_NAME   = self::DELIVERY_TYPE_STANDARD_NAME;
 
@@ -129,32 +100,6 @@ class DeliveryOptions extends Model
     public const  PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
     public const  PACKAGE_TYPE_PALLET_NAME        = 'pallet';
     public const  PACKAGE_TYPE_ENVELOPE_NAME      = 'envelope';
-
-    /**
-     * @deprecated Use ApiMapperService::forPackageType() for current mappings.
-     */
-    public const PACKAGE_TYPES_NAMES_IDS_MAP     = [
-        self::PACKAGE_TYPE_PACKAGE_NAME       => RefShipmentPackageType::PACKAGE,
-        self::PACKAGE_TYPE_MAILBOX_NAME       => RefShipmentPackageType::MAILBOX,
-        self::PACKAGE_TYPE_LETTER_NAME        => RefShipmentPackageType::UNFRANKED,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => RefShipmentPackageType::DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageType::SMALL_PACKAGE,
-        self::PACKAGE_TYPE_PALLET_NAME        => RefShipmentPackageType::PALLET,
-        self::PACKAGE_TYPE_ENVELOPE_NAME      => RefShipmentPackageType::ENVELOPE,
-    ];
-
-    /**
-     * @deprecated Use ApiMapperService::forPackageType() for current mappings.
-     */
-    public const PACKAGE_TYPES_V2_MAP = [
-        self::PACKAGE_TYPE_PACKAGE_NAME       => RefShipmentPackageTypeV2::PACKAGE,
-        self::PACKAGE_TYPE_MAILBOX_NAME       => RefShipmentPackageTypeV2::MAILBOX,
-        self::PACKAGE_TYPE_LETTER_NAME        => RefShipmentPackageTypeV2::UNFRANKED,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => RefShipmentPackageTypeV2::DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageTypeV2::SMALL_PACKAGE,
-        self::PACKAGE_TYPE_PALLET_NAME        => RefShipmentPackageTypeV2::PALLET,
-        self::PACKAGE_TYPE_ENVELOPE_NAME      => RefShipmentPackageTypeV2::ENVELOPE,
-    ];
 
     /**
      * Whether the SDK can map a V2 delivery type to a model name and a v1 export ID.
