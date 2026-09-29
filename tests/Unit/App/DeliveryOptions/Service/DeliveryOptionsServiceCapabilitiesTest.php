@@ -11,10 +11,12 @@ use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Pdk\Context\Model\DeliveryOptionsConfig;
 use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
@@ -88,7 +90,7 @@ function storeCarrierSettings(array $carriers): void
 /**
  * Build a minimal cart with a recipient country and default package type.
  */
-function makeCart(string $cc, int $weight = 1000): PdkCart
+function makeCart(string $cc, int $weight = 1000, int $quantity = 1): PdkCart
 {
     return new PdkCart([
         'shippingMethod' => [
@@ -96,7 +98,7 @@ function makeCart(string $cc, int $weight = 1000): PdkCart
         ],
         'lines' => [
             [
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'product'  => [
                     'weight'        => $weight,
                     'isDeliverable' => true,
@@ -512,4 +514,62 @@ it('normalizes max weight to grams when capabilities response uses kg', function
     ]));
 
     expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+});
+
+
+it('adds known weight to config without changing carrier settings or adding a server capabilities call', function (bool $allowPickup) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+    factory(Settings::class)
+        ->withCarrier($carrier, factory(CarrierSettings::class, $carrier)
+            ->withDeliveryOptionsEnabled(true)->withDeliveryOptions()
+            ->withAllowStandardDelivery(true)->withAllowPickupLocations($allowPickup))
+        ->store();
+    factory(OrderSettings::class)->withEmptyParcelWeight(250)->store();
+    factory(Shop::class)->withCarriers(factory(CarrierCollection::class)->push(
+        factory(Carrier::class)->withCarrier($carrier)->withCapabilityPackageTypes(['PACKAGE'])
+    ))->store();
+    resetStorageCache();
+
+    $response = [capabilityResult('POSTNL', 777, ['PACKAGE'], ['STANDARD_DELIVERY', 'PICKUP'], 1, 31500)];
+    // One ordinary selection request is expected; a spare response detects any extra weighted request.
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($response), new ExampleCapabilitiesResponse($response));
+
+    $config = DeliveryOptionsConfig::fromCart(makeCart('NL', 10000, 3));
+    $handler = MockSdkApiHandler::getHandler();
+    $body = json_decode((string) $handler->getLastRequest()->getBody(), true);
+    $carrierId = FrontendData::getLegacyCarrierIdentifier($carrier);
+
+    expect($config->physicalProperties)->toBe(['weight' => 30250])
+        ->and($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+        ->and($config->carrierSettings[$carrierId]['contractId'])->toBe(777)
+        ->and($config->carrierSettings[$carrierId]['allowPickupLocations'])->toBe($allowPickup)
+        ->and($config->carrierSettings[$carrierId]['allowStandardDelivery'])->toBeTrue()
+        ->and($handler->count())->toBe(1)
+        ->and($body)->not->toHaveKey('physicalProperties');
+})->with([true, false]);
+
+it('uses packaging for the selected upgraded package in checkout config', function () {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+    storeCarrierSettings([$carrier => true]);
+    factory(OrderSettings::class)->withEmptyParcelWeight(250)->withEmptyMailboxWeight(50)->store();
+    factory(Shop::class)->withCarriers(factory(CarrierCollection::class)->push(
+        factory(Carrier::class)->withCarrier($carrier)->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX'])
+    ))->store();
+    resetStorageCache();
+    enqueueCapabilitiesPerType([
+        'PACKAGE' => [capabilityResult('POSTNL', 777, ['PACKAGE'], ['STANDARD_DELIVERY'], 1, 23000)],
+        'MAILBOX' => [capabilityResult('POSTNL', 777, ['MAILBOX'], ['STANDARD_DELIVERY'], 1, 2000)],
+    ]);
+    $cart = new PdkCart([
+        'shippingMethod' => ['shippingAddress' => ['cc' => 'NL']],
+        'lines' => [['quantity' => 5, 'product' => [
+            'weight' => 500,
+            'isDeliverable' => true,
+            'settings' => ['packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME],
+        ]]],
+    ]);
+    $config = DeliveryOptionsConfig::fromCart($cart);
+
+    expect($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+        ->and($config->physicalProperties)->toBe(['weight' => 2750]);
 });
