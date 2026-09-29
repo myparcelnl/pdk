@@ -68,7 +68,7 @@ class RetailLocation extends Model
     protected function setTypeAttribute(?string $type): self
     {
         foreach ([$this->getCheckoutTypes(), $this->getCoreApiTypes()] as $types) {
-            if (array_key_exists($type, $types)) {
+            if (null !== $type && array_key_exists($type, $types)) {
                 $this->attributes['type'] = $types[$type];
 
                 return $this;
