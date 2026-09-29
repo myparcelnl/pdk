@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\App\Endpoint\Resource;
 
 use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
-use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\Base\Model\Currency;
@@ -92,7 +91,6 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
         $labelDescriptionKey = ShipmentOptions::LABEL_DESCRIPTION;
 
         $optionMapper = new ShipmentOptionMapper();
-        $returnKey    = (new DirectReturnDefinition())->getShipmentOptionsKey();
 
         foreach ($filteredOptions as $key => $value) {
             if ($key === $insuranceKey) {
@@ -107,10 +105,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
                 if (in_array($key, $orderApiShipmentOptions, true)) {
                     $mappedKey = $key;
                 } else {
-                    // This resource uses return for label printing at drop-off, unlike capabilities.
-                    $property = $key === $returnKey
-                        ? 'print_return_label_at_drop_off'
-                        : $optionMapper->v2PropertyFromName(Str::snake($key));
+                    $property  = $optionMapper->v2PropertyFromName(Str::snake($key));
                     $mappedKey = $orderApiShipmentOptions[$property ?? Str::snake($key)] ?? null;
                 }
                 // Format as an empty object as per ADR-0013
