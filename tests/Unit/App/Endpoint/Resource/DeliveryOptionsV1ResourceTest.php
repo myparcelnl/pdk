@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Tests\Unit\App\Endpoint\Resource;
 
 use ArrayObject;
 use MyParcelNL\Pdk\App\Endpoint\Resource\DeliveryOptionsV1Resource;
+use MyParcelNL\Pdk\App\Options\Definition\DirectReturnDefinition;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -18,6 +19,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryType as OrderApiDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType as OrderApiPackageType;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions as ModelShipmentOptions;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -58,7 +60,7 @@ it('formats delivery options correctly', function () {
         ->toHaveKey('oversizedPackage')
         ->toHaveKey('requiresAgeVerification')
         ->toHaveKey('insurance')
-        ->not()->toHaveKey('printReturnLabelAtDropOff');
+        ->not()->toHaveKey('returnOnFirstFailedDelivery');
 
     // Check that regular options are empty objects
     expect($result['shipmentOptions']['requiresSignature'])->toBeInstanceOf(ArrayObject::class);
@@ -312,7 +314,7 @@ it('maps shipment option keys to Order API format', function () {
         ->toHaveKey('requiresSignature')
         ->toHaveKey('recipientOnlyDelivery')
         ->toHaveKey('oversizedPackage')
-        ->toHaveKey('printReturnLabelAtDropOff')
+        ->toHaveKey('returnOnFirstFailedDelivery')
         ->toHaveKey('hideSender')
         ->toHaveKey('customLabelText')
         // Original camelCase keys should not be present
@@ -322,6 +324,18 @@ it('maps shipment option keys to Order API format', function () {
         ->not()->toHaveKey('largeFormat')
         ->not()->toHaveKey('return')
         ->not()->toHaveKey('labelDescription');
+});
+
+it('sends direct return as a return after a failed delivery, not as an inbound drop-off label', function () {
+    $shipmentOptions = new ShipmentOptions([
+        (new DirectReturnDefinition())->getShipmentOptionsKey() => TriStateService::ENABLED,
+    ]);
+
+    $result = (new DeliveryOptionsV1Resource(new DeliveryOptions(['shipmentOptions' => $shipmentOptions])))->format();
+
+    expect($result['shipmentOptions'])
+        ->toHaveKey(ModelShipmentOptions::attributeMap()['return_on_first_failed_delivery'])
+        ->not()->toHaveKey(ModelShipmentOptions::attributeMap()['print_return_label_at_drop_off']);
 });
 
 it('never sends the retired tracked option', function () {
@@ -356,7 +370,7 @@ it('maps all supported shipment options correctly', function () {
         ->toHaveKey('requiresSignature')
         ->toHaveKey('recipientOnlyDelivery')
         ->toHaveKey('oversizedPackage')
-        ->toHaveKey('printReturnLabelAtDropOff')
+        ->toHaveKey('returnOnFirstFailedDelivery')
         ->toHaveKey('hideSender')
         ->toHaveKey('priorityDelivery')
         ->toHaveKey('requiresReceiptCode')
