@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Shipment\Response;
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
@@ -54,7 +53,8 @@ class GetShipmentsResponse extends ApiResponseWithBody
         $physicalProperties = $data['physical_properties'] ?? [];
 
         // Convert carrier ID to name
-        $carrierName = Utils::convertToName($data['carrier_id'] ?? null, Carrier::CARRIER_NAME_ID_MAP);
+        $carrierId   = $data['carrier_id'] ?? null;
+        $carrierName = is_numeric($carrierId) ? Carrier::v2NameFromLegacyId((int) $carrierId) : null;
 
         return new Shipment([
             'id'                       => $data['id'],

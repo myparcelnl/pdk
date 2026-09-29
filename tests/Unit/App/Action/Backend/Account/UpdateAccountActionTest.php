@@ -274,7 +274,7 @@ it('falls back to carry-forward when the resolved carrier is not in the shop\'s 
     $repo = Pdk::get(PdkAccountRepositoryInterface::class);
     $repo->store($previousAccount);
 
-    // GLS is a valid V2 carrier name in CARRIER_NAME_ID_MAP but absent from the fixture's
+    // GLS is a V2 carrier name with a v1 ID in the SDK but absent from the fixture's
     // contract definitions, so the in-memory shop's carrier collection does not contain it.
     MockImplicationsService::setDefaultCarrierName('GLS');
 

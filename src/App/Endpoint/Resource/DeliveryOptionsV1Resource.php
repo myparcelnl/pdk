@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Endpoint\Contract\AbstractVersionedResource;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\Base\Model\Currency;
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
@@ -149,34 +148,24 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatCarrier(string $carrierName): string
     {
-        // If the carrier name already equals on of the order service constants, return it directly
-        if (\in_array($carrierName, OrderApiCarrier::getAllowableEnumValues(), true)) {
-            return $carrierName;
-        } else {
-            // Attempt to convert it to SCREAMING_SNAKE_CASE and check again
-            $convertedName = Str::upper(Str::snake($carrierName));
-            if (\in_array($convertedName, OrderApiCarrier::getAllowableEnumValues(), true)) {
-                return $convertedName;
-            }
-        }
-        // Otherwise, use our mapping
-        $carrierMapping = [
-            Carrier::CARRIER_POSTNL_LEGACY_NAME => OrderApiCarrier::POSTNL,
-            Carrier::CARRIER_BPOST_LEGACY_NAME => OrderApiCarrier::BPOST,
-            Carrier::CARRIER_CHEAP_CARGO_LEGACY_NAME => OrderApiCarrier::CHEAP_CARGO,
-            Carrier::CARRIER_DPD_LEGACY_NAME => OrderApiCarrier::DPD,
-            Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME => OrderApiCarrier::DHL_FOR_YOU,
-            Carrier::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME => OrderApiCarrier::DHL_PARCEL_CONNECT,
-            Carrier::CARRIER_DHL_EUROPLUS_LEGACY_NAME => OrderApiCarrier::DHL_EUROPLUS,
-            Carrier::CARRIER_UPS_STANDARD_LEGACY_NAME => OrderApiCarrier::UPS_STANDARD,
-            Carrier::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME => OrderApiCarrier::UPS_EXPRESS_SAVER,
-            Carrier::CARRIER_GLS_LEGACY_NAME => OrderApiCarrier::GLS,
-            Carrier::CARRIER_BRT_LEGACY_NAME => OrderApiCarrier::BRT,
-            Carrier::CARRIER_TRUNKRS_LEGACY_NAME => OrderApiCarrier::TRUNKRS,
-        ];
+        $allowedValues = OrderApiCarrier::getAllowableEnumValues();
 
-        if (\array_key_exists($carrierName, $carrierMapping)) {
-            return $carrierMapping[$carrierName];
+        // If the carrier name already equals one of the order service constants, return it directly
+        if (in_array($carrierName, $allowedValues, true)) {
+            return $carrierName;
+        }
+
+        $mappedName = ApiMapperService::forCarrier()->v2NameFromLegacyName($carrierName);
+
+        if (in_array($mappedName, $allowedValues, true)) {
+            return $mappedName;
+        }
+
+        // Order API carriers can exist without a matching Core API definition.
+        $convertedName = Str::upper(Str::snake($carrierName));
+
+        if (in_array($convertedName, $allowedValues, true)) {
+            return $convertedName;
         }
 
         throw new \InvalidArgumentException("Unknown carrier name: {$carrierName} - cannot be mapped to Order API carrier");

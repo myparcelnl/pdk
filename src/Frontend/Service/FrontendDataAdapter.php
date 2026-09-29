@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Frontend\Service;
 
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Frontend\Contract\FrontendDataAdapterInterface;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -20,6 +20,7 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
      */
     public function getLegacyCarrierIdentifier(string $carrierName): string
     {
-        return Carrier::CARRIER_NAME_TO_LEGACY_MAP[$carrierName] ?? Str::lower(\str_replace('', '_', $carrierName));
+        return ApiMapperService::forCarrier()->legacyNameFromV2Name($carrierName)
+            ?? Str::lower(\str_replace('', '_', $carrierName));
     }
 }
