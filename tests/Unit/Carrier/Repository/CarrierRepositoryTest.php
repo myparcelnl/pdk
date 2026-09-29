@@ -157,10 +157,10 @@ it('finds a carrier by its legacy name', function (string $legacyName, string $e
     expect($carrier)->toBeInstanceOf(Carrier::class)
         ->and($carrier->carrier)->toBe($expectedV2Name);
 })->with([
-    'postnl'    => [Carrier::CARRIER_POSTNL_LEGACY_NAME, RefCapabilitiesSharedCarrierV2::POSTNL],
-    'dpd'       => [Carrier::CARRIER_DPD_LEGACY_NAME, RefCapabilitiesSharedCarrierV2::DPD],
-    'bpost'     => [Carrier::CARRIER_BPOST_LEGACY_NAME, RefCapabilitiesSharedCarrierV2::BPOST],
-    'dhlforyou' => [Carrier::CARRIER_DHL_FOR_YOU_LEGACY_NAME, RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU],
+    'postnl'    => ['postnl', RefCapabilitiesSharedCarrierV2::POSTNL],
+    'dpd'       => ['dpd', RefCapabilitiesSharedCarrierV2::DPD],
+    'bpost'     => ['bpost', RefCapabilitiesSharedCarrierV2::BPOST],
+    'dhlforyou' => ['dhlforyou', RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU],
 ]);
 
 it('throws InvalidArgumentException from findByLegacyName() for an unknown legacy name', function () {

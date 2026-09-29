@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Contract\CarrierRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * Repository for retrieving Carrier models from account data.
@@ -178,9 +179,7 @@ class CarrierRepository extends Repository implements CarrierRepositoryInterface
      */
     private function normalizeFromLegacyName(string $legacyName): ?string
     {
-        $legacyToV2Map = array_flip(Carrier::CARRIER_NAME_TO_LEGACY_MAP);
-
-        return $legacyToV2Map[$legacyName] ?? null;
+        return ApiMapperService::forCarrier()->v2NameFromLegacyName($legacyName);
     }
 
     /**

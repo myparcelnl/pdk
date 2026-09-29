@@ -17,9 +17,11 @@ use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\Carrier as OrderApiCarrier;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\DeliveryType as OrderApiDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PackageType as OrderApiPackageType;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions as ModelShipmentOptions;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -224,29 +226,20 @@ it('correctly returns a pickup location when applicable', function () {
     ]);
 });
 
-it('maps carrier names using direct carrier mapping', function () {
-    $carriers = [
-        'POSTNL' => 'POSTNL',
-        'BPOST' => 'BPOST',
-        'CHEAP_CARGO' => 'CHEAP_CARGO',
-        'DPD' => 'DPD',
-        'DHL_FOR_YOU' => 'DHL_FOR_YOU',
-        'DHL_PARCEL_CONNECT' => 'DHL_PARCEL_CONNECT',
-        'DHL_EUROPLUS' => 'DHL_EUROPLUS',
-        'UPS_STANDARD' => 'UPS_STANDARD',
-        'UPS_EXPRESS_SAVER' => 'UPS_EXPRESS_SAVER',
-        'GLS' => 'GLS',
-        'BRT' => 'BRT',
-        'TRUNKRS' => 'TRUNKRS',
-    ];
+it('formats every SDK carrier that the Order API accepts', function () {
+    $allowed = OrderApiCarrier::getAllowableEnumValues();
 
-    foreach ($carriers as $carrierName => $expected) {
+    foreach (array_keys(ApiMapperService::forCarrier()->v2ToIdMap()) as $carrierName) {
+        if (! in_array($carrierName, $allowed, true)) {
+            continue;
+        }
+
         $carrier = factory(Carrier::class)->withCarrier($carrierName)->make();
         $deliveryOptions = new DeliveryOptions(['carrier' => $carrier]);
         $resource = new DeliveryOptionsV1Resource($deliveryOptions);
         $result = $resource->format();
 
-        expect($result['carrier'])->toBe($expected);
+        expect($result['carrier'])->toBe($carrierName);
     }
 });
 
