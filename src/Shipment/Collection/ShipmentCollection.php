@@ -49,7 +49,7 @@ class ShipmentCollection extends Collection
      */
     public function toStorableArray(): array
     {
-        return (new Collection($this->filterNotDeleted()))
+        return (new Collection($this->filterNotDeleted()->values()))
             ->map(function (Shipment $shipment) {
                 return $shipment->toStorableArray();
             })
