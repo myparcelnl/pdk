@@ -7,7 +7,11 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\Unit\App\Action\Frontend\Context;
 
 use MyParcelNL\Pdk\App\Action\Frontend\Context\FetchCheckoutContextAction;
+use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
+use MyParcelNL\Pdk\App\Cart\Repository\AbstractPdkCartRepository;
 use MyParcelNL\Pdk\Context\Context;
+use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
@@ -52,4 +56,26 @@ it('does not leak the account api key, even when the caller requests another con
         ->and($response->getContent())->not->toContain(TestBootstrapper::API_KEY_VALID)
         ->and(array_keys(json_decode($response->getContent(), true)['data']['context'][0]))
         ->toBe([Context::ID_CHECKOUT]);
+});
+
+
+it('serializes refreshed checkout weight and explicitly clears unknown weight', function () {
+    $repository = new class(Pdk::get(StorageInterface::class)) extends AbstractPdkCartRepository {
+        public function get($input): PdkCart
+        {
+            return new PdkCart(['lines' => [
+                ['quantity' => 1, 'product' => ['weight' => (int) $input, 'isDeliverable' => true]],
+            ]]);
+        }
+    };
+    $action = new FetchCheckoutContextAction($repository, Pdk::get(ContextServiceInterface::class));
+
+    foreach ([30000, 15000, 0] as $weight) {
+        $response = $action->handle(new Request(['cart' => $weight]));
+        $body = json_decode($response->getContent(), true);
+        $config = $body['data']['context'][0][Context::ID_CHECKOUT]['config'];
+
+        expect($config)->toHaveKey('physicalProperties')
+            ->and($config['physicalProperties'])->toBe($weight ? ['weight' => $weight] : null);
+    }
 });
