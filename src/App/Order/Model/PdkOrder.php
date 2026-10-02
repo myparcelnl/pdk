@@ -174,7 +174,7 @@ class PdkOrder extends Model
             'orderDate'           => $order->orderDate,
             'referenceIdentifier' => $order->referenceIdentifier,
             'invoiceAddress'      => $order->invoiceAddress,
-            'dropOffPoint'        => $order->dropOffPoint,
+            // dropOffPoint is left out: PdkOrder has no such attribute. A drop-off point is kept on each of the order's shipments.
             'notes'               => new PdkOrderNoteCollection($order->notes->all()),
             'lines'               => new PdkOrderLineCollection($order->lines->all()),
             'status'              => $order->status,

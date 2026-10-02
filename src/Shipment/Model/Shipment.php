@@ -104,6 +104,7 @@ class Shipment extends Model
         'delayed'                  => false,
         'delivered'                => false,
         'deliveryOptions'          => DeliveryOptions::class,
+        // Filled from the Core API shipment in GetShipmentsResponse, and stored with the order's shipments. PostShipmentsRequest reads it, but it is always null on export.
         'dropOffPoint'             => null,
         'hidden'                   => false,
         'isReturn'                 => false,

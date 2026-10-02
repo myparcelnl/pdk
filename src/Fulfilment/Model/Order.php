@@ -45,6 +45,7 @@ class Order extends Model
         'fulfilmentPartnerIdentifier' => null,
         'shopId'                      => null,
         'accountId'                   => null,
+        // Not filled by GetOrdersResponse or PostOrdersResponse, and nothing reads it.
         'dropOffPoint'                => null,
         'invoiceAddress'              => null,
         'language'                    => null,
