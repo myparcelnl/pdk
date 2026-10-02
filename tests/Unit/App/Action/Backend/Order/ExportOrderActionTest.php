@@ -760,6 +760,17 @@ it('exports multicollo order', function (
     $requestShipments = $requestBody['data']['shipments'];
     $labelAmount      = $orders->first()->deliveryOptions->labelAmount;
 
+    if (DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME === $orders->first()->deliveryOptions->deliveryType) {
+        $totalWeight    = $orders->first()->lines->onlyDeliverable()->getTotalWeight();
+        $weightPerLabel = (int) ($totalWeight / $labelAmount);
+
+        foreach ($requestShipments as $requestShipment) {
+            expect($requestShipment['physical_properties']['weight'])->toBe($weightPerLabel)
+                ->and($requestShipment['options']['delivery_type'])->toBe(DeliveryOptions::DELIVERY_TYPE_PICKUP_ID)
+                ->and($requestShipment['pickup']['location_code'])->toBe('215795');
+        }
+    }
+
     if ($expectedNumberOfShipments === 1) {
         // Real multicollo: one top-level shipment carrying extra labels as secondary shipments
         expect($requestShipments)->toHaveLength(1)

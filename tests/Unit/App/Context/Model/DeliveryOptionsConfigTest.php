@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
+use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
@@ -26,6 +27,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 usesShared(
     new UsesMockPdkInstance([
@@ -60,6 +62,7 @@ it('can be instantiated', function () {
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
+            'physicalProperties'                => null,
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
             'platform'                          => Proposition::PLATFORM_NAME_MYPARCEL,
@@ -271,4 +274,30 @@ it('returns AccountDefsPlatformName platform name for myparcel', function () {
 
     expect($config->platform)->toBe(AccountDefsPlatformName::MYPARCEL)
         ->and($config->proposition)->toBe(Proposition::MYPARCEL_NAME);
+});
+
+
+it('keeps legacy cart calculator implementations compatible with unknown checkout weight', function () {
+    TestBootstrapper::hasAccount();
+    $calculator = Pdk::get(CartCalculationServiceInterface::class);
+    $legacyCalculator = $this->createMock(CartCalculationServiceInterface::class);
+
+    foreach (['calculateMailboxPercentage', 'calculateShippingMethod', 'getCartPackageTypes', 'getCartWeightForPackageType'] as $method) {
+        $legacyCalculator->method($method)->willReturnCallback([$calculator, $method]);
+    }
+
+    $reset = mockPdkProperties([CartCalculationServiceInterface::class => $legacyCalculator]);
+
+    try {
+        $cart = new PdkCart(['lines' => [
+            ['quantity' => 1, 'product' => ['weight' => 1000, 'isDeliverable' => true]],
+        ]]);
+        $context = CheckoutContext::fromCart($cart)->toArrayWithoutNull();
+
+        expect($context['config'])->toHaveKey('physicalProperties')
+            ->and($context['config']['physicalProperties'])->toBeNull()
+            ->and($context['settings']['hasDeliveryOptions'])->toBeTrue();
+    } finally {
+        $reset();
+    }
 });
