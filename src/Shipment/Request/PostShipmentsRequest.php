@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Shipment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
+use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
@@ -154,7 +155,8 @@ class PostShipmentsRequest extends Request
             'number'        => '',
         ];
 
-        return Utils::filterNull($shipment->dropOffPoint->toSnakeCaseArray()) + $defaults;
+        // Core API rejects "type" here, and has no location type field for drop-off points.
+        return Utils::filterNull($shipment->dropOffPoint->except('type', Arrayable::CASE_SNAKE)) + $defaults;
     }
 
     /**

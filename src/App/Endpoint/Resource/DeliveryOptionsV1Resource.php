@@ -73,7 +73,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      *
      * We assume that inherited options were resolved before passing them here.
      */
-    private static function formatShipmentOptions(ShipmentOptions $shipmentOptions): array
+    private static function formatShipmentOptions(ShipmentOptions $shipmentOptions): object
     {
         // Include only explicitly enabled options - we assume any inherited options were resolved before being passed here
         $filteredOptions = array_filter(
@@ -81,7 +81,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
             fn($value) => $value && $value !== TriStateService::INHERIT
         );
 
-        $formattedOptions = [];
+        $formattedOptions = new ArrayObject();
 
         // AttributeMap is a lower snake_case to camelCase mapping of the shipment options, we can use it to convert our keys to the expected format
         $orderApiShipmentOptions = ModelShipmentOptions::attributeMap();
@@ -93,7 +93,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
         $noTrackingKey = (new NoTrackingDefinition())->getShipmentOptionsKey();
 
         if ($shipmentOptions->{$noTrackingKey} === TriStateService::ENABLED) {
-            $formattedOptions[$orderApiShipmentOptions['no_tracking']] = new ArrayObject();
+            $formattedOptions->offsetSet($orderApiShipmentOptions['no_tracking'], new ArrayObject());
         }
 
         $insuranceKey        = (new InsuranceDefinition())->getShipmentOptionsKey();
@@ -119,10 +119,10 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
                 // Insurance is stored in cents; convert to integer micros (1 cent = 10_000 micros).
                 $amount = ((int)$value) * 10_000;
                 $currency = new Currency();
-                $formattedOptions[$orderApiShipmentOptions['insurance']] = ['amount' => $amount, 'currency' => $currency->currency];
+                $formattedOptions->offsetSet($orderApiShipmentOptions['insurance'], new ArrayObject(['amount' => $amount, 'currency' => $currency->currency]));
             } elseif ($key === $labelDescriptionKey) {
                 // Custom label text option needs to be formatted as an object with a "text" property
-                $formattedOptions[$orderApiShipmentOptions['custom_label_text']] = ['text' => (string) $value];
+                $formattedOptions->offsetSet($orderApiShipmentOptions['custom_label_text'], new ArrayObject(['text' => (string) $value]));
             } else {
                 $mappedKey = null;
                 // Map our key to Order API service
@@ -138,7 +138,7 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
                 }
                 // Format as an empty object as per ADR-0013
                 if ($mappedKey) {
-                    $formattedOptions[$mappedKey] = new ArrayObject();
+                    $formattedOptions->offsetSet($mappedKey, new ArrayObject());
                 } else {
                     Logger::warning("Unmapped shipment option key: {$key} with value: {$value} - this option will be skipped in the API response");
                 }

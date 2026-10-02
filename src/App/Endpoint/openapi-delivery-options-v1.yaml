@@ -220,17 +220,28 @@ components:
       description: Pickup location details
       properties:
         locationCode:
-          type: string
+          type: [string, "null"]
           description: Unique location code
           example: "NL-12345"
         locationName:
-          type: string
+          type: [string, "null"]
           description: Name of the pickup location
           example: "Albert Heijn Hoofdstraat"
         retailNetworkId:
-          type: string
+          type: [string, "null"]
           description: Retail network identifier
           example: "PNPNL-01"
+        type:
+          type: [string, "null"]
+          enum:
+            - CLICK_COLLECT
+            - PARCEL_LOCKER
+            - PARCEL_POINT
+            - POST_OFFICE
+            - POST_POINT
+            - null
+          description: Type of the pickup location
+          example: "PARCEL_LOCKER"
         address:
           $ref: '#/components/schemas/Address'
 

@@ -51,7 +51,7 @@ it('formats delivery options correctly', function () {
         ->toHaveKey('deliveryType')
         ->toHaveKey('shipmentOptions')
         ->and($result['shipmentOptions'])
-        ->toBeArray()
+        ->toBeInstanceOf(ArrayObject::class)
         ->toHaveKey('requiresSignature')
         ->toHaveKey('recipientOnlyDelivery')
         ->toHaveKey('oversizedPackage')
@@ -67,7 +67,7 @@ it('formats delivery options correctly', function () {
 
     // Insurance: 50000 cents (€500) → 500_000_000 micros (€500 × 1_000_000)
     expect($result['shipmentOptions']['insurance'])
-        ->toBeArray()
+        ->toBeInstanceOf(ArrayObject::class)
         ->toHaveKey('amount', 50000 * 10_000);
 });
 
@@ -89,7 +89,7 @@ it('returns empty object when no shipment options are enabled', function () {
     $result = $resource->format();
 
     expect($result['shipmentOptions'])
-        ->toBeArray()
+        ->toBeInstanceOf(ArrayObject::class)
         ->toBeEmpty();
 });
 
@@ -109,7 +109,7 @@ it('correctly formats insurance amount in micro units', function () {
     expect($result['shipmentOptions'])
         ->toHaveKey('insurance')
         ->and($result['shipmentOptions']['insurance'])
-        ->toBeArray()
+        ->toBeInstanceOf(ArrayObject::class)
         ->toHaveKey('amount', 10000 * 10_000);
 });
 
@@ -380,7 +380,7 @@ it('maps all supported shipment options correctly', function () {
  * explicit opt-out. Getting the direction of this wrong would silently disable tracking for every
  * merchant, hence a case per tri-state value.
  */
-function formatWithNoTracking(int $noTracking): array
+function formatWithNoTracking(int $noTracking): object
 {
     $deliveryOptions = new DeliveryOptions([
         'carrier'         => factory(Carrier::class)->withCarrier('POSTNL')->make(),

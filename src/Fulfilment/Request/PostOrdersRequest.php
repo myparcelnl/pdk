@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
+use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -105,12 +106,14 @@ class PostOrdersRequest extends Request
             'contract_id'         => $shipment->contractId ? (int) $shipment->contractId : null,
             'customs_declaration' => $this->encodeCustomsDeclaration($shipment),
             'drop_off_point'      => $shipment->dropOffPoint
-                ? $shipment->dropOffPoint->toArray(Arrayable::ENCODED)
+                // Core API rejects "type" here, and has no location type field for drop-off points.
+                ? Arr::except($shipment->dropOffPoint->toArray(Arrayable::ENCODED), 'type')
                 : null,
             'options'             => $this->getShipmentOptions($shipment),
             'physical_properties' => $shipment->physicalProperties->toArray(Arrayable::ENCODED),
             'pickup'              => $shipment->pickup
-                ? $shipment->pickup->toArray(Arrayable::ENCODED)
+                // Core API rejects "type" here, and mapping it to "location_type" adds no functionality today because Core API does not read it.
+                ? Arr::except($shipment->pickup->toArray(Arrayable::ENCODED), 'type')
                 : null,
             'recipient'           => $this->encodeRecipient($shipment->recipient),
         ];
