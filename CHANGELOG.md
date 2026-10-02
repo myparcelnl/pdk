@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.4](https://github.com/myparcelnl/pdk/compare/v4.9.3...v4.9.4) (2026-10-02)
+
+### :bug: Bug Fixes
+
+* **delivery-options:** preserve weekly dispatch days ([#542](https://github.com/myparcelnl/pdk/issues/542)) ([ae170ab](https://github.com/myparcelnl/pdk/commit/ae170aba5da3b0da38cba38c89a6d486db4892b3))
+* **orderv2:** match the delivery options endpoint to its contract ([#547](https://github.com/myparcelnl/pdk/issues/547)) ([36c7082](https://github.com/myparcelnl/pdk/commit/36c7082c312fc108071c63944cc06031852a6df8))
+* **shipment:** store the location type of drop-off points from the api ([#549](https://github.com/myparcelnl/pdk/issues/549)) ([a71a3c1](https://github.com/myparcelnl/pdk/commit/a71a3c1ba94aa4785619cf35912eeb7aa5f4d2d7))
+
 ## [4.9.3](https://github.com/myparcelnl/pdk/compare/v4.9.2...v4.9.3) (2026-09-29)
 
 ## [4.9.2](https://github.com/myparcelnl/pdk/compare/v4.9.1...v4.9.2) (2026-09-21)
