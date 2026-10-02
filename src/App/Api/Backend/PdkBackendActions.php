@@ -24,6 +24,7 @@ final class PdkBackendActions
     public const EXPORT_RETURN = 'exportReturn';
     // Shipments
     public const DELETE_SHIPMENTS = 'deleteShipments';
+    public const FETCH_LABEL_PDF  = 'fetchLabelPdf';
     public const PRINT_SHIPMENTS  = 'printShipments';
     public const UPDATE_SHIPMENTS = 'updateShipments';
     // Settings

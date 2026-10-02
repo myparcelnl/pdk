@@ -25,7 +25,8 @@ class GetLabelsResponse extends ApiResponseWithBody
     {
         $parsedBody      = json_decode($this->getBody(), true);
         $responseKey     = array_key_exists('pdf', $parsedBody['data']) ? 'pdf' : 'pdfs';
-        $this->labelLink = 'pdfs' === $responseKey ? $parsedBody['data'][$responseKey]['url']
-            : $parsedBody['data'][$responseKey][0]['url'];
+        $link            = $parsedBody['data'][$responseKey];
+        // The bulk (v2) endpoint returns the link as a list or as a single object.
+        $this->labelLink = $link['url'] ?? $link[0]['url'];
     }
 }
