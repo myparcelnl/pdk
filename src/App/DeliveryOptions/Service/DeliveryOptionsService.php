@@ -149,6 +149,8 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $dropOffCollection = $this->dropOffService->getPossibleDropOffDays($carrierSettings);
         $dropOffDays       = (new Collection($dropOffCollection))
             ->pluck('weekday')
+            ->unique()
+            ->values()
             ->toArray();
 
         $minimumDropOffDelay = -1 === $cart->shippingMethod->minimumDropOffDelay
