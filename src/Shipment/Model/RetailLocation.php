@@ -76,7 +76,7 @@ class RetailLocation extends Model
         }
 
         if (null !== $type && ! in_array($type, (new PickupAnyOfLocation())->getTypeAllowableValues(), true)) {
-            Logger::warning('Unknown pickup location type, storing no type', ['type' => $type]);
+            Logger::warning('Unknown retail location type, storing no type', ['type' => $type]);
             $type = null;
         }
 
