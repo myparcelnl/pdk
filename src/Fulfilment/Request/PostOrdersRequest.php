@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\Fulfilment\Request;
 
 use MyParcelNL\Pdk\Api\Request\Request;
 use MyParcelNL\Pdk\Base\Contract\Arrayable;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
@@ -15,6 +14,7 @@ use MyParcelNL\Pdk\Fulfilment\Model\OrderLine;
 use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesCustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 class PostOrdersRequest extends Request
 {
@@ -137,7 +137,7 @@ class PostOrdersRequest extends Request
 
     private function getCarrierId(Carrier $carrier): int
     {
-        $id = Utils::convertToId($carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+        $id = ApiMapperService::forCarrier()->idFromV2Name($carrier->carrier);
         if (! $id) {
             throw new \InvalidArgumentException(sprintf('Cannot encode shipment: carrier %s is not mapped to an ID.', $carrier->carrier));
         }

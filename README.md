@@ -75,11 +75,12 @@ Shipment options are managed through the `OrderOptionDefinitionInterface` system
 
 To add a new option:
 
-1. **Create a Definition class** in `src/App/Options/Definition/` extending `AbstractOrderOptionDefinition`. Only two methods are required:
+1. **Create a Definition class** in `src/App/Options/Definition/` extending `AbstractOrderOptionDefinition`. Implement:
    - `getShipmentOptionsKey()` — the PDK-internal key, derived from `Str::camel(RefShipmentShipmentOptions::attributeMap()['sdk_key'])`
-   - `getCapabilitiesOptionsKey()` — the V2 capabilities key, from `RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['capabilities_key']`
 2. **Register it** in the `orderOptionDefinitions` array in `config/pdk-business-logic.php`.
 3. **Optionally**, add a deprecated constant to `ShipmentOptions` if platform integrations reference the key directly.
+
+The SDK derives the capabilities key. Override `getCapabilitiesOptionsKey()` only for exceptions, such as returning `null` for an option without a capabilities equivalent.
 
 Everything else (carrier settings, product settings, allow/price toggles, validation, frontend form fields, API export/import) is derived automatically. Run `yarn test:unit` to verify the consistency tests pass.
 

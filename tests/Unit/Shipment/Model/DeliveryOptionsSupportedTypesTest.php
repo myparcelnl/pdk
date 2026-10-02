@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
-use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
-use function MyParcelNL\Pdk\Tests\usesShared;
+it('supports SDK types only when both a model name and export ID exist', function () {
+    $mappers = [
+        'isPackageTypeSupported'  => ApiMapperService::forPackageType(),
+        'isDeliveryTypeSupported' => ApiMapperService::forDeliveryType(),
+    ];
 
-usesShared(new UsesMockPdkInstance());
+    foreach ($mappers as $method => $mapper) {
+        foreach ($mapper->allRows() as $row) {
+            if (null === $row['v2_name']) {
+                continue;
+            }
 
-it('reports support only for delivery types known to this PDK version', function () {
-    expect(DeliveryOptions::isDeliveryTypeSupported(RefTypesDeliveryTypeV2::STANDARD))->toBeTrue()
-        ->and(DeliveryOptions::isDeliveryTypeSupported(RefTypesDeliveryTypeV2::SAME_DAY))->toBeTrue()
-        ->and(DeliveryOptions::isDeliveryTypeSupported(RefTypesDeliveryTypeV2::EARLY_MORNING))->toBeTrue()
-        ->and(DeliveryOptions::isDeliveryTypeSupported('UNKNOWN_DELIVERY'))->toBeFalse()
-        ->and(DeliveryOptions::isDeliveryTypeSupported(''))->toBeFalse();
+            $expected = null !== $row['legacy_name'] && null !== $row['id'];
+
+            expect(DeliveryOptions::$method($row['v2_name']))->toBe($expected);
+        }
+    }
 });
 
-it('reports support only for package types known to this PDK version', function () {
-    expect(DeliveryOptions::isPackageTypeSupported(RefShipmentPackageTypeV2::PACKAGE))->toBeTrue()
-        ->and(DeliveryOptions::isPackageTypeSupported(RefShipmentPackageTypeV2::PALLET))->toBeTrue()
-        ->and(DeliveryOptions::isPackageTypeSupported(RefShipmentPackageTypeV2::ENVELOPE))->toBeTrue()
-        ->and(DeliveryOptions::isPackageTypeSupported('UNKNOWN_PACKAGE'))->toBeFalse()
-        ->and(DeliveryOptions::isPackageTypeSupported(''))->toBeFalse();
-});
+it('does not expose unknown types', function (string $value) {
+    expect(DeliveryOptions::isDeliveryTypeSupported($value))->toBeFalse()
+        ->and(DeliveryOptions::isPackageTypeSupported($value))->toBeFalse();
+})->with(['UNKNOWN_DELIVERY', 'UNKNOWN_PACKAGE', '']);

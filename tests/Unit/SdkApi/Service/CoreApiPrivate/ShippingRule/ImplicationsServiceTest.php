@@ -95,7 +95,7 @@ function emptyImplResponse(): string
 it('returns the V2 carrier name when implications contain a known carrier id', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    // carrier_id 1 maps to "POSTNL" in Carrier::CARRIER_NAME_ID_MAP.
+    // carrier_id 1 maps to "POSTNL" in the SDK carrier mapping.
     $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(200, [], implResponse(1)));
 
@@ -127,7 +127,7 @@ it('returns null when the first implication has no carrier_id', function () {
 it('returns null when the carrier id is not in the local V2 mapping', function () {
     TestBootstrapper::hasApiKey('test-key');
 
-    // 9999 is not in Carrier::CARRIER_NAME_ID_MAP — simulates an API id this PDK version
+    // 9999 has no V2 name in the SDK carrier mapping — simulates an API id the installed SDK
     // does not yet know about. Should yield null rather than throwing.
     $service = new MockableImplicationsService();
     $service->mockHandler->append(new Response(200, [], implResponse(9999)));
