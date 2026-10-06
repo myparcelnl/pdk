@@ -26,6 +26,8 @@ use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
 /**
  * @template T of PdkOrder
@@ -118,7 +120,7 @@ final class PdkOrderFactory extends AbstractModelFactory
     {
         return $this->withDeliveryOptions(
             factory(DeliveryOptions::class)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withDeliveryType(ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP))
                 ->withPickupLocation($pickupLocation ?? factory(RetailLocation::class))
         );
     }

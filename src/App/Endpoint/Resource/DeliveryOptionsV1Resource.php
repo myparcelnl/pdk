@@ -31,8 +31,6 @@ use MyParcelNL\Sdk\Support\Str;
  */
 final class DeliveryOptionsV1Resource extends AbstractVersionedResource
 {
-    private const ORDER_API_DELIVERY_TYPE_SUFFIX = '_DELIVERY';
-
     /**
      * Get the API version this resource handles.
      */
@@ -148,84 +146,62 @@ final class DeliveryOptionsV1Resource extends AbstractVersionedResource
      */
     private static function formatCarrier(string $carrierName): string
     {
-        $allowedValues = OrderApiCarrier::getAllowableEnumValues();
+        $formatted = self::toOrderApiValue(
+            $carrierName,
+            ApiMapperService::forCarrier(),
+            OrderApiCarrier::getAllowableEnumValues()
+        );
 
-        // If the carrier name already equals one of the order service constants, return it directly
-        if (in_array($carrierName, $allowedValues, true)) {
-            return $carrierName;
+        if (null === $formatted) {
+            throw new \InvalidArgumentException("Unknown carrier name: {$carrierName} - cannot be mapped to Order API carrier");
         }
 
-        $mappedName = ApiMapperService::forCarrier()->v2NameFromLegacyName($carrierName);
-
-        if (in_array($mappedName, $allowedValues, true)) {
-            return $mappedName;
-        }
-
-        // Order API carriers can exist without a matching Core API definition.
-        $convertedName = Str::upper(Str::snake($carrierName));
-
-        if (in_array($convertedName, $allowedValues, true)) {
-            return $convertedName;
-        }
-
-        throw new \InvalidArgumentException("Unknown carrier name: {$carrierName} - cannot be mapped to Order API carrier");
+        return $formatted;
     }
 
     /**
-     * Convert package type to CONSTANT_CASE format using existing constants.
+     * Convert package type to CONSTANT_CASE format for Order Service.
      */
     private static function formatPackageType(string $packageType): ?string
     {
-        $allowedValues = OrderApiPackageType::getAllowableEnumValues();
-
-        if (in_array($packageType, $allowedValues, true)) {
-            return $packageType;
-        }
-
-        $mappedName = ApiMapperService::forPackageType()->v2NameFromLegacyName($packageType);
-
-        if (in_array($mappedName, $allowedValues, true)) {
-            return $mappedName;
-        }
-
-        $convertedName = Str::upper(Str::snake($packageType));
-
-        return in_array($convertedName, $allowedValues, true) ? $convertedName : null;
+        return self::toOrderApiValue(
+            $packageType,
+            ApiMapperService::forPackageType(),
+            OrderApiPackageType::getAllowableEnumValues()
+        );
     }
 
     /**
-     * Convert delivery type to CONSTANT_CASE format using existing constants.
+     * Convert delivery type to CONSTANT_CASE format for Order Service.
      */
     private static function formatDeliveryType(string $deliveryType): ?string
     {
-        $allowedValues = OrderApiDeliveryType::getAllowableEnumValues();
+        $formatted = self::toOrderApiValue(
+            $deliveryType,
+            ApiMapperService::forDeliveryType(),
+            OrderApiDeliveryType::getAllowableEnumValues()
+        );
 
-        // If the delivery type already equals one of the order service constants, return it directly
-        if (\in_array($deliveryType, $allowedValues, true)) {
-            return $deliveryType;
+        if (null === $formatted) {
+            Logger::warning("Unmapped delivery type: {$deliveryType} - this delivery type will be null in the API response");
         }
 
-        $mappedName = ApiMapperService::forDeliveryType()->v2NameFromLegacyName($deliveryType);
+        return $formatted;
+    }
 
-        if (in_array($mappedName, $allowedValues, true)) {
-            return $mappedName;
-        }
+    /**
+     * Return the value when the Order API accepts it, otherwise the V2 name the SDK maps the legacy name to.
+     *
+     * @param  string                                            $value
+     * @param  \MyParcelNL\Sdk\Services\Mapping\ApiMapperService $mapper
+     * @param  string[]                                          $allowedValues
+     *
+     * @return null|string
+     */
+    private static function toOrderApiValue(string $value, ApiMapperService $mapper, array $allowedValues): ?string
+    {
+        $v2Name = in_array($value, $allowedValues, true) ? $value : $mapper->v2NameFromLegacyName($value);
 
-        // Order API types can exist without a matching Core API definition.
-        // Attempt to convert it to SCREAMING_SNAKE_CASE and check again
-        $convertedName = Str::upper(Str::snake($deliveryType));
-        if (\in_array($convertedName, $allowedValues, true)) {
-            return $convertedName;
-        }
-
-        // Every Order API delivery type carries the suffix, so same_day => SAME_DAY_DELIVERY
-        $suffixedName = $convertedName . self::ORDER_API_DELIVERY_TYPE_SUFFIX;
-        if (\in_array($suffixedName, $allowedValues, true)) {
-            return $suffixedName;
-        }
-
-        Logger::warning("Unmapped delivery type: {$deliveryType} - this delivery type will be null in the API response");
-
-        return null;
+        return in_array($v2Name, $allowedValues, true) ? $v2Name : null;
     }
 }

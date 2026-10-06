@@ -14,6 +14,13 @@ use MyParcelNL\Sdk\Support\Str;
 abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInterface
 {
     /**
+     * Capabilities keys resolved through the SDK, by shipment options key.
+     *
+     * @var array<string, null|string>
+     */
+    private static $capabilitiesKeys = [];
+
+    /**
      * The internal PDK key used on the ShipmentOptions model (e.g. 'signature', 'ageCheck').
      * This is the root key from which carrier/product/allow/price settings keys are derived.
      * These keys correspond to the legacy API naming used by the shipment-, order v1,
@@ -49,9 +56,14 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
             return null;
         }
 
-        $property = (new ShipmentOptionMapper())->v2PropertyFromName(Str::snake($key));
+        // Called in loops over all definitions, often on new instances.
+        if (! array_key_exists($key, self::$capabilitiesKeys)) {
+            $property = (new ShipmentOptionMapper())->v2PropertyFromName(Str::snake($key));
 
-        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()[$property] ?? null;
+            self::$capabilitiesKeys[$key] = RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()[$property] ?? null;
+        }
+
+        return self::$capabilitiesKeys[$key];
     }
 
     /**

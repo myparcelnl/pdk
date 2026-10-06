@@ -20,6 +20,8 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -95,7 +97,7 @@ it('instantiates delivery options with pickup location', function () {
     $deliveryOptions = new DeliveryOptions(
         [
             'date'           => new DateTime('+1 day'),
-            'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+            'deliveryType'   => ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP),
             'pickupLocation' => new RetailLocation(['cc' => CountryCodes::CC_NL]),
         ]
     );

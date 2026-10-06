@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
@@ -81,7 +82,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
 
         $supported = $currentCapability
             && $this->capabilitiesService->supportsWeight($currentCapability, $weightForCurrent)
-            && ! $this->isInternationalMailboxBlocked($currentType, $cc, $carrier);
+            && ! $this->isInternationalMailboxBlocked($v2CurrentType, $cc, $carrier);
 
         if ($supported) {
             return;
@@ -93,15 +94,15 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
     /**
      * Check whether the current package type is an international mailbox that the merchant has not enabled.
      *
-     * @param  string                              $currentType
+     * @param  string                              $v2PackageType
      * @param  string                              $cc
      * @param  \MyParcelNL\Pdk\Carrier\Model\Carrier $carrier
      *
      * @return bool
      */
-    private function isInternationalMailboxBlocked(string $currentType, string $cc, Carrier $carrier): bool
+    private function isInternationalMailboxBlocked(string $v2PackageType, string $cc, Carrier $carrier): bool
     {
-        if ($currentType !== DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME) {
+        if (RefShipmentPackageTypeV2::MAILBOX !== $v2PackageType) {
             return false;
         }
 
@@ -131,15 +132,14 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
         $mapper          = ApiMapperService::forPackageType();
 
         foreach (($carrier->packageTypes ?? []) as $v2Name) {
-            $pdkName = $mapper->legacyNameFromV2Name($v2Name);
-
             if (
-                $pdkName === null
-                || null === $mapper->idFromV2Name($v2Name)
-                || $this->isInternationalMailboxBlocked($pdkName, $cc, $carrier)
+                ! DeliveryOptions::isPackageTypeSupported($v2Name)
+                || $this->isInternationalMailboxBlocked($v2Name, $cc, $carrier)
             ) {
                 continue;
             }
+
+            $pdkName = $mapper->legacyNameFromV2Name($v2Name);
 
             $capability = $this->capabilitiesService->indexByCarrier(
                 $this->capabilitiesService->getRepository()->getCapabilities([

@@ -34,6 +34,8 @@ use Psr\Log\LogLevel;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock(), new UsesMockEachLogger());
 
@@ -82,8 +84,8 @@ function calculateOrder(string $carrier, array $shipmentOptions = []): PdkOrder
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD)
                 ->withShipmentOptions(
                     factory(ShipmentOptions::class)->with($shipmentOptions)
                 )
@@ -114,8 +116,8 @@ it('sends isBusiness on the capabilities request based on the shipping address c
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD)
         )
         ->make();
 

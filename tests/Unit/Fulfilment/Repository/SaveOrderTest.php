@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Api\Response\ExampleGetOrdersResponse;
 use MyParcelNL\Pdk\Tests\Api\Response\ExamplePostOrdersResponse;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockApi;
@@ -21,6 +20,10 @@ use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -108,8 +111,8 @@ it('creates a valid order collection from api data', function (array $input) {
                     'deliveryOptions'    => [
                         'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
-                        'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                        'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        'deliveryType'    => ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD,
+                        'packageType'     => ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
                         'pickupLocation'  => null,
                         'shipmentOptions' => [
                             'ageCheck'         => true,
@@ -172,8 +175,8 @@ it('creates a valid order collection from api data', function (array $input) {
                     'deliveryOptions'    => [
                         'carrier'         => RefCapabilitiesSharedCarrierV2::POSTNL,
                         'date'            => '2022-08-22 00:00:00',
-                        'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
-                        'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                        'deliveryType'    => ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP),
+                        'packageType'     => ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
                         'pickupLocation'  => [
                             'locationCode' => 0172,
                         ],
@@ -285,8 +288,8 @@ it('creates order', function ($input, $path, $query) {
                 'customsDeclaration' => null,
                 'deliveryOptions'    => [
                     'date'            => '2022-08-22 00:00:00',
-                    'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME,
-                    'packageType'     => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    'deliveryType'    => ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD,
+                    'packageType'     => ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
                     'shipmentOptions' => [
                         'ageCheck'         => 1,
                         'insurance'        => [

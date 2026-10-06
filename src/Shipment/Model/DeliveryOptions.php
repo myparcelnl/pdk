@@ -20,6 +20,9 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
@@ -47,23 +50,6 @@ class DeliveryOptions extends Model
     public const PACKAGE_TYPE     = 'packageType';
     public const PICKUP_LOCATION  = 'pickupLocation';
     public const SHIPMENT_OPTIONS = 'shipmentOptions';
-    /**
-     * Values
-     */
-    public const DELIVERY_TYPE_MORNING_ID         = RefTypesDeliveryType::MORNING;
-    public const DELIVERY_TYPE_MORNING_NAME       = 'morning';
-    public const DELIVERY_TYPE_EVENING_ID         = RefTypesDeliveryType::EVENING;
-    public const DELIVERY_TYPE_EVENING_NAME       = 'evening';
-    public const DELIVERY_TYPE_STANDARD_ID        = RefTypesDeliveryType::STANDARD;
-    public const DELIVERY_TYPE_STANDARD_NAME      = 'standard';
-    public const DELIVERY_TYPE_PICKUP_ID          = RefTypesDeliveryType::PICKUP;
-    public const DELIVERY_TYPE_PICKUP_NAME        = 'pickup';
-    public const DELIVERY_TYPE_EXPRESS_ID         = RefTypesDeliveryType::EXPRESS;
-    public const DELIVERY_TYPE_EXPRESS_NAME       = 'express';
-    public const DELIVERY_TYPE_SAME_DAY_ID        = RefTypesDeliveryType::SAME_DAY;
-    public const DELIVERY_TYPE_SAME_DAY_NAME      = 'same_day';
-    public const DELIVERY_TYPE_EARLY_MORNING_ID   = RefTypesDeliveryType::EARLY_MORNING;
-    public const DELIVERY_TYPE_EARLY_MORNING_NAME = 'early_morning';
 
     /**
      * Delivery-option toggle names that are NOT delivery types in the
@@ -82,24 +68,12 @@ class DeliveryOptions extends Model
     public const DELIVERY_OPTION_MONDAY                = 'mondayDelivery';
     public const DELIVERY_OPTION_SATURDAY              = 'saturdayDelivery';
 
-    public const DEFAULT_DELIVERY_TYPE_ID     = self::DELIVERY_TYPE_STANDARD_ID;
-    public const DEFAULT_DELIVERY_TYPE_NAME   = self::DELIVERY_TYPE_STANDARD_NAME;
-
     /**
-     * Package types
+     * The model stores delivery and package types as legacy names (e.g. 'pickup', 'package_small').
+     * ApiMapperService maps these names to the generated API definitions.
      */
-    /**
-     * PDK-internal package-type names (also used by the delivery-options widget).
-     *
-     * ApiMapperService resolves these names to the generated API definitions.
-     */
-    public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
-    public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
-    public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
-    public const  PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
-    public const  PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
-    public const  PACKAGE_TYPE_PALLET_NAME        = 'pallet';
-    public const  PACKAGE_TYPE_ENVELOPE_NAME      = 'envelope';
+    public const DEFAULT_DELIVERY_TYPE_ID  = RefTypesDeliveryType::STANDARD;
+    public const DEFAULT_DELIVERY_TYPE_NAME = ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD;
 
     /**
      * Whether the SDK can map a V2 delivery type to a model name and a v1 export ID.
@@ -132,7 +106,7 @@ class DeliveryOptions extends Model
     }
 
     public const  DEFAULT_PACKAGE_TYPE_ID         = RefShipmentPackageType::PACKAGE;
-    public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
+    public const  DEFAULT_PACKAGE_TYPE_NAME       = ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE;
     public const  DEFAULT_PACKAGE_TYPE_V2         = RefShipmentPackageTypeV2::PACKAGE;
 
     protected $attributes = [
@@ -318,7 +292,9 @@ class DeliveryOptions extends Model
      */
     public function isPickup(): bool
     {
-        return $this->deliveryType === self::DELIVERY_TYPE_PICKUP_NAME && $this->pickupLocation;
+        return $this->pickupLocation
+            && RefTypesDeliveryTypeV2::PICKUP === ApiMapperService::forDeliveryType()
+                ->v2NameFromLegacyName((string) $this->deliveryType);
     }
 
     /**

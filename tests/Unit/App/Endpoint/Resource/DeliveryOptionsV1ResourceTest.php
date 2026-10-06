@@ -268,12 +268,11 @@ it('preserves valid Order API types outside the Core API map', function (string 
     }
 })->with(['packageType', 'deliveryType']);
 
-it('keeps the Order API normalization for delivery names without a Core API mapping', function () {
+it('does not guess an Order API delivery type that the SDK cannot map', function () {
     $options = new DeliveryOptions();
     $options->deliveryType = 'pickup_express';
 
-    expect((new DeliveryOptionsV1Resource($options))->format()['deliveryType'])
-        ->toBe(OrderApiDeliveryType::PICKUP_EXPRESS_DELIVERY);
+    expect((new DeliveryOptionsV1Resource($options))->format()['deliveryType'])->toBeNull();
 });
 
 it('does not send unknown package or delivery types to the Order API', function () {

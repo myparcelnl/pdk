@@ -308,7 +308,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
 
             // Mailbox requires the cart contents to physically fit (product-level, not carrier-level).
             if (
-                DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME === $packageTypeName
+                RefShipmentPackageTypeV2::MAILBOX === $v2PackageType
                 && $this->cartCalculationService->calculateMailboxPercentage($cart) > 100.0
             ) {
                 continue;
@@ -538,7 +538,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
      */
     private function shouldUseInternationalMailboxPrice(string $packageType, string $cc): bool
     {
-        $isMailbox  = $packageType === DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME;
+        $isMailbox  = RefShipmentPackageTypeV2::MAILBOX === ApiMapperService::forPackageType()->v2NameFromLegacyName($packageType);
         $isNotLocal = ! $this->countryService->isLocalCountry($cc);
 
         return $isMailbox && $isNotLocal;

@@ -10,7 +10,6 @@ use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -18,6 +17,7 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -102,7 +102,7 @@ it('gets context data', function (string $id, array $arguments) {
             'order' => [
                 'deliveryOptions' => [
                     'carrier'     => RefCapabilitiesSharedCarrierV2::POSTNL,
-                    'packageType' => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                    'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
                 ],
             ],
         ],

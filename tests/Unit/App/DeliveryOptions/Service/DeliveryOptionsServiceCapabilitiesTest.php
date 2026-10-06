@@ -28,6 +28,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 
 uses()->group('checkout', 'capabilities');
 
@@ -169,7 +170,7 @@ it('excludes carrier when package type is not in capabilities', function () {
     $postnlId = FrontendData::getLegacyCarrierIdentifier(RefCapabilitiesSharedCarrierV2::POSTNL);
     $dhlId    = FrontendData::getLegacyCarrierIdentifier(RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU);
 
-    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+    expect($result['packageType'])->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
         ->and($result['carrierSettings'])->toHaveKey($postnlId)
         ->and($result['carrierSettings'])->not->toHaveKey($dhlId);
 });
@@ -410,7 +411,7 @@ it('skips mailbox package type when mailbox percentage exceeds 100%', function (
                     'weight'        => 100,
                     'isDeliverable' => true,
                     'settings'      => [
-                        'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                         'fitInMailbox' => 4,
                     ],
                 ],
@@ -419,7 +420,7 @@ it('skips mailbox package type when mailbox percentage exceeds 100%', function (
     ]));
 
     // Mailbox percentage > 100% → skipped → upgrade to package.
-    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+    expect($result['packageType'])->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
 });
 
 it('upgrades to next fitting package type when desired type exceeds weight', function () {
@@ -458,7 +459,7 @@ it('upgrades to next fitting package type when desired type exceeds weight', fun
                     'weight'        => 500,
                     'isDeliverable' => true,
                     'settings'      => [
-                        'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                     ],
                 ],
             ],
@@ -466,7 +467,7 @@ it('upgrades to next fitting package type when desired type exceeds weight', fun
     ]));
 
     // Mailbox too heavy → upgraded to package.
-    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+    expect($result['packageType'])->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
 });
 
 it('normalizes max weight to grams when capabilities response uses kg', function () {
@@ -504,12 +505,12 @@ it('normalizes max weight to grams when capabilities response uses kg', function
                     'weight'        => 1500,
                     'isDeliverable' => true,
                     'settings'      => [
-                        'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                     ],
                 ],
             ],
         ],
     ]));
 
-    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+    expect($result['packageType'])->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX);
 });

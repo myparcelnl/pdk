@@ -21,6 +21,6 @@ class FrontendDataAdapter implements FrontendDataAdapterInterface
     public function getLegacyCarrierIdentifier(string $carrierName): string
     {
         return ApiMapperService::forCarrier()->legacyNameFromV2Name($carrierName)
-            ?? Str::lower(\str_replace('', '_', $carrierName));
+            ?? Str::lower(\str_replace('_', '', $carrierName));
     }
 }

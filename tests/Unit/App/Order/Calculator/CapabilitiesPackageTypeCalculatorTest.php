@@ -30,6 +30,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesSdkApiMock());
 
@@ -88,7 +89,7 @@ it('keeps package type when it is available in capabilities', function () {
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
         )
         ->make();
 
@@ -96,7 +97,7 @@ it('keeps package type when it is available in capabilities', function () {
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+    expect($newOrder->deliveryOptions->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
 
     $reset();
 });
@@ -136,7 +137,7 @@ it('falls back to next available type when selected type is not in capabilities'
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -144,7 +145,7 @@ it('falls back to next available type when selected type is not in capabilities'
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+    expect($newOrder->deliveryOptions->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
 
     $reset();
 });
@@ -178,7 +179,7 @@ it('keeps international mailbox when allowInternationalMailbox is enabled', func
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -186,7 +187,7 @@ it('keeps international mailbox when allowInternationalMailbox is enabled', func
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+    expect($newOrder->deliveryOptions->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX);
 
     $reset();
 });
@@ -227,7 +228,7 @@ it('falls back when international mailbox is blocked by merchant setting', funct
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -236,7 +237,7 @@ it('falls back when international mailbox is blocked by merchant setting', funct
     $newOrder = $service->calculate($order);
 
     // Mailbox blocked for international → skipped in fallback, falls back to package.
-    expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+    expect($newOrder->deliveryOptions->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
 
     $reset();
 });
@@ -271,7 +272,7 @@ it('falls back to default when no capabilities match at all', function () {
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -323,7 +324,7 @@ it('passes effective weight (raw + empty-weight setting) to the capability check
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -332,7 +333,7 @@ it('passes effective weight (raw + empty-weight setting) to the capability check
     $newOrder = $service->calculate($order);
 
     // Mailbox stays selected — without the empty-weight fallback this would falsely fall through.
-    expect($newOrder->deliveryOptions->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME);
+    expect($newOrder->deliveryOptions->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX);
 
     $reset();
 });

@@ -21,6 +21,9 @@ use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -67,43 +70,43 @@ it('calculates weight', function (
 
         return [
             'package' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
                 'manualWeight' => null,
                 'totalWeight'  => $orderLinesWeight + 200,
             ],
 
             'package with manual weight' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
                 'manualWeight' => 300,
                 'totalWeight'  => 300,
             ],
 
             'package small' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE,
                 'manualWeight' => null,
                 'totalWeight'  => $orderLinesWeight + 75,
             ],
 
             'mailbox' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                 'manualWeight' => null,
                 'totalWeight'  => $orderLinesWeight + 100,
             ],
 
             'digital stamp' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::DIGITAL_STAMP,
                 'manualWeight' => null,
                 'totalWeight'  => $orderLinesWeight + 50,
             ],
 
             'digital stamp with manual weight' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::DIGITAL_STAMP,
                 'manualWeight' => 225,
                 'totalWeight'  => 225,
             ],
 
             'letter' => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                'packageType'  => ApiMapperService::forPackageType()->legacyNameFromV2Name(RefShipmentPackageTypeV2::UNFRANKED),
                 'manualWeight' => null,
                 'totalWeight'  => $orderLinesWeight,
             ],

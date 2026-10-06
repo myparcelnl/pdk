@@ -29,6 +29,8 @@ use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 uses()->group('checkout');
 
@@ -152,7 +154,7 @@ it(
                         'weight'        => 500,
                         'isDeliverable' => true,
                         'settings'      => [
-                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            ProductSettings::PACKAGE_TYPE => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                         ],
                     ],
                 ],
@@ -172,7 +174,7 @@ it(
                         'weight'        => 500,
                         'isDeliverable' => true,
                         'settings'      => [
-                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            ProductSettings::PACKAGE_TYPE => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                         ],
                     ],
                 ],
@@ -193,7 +195,7 @@ it(
                         'isDeliverable' => true,
                         'settings'      => [
                             ProductSettings::FIT_IN_MAILBOX => 5,
-                            ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            ProductSettings::PACKAGE_TYPE   => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                         ],
                     ],
                 ],
@@ -213,7 +215,7 @@ it(
                         'weight'        => 500,
                         'isDeliverable' => true,
                         'settings'      => [
-                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                            ProductSettings::PACKAGE_TYPE => ShipmentResponsesDeliveryOptionsPackageTypeV2::DIGITAL_STAMP,
                         ],
                     ],
                 ],
@@ -233,7 +235,7 @@ it(
                         'weight'        => 500,
                         'isDeliverable' => true,
                         'settings'      => [
-                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
+                            ProductSettings::PACKAGE_TYPE => ApiMapperService::forPackageType()->legacyNameFromV2Name(RefShipmentPackageTypeV2::UNFRANKED),
                         ],
                     ],
                 ],
@@ -253,7 +255,7 @@ it(
                         'weight'        => 500,
                         'isDeliverable' => true,
                         'settings'      => [
-                            ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            ProductSettings::PACKAGE_TYPE => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                         ],
                     ],
                 ],
@@ -296,14 +298,14 @@ it('falls back to package when international mailbox is disabled by merchant set
                     'isDeliverable' => true,
                     'settings'      => [
                         ProductSettings::FIT_IN_MAILBOX => 5,
-                        ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ProductSettings::PACKAGE_TYPE   => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                     ],
                 ],
             ],
         ],
     ]));
 
-    expect($result['packageType'])->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+    expect($result['packageType'])->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
 });
 
 it('uses international mailbox price when shipping address is non-local', function () {
@@ -334,7 +336,7 @@ it('uses international mailbox price when shipping address is non-local', functi
                     'isDeliverable' => true,
                     'settings'      => [
                         ProductSettings::FIT_IN_MAILBOX => 5,
-                        ProductSettings::PACKAGE_TYPE   => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                        ProductSettings::PACKAGE_TYPE   => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                     ],
                 ],
             ],

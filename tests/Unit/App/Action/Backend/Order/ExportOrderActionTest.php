@@ -60,6 +60,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesApiMock(), new UsesNotificationsMock(), new UsesSettingsMock());
 
@@ -489,7 +492,7 @@ it('exports multiple orders in a batch with per-shipment option resolution', fun
             factory(PdkOrder::class)
                 ->withDeliveryOptions([
                     'carrier'     => RefCapabilitiesSharedCarrierV2::POSTNL,
-                    'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                 ])
                 ->withLines(factory(PdkOrderLineCollection::class, 1)->eachWith(['quantity' => 5])),
             // Order 1: PostNL evening with explicit signature + only_recipient
@@ -497,7 +500,7 @@ it('exports multiple orders in a batch with per-shipment option resolution', fun
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-                        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                        ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
                         ->withDate('2077-10-23 09:47:51')
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
@@ -539,7 +542,7 @@ it('exports multiple orders in a batch with per-shipment option resolution', fun
         ->and($shipments[0]['options'])->not->toHaveKey('signature');
 
     // Order 1: evening delivery type, signature and only_recipient present
-    expect($shipments[1]['options']['delivery_type'])->toBe(DeliveryOptions::DELIVERY_TYPE_EVENING_ID)
+    expect($shipments[1]['options']['delivery_type'])->toBe(RefTypesDeliveryType::EVENING)
         ->and($shipments[1]['options']['signature'])->toBe(1)
         ->and($shipments[1]['options']['only_recipient'])->toBe(1);
 
@@ -807,7 +810,7 @@ it('adds api errors as notifications if shipment export fails', function () {
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
         )
         ->store();
 
@@ -992,7 +995,7 @@ it(
             ->withOrderDate('2020-01-01T00:00:00+00:00')
             ->withDeliveryOptions(
                 factory(DeliveryOptions::class)
-                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                    ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
             )
             ->withShippingAddress($shippingAddress)
             ->store()
@@ -1147,7 +1150,7 @@ it(
                                         ->fromPostNL()
                                         ->withPackageTypes([RefShipmentPackageTypeV2::MAILBOX])
                                 )
-                                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
                         )
                 );
             },

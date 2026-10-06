@@ -28,8 +28,9 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\WeightCalculator;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use function DI\factory;
 use function DI\value;
 
@@ -117,13 +118,20 @@ return [
      * - Off: The shipping method does not get delivery options. Default behavior and thus not saved in the model.
      * - Inherit: The shipping method gets delivery options and package type is calculated dynamically (using product settings, for example).
      * - [PackageTypeName]: The shipping method gets delivery options and the package type is fixed.
+     *
+     * @deprecated Only for migrating plugin settings. Do not use in new code: a new package type does not appear in
+     *             this list. Read the package types from the SDK ApiMapperService instead.
      */
-    'allowedShippingMethodsKeys' => value([
-        TriStateService::INHERIT,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
-        DeliveryOptions::PACKAGE_TYPE_LETTER_NAME,
-    ]),
+    'allowedShippingMethodsKeys' => factory(function (): array {
+        $mapper = ApiMapperService::forPackageType();
+
+        return [
+            TriStateService::INHERIT,
+            $mapper->legacyNameFromV2Name(RefShipmentPackageTypeV2::PACKAGE),
+            $mapper->legacyNameFromV2Name(RefShipmentPackageTypeV2::SMALL_PACKAGE),
+            $mapper->legacyNameFromV2Name(RefShipmentPackageTypeV2::MAILBOX),
+            $mapper->legacyNameFromV2Name(RefShipmentPackageTypeV2::DIGITAL_STAMP),
+            $mapper->legacyNameFromV2Name(RefShipmentPackageTypeV2::UNFRANKED),
+        ];
+    }),
 ];

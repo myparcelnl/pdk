@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use function MyParcelNL\Pdk\Tests\factory;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 
 /**
  * @template T of DeliveryOptions
@@ -48,6 +49,6 @@ final class DeliveryOptionsFactory extends AbstractModelFactory
     {
         return $this
             ->withCarrier(factory(Carrier::class))
-            ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME);
+            ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD);
     }
 }

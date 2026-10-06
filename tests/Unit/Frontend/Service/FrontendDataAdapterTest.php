@@ -27,3 +27,10 @@ it('maps carrier name to legacy identifier', function (string $carrierName, stri
         }
     }
 });
+
+it('removes separators from a carrier without a legacy name', function () {
+    /** @var FrontendDataAdapterInterface $service */
+    $service = Pdk::get(FrontendDataAdapterInterface::class);
+
+    expect($service->getLegacyCarrierIdentifier('NEW_CARRIER'))->toBe('newcarrier');
+});
