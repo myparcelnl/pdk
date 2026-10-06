@@ -25,9 +25,9 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
-use function MyParcelNL\Pdk\Tests\factory;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of PdkOrder

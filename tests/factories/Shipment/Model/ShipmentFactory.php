@@ -18,9 +18,9 @@ use MyParcelNL\Pdk\Base\Model\CurrencyFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
-use function MyParcelNL\Pdk\Tests\factory;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use function MyParcelNL\Pdk\Tests\factory;
 
 /**
  * @template T of Shipment
