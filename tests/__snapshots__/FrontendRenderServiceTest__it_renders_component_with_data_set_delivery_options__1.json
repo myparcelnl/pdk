@@ -7,7 +7,6 @@
             "currency": "EUR",
             "locale": "nl-NL",
             "packageType": "package",
-            "physicalProperties": null,
             "allowPickupLocationsViewSelection": true,
             "platform": "myparcel",
             "proposition": "myparcel-nederland",

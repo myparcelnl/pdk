@@ -8,7 +8,6 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Account\Model\Account;
 use MyParcelNL\Pdk\Account\Model\Shop;
-use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
@@ -18,6 +17,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -27,7 +27,6 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 
 usesShared(
     new UsesMockPdkInstance([
@@ -277,27 +276,22 @@ it('returns AccountDefsPlatformName platform name for myparcel', function () {
 });
 
 
-it('keeps legacy cart calculator implementations compatible with unknown checkout weight', function () {
+it('sends the known cart weight as physicalProperties', function (array $lines, ?array $expected) {
     TestBootstrapper::hasAccount();
-    $calculator = Pdk::get(CartCalculationServiceInterface::class);
-    $legacyCalculator = $this->createMock(CartCalculationServiceInterface::class);
+    factory(OrderSettings::class)->withEmptyParcelWeight(250)->store();
 
-    foreach (['calculateMailboxPercentage', 'calculateShippingMethod', 'getCartPackageTypes', 'getCartWeightForPackageType'] as $method) {
-        $legacyCalculator->method($method)->willReturnCallback([$calculator, $method]);
-    }
+    $config = DeliveryOptionsConfig::fromCart(new PdkCart(['lines' => $lines]));
 
-    $reset = mockPdkProperties([CartCalculationServiceInterface::class => $legacyCalculator]);
+    expect($config->physicalProperties)->toBe($expected);
+})->with(function () {
+    $line = static function (?int $weight, int $quantity = 1, bool $deliverable = true): array {
+        return ['quantity' => $quantity, 'product' => ['weight' => $weight, 'isDeliverable' => $deliverable]];
+    };
 
-    try {
-        $cart = new PdkCart(['lines' => [
-            ['quantity' => 1, 'product' => ['weight' => 1000, 'isDeliverable' => true]],
-        ]]);
-        $context = CheckoutContext::fromCart($cart)->toArrayWithoutNull();
-
-        expect($context['config'])->toHaveKey('physicalProperties')
-            ->and($context['config']['physicalProperties'])->toBeNull()
-            ->and($context['settings']['hasDeliveryOptions'])->toBeTrue();
-    } finally {
-        $reset();
-    }
+    return [
+        'known weight'                      => [[$line(10000, 3)], ['weight' => 30250]],
+        'partly known weight'               => [[$line(10000), $line(null)], ['weight' => 10250]],
+        'no line has a weight'              => [[$line(null), $line(0)], null],
+        'only non-deliverable lines'        => [[$line(1000, 1, false)], null],
+    ];
 });

@@ -7,7 +7,6 @@ namespace MyParcelNL\Pdk\Context\Model;
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
-use MyParcelNL\Pdk\App\Cart\Contract\KnownCartWeightServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -24,8 +23,8 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property array  $carrierSettings
  * @property string $currency
  * @property string $locale
- * @property null|array $physicalProperties
  * @property string $packageType
+ * @property null|array $physicalProperties
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
  * @property string $platform
@@ -123,13 +122,14 @@ class DeliveryOptionsConfig extends Model
 
         $config = new self($service->createAllCarrierSettings($cart));
 
-        $cartCalculationService = Pdk::get(CartCalculationServiceInterface::class);
-        $knownWeight = $cart->shippingMethod->hasDeliveryOptions
-            && $cartCalculationService instanceof KnownCartWeightServiceInterface
-            ? $cartCalculationService->getKnownCartWeightForPackageType($cart, $config->packageType)
-            : null;
-        // The delivery options widget takes the weight in grams, without a unit.
-        $config->physicalProperties = null === $knownWeight ? null : ['weight' => $knownWeight];
+        // The empty package weight alone is not a cart weight.
+        if ($cart->shippingMethod->hasDeliveryOptions && $cart->lines->onlyDeliverable()->getTotalWeight() > 0) {
+            // The delivery options widget takes the weight in grams, without a unit.
+            $config->physicalProperties = [
+                'weight' => Pdk::get(CartCalculationServiceInterface::class)
+                    ->getCartWeightForPackageType($cart, $config->packageType),
+            ];
+        }
 
         // Override excludeParcelLockers based on cart calculation
         if (isset($cart->shippingMethod->excludeParcelLockers)) {

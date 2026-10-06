@@ -59,7 +59,7 @@ it('does not leak the account api key, even when the caller requests another con
 });
 
 
-it('serializes refreshed checkout weight and explicitly clears unknown weight', function () {
+it('sends physicalProperties only when the cart has a weight', function (int $weight, array $expected) {
     $repository = new class(Pdk::get(StorageInterface::class)) extends AbstractPdkCartRepository {
         public function get($input): PdkCart
         {
@@ -70,12 +70,11 @@ it('serializes refreshed checkout weight and explicitly clears unknown weight', 
     };
     $action = new FetchCheckoutContextAction($repository, Pdk::get(ContextServiceInterface::class));
 
-    foreach ([30000, 15000, 0] as $weight) {
-        $response = $action->handle(new Request(['cart' => $weight]));
-        $body = json_decode($response->getContent(), true);
-        $config = $body['data']['context'][0][Context::ID_CHECKOUT]['config'];
+    $response = $action->handle(new Request(['cart' => $weight]));
+    $config   = json_decode($response->getContent(), true)['data']['context'][0][Context::ID_CHECKOUT]['config'];
 
-        expect($config)->toHaveKey('physicalProperties')
-            ->and($config['physicalProperties'])->toBe($weight ? ['weight' => $weight] : null);
-    }
-});
+    expect(array_intersect_key($config, ['physicalProperties' => true]))->toBe($expected);
+})->with([
+    'known weight'   => [30000, ['physicalProperties' => ['weight' => 30000]]],
+    'unknown weight' => [0, []],
+]);

@@ -306,49 +306,39 @@ it('resolves cart package types from merged settings so child products inherit p
 });
 
 
-it('only exposes a known shipping weight without changing the original cart', function (array $lines, int $packaging, ?int $expected) {
-    factory(OrderSettings::class)->withEmptyParcelWeight($packaging)->store();
-
-    $cart = new PdkCart(['lines' => $lines]);
-    $originalLines = $cart->lines;
-    $originalData = $cart->toArray();
-    $originalWeight = $originalLines->getTotalWeight();
+it('counts only deliverable lines in the cart weight', function (array $lines, int $expected) {
+    factory(OrderSettings::class)->withEmptyParcelWeight(250)->store();
 
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
-    expect($service->getKnownCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME))
-        ->toBe($expected)
-        ->and($cart->lines)->toBe($originalLines)
-        ->and($cart->toArray())->toBe($originalData)
-        ->and($cart->lines->getTotalWeight())->toBe($originalWeight);
-})->with(function () {
-    $line = static function (?int $weight, int $quantity = 1, bool $deliverable = true): array {
-        return ['quantity' => $quantity, 'product' => ['weight' => $weight, 'isDeliverable' => $deliverable]];
-    };
+    expect($service->getCartWeightForPackageType(new PdkCart(['lines' => $lines]), DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME))
+        ->toBe($expected);
+})->with([
+    'quantities and packaging once' => [
+        [['quantity' => 3, 'product' => ['weight' => 10000, 'isDeliverable' => true]]],
+        30250,
+    ],
+    'non-deliverable line with a weight' => [
+        [
+            ['quantity' => 1, 'product' => ['weight' => 1000, 'isDeliverable' => true]],
+            ['quantity' => 2, 'product' => ['weight' => 5000, 'isDeliverable' => false]],
+        ],
+        1250,
+    ],
+    'line without a weight counts as 0 g' => [
+        [
+            ['quantity' => 1, 'product' => ['weight' => 10000, 'isDeliverable' => true]],
+            ['quantity' => 1, 'product' => ['weight' => null, 'isDeliverable' => true]],
+        ],
+        10250,
+    ],
+]);
 
-    return [
-        'quantities and packaging once' => [[$line(10000, 3)], 250, 30250],
-        'missing weight'                => [[$line(null)], 250, null],
-        'packaging alone is unknown'    => [[$line(0)], 250, null],
-        'negative weight'               => [[$line(-1)], 250, null],
-        'partially known cart'          => [[$line(10000), $line(null)], 250, null],
-        'zero in partially known cart'  => [[$line(10000), $line(0)], 250, null],
-        'virtual unknown item'          => [[$line(1000), $line(null, 1, false)], 250, 1250],
-        'virtual known item'            => [[$line(1000), $line(5000, 2, false)], 250, 1250],
-        'zero quantity unknown item'    => [[$line(1000), $line(null, 0)], 250, 1250],
-        'negative quantity item'        => [[$line(1000), $line(500, -1)], 250, 1250],
-        'only virtual items'            => [[$line(1000, 1, false)], 250, null],
-        'no positive quantities'        => [[$line(1000, 0)], 250, null],
-        'empty cart'                    => [[], 250, null],
-        'genuine one gram'              => [[$line(1)], 0, 1],
-    ];
-});
-
-it('uses the selected package type when calculating known weight', function () {
+it('adds the empty weight of the given package type', function () {
     factory(OrderSettings::class)->withEmptyParcelWeight(250)->withEmptyMailboxWeight(50)->store();
     $cart = new PdkCart(['lines' => [['quantity' => 2, 'product' => ['weight' => 500, 'isDeliverable' => true]]]]);
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
-    expect($service->getKnownCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME))->toBe(1250)
-        ->and($service->getKnownCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME))->toBe(1050);
+    expect($service->getCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME))->toBe(1250)
+        ->and($service->getCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME))->toBe(1050);
 });
