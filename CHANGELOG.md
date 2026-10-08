@@ -3,6 +3,87 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.0](https://github.com/myparcelnl/pdk/compare/v4.9.4...v5.0.0) (2026-10-08)
+
+### ⚠ BREAKING CHANGES
+
+* DeliveryOptions::DELIVERY_TYPES_NAMES_IDS_MAP, DELIVERY_TYPES_V2_MAP, PACKAGE_TYPES_NAMES_IDS_MAP and PACKAGE_TYPES_V2_MAP are removed. Use ApiMapperService::forDeliveryType() and ApiMapperService::forPackageType() from the SDK instead.
+Story: INT-1564 PDK: vervang hardcoded v1<>v2 mappings door generieke SDK-helpers
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+* fix(endpoint): INT-1564 - correct the direct return option mapping
+
+The delivery options v1 resource mapped the direct return option to
+printReturnLabelAtDropOff. That Order API option only applies to inbound
+shipments. Direct return sends the package back to the sender after the
+first failed delivery attempt, which the Order API calls
+returnOnFirstFailedDelivery.
+
+Remove the override, so the resource uses the SDK ShipmentOptionMapper
+like the capabilities mapping already does.
+
+Story: INT-1564 PDK: vervang hardcoded v1<>v2 mappings door generieke SDK-helpers
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+* refactor(carrier)!: INT-1564 - resolve carriers through the SDK
+
+The Carrier model kept its own list of legacy carrier names and two maps
+between V2 names, legacy names and v1 IDs. Each new carrier needed a PDK
+change, and the copies had already drifted: the Order API carrier map in
+DeliveryOptionsV1Resource missed four carriers.
+
+Resolve carrier names and IDs through ApiMapperService::forCarrier()
+instead. Carrier::isSupported() and Carrier::v2NameFromLegacyId() keep
+their signatures and now ask the SDK. Every SDK carrier with a v1 ID is
+supported, so a new carrier only needs an SDK update. DHL_FREIGHT is the
+first carrier that becomes available this way, which the updated
+snapshots show.
+* Carrier::CARRIER_*_LEGACY_NAME, Carrier::CARRIER_NAME_TO_LEGACY_MAP and Carrier::CARRIER_NAME_ID_MAP are removed. Use ApiMapperService::forCarrier() from the SDK instead.
+Story: INT-1564 PDK: vervang hardcoded v1<>v2 mappings door generieke SDK-helpers
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+* refactor(utils)!: INT-1564 - remove convertToId and convertToName
+
+These helpers looked up names and IDs in a hand-written map. The PDK now
+resolves carriers, delivery types and package types through the SDK
+ApiMapperService, so nothing calls them anymore.
+* Utils::convertToId() and Utils::convertToName() are removed. Use the lookup methods of ApiMapperService from the SDK instead.
+Story: INT-1564 PDK: vervang hardcoded v1<>v2 mappings door generieke SDK-helpers
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+* docs(claude): INT-1564 - drop the capabilities key from the skill
+
+The add-shipment-option skill still asked for the capabilities key and
+told the developer to implement getCapabilitiesOptionsKey(). The base
+definition now derives that key through the SDK ShipmentOptionMapper.
+The skill now only asks for the shipment options key, and points to the
+SDK when a derived key is wrong.
+
+Story: INT-1564 PDK: vervang hardcoded v1<>v2 mappings door generieke SDK-helpers
+Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
+
+* refactor(delivery-options)!: INT-1564 - resolve type names through the SDK
+
+- remove the delivery and package type name and ID constants from DeliveryOptions; the defaults use SDK constants
+- compare package and delivery types as V2 values through ApiMapperService
+- deprecate allowedShippingMethodsKeys for migration use only
+- remove the guessed Order API fallbacks from DeliveryOptionsV1Resource
+- remove the separators in the FrontendDataAdapter carrier fallback
+- cache the capabilities key per shipment option
+- require SDK 11.0.0-beta.37
+
+BREAKING CHANGES: removes DeliveryOptions::DELIVERY_TYPE_*_ID, DELIVERY_TYPE_*_NAME and PACKAGE_TYPE_*_NAME
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+* style: INT-1564 - group the sdk imports in the tests
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+
+### :sparkles: New Features
+
+* resolve carrier, package type and delivery type mappings through the SDK ([#543](https://github.com/myparcelnl/pdk/issues/543)) ([a167629](https://github.com/myparcelnl/pdk/commit/a167629e3c1bc54ca71da500469fd7f7a4e46a8d))
+
 ## [4.9.4](https://github.com/myparcelnl/pdk/compare/v4.9.3...v4.9.4) (2026-10-02)
 
 ### :bug: Bug Fixes
