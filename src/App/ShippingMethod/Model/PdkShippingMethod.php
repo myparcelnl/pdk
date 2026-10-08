@@ -11,8 +11,8 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Collection\PackageTypeCollection;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * @property string                $id
@@ -99,7 +99,7 @@ class PdkShippingMethod extends Model
         $packageTypes = [];
 
         foreach ($matchedKeys as $matchedKey) {
-            $id = DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$matchedKey] ?? null;
+            $id = ApiMapperService::forPackageType()->idFromLegacyName($matchedKey);
 
             if (null !== $id) {
                 $packageTypes[] = ['name' => $matchedKey, 'id' => $id];
@@ -116,17 +116,18 @@ class PdkShippingMethod extends Model
      */
     private function getAllCarrierPackageTypes(): PackageTypeCollection
     {
-        $v2ToPdkMap = array_flip(DeliveryOptions::PACKAGE_TYPES_V2_MAP);
-        $types      = [];
+        $mapper = ApiMapperService::forPackageType();
+        $types  = [];
 
         foreach (Pdk::get(CarrierRepositoryInterface::class)->all() as $carrier) {
             foreach ($carrier->packageTypes ?? [] as $v2PackageType) {
-                $name = $v2ToPdkMap[$v2PackageType] ?? null;
+                $name = $mapper->legacyNameFromV2Name($v2PackageType);
+                $id   = $mapper->idFromV2Name($v2PackageType);
 
-                if ($name && ! isset($types[$name])) {
+                if (null !== $name && null !== $id && ! isset($types[$name])) {
                     $types[$name] = [
                         'name' => $name,
-                        'id'   => DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$name],
+                        'id'   => $id,
                     ];
                 }
             }

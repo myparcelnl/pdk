@@ -9,24 +9,27 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
 it('can create instance from pdk delivery options', function () {
     $deliveryOptions = factory(DeliveryOptions::class)
         ->withCarrier('POSTNL')
-        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
-        ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+        ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING)
+        ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         ->withAllShipmentOptions()
         ->make();
 
     $created = ShipmentOptions::fromPdkDeliveryOptions($deliveryOptions);
 
     expect($created->toArray())->toEqual([
-        'deliveryType'     => DeliveryOptions::DELIVERY_TYPE_MORNING_ID,
+        'deliveryType'     => RefTypesDeliveryType::MORNING,
         'packageType'      => RefShipmentPackageType::MAILBOX,
         'deliveryDate'     => null,
         'insurance'        => 100,

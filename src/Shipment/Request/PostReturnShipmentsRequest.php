@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 class PostReturnShipmentsRequest extends Request
 {
@@ -102,7 +103,7 @@ class PostReturnShipmentsRequest extends Request
 
             $shipment = $this->ensureReturnCapabilities($shipment, $recipient->cc);
 
-            $carrierId = Utils::convertToId($shipment->carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+            $carrierId = ApiMapperService::forCarrier()->idFromV2Name($shipment->carrier->carrier);
             if (! $carrierId) {
                 throw new \InvalidArgumentException(sprintf('Cannot encode return shipment: carrier %s is not mapped to an ID.', $shipment->carrier->carrier));
             }

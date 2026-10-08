@@ -11,17 +11,18 @@ use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 class WeightService implements WeightServiceInterface
 {
     private const PACKAGE_TYPE_EMPTY_WEIGHT_MAP = [
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME       => OrderSettings::EMPTY_PARCEL_WEIGHT,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_SMALL_NAME => OrderSettings::EMPTY_PACKAGE_SMALL_WEIGHT,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME       => OrderSettings::EMPTY_MAILBOX_WEIGHT,
-        DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME => OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
+        RefShipmentPackageTypeV2::PACKAGE       => OrderSettings::EMPTY_PARCEL_WEIGHT,
+        RefShipmentPackageTypeV2::SMALL_PACKAGE => OrderSettings::EMPTY_PACKAGE_SMALL_WEIGHT,
+        RefShipmentPackageTypeV2::MAILBOX       => OrderSettings::EMPTY_MAILBOX_WEIGHT,
+        RefShipmentPackageTypeV2::DIGITAL_STAMP => OrderSettings::EMPTY_DIGITAL_STAMP_WEIGHT,
     ];
 
     /**
@@ -78,7 +79,8 @@ class WeightService implements WeightServiceInterface
      */
     private function getEmptyWeightForPackageType(PackageType $packageType): int
     {
-        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$packageType->name] ?? null;
+        $v2PackageType      = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $packageType->name);
+        $emptyWeightSetting = self::PACKAGE_TYPE_EMPTY_WEIGHT_MAP[$v2PackageType] ?? null;
 
         if (! $emptyWeightSetting) {
             return 0;

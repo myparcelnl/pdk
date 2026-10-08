@@ -20,6 +20,8 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 use function DI\autowire;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -71,7 +73,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     ],
 
     'delivery type pickup' => [
-        'input'       => [DeliveryOptions::DELIVERY_TYPE => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME],
+        'input'       => [DeliveryOptions::DELIVERY_TYPE => ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP)],
         'expectation' => [
             [
                 'id'          => 'delivery_type_pickup',
@@ -82,7 +84,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     ],
 
     'delivery type evening' => [
-        'input'       => [DeliveryOptions::DELIVERY_TYPE => DeliveryOptions::DELIVERY_TYPE_EVENING_NAME],
+        'input'       => [DeliveryOptions::DELIVERY_TYPE => ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING],
         'expectation' => [
             [
                 'id'          => 'delivery_type_evening',
@@ -93,7 +95,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     ],
 
     'delivery type morning' => [
-        'input'       => [DeliveryOptions::DELIVERY_TYPE => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME],
+        'input'       => [DeliveryOptions::DELIVERY_TYPE => ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING],
         'expectation' => [
             [
                 'id'          => 'delivery_type_morning',
@@ -104,7 +106,7 @@ it('calculates fees based on delivery options', function (array $input, array $e
     ],
 
     'delivery type standard' => [
-        'input'       => [DeliveryOptions::DELIVERY_TYPE => DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME],
+        'input'       => [DeliveryOptions::DELIVERY_TYPE => ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD],
         'expectation' => [
             [
                 'id'          => 'delivery_type_standard',

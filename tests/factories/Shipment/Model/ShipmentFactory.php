@@ -18,6 +18,8 @@ use MyParcelNL\Pdk\Base\Model\CurrencyFactory;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Model\CarrierFactory;
 use MyParcelNL\Pdk\Tests\Factory\Model\AbstractModelFactory;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use function MyParcelNL\Pdk\Tests\factory;
 
 /**
@@ -68,7 +70,7 @@ final class ShipmentFactory extends AbstractModelFactory
         return $this->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withPickupLocation(factory(RetailLocation::class)->inEU())
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withDeliveryType(ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP))
         );
     }
 
@@ -80,7 +82,7 @@ final class ShipmentFactory extends AbstractModelFactory
         return $this->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withPickupLocation(factory(RetailLocation::class)->inTheNetherlands())
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withDeliveryType(ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP))
         );
     }
 

@@ -598,6 +598,28 @@
                         "deliveryType": "STANDARD_DELIVERY",
                         "packageType": "PACKAGE"
                     },
+                    "DHL_FREIGHT": {
+                        "labelAmount": 1,
+                        "shipmentOptions": {
+                            "requiresAgeVerification": 0,
+                            "returnOnFirstFailedDelivery": 0,
+                            "hideSender": 0,
+                            "insurance": 0,
+                            "oversizedPackage": 0,
+                            "recipientOnlyDelivery": 0,
+                            "priorityDelivery": 0,
+                            "sameDayDelivery": 0,
+                            "saturdayDelivery": 0,
+                            "requiresSignature": 0,
+                            "noTracking": 0,
+                            "requiresReceiptCode": 0,
+                            "scheduledCollection": 0,
+                            "freshFood": 0,
+                            "frozen": 0
+                        },
+                        "deliveryType": "STANDARD_DELIVERY",
+                        "packageType": "PACKAGE"
+                    },
                     "DHL_PARCEL_CONNECT": {
                         "labelAmount": 1,
                         "shipmentOptions": {
@@ -1138,6 +1160,28 @@
                         "packageType": "PACKAGE"
                     },
                     "DHL_FOR_YOU": {
+                        "labelAmount": 1,
+                        "shipmentOptions": {
+                            "requiresAgeVerification": 0,
+                            "returnOnFirstFailedDelivery": 0,
+                            "hideSender": 0,
+                            "insurance": 0,
+                            "oversizedPackage": 0,
+                            "recipientOnlyDelivery": 0,
+                            "priorityDelivery": 0,
+                            "sameDayDelivery": 0,
+                            "saturdayDelivery": 0,
+                            "requiresSignature": 0,
+                            "noTracking": 0,
+                            "requiresReceiptCode": 0,
+                            "scheduledCollection": 0,
+                            "freshFood": 0,
+                            "frozen": 0
+                        },
+                        "deliveryType": "EVENING_DELIVERY",
+                        "packageType": "PACKAGE"
+                    },
+                    "DHL_FREIGHT": {
                         "labelAmount": 1,
                         "shipmentOptions": {
                             "requiresAgeVerification": 0,

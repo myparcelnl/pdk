@@ -17,10 +17,10 @@ use MyParcelNL\Pdk\App\Options\Definition\NoTrackingDefinition;
 use MyParcelNL\Pdk\Base\Support\Arr;
 use MyParcelNL\Pdk\Facade\Actions;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use Symfony\Component\HttpFoundation\Request;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -73,7 +73,7 @@ it('saves settings', function (string $productId, array $settings, array $newSet
             (new NoTrackingDefinition())->getProductSettingsKey()       => TriStateService::ENABLED,
             ProductSettings::FIT_IN_DIGITAL_STAMP     => TriStateService::ENABLED,
             ProductSettings::FIT_IN_MAILBOX           => 10,
-            ProductSettings::PACKAGE_TYPE             => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            ProductSettings::PACKAGE_TYPE             => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
         ],
     ],
 ]);

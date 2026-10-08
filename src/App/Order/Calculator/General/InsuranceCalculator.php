@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -147,8 +148,8 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     {
         $deliveryOptions = $this->order->deliveryOptions;
         $cc              = $this->order->shippingAddress->cc;
-        $v2PackageType   = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$deliveryOptions->packageType] ?? null;
-        $v2DeliveryType  = DeliveryOptions::DELIVERY_TYPES_V2_MAP[$deliveryOptions->deliveryType] ?? null;
+        $v2PackageType   = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $deliveryOptions->packageType);
+        $v2DeliveryType  = ApiMapperService::forDeliveryType()->v2NameFromLegacyName((string) $deliveryOptions->deliveryType);
 
         if (! $v2PackageType) {
             return null;

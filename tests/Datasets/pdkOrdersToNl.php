@@ -14,6 +14,8 @@ use MyParcelNL\Pdk\Shipment\Model\ShipmentOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 use function MyParcelNL\Pdk\Tests\factory;
 
 dataset('pdk orders domestic', [
@@ -49,12 +51,12 @@ dataset('pdk orders domestic', [
                 ->withLines(factory(PdkOrderLineCollection::class, 1)->eachWith(['quantity' => 5]))
                 ->withDeliveryOptions([
                     'carrier'     => RefCapabilitiesSharedCarrierV2::POSTNL,
-                    'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                 ]),
             factory(PdkOrder::class)
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
-                        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                        ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
                         ->withDate('2077-10-23 09:47:51')
                         ->withShipmentOptions(
                             factory(ShipmentOptions::class)
@@ -85,7 +87,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER)
-                        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
+                        ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EXPRESS)
                 )
                 ->toBelgium()
         );
@@ -97,7 +99,7 @@ dataset('pdk orders domestic', [
                 ->withDeliveryOptions(
                     factory(DeliveryOptions::class)
                         ->withCarrier(RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER)
-                        ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EXPRESS_NAME)
+                        ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EXPRESS)
                 )
                 ->toTheNetherlands()
         );

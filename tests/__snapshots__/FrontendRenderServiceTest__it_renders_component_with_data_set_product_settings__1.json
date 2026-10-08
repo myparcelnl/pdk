@@ -90,12 +90,12 @@
                             "label": "package_type_digital_stamp"
                         },
                         {
-                            "value": "package_small",
-                            "label": "package_type_package_small"
-                        },
-                        {
                             "value": "pallet",
                             "label": "package_type_pallet"
+                        },
+                        {
+                            "value": "package_small",
+                            "label": "package_type_package_small"
                         },
                         {
                             "value": "envelope",

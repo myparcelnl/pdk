@@ -8,8 +8,7 @@ use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * Instantiate a Carrier model based on existing known data when passed an ID/Name, or creates a new Carrier model based on the data passed to the constructor.
@@ -42,169 +41,39 @@ class Carrier extends SdkBackedModel
     protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
 
     /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::POSTNL
-     */
-    public const CARRIER_POSTNL_LEGACY_NAME          = 'postnl';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::BPOST
-     */
-    public const CARRIER_BPOST_LEGACY_NAME           = 'bpost';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::CHEAP_CARGO
-     */
-    public const CARRIER_CHEAP_CARGO_LEGACY_NAME     = 'cheapcargo';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::DPD
-     */
-    public const CARRIER_DPD_LEGACY_NAME             = 'dpd';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU
-     */
-    public const CARRIER_DHL_FOR_YOU_LEGACY_NAME     = 'dhlforyou';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT
-     */
-    public const CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME = 'dhlparcelconnect';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS
-     */
-    public const CARRIER_DHL_EUROPLUS_LEGACY_NAME    = 'dhleuroplus';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::UPS_STANDARD
-     */
-    public const CARRIER_UPS_STANDARD_LEGACY_NAME = 'upsstandard';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER
-     */
-    public const CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME = 'upsexpresssaver';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::GLS
-     */
-    public const CARRIER_GLS_LEGACY_NAME       = 'gls';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::BRT
-     */
-    public const CARRIER_BRT_LEGACY_NAME       = 'brt';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::TRUNKRS
-     */
-    public const CARRIER_TRUNKRS_LEGACY_NAME   = 'trunkrs';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::INPOST
-     */
-    public const CARRIER_INPOST_LEGACY_NAME    = 'inpost';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE
-     */
-    public const CARRIER_POSTE_ITALIANE_LEGACY_NAME = 'posteitaliane';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::SPRING
-     */
-    public const CARRIER_SPRING_LEGACY_NAME    = 'spring';
-
-    /**
-     * @deprecated use RefCapabilitiesSharedCarrierV2::VIA_TIM
-     */
-    public const CARRIER_VIA_TIM_LEGACY_NAME   = 'viatim';
-
-    /**
-     * Legacy names as used by delivery options and internal storage.
+     * Whether the SDK can map a V2 carrier name to a v1 export ID.
      *
-     * @deprecated use new carrier names directly
-     */
-    public const CARRIER_NAME_TO_LEGACY_MAP = [
-        RefCapabilitiesSharedCarrierV2::BPOST              => self::CARRIER_BPOST_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::CHEAP_CARGO        => self::CARRIER_CHEAP_CARGO_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS       => self::CARRIER_DHL_EUROPLUS_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU        => self::CARRIER_DHL_FOR_YOU_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT => self::CARRIER_DHL_PARCEL_CONNECT_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::DPD                => self::CARRIER_DPD_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::POSTNL             => self::CARRIER_POSTNL_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::UPS_STANDARD       => self::CARRIER_UPS_STANDARD_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER  => self::CARRIER_UPS_EXPRESS_SAVER_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::GLS                => self::CARRIER_GLS_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::BRT                => self::CARRIER_BRT_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::TRUNKRS            => self::CARRIER_TRUNKRS_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::INPOST             => self::CARRIER_INPOST_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => self::CARRIER_POSTE_ITALIANE_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::SPRING             => self::CARRIER_SPRING_LEGACY_NAME,
-        RefCapabilitiesSharedCarrierV2::VIA_TIM            => self::CARRIER_VIA_TIM_LEGACY_NAME,
-    ];
-
-    /**
-     * Names to ids
-     * @deprecated use mapping functionality from the SDK when available (INT-1441)
-     */
-    public const CARRIER_NAME_ID_MAP = [
-        RefCapabilitiesSharedCarrierV2::BPOST              => RefTypesCarrier::BPOST,
-        RefCapabilitiesSharedCarrierV2::CHEAP_CARGO        => RefTypesCarrier::CHEAP_CARGO,
-        RefCapabilitiesSharedCarrierV2::DHL_EUROPLUS       => RefTypesCarrier::DHL_EUROPLUS,
-        RefCapabilitiesSharedCarrierV2::DHL_FOR_YOU        => RefTypesCarrier::DHL_FOR_YOU,
-        RefCapabilitiesSharedCarrierV2::DHL_PARCEL_CONNECT => RefTypesCarrier::DHL_PARCEL_CONNECT,
-        RefCapabilitiesSharedCarrierV2::DPD                => RefTypesCarrier::DPD,
-        RefCapabilitiesSharedCarrierV2::POSTNL             => RefTypesCarrier::POSTNL,
-        RefCapabilitiesSharedCarrierV2::GLS                => RefTypesCarrier::GLS,
-        RefCapabilitiesSharedCarrierV2::UPS_STANDARD       => RefTypesCarrier::UPS_STANDARD,
-        RefCapabilitiesSharedCarrierV2::UPS_EXPRESS_SAVER  => RefTypesCarrier::UPS_EXPRESS_SAVER,
-        RefCapabilitiesSharedCarrierV2::BRT                => RefTypesCarrier::BRT,
-        RefCapabilitiesSharedCarrierV2::TRUNKRS            => RefTypesCarrier::TRUNKRS,
-        RefCapabilitiesSharedCarrierV2::INPOST             => RefTypesCarrier::INPOST,
-        RefCapabilitiesSharedCarrierV2::POSTE_ITALIANE     => RefTypesCarrier::POSTE_ITALIANE,
-        RefCapabilitiesSharedCarrierV2::SPRING             => RefTypesCarrier::SPRING,
-        RefCapabilitiesSharedCarrierV2::VIA_TIM            => RefTypesCarrier::VIA_TIM,
-    ];
-
-    /**
-     * Whether a carrier name is supported by this PDK version.
-     *
-     * Carriers absent from this set are filtered out at the boundary
+     * Carriers without an ID are filtered out at the boundary
      * ({@see \MyParcelNL\Pdk\Account\Service\AccountSettingsService::getCarriers},
      * {@see \MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction}'s response)
      * so a server-side proposition update introducing a new carrier cannot expose
      * it to admin or checkout, which would otherwise lead to encode-side throws
-     * during export.
+     * during export. A new carrier becomes supported with an SDK update.
      *
-     * Currently backed by {@see self::CARRIER_NAME_ID_MAP}; switch to an
-     * SDK-provided definition when INT-1441 lands so call sites stay unchanged.
+     * @param  string $carrierName
+     *
+     * @return bool
      */
     public static function isSupported(string $carrierName): bool
     {
-        return array_key_exists($carrierName, self::CARRIER_NAME_ID_MAP);
+        return null !== ApiMapperService::forCarrier()->idFromV2Name($carrierName);
     }
 
     /**
      * Translate a numeric carrier id (as exposed by external APIs in legacy CoreAPI shape)
-     * to its V2 carrier name (e.g. 1 → "POSTNL", 15 → "BRT"). Returns null when the id is
-     * not in the local id↔name mapping — typically a carrier that exists in the API enum
-     * but is not yet known to this PDK version.
+     * to its V2 carrier name (e.g. 1 → "POSTNL", 15 → "BRT"). Returns null when the SDK
+     * has no V2 name for the id.
      *
-     * Pure static-map lookup with no shop/repository dependency, so it is safe to call
+     * Pure SDK lookup with no shop/repository dependency, so it is safe to call
      * before any carrier collection has been resolved or persisted.
-     *
-     * Currently backed by {@see self::CARRIER_NAME_ID_MAP}; switch to an
-     * SDK-provided definition when INT-1441 lands so call sites stay unchanged.
      *
      * @param  int $id Numeric carrier id from a legacy CoreAPI payload.
      *
-     * @return null|string V2 carrier name, or null when the id is not in the local mapping.
+     * @return null|string V2 carrier name, or null when the SDK has no V2 name for the id.
      */
     public static function v2NameFromLegacyId(int $id): ?string
     {
-        return array_search($id, self::CARRIER_NAME_ID_MAP, true) ?: null;
+        return ApiMapperService::forCarrier()->v2NameFromId($id);
     }
 
     /**

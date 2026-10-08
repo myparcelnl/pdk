@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * Applies requires/excludes/isRequired from the capabilities API response to shipment options.
@@ -95,8 +96,8 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         $deliveryOptions = $this->order->deliveryOptions;
         $carrierName     = $deliveryOptions->carrier->carrier;
         $cc              = $this->order->shippingAddress->cc;
-        $v2PackageType   = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$deliveryOptions->packageType] ?? null;
-        $v2DeliveryType  = DeliveryOptions::DELIVERY_TYPES_V2_MAP[$deliveryOptions->deliveryType] ?? null;
+        $v2PackageType   = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $deliveryOptions->packageType);
+        $v2DeliveryType  = ApiMapperService::forDeliveryType()->v2NameFromLegacyName((string) $deliveryOptions->deliveryType);
 
         if (! $cc || ! $v2PackageType) {
             return null;

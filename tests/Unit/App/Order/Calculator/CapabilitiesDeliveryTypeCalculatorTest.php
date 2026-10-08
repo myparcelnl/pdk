@@ -24,6 +24,9 @@ use MyParcelNL\Pdk\Tests\Uses\UsesSdkApiMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -79,8 +82,8 @@ it('keeps delivery type when it is supported by the carrier capability', functio
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING)
         )
         ->make();
 
@@ -88,7 +91,7 @@ it('keeps delivery type when it is supported by the carrier capability', functio
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->deliveryType)->toBe(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME);
+    expect($newOrder->deliveryOptions->deliveryType)->toBe(ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING);
 
     $reset();
 });
@@ -121,8 +124,8 @@ it('resets to standard when current delivery type is not supported', function ()
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
         )
         ->make();
 
@@ -130,7 +133,7 @@ it('resets to standard when current delivery type is not supported', function ()
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->deliveryType)->toBe(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME);
+    expect($newOrder->deliveryOptions->deliveryType)->toBe(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD);
 
     $reset();
 });
@@ -163,8 +166,8 @@ it('falls back to first available type when standard is not supported', function
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
         )
         ->make();
 
@@ -172,7 +175,7 @@ it('falls back to first available type when standard is not supported', function
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->deliveryType)->toBe(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME);
+    expect($newOrder->deliveryOptions->deliveryType)->toBe(ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP));
 
     $reset();
 });
@@ -203,8 +206,8 @@ it('resets to standard when carrier capability is missing entirely', function ()
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier($carrier)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
         )
         ->make();
 
@@ -212,7 +215,7 @@ it('resets to standard when carrier capability is missing entirely', function ()
     $service  = Pdk::get(PdkOrderOptionsServiceInterface::class);
     $newOrder = $service->calculate($order);
 
-    expect($newOrder->deliveryOptions->deliveryType)->toBe(DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME);
+    expect($newOrder->deliveryOptions->deliveryType)->toBe(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD);
 
     $reset();
 });

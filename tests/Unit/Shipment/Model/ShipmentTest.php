@@ -10,13 +10,14 @@ use MyParcelNL\Pdk\Base\Model\Address;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Shipment\Concern\EncodesRecipient;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
-use function MyParcelNL\Pdk\Tests\factory;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use RuntimeException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use function MyParcelNL\Pdk\Tests\usesShared;
+use function MyParcelNL\Pdk\Tests\factory;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -43,7 +44,7 @@ it('passes carrier to delivery options', function (string $carrierName) {
     $shipment = new Shipment([
         'carrier'         => $carrier,
         'deliveryOptions' => new DeliveryOptions([
-            'deliveryType'    => DeliveryOptions::DELIVERY_TYPE_MORNING_NAME,
+            'deliveryType'    => ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING,
             'shipmentOptions' => [
                 'signature' => true,
             ],
