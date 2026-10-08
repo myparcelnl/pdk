@@ -193,6 +193,39 @@ it('returns a link instead of pdf data when the bulk labels endpoint is used', f
         ->toBe(['url' => 'API/pdfs/label_hash', 'labelId' => 'label_hash']);
 });
 
+it('returns pdf data when one shipment less than the bulk labels threshold is printed', function () {
+    $shipments = array_map(static function (int $id) {
+        return factory(Shipment::class)->withId($id);
+    }, range(40001, 40024));
+
+    factory(PdkOrder::class)
+        ->withExternalIdentifier('300')
+        ->withShipments(factory(ShipmentCollection::class)->push(...$shipments))
+        ->store();
+
+    factory(LabelSettings::class)
+        ->withOutput(LabelSettings::OUTPUT_OPEN)
+        ->store();
+
+    MockApi::enqueue(new ExampleGetShipmentLabelsPdfResponse());
+
+    $response = Actions::execute(PdkBackendActions::PRINT_ORDERS, [
+        'orderIds' => ['300'],
+    ]);
+
+    $content = json_decode($response->getContent(), true);
+    $uri     = Pdk::get(MockApiService::class)
+        ->ensureLastRequest()
+        ->getUri();
+
+    expect($uri->getPath())
+        ->toStartWith('API/shipment_labels/40001;')
+        ->and(array_keys($content['data']['pdfs']))
+        ->toBe(['data'])
+        ->and(base64_decode($content['data']['pdfs']['data']))
+        ->toStartWith('%PDF-');
+});
+
 it('returns the label id with the link so the frontend can poll for the pdf', function () {
     factory(LabelSettings::class)
         ->withOutput(LabelSettings::OUTPUT_DOWNLOAD)
