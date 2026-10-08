@@ -33,7 +33,7 @@ interface CartCalculationServiceInterface
     public function getCartPackageTypes(PdkCart $cart): array;
 
     /**
-     * Calculate the total cart weight including empty package weight for the given package type.
+     * Get the weight of the deliverable lines in grams, plus the empty package weight of the package type.
      *
      * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
      * @param  string                                  $packageTypeName

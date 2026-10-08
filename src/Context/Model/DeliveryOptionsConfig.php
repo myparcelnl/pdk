@@ -6,6 +6,7 @@ namespace MyParcelNL\Pdk\Context\Model;
 
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
+use MyParcelNL\Pdk\App\Cart\Contract\CartCalculationServiceInterface;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
 use MyParcelNL\Pdk\Base\Model\Model;
@@ -23,6 +24,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
  * @property string $currency
  * @property string $locale
  * @property string $packageType
+ * @property null|array $physicalProperties
  * @property string $pickupLocationsDefaultView
  * @property bool   $allowPickupLocationsViewSelection
  * @property string $platform
@@ -42,6 +44,7 @@ class DeliveryOptionsConfig extends Model
         'currency'                       => 'EUR',
         'locale'                         => null,
         'packageType'                    => DeliveryOptions::DEFAULT_PACKAGE_TYPE_NAME,
+        'physicalProperties'             => null,
         'pickupLocationsDefaultView'     => null,
         'allowPickupLocationsViewSelection' => true,
         'platform'                          => null,
@@ -60,6 +63,7 @@ class DeliveryOptionsConfig extends Model
         'currency'                          => 'string',
         'locale'                            => 'string',
         'packageType'                       => 'string',
+        'physicalProperties'                => 'array',
         'pickupLocationsDefaultView'        => 'string',
         'allowPickupLocationsViewSelection' => 'boolean',
         'platform'                          => 'string',
@@ -117,6 +121,15 @@ class DeliveryOptionsConfig extends Model
         $service = Pdk::get(DeliveryOptionsServiceInterface::class);
 
         $config = new self($service->createAllCarrierSettings($cart));
+
+        // The empty package weight alone is not a cart weight.
+        if ($cart->shippingMethod->hasDeliveryOptions && $cart->lines->onlyDeliverable()->getTotalWeight() > 0) {
+            // The delivery options widget takes the weight in grams, without a unit.
+            $config->physicalProperties = [
+                'weight' => Pdk::get(CartCalculationServiceInterface::class)
+                    ->getCartWeightForPackageType($cart, $config->packageType),
+            ];
+        }
 
         // Override excludeParcelLockers based on cart calculation
         if (isset($cart->shippingMethod->excludeParcelLockers)) {

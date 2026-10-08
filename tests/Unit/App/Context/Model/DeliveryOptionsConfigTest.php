@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Facade\Settings;
 use MyParcelNL\Pdk\Proposition\Proposition;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
+use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkProductRepository;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
@@ -60,6 +61,7 @@ it('can be instantiated', function () {
             'currency'                          => 'EUR',
             'locale'                            => 'nl-NL',
             'packageType'                       => 'package',
+            'physicalProperties'                => null,
             'pickupLocationsDefaultView'        => $pickupLocationsDefaultView,
             'allowPickupLocationsViewSelection' => $allowPickupLocationsViewSelection,
             'platform'                          => Proposition::PLATFORM_NAME_MYPARCEL,
@@ -271,4 +273,25 @@ it('returns AccountDefsPlatformName platform name for myparcel', function () {
 
     expect($config->platform)->toBe(AccountDefsPlatformName::MYPARCEL)
         ->and($config->proposition)->toBe(Proposition::MYPARCEL_NAME);
+});
+
+
+it('sends the known cart weight as physicalProperties', function (array $lines, ?array $expected) {
+    TestBootstrapper::hasAccount();
+    factory(OrderSettings::class)->withEmptyParcelWeight(250)->store();
+
+    $config = DeliveryOptionsConfig::fromCart(new PdkCart(['lines' => $lines]));
+
+    expect($config->physicalProperties)->toBe($expected);
+})->with(function () {
+    $line = static function (?int $weight, int $quantity = 1, bool $deliverable = true): array {
+        return ['quantity' => $quantity, 'product' => ['weight' => $weight, 'isDeliverable' => $deliverable]];
+    };
+
+    return [
+        'known weight'                      => [[$line(10000, 3)], ['weight' => 30250]],
+        'partly known weight'               => [[$line(10000), $line(null)], ['weight' => 10250]],
+        'no line has a weight'              => [[$line(null), $line(0)], null],
+        'only non-deliverable lines'        => [[$line(1000, 1, false)], null],
+    ];
 });
