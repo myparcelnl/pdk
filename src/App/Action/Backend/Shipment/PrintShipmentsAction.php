@@ -69,8 +69,7 @@ class PrintShipmentsAction extends AbstractOrderAction
 
         switch ($output) {
             case LabelSettings::OUTPUT_OPEN:
-                // The bulk labels endpoint only returns a link, not the pdf itself.
-                if ($shipments->count() >= GetLabelsRequest::LIMIT_TO_USE_V2) {
+                if (GetLabelsRequest::usesV2($shipments)) {
                     return $this->getUrlToPdf($shipments, $format, $positions);
                 }
 
