@@ -48,6 +48,22 @@ it('instantiates shipments', function (array $input) {
     ],
 ]);
 
+it('re-indexes shipments so they serialize as a list', function ($shipments) {
+    $order = new PdkOrder(['shipments' => $shipments]);
+
+    expect($order->shipments->keys()->all())
+        ->toBe([0, 1])
+        ->and(json_encode($order->toArray()['shipments']))
+        ->toStartWith('[');
+})->with([
+    'array with gaps'      => [[1 => ['id' => 1], 3 => ['id' => 2]]],
+    'collection with gaps' => [
+        function () {
+            return new ShipmentCollection([1 => ['id' => 1], 3 => ['id' => 2]]);
+        },
+    ],
+]);
+
 it('calculates correct totals', function (array $input, array $totals) {
     $order = new PdkOrder($input);
 
