@@ -10,6 +10,16 @@
         "baseUrl": "BACKEND_URL",
         "bootstrapId": "myparcel-pdk-boot",
         "endpoints": {
+            "fetchContext": {
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchContext"
+                },
+                "path": "",
+                "property": "context",
+                "useDataEnvelope": true
+            },
             "deleteAccount": {
                 "headers": [],
                 "method": "POST",
@@ -141,6 +151,16 @@
                 "property": "pdfs",
                 "useDataEnvelope": true
             },
+            "fetchLabelPdf": {
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchLabelPdf"
+                },
+                "path": "",
+                "property": "pdfs",
+                "useDataEnvelope": true
+            },
             "updatePluginSettings": {
                 "headers": [],
                 "method": "PUT",
@@ -232,16 +252,6 @@
                     "action": "switchToProductionApi"
                 },
                 "path": "",
-                "useDataEnvelope": true
-            },
-            "fetchContext": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "fetchContext"
-                },
-                "path": "",
-                "property": "context",
                 "useDataEnvelope": true
             },
             "proxyCapabilities": {

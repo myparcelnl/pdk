@@ -29,6 +29,14 @@ class GetLabelsRequest extends Request
     }
 
     /**
+     * The v2 (bulk) endpoint returns a link to a pdf that is prepared later, never the pdf itself.
+     */
+    public static function usesV2(ShipmentCollection $collection): bool
+    {
+        return $collection->count() >= self::LIMIT_TO_USE_V2;
+    }
+
+    /**
      * @return array
      */
     public function getHeaders(): array
@@ -41,9 +49,8 @@ class GetLabelsRequest extends Request
      */
     public function getPath(): string
     {
-        $usesV2Endpoint = $this->hasBulkPrepare();
-        $path           = $usesV2Endpoint ? self::PATH_V2 : self::PATH;
-        $ids            = $this->collection
+        $path = self::usesV2($this->collection) ? self::PATH_V2 : self::PATH;
+        $ids  = $this->collection
             ->pluck('id')
             ->all();
 
@@ -59,14 +66,6 @@ class GetLabelsRequest extends Request
         $parameters['positions'] = implode(';', $parameters['positions'] ?? []);
 
         return array_filter($parameters);
-    }
-
-    /**
-     * @return bool
-     */
-    private function hasBulkPrepare(): bool
-    {
-        return $this->collection->count() >= self::LIMIT_TO_USE_V2;
     }
 }
 

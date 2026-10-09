@@ -81,6 +81,16 @@
                 "property": "orderNotes",
                 "useDataEnvelope": true
             },
+            "fetchLabelPdf": {
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchLabelPdf"
+                },
+                "path": "",
+                "property": "pdfs",
+                "useDataEnvelope": true
+            },
             "fetchOrders": {
                 "headers": [],
                 "method": "GET",

@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Repository\ShipmentRepository;
+use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -68,6 +69,10 @@ class PrintShipmentsAction extends AbstractOrderAction
 
         switch ($output) {
             case LabelSettings::OUTPUT_OPEN:
+                if (GetLabelsRequest::usesV2($shipments)) {
+                    return $this->getUrlToPdf($shipments, $format, $positions);
+                }
+
                 return $this->getPdf($shipments, $format, $positions);
 
             case LabelSettings::OUTPUT_DOWNLOAD:
@@ -105,9 +110,12 @@ class PrintShipmentsAction extends AbstractOrderAction
      */
     protected function getUrlToPdf(ShipmentCollection $shipments, string $format, array $position): Response
     {
+        $url = $this->shipmentRepository->fetchLabelLink($shipments, $format, $position);
+
         return new JsonResponse([
             'pdfs' => [
-                'url' => $this->shipmentRepository->fetchLabelLink($shipments, $format, $position),
+                'url'     => $url,
+                'labelId' => basename($url),
             ],
         ]);
     }
