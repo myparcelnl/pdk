@@ -25,6 +25,7 @@
                 "customsCode": -1,
                 "disableDeliveryOptions": -1,
                 "dropOffDelay": -1,
+                "externalProductReference": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -47,6 +48,7 @@
                 "customsCode": -1,
                 "disableDeliveryOptions": -1,
                 "dropOffDelay": -1,
+                "externalProductReference": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -77,6 +79,7 @@
                 "customsCode": -1,
                 "disableDeliveryOptions": -1,
                 "dropOffDelay": -1,
+                "externalProductReference": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -99,6 +102,7 @@
                 "customsCode": -1,
                 "disableDeliveryOptions": -1,
                 "dropOffDelay": -1,
+                "externalProductReference": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1

@@ -26,6 +26,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptio
  * @method $this withExportOnlyRecipient(int $exportOnlyRecipient)
  * @method $this withExportReturn(int $exportReturn)
  * @method $this withExportSignature(int $exportSignature)
+ * @method $this withExternalProductReference(string $externalProductReference)
  * @method $this withFitInMailbox(int $fitInMailbox)
  * @method $this withPackageType(string $packageType)
  */

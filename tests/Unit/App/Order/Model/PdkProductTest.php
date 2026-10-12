@@ -107,6 +107,18 @@ it('calculates other options for child products', function (string $key, $input,
         'output' => 'b',
     ],
 
+    'external product reference: a, b, _ -> b' => [
+        'key'    => 'externalProductReference',
+        'input'  => ['a', 'b', -1],
+        'output' => 'b',
+    ],
+
+    'external product reference: _, a, b -> b' => [
+        'key'    => 'externalProductReference',
+        'input'  => [-1, 'a', 'b'],
+        'output' => 'b',
+    ],
+
     'package type: package, mailbox, _ -> mailbox' => [
         'key'    => 'packageType',
         'input'  => ['package', 'mailbox', '-1'],

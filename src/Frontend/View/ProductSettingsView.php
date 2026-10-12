@@ -84,6 +84,11 @@ class ProductSettingsView extends AbstractSettingsView
                 Components::INPUT_TEXT,
                 ['$attributes' => ['maxlength' => Pdk::get('customsCodeMaxLength')]]
             ),
+            new InteractiveElement(
+                ProductSettings::EXTERNAL_PRODUCT_REFERENCE,
+                Components::INPUT_TEXT,
+                ['$attributes' => ['maxlength' => Pdk::get('externalProductReferenceMaxLength')]]
+            ),
 
             /**
              * Export options — dynamically built from definitions that have both
