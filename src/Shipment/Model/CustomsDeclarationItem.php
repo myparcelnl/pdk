@@ -19,30 +19,33 @@ use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
  * @property null|string                         $classification
  * @property null|string                         $country
  * @property null|string                         $description
+ * @property null|string                         $externalProductReference
  * @property \MyParcelNL\Pdk\Base\Model\Currency $itemValue
  * @property int                                 $weight
  */
 class CustomsDeclarationItem extends Model
 {
     protected $attributes = [
-        'amount'         => 1,
-        'classification' => null,
-        'country'        => null,
-        'description'    => null,
+        'amount'                   => 1,
+        'classification'           => null,
+        'country'                  => null,
+        'description'              => null,
+        'externalProductReference' => null,
         /**
          * This value must always be at least 100 cents (1 EUR).
          */
-        'itemValue'      => Currency::class,
-        'weight'         => 0,
+        'itemValue'                => Currency::class,
+        'weight'                   => 0,
     ];
 
     protected $casts      = [
-        'amount'         => 'int',
-        'classification' => 'string',
-        'country'        => 'string',
-        'description'    => 'string',
-        'itemValue'      => Currency::class,
-        'weight'         => 'int',
+        'amount'                   => 'int',
+        'classification'           => 'string',
+        'country'                  => 'string',
+        'description'              => 'string',
+        'externalProductReference' => 'string',
+        'itemValue'                => Currency::class,
+        'weight'                   => 'int',
     ];
 
     /**
@@ -66,14 +69,18 @@ class CustomsDeclarationItem extends Model
             self::getLocalCountry()
         );
 
+        // resolveString() returns '' when nothing is set; the API must not get an empty reference.
+        $externalProductReference = $triStateService->resolveString($productSettings->externalProductReference) ?: null;
+
         return new static(
             Utils::filterNull([
-                'amount'         => $orderLine->quantity,
-                'classification' => $classification,
-                'country'        => $country,
-                'description'    => $orderLine->product->name,
-                'weight'         => $orderLine->product->weight,
-                'itemValue'      => [
+                'amount'                   => $orderLine->quantity,
+                'classification'           => $classification,
+                'country'                  => $country,
+                'description'              => $orderLine->product->name,
+                'externalProductReference' => $externalProductReference,
+                'weight'                   => $orderLine->product->weight,
+                'itemValue'                => [
                     'amount'   => $orderLine->product->price->amount,
                     'currency' => $orderLine->product->price->currency,
                 ],
