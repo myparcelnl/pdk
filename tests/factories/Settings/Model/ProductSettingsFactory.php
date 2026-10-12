@@ -55,6 +55,7 @@ final class ProductSettingsFactory extends AbstractSettingsModelFactory
             ->withExportOnlyRecipient(TriStateService::ENABLED)
             ->withExportReturn(TriStateService::ENABLED)
             ->withExportSignature(TriStateService::ENABLED)
+            ->withExternalProductReference('catalog_item_abc123def456g')
             ->withFitInMailbox(0)
             ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
     }
