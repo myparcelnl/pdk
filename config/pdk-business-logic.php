@@ -46,6 +46,7 @@ return [
     'customsCodeMaxLength'              => value(10),
     'dropOffDelayMaximum'               => value(14),
     'dropOffDelayMinimum'               => value(-1),
+    // maxLength of external_product_reference in the core-api customs_declaration_item schema (SB-3454).
     'externalProductReferenceMaxLength' => value(64),
     'numberSuffixMaxLength'             => value(6),
     'minimumWeight'                     => value(1),
