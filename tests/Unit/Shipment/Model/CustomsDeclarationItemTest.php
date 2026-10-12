@@ -73,6 +73,38 @@ it('creates customs declaration item from pdk product', function (PdkOrderLineFa
         ],
     ],
 
+    'child product inherits customs options from parent' => [
+        function () {
+            return factory(PdkOrderLine::class)->withProduct(
+                factory(PdkProduct::class)
+                    ->withSettings(
+                        factory(ProductSettings::class)
+                            ->withCustomsCode(-1)
+                            ->withCountryOfOrigin(-1)
+                    )
+                    ->withParent(
+                        factory(PdkProduct::class)->withSettings(
+                            factory(ProductSettings::class)
+                                ->withCustomsCode('1234')
+                                ->withCountryOfOrigin(CountryCodes::CC_NL)
+                        )
+                    )
+            );
+        },
+
+        'output' => [
+            'amount'         => 1,
+            'classification' => '1234',
+            'country'        => CountryCodes::CC_NL,
+            'description'    => 'test',
+            'itemValue'      => [
+                'amount'   => 1000,
+                'currency' => 'EUR',
+            ],
+            'weight'         => 0,
+        ],
+    ],
+
     'line with quantity 3' => [
         function () {
             return factory(PdkOrderLine::class)
