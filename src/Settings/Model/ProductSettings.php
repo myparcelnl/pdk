@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property int<-1>|string $customsCode
  * @property int<-1|0|1>    $disableDeliveryOptions
  * @property int            $dropOffDelay
+ * @property int<-1>|string $externalProductReference
  * @property int<-1|0|1>    $exportAgeCheck
  * @property int<-1|0|1>    $exportHideSender
  * @property int<-1|0|1>    $exportInsurance
@@ -31,39 +32,42 @@ class ProductSettings extends AbstractSettingsModel
 {
     use ResolvesOptionAttributes;
 
-    public const ID                       = 'product';
-    public const COUNTRY_OF_ORIGIN        = 'countryOfOrigin';
-    public const COUNTRY_OF_ORIGIN_NONE   = 'none';
-    public const CUSTOMS_CODE             = 'customsCode';
-    public const DISABLE_DELIVERY_OPTIONS = 'disableDeliveryOptions';
-    public const DROP_OFF_DELAY           = 'dropOffDelay';
-    public const FIT_IN_DIGITAL_STAMP   = 'fitInDigitalStamp';
-    public const FIT_IN_MAILBOX         = 'fitInMailbox';
-    public const PACKAGE_TYPE           = 'packageType';
-    public const EXCLUDE_PARCEL_LOCKERS = 'excludeParcelLockers';
+    public const ID                         = 'product';
+    public const COUNTRY_OF_ORIGIN          = 'countryOfOrigin';
+    public const COUNTRY_OF_ORIGIN_NONE     = 'none';
+    public const CUSTOMS_CODE               = 'customsCode';
+    public const DISABLE_DELIVERY_OPTIONS   = 'disableDeliveryOptions';
+    public const DROP_OFF_DELAY             = 'dropOffDelay';
+    public const EXTERNAL_PRODUCT_REFERENCE = 'externalProductReference';
+    public const FIT_IN_DIGITAL_STAMP       = 'fitInDigitalStamp';
+    public const FIT_IN_MAILBOX             = 'fitInMailbox';
+    public const PACKAGE_TYPE               = 'packageType';
+    public const EXCLUDE_PARCEL_LOCKERS     = 'excludeParcelLockers';
 
     protected $attributes = [
         'id' => self::ID,
 
-        self::COUNTRY_OF_ORIGIN        => TriStateService::INHERIT,
-        self::CUSTOMS_CODE             => TriStateService::INHERIT,
-        self::DISABLE_DELIVERY_OPTIONS => TriStateService::INHERIT,
-        self::DROP_OFF_DELAY           => TriStateService::INHERIT,
-        self::FIT_IN_DIGITAL_STAMP     => TriStateService::INHERIT,
-        self::FIT_IN_MAILBOX           => TriStateService::INHERIT,
-        self::PACKAGE_TYPE             => TriStateService::INHERIT,
-        self::EXCLUDE_PARCEL_LOCKERS   => TriStateService::INHERIT,
+        self::COUNTRY_OF_ORIGIN          => TriStateService::INHERIT,
+        self::CUSTOMS_CODE               => TriStateService::INHERIT,
+        self::DISABLE_DELIVERY_OPTIONS   => TriStateService::INHERIT,
+        self::DROP_OFF_DELAY             => TriStateService::INHERIT,
+        self::EXTERNAL_PRODUCT_REFERENCE => TriStateService::INHERIT,
+        self::FIT_IN_DIGITAL_STAMP       => TriStateService::INHERIT,
+        self::FIT_IN_MAILBOX             => TriStateService::INHERIT,
+        self::PACKAGE_TYPE               => TriStateService::INHERIT,
+        self::EXCLUDE_PARCEL_LOCKERS     => TriStateService::INHERIT,
     ];
 
     protected $casts = [
-        self::COUNTRY_OF_ORIGIN        => TriStateService::TYPE_COERCED,
-        self::CUSTOMS_CODE             => TriStateService::TYPE_COERCED,
-        self::DISABLE_DELIVERY_OPTIONS => TriStateService::TYPE_STRICT,
-        self::DROP_OFF_DELAY           => 'int',
-        self::FIT_IN_DIGITAL_STAMP     => 'int',
-        self::FIT_IN_MAILBOX           => 'int',
-        self::PACKAGE_TYPE             => TriStateService::TYPE_COERCED,
-        self::EXCLUDE_PARCEL_LOCKERS   => TriStateService::TYPE_STRICT,
+        self::COUNTRY_OF_ORIGIN          => TriStateService::TYPE_COERCED,
+        self::CUSTOMS_CODE               => TriStateService::TYPE_COERCED,
+        self::DISABLE_DELIVERY_OPTIONS   => TriStateService::TYPE_STRICT,
+        self::DROP_OFF_DELAY             => 'int',
+        self::EXTERNAL_PRODUCT_REFERENCE => TriStateService::TYPE_COERCED,
+        self::FIT_IN_DIGITAL_STAMP       => 'int',
+        self::FIT_IN_MAILBOX             => 'int',
+        self::PACKAGE_TYPE               => TriStateService::TYPE_COERCED,
+        self::EXCLUDE_PARCEL_LOCKERS     => TriStateService::TYPE_STRICT,
     ];
 
     /**

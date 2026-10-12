@@ -43,11 +43,12 @@ return [
      */
 
     // Shipments
-    'customsCodeMaxLength'      => value(10),
-    'dropOffDelayMaximum'       => value(14),
-    'dropOffDelayMinimum'       => value(-1),
-    'numberSuffixMaxLength'     => value(6),
-    'minimumWeight'             => value(1),
+    'customsCodeMaxLength'              => value(10),
+    'dropOffDelayMaximum'               => value(14),
+    'dropOffDelayMinimum'               => value(-1),
+    'externalProductReferenceMaxLength' => value(64),
+    'numberSuffixMaxLength'             => value(6),
+    'minimumWeight'                     => value(1),
 
     // Delivery options
     'deliveryDaysWindowMin'     => value(0),

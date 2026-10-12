@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Shipment\Model;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrderLineFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
+use MyParcelNL\Pdk\App\Order\Model\PdkProductFactory;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Settings\Model\CustomsSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
@@ -127,5 +128,66 @@ it('creates customs declaration item from pdk product', function (PdkOrderLineFa
             ],
             'weight'         => 100,
         ],
+    ],
+]);
+
+it('takes the external product reference from the product settings', function (PdkProductFactory $product, ?string $expected) {
+    $item = CustomsDeclarationItem::fromOrderLine(
+        factory(PdkOrderLine::class)
+            ->withProduct($product)
+            ->make()
+    );
+
+    expect($item->externalProductReference)->toBe($expected);
+})->with([
+    'own value' => [
+        function () {
+            return factory(PdkProduct::class)->withSettings(
+                factory(ProductSettings::class)->withExternalProductReference('catalog_item_abc123def456g')
+            );
+        },
+        'catalog_item_abc123def456g',
+    ],
+
+    'no value' => [
+        function () {
+            return factory(PdkProduct::class);
+        },
+        null,
+    ],
+
+    'empty value' => [
+        function () {
+            return factory(PdkProduct::class)->withSettings(
+                factory(ProductSettings::class)->withExternalProductReference('')
+            );
+        },
+        null,
+    ],
+
+    'child inherits value from parent' => [
+        function () {
+            return factory(PdkProduct::class)
+                ->withSettings(factory(ProductSettings::class)->withExternalProductReference(-1))
+                ->withParent(
+                    factory(PdkProduct::class)->withSettings(
+                        factory(ProductSettings::class)->withExternalProductReference('catalog_item_parent00000')
+                    )
+                );
+        },
+        'catalog_item_parent00000',
+    ],
+
+    'child value overrides parent' => [
+        function () {
+            return factory(PdkProduct::class)
+                ->withSettings(factory(ProductSettings::class)->withExternalProductReference('catalog_item_child000000'))
+                ->withParent(
+                    factory(PdkProduct::class)->withSettings(
+                        factory(ProductSettings::class)->withExternalProductReference('catalog_item_parent00000')
+                    )
+                );
+        },
+        'catalog_item_child000000',
     ],
 ]);
