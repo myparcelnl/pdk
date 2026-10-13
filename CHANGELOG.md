@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/myparcelnl/pdk/compare/v5.0.1...v5.0.2) (2026-10-13)
+
+### :bug: Bug Fixes
+
+* **shipment:** store and load order shipments as a list ([#556](https://github.com/myparcelnl/pdk/issues/556)) ([669e243](https://github.com/myparcelnl/pdk/commit/669e243f2553708620104bd18666794f6c7af990))
+
 ## [5.0.1](https://github.com/myparcelnl/pdk/compare/v5.0.0...v5.0.1) (2026-10-08)
 
 ## [5.0.0](https://github.com/myparcelnl/pdk/compare/v4.9.4...v5.0.0) (2026-10-08)
