@@ -62,4 +62,14 @@ interface OrderOptionDefinitionInterface
      * @return mixed
      */
     public function getShipmentOptionsDefault();
+
+    /**
+     * Whether the given shipment options value switches this option on. Use it to decide if the
+     * requires and excludes of this option apply.
+     *
+     * @param  mixed $value
+     *
+     * @return bool
+     */
+    public function isEnabled($value): bool;
 }

@@ -197,7 +197,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
             $currentValue = $this->order->deliveryOptions->shipmentOptions->getAttribute($shipmentKey);
 
-            if ($currentValue !== TriStateService::ENABLED) {
+            if (! $definition->isEnabled($currentValue)) {
                 continue;
             }
 
