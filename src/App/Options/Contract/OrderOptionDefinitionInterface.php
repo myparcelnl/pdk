@@ -72,4 +72,14 @@ interface OrderOptionDefinitionInterface
      * @return bool
      */
     public function isEnabled($value): bool;
+
+    /**
+     * The shipment options value that switches this option on. Use it when the capabilities make the
+     * option required, or when another option requires it.
+     *
+     * @param  mixed $capabilityOption The option from the capabilities response, if there is one.
+     *
+     * @return int
+     */
+    public function getEnabledValue($capabilityOption): int;
 }

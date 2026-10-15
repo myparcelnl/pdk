@@ -102,8 +102,6 @@ return [
             // Exception: null delivery date for carriers that don't support it (API doesn't implement this yet).
             DeliveryDateExceptionCalculator::class,
             LabelDescriptionCalculator::class,
-            // Again: capabilities can force insurance to ENABLED (isRequired, or required by another option).
-            InsuranceCalculator::class,
             WeightCalculator::class,
             CustomerInformationCalculator::class,
             CustomsDeclarationCalculator::class,
