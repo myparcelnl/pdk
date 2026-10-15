@@ -53,7 +53,7 @@ class CustomsDeclarationItem extends Model
     public static function fromOrderLine(PdkOrderLine $orderLine): self
     {
         $triStateService = Pdk::get(TriStateServiceInterface::class);
-        $productSettings = $orderLine->product->settings;
+        $productSettings = $orderLine->product->mergedSettings;
 
         $classification = $triStateService->resolveString(
             $productSettings->customsCode,
