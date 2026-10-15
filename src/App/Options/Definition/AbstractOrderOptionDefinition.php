@@ -167,4 +167,19 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         return TriStateService::ENABLED === $value;
     }
+
+    /**
+     * The shipment options value that switches this option on.
+     * Default: TriStateService::ENABLED (1).
+     *
+     * Override for options whose value is not a tri-state, such as an amount.
+     *
+     * @param  mixed $capabilityOption
+     *
+     * @return int
+     */
+    public function getEnabledValue($capabilityOption): int
+    {
+        return TriStateService::ENABLED;
+    }
 }

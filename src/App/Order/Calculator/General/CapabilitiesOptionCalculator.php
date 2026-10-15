@@ -169,7 +169,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         }
 
         if ($optionValue->getIsRequired()) {
-            $this->forceOption($shipmentKey, TriStateService::ENABLED);
+            $this->enableOption($definition, $optionValue);
         }
     }
 
@@ -252,7 +252,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
                 continue;
             }
 
-            $this->forceOption($requiredDef->getShipmentOptionsKey(), TriStateService::ENABLED);
+            $this->enableOption($requiredDef, $this->getCapabilityOption($options, $requiredCapKey));
 
             $this->applyRequiresChain($requiredCapKey, $options, $definitionsByCapKey, array_merge($visited, [$requiredCapKey]));
         }
@@ -287,6 +287,27 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         }
 
         return $options->{$getter}();
+    }
+
+    /**
+     * Switch an option on. An option that is already on keeps its value, so an insured amount is not
+     * replaced. An option that is off gets the value its definition gives for "on".
+     *
+     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
+     * @param  mixed                                                               $capabilityOption
+     *
+     * @return void
+     */
+    private function enableOption(OrderOptionDefinitionInterface $definition, $capabilityOption): void
+    {
+        $shipmentKey  = $definition->getShipmentOptionsKey();
+        $currentValue = $this->order->deliveryOptions->shipmentOptions->getAttribute($shipmentKey);
+
+        if ($definition->isEnabled($currentValue)) {
+            return;
+        }
+
+        $this->forceOption($shipmentKey, $definition->getEnabledValue($capabilityOption));
     }
 
     /**

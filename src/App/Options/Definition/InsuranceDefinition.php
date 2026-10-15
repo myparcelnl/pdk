@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
+use MyParcelNL\Pdk\Carrier\Util\InsuranceTierMath;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
 use MyParcelNL\Sdk\Support\Str;
 
@@ -42,5 +44,45 @@ final class InsuranceDefinition extends AbstractOrderOptionDefinition
     public function isEnabled($value): bool
     {
         return is_int($value) && $value > TriStateService::DISABLED;
+    }
+
+    /**
+     * When the capabilities switch insurance on, insure for the carrier default. Without a default,
+     * use the carrier minimum, then the lowest tier above zero. ENABLED (1) is the last resort, for a
+     * capability without amounts.
+     *
+     * @param  mixed $capabilityOption
+     *
+     * @return int
+     */
+    public function getEnabledValue($capabilityOption): int
+    {
+        if (! $capabilityOption instanceof RefCapabilitiesResponseOptionsInsuranceOptionV2) {
+            return TriStateService::ENABLED;
+        }
+
+        $default = $capabilityOption->getDefault();
+        $min     = $capabilityOption->getMin();
+        $max     = $capabilityOption->getMax();
+
+        $defaultAmount = $default ? $default->getAmount() : 0;
+        $minAmount     = $min ? $min->getAmount() : 0;
+        $maxAmount     = $max ? $max->getAmount() : 0;
+
+        if ($defaultAmount > 0) {
+            return $defaultAmount;
+        }
+
+        if ($minAmount > 0) {
+            return $minAmount;
+        }
+
+        foreach (InsuranceTierMath::buildTiers($minAmount, $maxAmount) as $tier) {
+            if ($tier > 0) {
+                return $tier;
+            }
+        }
+
+        return TriStateService::ENABLED;
     }
 }
