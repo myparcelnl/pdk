@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.0](https://github.com/myparcelnl/pdk/compare/v5.0.2...v5.1.0) (2026-10-15)
+
+### :sparkles: New Features
+
+* **print:** let the frontend wait for bulk label pdfs ([#548](https://github.com/myparcelnl/pdk/issues/548)) ([796c24c](https://github.com/myparcelnl/pdk/commit/796c24c723dc9574c7bd7c2c7933c8ed6843433d))
+
 ## [5.0.2](https://github.com/myparcelnl/pdk/compare/v5.0.1...v5.0.2) (2026-10-13)
 
 ### :bug: Bug Fixes
