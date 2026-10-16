@@ -291,10 +291,12 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
     /**
      * Switch an option on. An option that is already on keeps its value, so an insured amount is not
-     * replaced. An option that is off gets the value its definition gives for "on".
+     * replaced. An option that is off gets the value from getDefaultEnabledValue() of its definition.
      *
      * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
-     * @param  mixed                                                               $capabilityOption
+     * @param  null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2 $capabilityOption
+     *         The entry for this option in the capabilities response, from getCapabilityOption(). Insurance
+     *         has its own model with default, min and max amounts. Null when the response has no entry.
      *
      * @return void
      */
@@ -307,7 +309,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
             return;
         }
 
-        $this->forceOption($shipmentKey, $definition->getEnabledValue($capabilityOption));
+        $this->forceOption($shipmentKey, $definition->getDefaultEnabledValue($capabilityOption));
     }
 
     /**
