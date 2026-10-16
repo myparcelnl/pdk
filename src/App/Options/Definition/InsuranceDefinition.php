@@ -51,11 +51,13 @@ final class InsuranceDefinition extends AbstractOrderOptionDefinition
      * use the carrier minimum, then the lowest tier above zero. ENABLED (1) is the last resort, for a
      * capability without amounts.
      *
-     * @param  mixed $capabilityOption
+     * @param  null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2 $capabilityOption
+     *         The insurance entry in the capabilities response for the shipment, with its default, min
+     *         and max amounts. Null when the response has no insurance entry.
      *
      * @return int
      */
-    public function getEnabledValue($capabilityOption): int
+    public function getDefaultEnabledValue($capabilityOption): int
     {
         if (! $capabilityOption instanceof RefCapabilitiesResponseOptionsInsuranceOptionV2) {
             return TriStateService::ENABLED;
