@@ -7,11 +7,14 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Tests\App\Order\Calculator;
 
 use MyParcelNL\Pdk\App\Options\Definition\AbstractOrderOptionDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesOptionCalculator;
 use MyParcelNL\Pdk\App\Order\Contract\PdkOrderOptionsServiceInterface;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -498,3 +501,188 @@ it('logs a warning when a definition references a capabilities key that has no S
     $resetDefinitions();
     $resetCalculators();
 });
+
+it('applies what insurance requires only when the calculated insured amount is above zero', function (
+    int $orderPrice,
+    int $orderInsurance,
+    int $expectedInsurance,
+    int $expectedRequiredOption
+) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    // Insure from €500 up to €500. Signature and only recipient are off in the settings.
+    factory(Settings::class)
+        ->withCarrier($carrier, [
+            (new InsuranceDefinition())->getCarrierSettingsKey()     => true,
+            (new SignatureDefinition())->getCarrierSettingsKey()     => false,
+            (new OnlyRecipientDefinition())->getCarrierSettingsKey() => false,
+            CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT            => 500,
+            CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE       => 100,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO                  => 50000,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO_UNIQUE           => 50000,
+        ])
+        ->store();
+
+    $option = [
+        'isRequired'          => false,
+        'isSelectedByDefault' => false,
+        'requires'            => [],
+        'excludes'            => [],
+    ];
+
+    $capabilities = new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, [
+            'requiresSignature'     => $option,
+            'recipientOnlyDelivery' => $option,
+            'insurance'             => array_merge($option, [
+                'requires' => ['requiresSignature', 'recipientOnlyDelivery'],
+                'default'  => ['currency' => 'EUR', 'amount' => 0],
+                'min'      => ['currency' => 'EUR', 'amount' => 0],
+                'max'      => ['currency' => 'EUR', 'amount' => 500000],
+            ]),
+        ]),
+    ]);
+
+    // One response per capabilities request in the calculator chain. Unused responses are reset after the test.
+    MockSdkApiHandler::enqueue(...array_fill(0, 6, $capabilities));
+
+    factory(PdkProduct::class)
+        ->withExternalIdentifier('insured-product')
+        ->withPrice($orderPrice)
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD)
+                ->withShipmentOptions(factory(ShipmentOptions::class)->with(['insurance' => $orderInsurance]))
+        )
+        ->withLines([
+            factory(PdkOrderLine::class)
+                ->withProduct('insured-product')
+                ->withPrice($orderPrice),
+        ])
+        ->make();
+
+    $shipmentOptions = Pdk::get(PdkOrderOptionsServiceInterface::class)
+        ->calculate($order)
+        ->deliveryOptions
+        ->shipmentOptions;
+
+    expect($shipmentOptions->insurance)->toBe($expectedInsurance)
+        ->and($shipmentOptions->signature)->toBe($expectedRequiredOption)
+        ->and($shipmentOptions->onlyRecipient)->toBe($expectedRequiredOption);
+})->with([
+    'order below the insure-from amount'   => [10000, TriStateService::INHERIT, 0, TriStateService::DISABLED],
+    'order above the insure-from amount'   => [60000, TriStateService::INHERIT, 50000, TriStateService::ENABLED],
+    'insured amount entered on the order' => [10000, 50000, 50000, TriStateService::ENABLED],
+]);
+
+it('gives insurance the carrier amount when the capabilities switch it on', function (
+    array $insuranceCapability,
+    array $otherOptions,
+    array $orderOptions,
+    int $expectedInsurance
+) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    // Insure from €500. The order of €100 stays below it, so the settings give no insurance.
+    factory(Settings::class)
+        ->withCarrier($carrier, [
+            (new InsuranceDefinition())->getCarrierSettingsKey() => true,
+            CarrierSettings::EXPORT_INSURANCE_FROM_AMOUNT        => 500,
+            CarrierSettings::EXPORT_INSURANCE_PRICE_PERCENTAGE   => 100,
+            CarrierSettings::EXPORT_INSURANCE_UP_TO              => 500000,
+        ])
+        ->store();
+
+    $option = [
+        'isRequired'          => false,
+        'isSelectedByDefault' => false,
+        'requires'            => [],
+        'excludes'            => [],
+    ];
+
+    $capabilities = new ExampleCapabilitiesResponse([
+        capabilityResult($carrier, 100, array_merge([
+            'insurance' => array_merge($option, $insuranceCapability),
+        ], array_map(static function (array $overrides) use ($option) {
+            return array_merge($option, $overrides);
+        }, $otherOptions))),
+    ]);
+
+    // One response per capabilities request in the calculator chain. Unused responses are reset after the test.
+    MockSdkApiHandler::enqueue(...array_fill(0, 6, $capabilities));
+
+    factory(PdkProduct::class)
+        ->withExternalIdentifier('cheap-product')
+        ->withPrice(10000)
+        ->store();
+
+    $order = factory(PdkOrder::class)
+        ->withShippingAddress(factory(ShippingAddress::class)->withCc('NL'))
+        ->withDeliveryOptions(
+            factory(DeliveryOptions::class)
+                ->withCarrier($carrier)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD)
+                ->withShipmentOptions(factory(ShipmentOptions::class)->with($orderOptions))
+        )
+        ->withLines([
+            factory(PdkOrderLine::class)
+                ->withProduct('cheap-product')
+                ->withPrice(10000),
+        ])
+        ->make();
+
+    $shipmentOptions = Pdk::get(PdkOrderOptionsServiceInterface::class)
+        ->calculate($order)
+        ->deliveryOptions
+        ->shipmentOptions;
+
+    expect($shipmentOptions->insurance)->toBe($expectedInsurance);
+})->with([
+    'another option requires insurance' => [
+        [
+            'default' => ['currency' => 'EUR', 'amount' => 10000],
+            'min'     => ['currency' => 'EUR', 'amount' => 10000],
+            'max'     => ['currency' => 'EUR', 'amount' => 500000],
+        ],
+        ['requiresReceiptCode' => ['requires' => ['insurance']]],
+        ['receiptCode' => TriStateService::ENABLED],
+        10000,
+    ],
+    'insurance is required, carrier default above zero' => [
+        [
+            'isRequired' => true,
+            'default'    => ['currency' => 'EUR', 'amount' => 52000],
+            'min'        => ['currency' => 'EUR', 'amount' => 0],
+            'max'        => ['currency' => 'EUR', 'amount' => 500000],
+        ],
+        [],
+        [],
+        52000,
+    ],
+    'insurance is required, carrier default and minimum zero' => [
+        [
+            'isRequired' => true,
+            'default'    => ['currency' => 'EUR', 'amount' => 0],
+            'min'        => ['currency' => 'EUR', 'amount' => 0],
+            'max'        => ['currency' => 'EUR', 'amount' => 500000],
+        ],
+        [],
+        [],
+        10000,
+    ],
+]);

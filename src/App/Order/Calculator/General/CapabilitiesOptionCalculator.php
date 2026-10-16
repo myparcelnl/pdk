@@ -169,7 +169,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         }
 
         if ($optionValue->getIsRequired()) {
-            $this->forceOption($shipmentKey, TriStateService::ENABLED);
+            $this->enableOption($definition, $optionValue);
         }
     }
 
@@ -197,7 +197,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
 
             $currentValue = $this->order->deliveryOptions->shipmentOptions->getAttribute($shipmentKey);
 
-            if ($currentValue !== TriStateService::ENABLED) {
+            if (! $definition->isEnabled($currentValue)) {
                 continue;
             }
 
@@ -252,7 +252,7 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
                 continue;
             }
 
-            $this->forceOption($requiredDef->getShipmentOptionsKey(), TriStateService::ENABLED);
+            $this->enableOption($requiredDef, $this->getCapabilityOption($options, $requiredCapKey));
 
             $this->applyRequiresChain($requiredCapKey, $options, $definitionsByCapKey, array_merge($visited, [$requiredCapKey]));
         }
@@ -287,6 +287,29 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
         }
 
         return $options->{$getter}();
+    }
+
+    /**
+     * Switch an option on. An option that is already on keeps its value, so an insured amount is not
+     * replaced. An option that is off gets the value from getDefaultEnabledValue() of its definition.
+     *
+     * @param  \MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface $definition
+     * @param  null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2 $capabilityOption
+     *         The entry for this option in the capabilities response, from getCapabilityOption(). Insurance
+     *         has its own model with default, min and max amounts. Null when the response has no entry.
+     *
+     * @return void
+     */
+    private function enableOption(OrderOptionDefinitionInterface $definition, $capabilityOption): void
+    {
+        $shipmentKey  = $definition->getShipmentOptionsKey();
+        $currentValue = $this->order->deliveryOptions->shipmentOptions->getAttribute($shipmentKey);
+
+        if ($definition->isEnabled($currentValue)) {
+            return;
+        }
+
+        $this->forceOption($shipmentKey, $definition->getDefaultEnabledValue($capabilityOption));
     }
 
     /**
