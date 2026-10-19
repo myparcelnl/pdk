@@ -9,6 +9,7 @@ namespace MyParcelNL\Pdk\App\DeliveryOptions\Service;
 use MyParcelNL\Pdk\Account\Model\Shop;
 use MyParcelNL\Pdk\App\Cart\Model\PdkCart;
 use MyParcelNL\Pdk\App\DeliveryOptions\Contract\DeliveryOptionsServiceInterface;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Context\Model\DeliveryOptionsConfig;
@@ -16,6 +17,7 @@ use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Contract\PdkSettingsRepositoryInterface;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
+use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
@@ -573,3 +575,63 @@ it('uses packaging for the selected upgraded package in checkout config', functi
     expect($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
         ->and($config->physicalProperties)->toBe(['weight' => 2750]);
 });
+
+it('lets a product without package type follow the package type of the shipping method', function (
+    string $methodPackageType,
+    ?string $productPackageType,
+    string $expectedPackageType,
+    int $expectedWeight
+) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+    storeCarrierSettings([$carrier => true]);
+    factory(CheckoutSettings::class)
+        ->withAllowedShippingMethods(new Collection([$methodPackageType => ['free_shipping:1']]))
+        ->store();
+    factory(OrderSettings::class)->withEmptyParcelWeight(300)->withEmptyMailboxWeight(50)->store();
+    factory(Shop::class)->withCarriers(factory(CarrierCollection::class)->push(
+        factory(Carrier::class)->withCarrier($carrier)->withCapabilityPackageTypes(['PACKAGE', 'MAILBOX'])
+    ))->store();
+    resetStorageCache();
+    // The shipping method allows one package type, so every capabilities call is for that type.
+    $v2PackageType = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$methodPackageType];
+    $maxWeight = 'MAILBOX' === $v2PackageType ? 2000 : 23000;
+    $response = [capabilityResult('POSTNL', 777, [$v2PackageType], ['STANDARD_DELIVERY'], 1, $maxWeight)];
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($response), new ExampleCapabilitiesResponse($response));
+
+    $config = DeliveryOptionsConfig::fromCart(new PdkCart([
+        'shippingMethod' => ['id' => 'free_shipping:1', 'shippingAddress' => ['cc' => 'NL']],
+        'lines' => [['quantity' => 1, 'product' => array_filter([
+            'weight' => 1000,
+            'isDeliverable' => true,
+            'settings' => $productPackageType ? ['packageType' => $productPackageType] : null,
+        ])]],
+    ]));
+
+    expect($config->packageType)->toBe($expectedPackageType)
+        ->and($config->physicalProperties)->toBe(['weight' => $expectedWeight]);
+})->with([
+    'no package type, method for package' => [
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        null,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        1300,
+    ],
+    'no package type, method for mailbox' => [
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        null,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        1050,
+    ],
+    'package product, method for mailbox' => [
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        1300,
+    ],
+    'mailbox product, method for mailbox' => [
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        1050,
+    ],
+]);

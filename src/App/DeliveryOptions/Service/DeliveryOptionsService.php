@@ -26,6 +26,7 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Contract\DropOffServiceInterface;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 use MyParcelNL\Sdk\Support\Str;
@@ -292,7 +293,14 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
             : [];
 
         // The desired type is the heaviest type among the cart's product types.
-        $desiredType   = $this->capabilitiesValidation->resolveHeaviestType($cartTypes, $typeWeights);
+        $desiredType = $this->capabilitiesValidation->resolveHeaviestType($cartTypes, $typeWeights);
+
+        // Products without their own package type follow the shipping method when it doesn't allow the
+        // default type, starting at its lightest type.
+        if (! isset($allowedTypes[$desiredType]) && ! $this->cartHasProductPackageType($cart)) {
+            $desiredType = $this->resolveLightestType(array_keys($allowedTypes), $typeWeights) ?? $desiredType;
+        }
+
         $desiredWeight = $typeWeights[$desiredType] ?? null;
 
         $candidates = [];
@@ -329,6 +337,41 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         });
 
         return $candidates;
+    }
+
+    /**
+     * Whether any product in the cart has its own package type instead of inheriting the default.
+     *
+     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
+     *
+     * @return bool
+     */
+    private function cartHasProductPackageType(PdkCart $cart): bool
+    {
+        $triStateService = new TriStateService();
+
+        return $cart->lines->contains(static function ($line) use ($triStateService): bool {
+            return TriStateService::INHERIT !== $triStateService->cast($line->product->mergedSettings->packageType);
+        });
+    }
+
+    /**
+     * Pick the lightest package type among the given types, based on capabilities weight data.
+     *
+     * null weight = unconstrained = heavier than any defined weight.
+     *
+     * @param  string[] $types       PDK package type names
+     * @param  array    $typeWeights PDK name => max weight (null = unconstrained)
+     *
+     * @return null|string PDK package type name, or null when there are no types
+     */
+    private function resolveLightestType(array $types, array $typeWeights): ?string
+    {
+        usort($types, static function (string $a, string $b) use ($typeWeights): int {
+            return Utils::compareNullableInts($typeWeights[$a] ?? null, $typeWeights[$b] ?? null);
+        });
+
+        return $types[0] ?? null;
     }
 
     /**
