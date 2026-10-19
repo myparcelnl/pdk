@@ -31,6 +31,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesSdkApiMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -543,7 +544,7 @@ it('adds known weight to config without changing carrier settings or adding a se
     $carrierId = FrontendData::getLegacyCarrierIdentifier($carrier);
 
     expect($config->physicalProperties)->toBe(['weight' => 30250])
-        ->and($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+        ->and($config->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
         ->and($config->carrierSettings[$carrierId]['contractId'])->toBe(777)
         ->and($config->carrierSettings[$carrierId]['allowPickupLocations'])->toBe($allowPickup)
         ->and($config->carrierSettings[$carrierId]['allowStandardDelivery'])->toBeTrue()
@@ -568,12 +569,12 @@ it('uses packaging for the selected upgraded package in checkout config', functi
         'lines' => [['quantity' => 5, 'product' => [
             'weight' => 500,
             'isDeliverable' => true,
-            'settings' => ['packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME],
+            'settings' => ['packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX],
         ]]],
     ]);
     $config = DeliveryOptionsConfig::fromCart($cart);
 
-    expect($config->packageType)->toBe(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
+    expect($config->packageType)->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
         ->and($config->physicalProperties)->toBe(['weight' => 2750]);
 });
 
@@ -594,7 +595,7 @@ it('lets a product without package type follow the package type of the shipping 
     ))->store();
     resetStorageCache();
     // The shipping method allows one package type, so every capabilities call is for that type.
-    $v2PackageType = DeliveryOptions::PACKAGE_TYPES_V2_MAP[$methodPackageType];
+    $v2PackageType = ApiMapperService::forPackageType()->v2NameFromLegacyName($methodPackageType);
     $maxWeight = 'MAILBOX' === $v2PackageType ? 2000 : 23000;
     $response = [capabilityResult('POSTNL', 777, [$v2PackageType], ['STANDARD_DELIVERY'], 1, $maxWeight)];
     MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($response), new ExampleCapabilitiesResponse($response));
@@ -612,27 +613,27 @@ it('lets a product without package type follow the package type of the shipping 
         ->and($config->physicalProperties)->toBe(['weight' => $expectedWeight]);
 })->with([
     'no package type, method for package' => [
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
         null,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
         1300,
     ],
     'no package type, method for mailbox' => [
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
         null,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
         1050,
     ],
     'package product, method for mailbox' => [
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
-        DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE,
         1300,
     ],
     'mailbox product, method for mailbox' => [
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
-        DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
+        ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
         1050,
     ],
 ]);

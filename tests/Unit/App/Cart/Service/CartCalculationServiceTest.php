@@ -12,7 +12,6 @@ use MyParcelNL\Pdk\Base\Contract\Arrayable;
 use MyParcelNL\Pdk\Base\Service\CountryCodes;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
@@ -312,7 +311,7 @@ it('counts only deliverable lines in the cart weight', function (array $lines, i
 
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
-    expect($service->getCartWeightForPackageType(new PdkCart(['lines' => $lines]), DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME))
+    expect($service->getCartWeightForPackageType(new PdkCart(['lines' => $lines]), ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE))
         ->toBe($expected);
 })->with([
     'quantities and packaging once' => [
@@ -340,6 +339,6 @@ it('adds the empty weight of the given package type', function () {
     $cart = new PdkCart(['lines' => [['quantity' => 2, 'product' => ['weight' => 500, 'isDeliverable' => true]]]]);
     $service = Pdk::get(CartCalculationServiceInterface::class);
 
-    expect($service->getCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME))->toBe(1250)
-        ->and($service->getCartWeightForPackageType($cart, DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME))->toBe(1050);
+    expect($service->getCartWeightForPackageType($cart, ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE))->toBe(1250)
+        ->and($service->getCartWeightForPackageType($cart, ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX))->toBe(1050);
 });
