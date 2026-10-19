@@ -15,6 +15,7 @@ use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesEachMockPdkInstance;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -225,4 +226,25 @@ it('reports support only for carriers known to this PDK version', function () {
     expect(Carrier::isSupported(RefCapabilitiesSharedCarrierV2::POSTNL))->toBeTrue()
         ->and(Carrier::isSupported('UNSUPPORTED_FUTURE_CARRIER'))->toBeFalse()
         ->and(Carrier::isSupported(''))->toBeFalse();
+});
+
+it('supports every SDK carrier with a v1 export ID and resolves it back from that ID', function (string $carrierName, int $id) {
+    expect(Carrier::isSupported($carrierName))->toBeTrue()
+        ->and(Carrier::v2NameFromLegacyId($id))->toBe($carrierName);
+})->with(function () {
+    foreach (ApiMapperService::forCarrier()->v2ToIdMap() as $carrierName => $id) {
+        yield $carrierName => [$carrierName, $id];
+    }
+});
+
+it('does not treat a legacy carrier name as a V2 carrier name', function (string $legacyName) {
+    expect(Carrier::isSupported($legacyName))->toBeFalse();
+})->with(function () {
+    foreach (ApiMapperService::forCarrier()->allRows() as $constantName => $row) {
+        $legacyName = $row[ApiMapperService::COLUMN_LEGACY_NAME];
+
+        if (null !== $legacyName && $legacyName !== $row[ApiMapperService::COLUMN_V2_NAME]) {
+            yield $constantName => [$legacyName];
+        }
+    }
 });

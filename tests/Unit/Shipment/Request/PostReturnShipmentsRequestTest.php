@@ -8,7 +8,6 @@ namespace MyParcelNL\Pdk\Shipment\Request;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\WeightServiceInterface;
 use MyParcelNL\Pdk\Base\Support\Arr;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Carrier\Repository\CarrierCapabilitiesRepository;
 use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
@@ -25,6 +24,7 @@ use function MyParcelNL\Pdk\Tests\mockPdkProperties;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
 
 usesShared(new UsesMockPdkInstance(), new UsesNotificationsMock(), new UsesAccountMock());
 
@@ -203,9 +203,7 @@ it('keeps the original carrier and emits no notification when the carrier lacks 
     $request = new PostReturnShipmentsRequest(makeReturnShipmentCollection(RefCapabilitiesSharedCarrierV2::POSTNL));
     $body    = json_decode($request->getBody(), true);
 
-    $postnlId = Utils::convertToId(RefCapabilitiesSharedCarrierV2::POSTNL, Carrier::CARRIER_NAME_ID_MAP);
-
     expect(Notifications::isEmpty())->toBeTrue()
-        ->and(Arr::get($body, 'data.return_shipments.0.carrier'))->toBe($postnlId);
+        ->and(Arr::get($body, 'data.return_shipments.0.carrier'))->toBe(RefTypesCarrier::POSTNL);
 });
 

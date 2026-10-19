@@ -7,8 +7,8 @@ namespace MyParcelNL\Pdk\App\Order\Repository;
 
 use MyParcelNL\Pdk\App\Order\Contract\PdkProductRepositoryInterface;
 use MyParcelNL\Pdk\Facade\Pdk;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance());
@@ -21,7 +21,7 @@ it('updates product settings', function () {
 
     $product->fill([
         'settings' => [
-            'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+            'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
             'customsCode' => '42069',
         ],
     ]);
@@ -29,7 +29,7 @@ it('updates product settings', function () {
     $settings = $repository->getProductSettings('123');
 
     expect($settings->packageType)
-        ->toBe(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+        ->toBe(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         ->and($settings->customsCode)
         ->toBe('42069');
 });

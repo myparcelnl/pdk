@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Shipment\Model;
 
+use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -58,3 +59,21 @@ it('fromCapabilitiesDefinitions preserves all values in export-like merge scenar
         // insurance:-1 → same key as model, must not be lost
         ->and($result->insurance)->toBe(TriStateService::INHERIT);
 });
+
+it('preserves tri-state values through every registered capability mapping', function (int $value) {
+    foreach (Pdk::get('orderOptionDefinitions') as $definition) {
+        $name       = $definition->getShipmentOptionsKey();
+        $capability = $definition->getCapabilitiesOptionsKey();
+
+        if (null === $name || null === $capability) {
+            continue;
+        }
+
+        $original = new ShipmentOptions([$name => $value]);
+        $exported = ShipmentOptions::toCapabilitiesDefinitions($original);
+        $restored = ShipmentOptions::fromCapabilitiesDefinitions($exported);
+
+        expect($exported[$capability])->toBe($value)
+            ->and($restored->{$name})->toBe($value);
+    }
+})->with([TriStateService::INHERIT, TriStateService::DISABLED, TriStateService::ENABLED]);

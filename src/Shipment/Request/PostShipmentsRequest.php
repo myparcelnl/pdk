@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Types\Contract\TriStateServiceInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Pdk\Carrier\Service\CarrierValidationService;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 class PostShipmentsRequest extends Request
 {
@@ -254,7 +255,7 @@ class PostShipmentsRequest extends Request
 
     private function getCarrierId(Carrier $carrier): int
     {
-        $id = Utils::convertToId($carrier->carrier, Carrier::CARRIER_NAME_ID_MAP);
+        $id = ApiMapperService::forCarrier()->idFromV2Name($carrier->carrier);
         if (! $id) {
             throw new \InvalidArgumentException(sprintf('Cannot encode shipment: carrier %s is not mapped to an ID.', $carrier->carrier));
         }

@@ -3,16 +3,16 @@
 
 declare(strict_types=1);
 
-use MyParcelNL\Pdk\Carrier\Model\Carrier;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 dataset('carrierNames', function () {
-    foreach (array_keys(Carrier::CARRIER_NAME_ID_MAP) as $name) {
+    foreach (array_keys(ApiMapperService::forCarrier()->v2ToIdMap()) as $name) {
         yield [$name];
     }
 });
 
 dataset('carrierIds', function () {
-    foreach (Carrier::CARRIER_NAME_ID_MAP as $id) {
+    foreach (ApiMapperService::forCarrier()->v2ToIdMap() as $id) {
         yield [$id];
     }
 });

@@ -29,7 +29,10 @@ use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkFactory;
 use MyParcelNL\Pdk\Tests\Bootstrap\TestBootstrapper;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\ShipmentOptions as OrderApiShipmentOptions;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use PHPUnit\Framework\Assert;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
@@ -316,8 +319,8 @@ it('returns a response which matches the openApi schema when the order has no sh
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier('POSTNL')
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP))
                 ->withShipmentOptions([])
                 ->withPickupLocation(
                     factory(RetailLocation::class)
@@ -346,8 +349,8 @@ it('returns the Order API location type for the pickup location type from the ch
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier('POSTNL')
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME)
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE)
+                ->withDeliveryType(ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP))
                 ->withPickupLocation(factory(RetailLocation::class)->withType($checkoutType))
         )
         ->store();

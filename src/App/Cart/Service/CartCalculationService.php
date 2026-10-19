@@ -16,6 +16,7 @@ use MyParcelNL\Pdk\Settings\Model\CheckoutSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 class CartCalculationService implements CartCalculationServiceInterface
 {
@@ -163,7 +164,7 @@ class CartCalculationService implements CartCalculationServiceInterface
         return Pdk::get(WeightServiceInterface::class)
             ->addEmptyPackageWeight($cart->lines->onlyDeliverable()->getTotalWeight(), new PackageType([
                 'name' => $packageTypeName,
-                'id'   => DeliveryOptions::PACKAGE_TYPES_NAMES_IDS_MAP[$packageTypeName] ?? null,
+                'id'   => ApiMapperService::forPackageType()->idFromLegacyName($packageTypeName),
             ]));
     }
 }

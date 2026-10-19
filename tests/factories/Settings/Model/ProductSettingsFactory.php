@@ -8,9 +8,9 @@ namespace MyParcelNL\Pdk\Settings\Model;
 
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Factory\Contract\FactoryInterface;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 
 /**
  * @template T of ProductSettings
@@ -55,7 +55,7 @@ final class ProductSettingsFactory extends AbstractSettingsModelFactory
             ->withExportReturn(TriStateService::ENABLED)
             ->withExportSignature(TriStateService::ENABLED)
             ->withFitInMailbox(0)
-            ->withPackageType(DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME);
+            ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE);
     }
 
     /**
@@ -64,7 +64,7 @@ final class ProductSettingsFactory extends AbstractSettingsModelFactory
     public function withMailboxOptions(): self
     {
         return $this
-            ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+            ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
             ->withFitInMailbox(3);
     }
 

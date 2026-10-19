@@ -8,9 +8,9 @@ use MyParcelNL\Pdk\App\Order\Collection\PdkProductCollection;
 use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\App\Order\Repository\AbstractPdkPdkProductRepository;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Storage\MemoryCacheStorage;
 use RuntimeException;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 
 class MockPdkProductRepository extends AbstractPdkPdkProductRepository
 {
@@ -33,7 +33,7 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
             'weight'             => 5000,
             'settings'           => [
                 ProductSettings::CUSTOMS_CODE => '4321',
-                ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                ProductSettings::PACKAGE_TYPE => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
             ],
         ],
         [
@@ -43,7 +43,7 @@ class MockPdkProductRepository extends AbstractPdkPdkProductRepository
             'weight'             => 6000,
             'settings'           => [
                 ProductSettings::CUSTOMS_CODE => '666',
-                ProductSettings::PACKAGE_TYPE => DeliveryOptions::PACKAGE_TYPE_DIGITAL_STAMP_NAME,
+                ProductSettings::PACKAGE_TYPE => ShipmentResponsesDeliveryOptionsPackageTypeV2::DIGITAL_STAMP,
             ],
         ],
     ];

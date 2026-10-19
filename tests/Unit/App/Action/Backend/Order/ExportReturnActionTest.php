@@ -24,11 +24,12 @@ use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesApiMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use Symfony\Component\HttpFoundation\Response;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 use function Spatie\Snapshots\assertMatchesJsonSnapshot;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrier;
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock(), new UsesApiMock());
 
@@ -87,7 +88,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                             ->withDeliveryOptions(
                                 factory(DeliveryOptions::class)
                                     ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-                                    ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_MORNING_NAME)
+                                    ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING)
                                     ->withShipmentOptions(factory(ShipmentOptions::class)->withSignature(1))
                             ),
                     ]),
@@ -96,7 +97,7 @@ it('exports return', function (PdkOrderCollectionFactory $ordersFactory) {
                     ->withDeliveryOptions(
                         factory(DeliveryOptions::class)
                             ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
-                            ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
+                            ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
                     )
             );
         },

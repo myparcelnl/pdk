@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.0](https://github.com/myparcelnl/pdk/compare/v5.0.2...v5.1.0) (2026-10-15)
+
+### :sparkles: New Features
+
+* **print:** let the frontend wait for bulk label pdfs ([#548](https://github.com/myparcelnl/pdk/issues/548)) ([796c24c](https://github.com/myparcelnl/pdk/commit/796c24c723dc9574c7bd7c2c7933c8ed6843433d))
+
+## [5.0.2](https://github.com/myparcelnl/pdk/compare/v5.0.1...v5.0.2) (2026-10-13)
+
+### :bug: Bug Fixes
+
+* **shipment:** store and load order shipments as a list ([#556](https://github.com/myparcelnl/pdk/issues/556)) ([669e243](https://github.com/myparcelnl/pdk/commit/669e243f2553708620104bd18666794f6c7af990))
+
+## [5.0.1](https://github.com/myparcelnl/pdk/compare/v5.0.0...v5.0.1) (2026-10-08)
+
+## [5.0.0](https://github.com/myparcelnl/pdk/compare/v4.9.4...v5.0.0) (2026-10-08)
+
+### ⚠ BREAKING CHANGES
+
+* `DeliveryOptions::DELIVERY_TYPES_NAMES_IDS_MAP`, `DELIVERY_TYPES_V2_MAP`, `PACKAGE_TYPES_NAMES_IDS_MAP` and `PACKAGE_TYPES_V2_MAP` are removed. Use `ApiMapperService::forDeliveryType()` and `ApiMapperService::forPackageType()` from the SDK.
+* `DeliveryOptions::DELIVERY_TYPE_*_ID`, `DELIVERY_TYPE_*_NAME` and `PACKAGE_TYPE_*_NAME` are removed. Use the SDK constants in `RefTypesDeliveryType`, `ShipmentDefsDeliveryOptionsDeliveryNameV2` and `ShipmentResponsesDeliveryOptionsPackageTypeV2`. `PACKAGE_TYPE_PACKAGE_SMALL_NAME` becomes `SMALL_PACKAGE`. The pickup name, `letter` and `envelope` have no constant: get them from `ApiMapperService`.
+* `Carrier::CARRIER_*_LEGACY_NAME`, `Carrier::CARRIER_NAME_TO_LEGACY_MAP` and `Carrier::CARRIER_NAME_ID_MAP` are removed. Use the SDK constants in `ShipmentParametersCarrierName` for the legacy names, or `ApiMapperService::forCarrier()`.
+* `Utils::convertToId()` and `Utils::convertToName()` are removed. Use the lookup methods of `ApiMapperService` from the SDK.
+* The PDK requires SDK `11.0.0-beta.37` or later.
+
+### :sparkles: New Features
+
+* resolve carrier, package type and delivery type mappings through the SDK ([#543](https://github.com/myparcelnl/pdk/issues/543)) ([a167629](https://github.com/myparcelnl/pdk/commit/a167629e3c1bc54ca71da500469fd7f7a4e46a8d))
+* `Carrier::isSupported()` accepts every SDK carrier with a v1 ID, so `DHL_FREIGHT` becomes available
+* the `allowedShippingMethodsKeys` config entry is deprecated. Use it only to migrate plugin settings. A new package type does not appear in it: read the package types from `ApiMapperService` instead.
+
+### :bug: Bug Fixes
+
+* the delivery options v1 resource sends direct return as `returnOnFirstFailedDelivery` instead of `printReturnLabelAtDropOff`
+
 ## [4.9.4](https://github.com/myparcelnl/pdk/compare/v4.9.3...v4.9.4) (2026-10-02)
 
 ### :bug: Bug Fixes

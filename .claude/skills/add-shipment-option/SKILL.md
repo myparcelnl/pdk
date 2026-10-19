@@ -15,7 +15,7 @@ Ask the user the following questions one at a time:
 
 Ask: "What is the snake_case key from `RefShipmentShipmentOptions::attributeMap()`? (e.g. `my_new_option`)"
 
-Then: "What is the snake_case key from `RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()`? (e.g. `my_new_option`)"
+Do not ask for the capabilities key. `AbstractOrderOptionDefinition::getCapabilitiesOptionsKey()` derives it from the shipment options key through the SDK `ShipmentOptionMapper`. If the derived key is wrong or missing, fix the mapping in the SDK, not in the PDK.
 
 If the option is not in the SDK types, suggest regenerating the OpenAPI generated types and/or updating the SDK first. New shipment options should be defined in the API spec and reflected in the SDK before being added to the PDK. Only use plain string values as a last resort for options that are PDK-internal and not part of the API (e.g. `excludeParcelLockers`).
 
@@ -58,10 +58,11 @@ After gathering the information:
 
 Create `src/App/Options/Definition/{OptionName}Definition.php` extending `AbstractOrderOptionDefinition`.
 
-Required methods:
+Required method:
 
 - `getShipmentOptionsKey()` — return `Str::camel(RefShipmentShipmentOptions::attributeMap()['sdk_key'])`
-- `getCapabilitiesOptionsKey()` — return `RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['capabilities_key']`
+
+Override `getCapabilitiesOptionsKey()` only to return `null` for an option without a capabilities equivalent (e.g. `excludeParcelLockers`).
 
 Add null overrides for any settings the user opted out of.
 

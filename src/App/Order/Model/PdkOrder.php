@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\App\Order\Contract\PdkOrderNoteRepositoryInterface;
 use MyParcelNL\Pdk\Base\Model\ContactDetails;
 use MyParcelNL\Pdk\Base\Model\Model;
 use MyParcelNL\Pdk\Base\Support\Arr;
+use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -286,6 +287,13 @@ class PdkOrder extends Model
      */
     protected function setShipmentsAttribute($shipments): self
     {
+        // Stored shipments can have gaps in their keys, which json_encode turns into an object.
+        if ($shipments instanceof Collection) {
+            $shipments = $shipments->values();
+        } elseif (is_array($shipments)) {
+            $shipments = array_values($shipments);
+        }
+
         $this->attributes['shipments'] = $shipments;
         $this->synchronizeShipments();
 

@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Settings\Model\LabelSettings;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
 use MyParcelNL\Pdk\Shipment\Collection\ShipmentCollection;
 use MyParcelNL\Pdk\Shipment\Request\FetchShipmentsRequest;
+use MyParcelNL\Pdk\Shipment\Request\GetLabelPdfRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsAsPdfRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetLabelsRequest;
 use MyParcelNL\Pdk\Shipment\Request\GetShipmentsRequest;
@@ -125,6 +126,19 @@ class ShipmentRepository extends ApiRepository
 
             return $response->getPdf();
         });
+    }
+
+    /**
+     * Not cached: the frontend polls this until the api has generated the pdf.
+     *
+     * @throws \MyParcelNL\Pdk\Api\Exception\ApiException
+     */
+    public function fetchPreparedLabelPdf(string $labelId): string
+    {
+        /** @var \MyParcelNL\Pdk\Shipment\Response\GetLabelsPdfResponse $response */
+        $response = $this->api->doRequest(new GetLabelPdfRequest($labelId), GetLabelsPdfResponse::class);
+
+        return $response->getPdf();
     }
 
     /**

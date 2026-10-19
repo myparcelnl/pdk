@@ -22,9 +22,11 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
 
+use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
-use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -162,8 +164,8 @@ it('produces correct v2 delivery type through full context service flow', functi
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier('POSTNL')
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -179,8 +181,8 @@ it('converts delivery type to v2 when order was filled with a DeliveryOptions ob
         ->withDeliveryOptions(
             factory(DeliveryOptions::class)
                 ->withCarrier('POSTNL')
-                ->withDeliveryType(DeliveryOptions::DELIVERY_TYPE_EVENING_NAME)
-                ->withPackageType(DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME)
+                ->withDeliveryType(ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING)
+                ->withPackageType(ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX)
         )
         ->make();
 
@@ -215,9 +217,9 @@ it('converts stored v1 delivery type to v2 in delivery options', function (strin
 
     expect($context->deliveryOptions['deliveryType'])->toBe($expectedV2DeliveryType);
 })->with([
-    'evening'  => [DeliveryOptions::DELIVERY_TYPE_EVENING_NAME, RefTypesDeliveryTypeV2::EVENING],
-    'morning'  => [DeliveryOptions::DELIVERY_TYPE_MORNING_NAME, RefTypesDeliveryTypeV2::MORNING],
-    'standard' => [DeliveryOptions::DELIVERY_TYPE_STANDARD_NAME, RefTypesDeliveryTypeV2::STANDARD],
+    'evening'  => [ShipmentDefsDeliveryOptionsDeliveryNameV2::EVENING, RefTypesDeliveryTypeV2::EVENING],
+    'morning'  => [ShipmentDefsDeliveryOptionsDeliveryNameV2::MORNING, RefTypesDeliveryTypeV2::MORNING],
+    'standard' => [ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD, RefTypesDeliveryTypeV2::STANDARD],
 ]);
 
 it('converts stored v1 package type to v2 in delivery options', function (string $storedPackageType, string $expectedV2PackageType) {
@@ -235,8 +237,8 @@ it('converts stored v1 package type to v2 in delivery options', function (string
 
     expect($context->deliveryOptions['packageType'])->toBe($expectedV2PackageType);
 })->with([
-    'package'  => [DeliveryOptions::PACKAGE_TYPE_PACKAGE_NAME, RefShipmentPackageTypeV2::PACKAGE],
-    'mailbox'  => [DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME, RefShipmentPackageTypeV2::MAILBOX],
+    'package'  => [ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE, RefShipmentPackageTypeV2::PACKAGE],
+    'mailbox'  => [ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX, RefShipmentPackageTypeV2::MAILBOX],
 ]);
 
 it('gets digital stamp ranges', function () {

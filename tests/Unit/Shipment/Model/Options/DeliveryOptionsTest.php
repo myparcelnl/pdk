@@ -16,10 +16,12 @@ use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use RuntimeException;
-use function MyParcelNL\Pdk\Tests\factory;
-use function MyParcelNL\Pdk\Tests\usesShared;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\usesShared;
 
 usesShared(new UsesMockPdkInstance(), new UsesAccountMock());
 
@@ -95,7 +97,7 @@ it('instantiates delivery options with pickup location', function () {
     $deliveryOptions = new DeliveryOptions(
         [
             'date'           => new DateTime('+1 day'),
-            'deliveryType'   => DeliveryOptions::DELIVERY_TYPE_PICKUP_NAME,
+            'deliveryType'   => ApiMapperService::forDeliveryType()->legacyNameFromV2Name(RefTypesDeliveryTypeV2::PICKUP),
             'pickupLocation' => new RetailLocation(['cc' => CountryCodes::CC_NL]),
         ]
     );
@@ -209,4 +211,60 @@ it('can be instantiated from its storable array', function () {
     $fromStorable = new DeliveryOptions($original->toStorableArray());
 
     expect($original->toArrayWithoutNull())->toEqual($fromStorable->toArrayWithoutNull());
+});
+
+it('roundtrips every complete SDK mapping through capabilities', function (string $attribute, int $id, string $name, string $v2Name) {
+    $original = new DeliveryOptions([$attribute => $name]);
+    $exported = DeliveryOptions::toCapabilitiesDefinitions($original);
+    $restored = DeliveryOptions::fromCapabilitiesDefinitions($exported);
+    $idGetter = 'get' . ucfirst($attribute) . 'Id';
+
+    expect($exported[$attribute])->toBe($v2Name)
+        ->and($restored->{$attribute})->toBe($name)
+        ->and($restored->{$idGetter}())->toBe($id);
+})->with('apiTypeMappings');
+
+it('accepts numeric strings from stored options and direct assignments', function (string $attribute, int $id, string $name, string $v2Name) {
+    $options  = new DeliveryOptions([$attribute => (string) $id]);
+    $idGetter = 'get' . ucfirst($attribute) . 'Id';
+
+    expect($options->{$attribute})->toBe($name)
+        ->and($options->{$idGetter}())->toBe($id);
+
+    $options->{$attribute} = (string) $id;
+
+    expect($options->{$idGetter}())->toBe($id);
+})->with('apiTypeMappings');
+
+it('keeps model defaults for unmappable stored input', function ($value) {
+    $options = new DeliveryOptions(['packageType' => $value, 'deliveryType' => $value]);
+
+    expect($options->getPackageTypeId())->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID)
+        ->and($options->getDeliveryTypeId())->toBe(DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID);
+})->with([null, '', 'unknown_type', 999999, '999999']);
+
+it('uses canonical package names for SDK input aliases', function (string $alias, string $name) {
+    expect((new DeliveryOptions(['packageType' => $alias]))->packageType)->toBe($name);
+})->with([
+    ['unfranked', 'letter'],
+    ['small_package', 'package_small'],
+]);
+
+it('uses model defaults for incomplete or unknown capabilities data', function () {
+    $options = DeliveryOptions::fromCapabilitiesDefinitions([
+        'packageType'  => 'UNKNOWN_PACKAGE',
+        'deliveryType' => 'UNKNOWN_DELIVERY',
+    ]);
+
+    expect($options->getPackageTypeId())->toBe(DeliveryOptions::DEFAULT_PACKAGE_TYPE_ID)
+        ->and($options->getDeliveryTypeId())->toBe(DeliveryOptions::DEFAULT_DELIVERY_TYPE_ID);
+});
+
+it('returns null for unknown values assigned after construction', function () {
+    $options = new DeliveryOptions();
+    $options->packageType = 'unknown_package';
+    $options->deliveryType = 'unknown_delivery';
+
+    expect($options->getPackageTypeId())->toBeNull()
+        ->and($options->getDeliveryTypeId())->toBeNull();
 });

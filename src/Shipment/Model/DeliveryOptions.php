@@ -21,6 +21,9 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsDeliveryOptionsDeliveryNameV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * @property Carrier                $carrier
@@ -47,23 +50,6 @@ class DeliveryOptions extends Model
     public const PACKAGE_TYPE     = 'packageType';
     public const PICKUP_LOCATION  = 'pickupLocation';
     public const SHIPMENT_OPTIONS = 'shipmentOptions';
-    /**
-     * Values
-     */
-    public const DELIVERY_TYPE_MORNING_ID         = RefTypesDeliveryType::MORNING;
-    public const DELIVERY_TYPE_MORNING_NAME       = 'morning';
-    public const DELIVERY_TYPE_EVENING_ID         = RefTypesDeliveryType::EVENING;
-    public const DELIVERY_TYPE_EVENING_NAME       = 'evening';
-    public const DELIVERY_TYPE_STANDARD_ID        = RefTypesDeliveryType::STANDARD;
-    public const DELIVERY_TYPE_STANDARD_NAME      = 'standard';
-    public const DELIVERY_TYPE_PICKUP_ID          = RefTypesDeliveryType::PICKUP;
-    public const DELIVERY_TYPE_PICKUP_NAME        = 'pickup';
-    public const DELIVERY_TYPE_EXPRESS_ID         = RefTypesDeliveryType::EXPRESS;
-    public const DELIVERY_TYPE_EXPRESS_NAME       = 'express';
-    public const DELIVERY_TYPE_SAME_DAY_ID        = RefTypesDeliveryType::SAME_DAY;
-    public const DELIVERY_TYPE_SAME_DAY_NAME      = 'same_day';
-    public const DELIVERY_TYPE_EARLY_MORNING_ID   = RefTypesDeliveryType::EARLY_MORNING;
-    public const DELIVERY_TYPE_EARLY_MORNING_NAME = 'early_morning';
 
     /**
      * Delivery-option toggle names that are NOT delivery types in the
@@ -83,99 +69,44 @@ class DeliveryOptions extends Model
     public const DELIVERY_OPTION_SATURDAY              = 'saturdayDelivery';
 
     /**
-     * @var array
+     * The model stores delivery and package types as legacy names (e.g. 'pickup', 'package_small').
+     * ApiMapperService maps these names to the generated API definitions.
      */
-    public const DELIVERY_TYPES_NAMES_IDS_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME       => self::DELIVERY_TYPE_MORNING_ID,
-        self::DELIVERY_TYPE_STANDARD_NAME      => self::DELIVERY_TYPE_STANDARD_ID,
-        self::DELIVERY_TYPE_EVENING_NAME       => self::DELIVERY_TYPE_EVENING_ID,
-        self::DELIVERY_TYPE_PICKUP_NAME        => self::DELIVERY_TYPE_PICKUP_ID,
-        self::DELIVERY_TYPE_EXPRESS_NAME       => self::DELIVERY_TYPE_EXPRESS_ID,
-        self::DELIVERY_TYPE_SAME_DAY_NAME      => self::DELIVERY_TYPE_SAME_DAY_ID,
-        self::DELIVERY_TYPE_EARLY_MORNING_NAME => self::DELIVERY_TYPE_EARLY_MORNING_ID,
-    ];
-
-    public const DELIVERY_TYPES_V2_MAP = [
-        self::DELIVERY_TYPE_MORNING_NAME       => RefTypesDeliveryTypeV2::MORNING,
-        self::DELIVERY_TYPE_STANDARD_NAME      => RefTypesDeliveryTypeV2::STANDARD,
-        self::DELIVERY_TYPE_EVENING_NAME       => RefTypesDeliveryTypeV2::EVENING,
-        self::DELIVERY_TYPE_PICKUP_NAME        => RefTypesDeliveryTypeV2::PICKUP,
-        self::DELIVERY_TYPE_EXPRESS_NAME       => RefTypesDeliveryTypeV2::EXPRESS,
-        self::DELIVERY_TYPE_SAME_DAY_NAME      => RefTypesDeliveryTypeV2::SAME_DAY,
-        self::DELIVERY_TYPE_EARLY_MORNING_NAME => RefTypesDeliveryTypeV2::EARLY_MORNING,
-    ];
-
-    public const DEFAULT_DELIVERY_TYPE_ID     = self::DELIVERY_TYPE_STANDARD_ID;
-    public const DEFAULT_DELIVERY_TYPE_NAME   = self::DELIVERY_TYPE_STANDARD_NAME;
+    public const DEFAULT_DELIVERY_TYPE_ID  = RefTypesDeliveryType::STANDARD;
+    public const DEFAULT_DELIVERY_TYPE_NAME = ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD;
 
     /**
-     * Package types
-     */
-    /**
-     * PDK-internal package-type names (also used by the delivery-options widget).
+     * Whether the SDK can map a V2 delivery type to a model name and a v1 export ID.
      *
-     * @TODO: source these from the SDK delivery-options response enum
-     *   ShipmentResponsesDeliveryOptionsPackageTypeV2 once its OpenAPI spec is
-     *   corrected. The spec currently defines 'small_package' / 'unfranked' where
-     *   the live endpoint accepts 'package_small' / 'letter' (spec fix in progress
-     *   in core-api); sourcing from the SDK before that lands would import the
-     *   wrong values.
-     */
-    public const  PACKAGE_TYPE_PACKAGE_NAME       = 'package';
-    public const  PACKAGE_TYPE_MAILBOX_NAME       = 'mailbox';
-    public const  PACKAGE_TYPE_LETTER_NAME        = 'letter';
-    public const  PACKAGE_TYPE_DIGITAL_STAMP_NAME = 'digital_stamp';
-    public const  PACKAGE_TYPE_PACKAGE_SMALL_NAME = 'package_small';
-    public const  PACKAGE_TYPE_PALLET_NAME        = 'pallet';
-    public const  PACKAGE_TYPE_ENVELOPE_NAME      = 'envelope';
-
-    public const PACKAGE_TYPES_NAMES_IDS_MAP     = [
-        self::PACKAGE_TYPE_PACKAGE_NAME       => RefShipmentPackageType::PACKAGE,
-        self::PACKAGE_TYPE_MAILBOX_NAME       => RefShipmentPackageType::MAILBOX,
-        self::PACKAGE_TYPE_LETTER_NAME        => RefShipmentPackageType::UNFRANKED,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => RefShipmentPackageType::DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageType::SMALL_PACKAGE,
-        self::PACKAGE_TYPE_PALLET_NAME        => RefShipmentPackageType::PALLET,
-        self::PACKAGE_TYPE_ENVELOPE_NAME      => RefShipmentPackageType::ENVELOPE,
-    ];
-
-    public const PACKAGE_TYPES_V2_MAP = [
-        self::PACKAGE_TYPE_PACKAGE_NAME       => RefShipmentPackageTypeV2::PACKAGE,
-        self::PACKAGE_TYPE_MAILBOX_NAME       => RefShipmentPackageTypeV2::MAILBOX,
-        self::PACKAGE_TYPE_LETTER_NAME        => RefShipmentPackageTypeV2::UNFRANKED,
-        self::PACKAGE_TYPE_DIGITAL_STAMP_NAME => RefShipmentPackageTypeV2::DIGITAL_STAMP,
-        self::PACKAGE_TYPE_PACKAGE_SMALL_NAME => RefShipmentPackageTypeV2::SMALL_PACKAGE,
-        self::PACKAGE_TYPE_PALLET_NAME        => RefShipmentPackageTypeV2::PALLET,
-        self::PACKAGE_TYPE_ENVELOPE_NAME      => RefShipmentPackageTypeV2::ENVELOPE,
-    ];
-
-    /**
-     * Whether a V2 delivery type is supported by this PDK version.
+     * @param  string $v2DeliveryType
      *
-     * Backed by {@see self::DELIVERY_TYPES_V2_MAP} — a value is "supported"
-     * when the PDK has a mapped legacy name (and therefore calculators and
-     * UI labels) for it. Used at the boundary (capabilities proxy, carrier
-     * serialization) so SDK enum values the PDK doesn't know about cannot
-     * reach the admin or checkout.
+     * @return bool
      */
     public static function isDeliveryTypeSupported(string $v2DeliveryType): bool
     {
-        return in_array($v2DeliveryType, self::DELIVERY_TYPES_V2_MAP, true);
+        $mapper = ApiMapperService::forDeliveryType();
+
+        return null !== $mapper->legacyNameFromV2Name($v2DeliveryType)
+            && null !== $mapper->idFromV2Name($v2DeliveryType);
     }
 
     /**
-     * Whether a V2 package type is supported by this PDK version.
+     * Whether the SDK can map a V2 package type to a model name and a v1 export ID.
      *
-     * Backed by {@see self::PACKAGE_TYPES_V2_MAP}; see
-     * {@see self::isDeliveryTypeSupported()} for the rationale.
+     * @param  string $v2PackageType
+     *
+     * @return bool
      */
     public static function isPackageTypeSupported(string $v2PackageType): bool
     {
-        return in_array($v2PackageType, self::PACKAGE_TYPES_V2_MAP, true);
+        $mapper = ApiMapperService::forPackageType();
+
+        return null !== $mapper->legacyNameFromV2Name($v2PackageType)
+            && null !== $mapper->idFromV2Name($v2PackageType);
     }
 
     public const  DEFAULT_PACKAGE_TYPE_ID         = RefShipmentPackageType::PACKAGE;
-    public const  DEFAULT_PACKAGE_TYPE_NAME       = self::PACKAGE_TYPE_PACKAGE_NAME;
+    public const  DEFAULT_PACKAGE_TYPE_NAME       = ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE;
     public const  DEFAULT_PACKAGE_TYPE_V2         = RefShipmentPackageTypeV2::PACKAGE;
 
     protected $attributes = [
@@ -203,24 +134,24 @@ class DeliveryOptions extends Model
     public function __construct(?array $data = null)
     {
         if (isset($data[self::DELIVERY_TYPE])) {
-            $data[self::DELIVERY_TYPE] = Utils::convertToName(
+            $data[self::DELIVERY_TYPE] = self::normalizeType(
                 $data[self::DELIVERY_TYPE],
-                self::DELIVERY_TYPES_NAMES_IDS_MAP
+                ApiMapperService::forDeliveryType()
             );
         }
 
         if (isset($data[self::PACKAGE_TYPE])) {
-            $data[self::PACKAGE_TYPE] = Utils::convertToName(
+            $data[self::PACKAGE_TYPE] = self::normalizeType(
                 $data[self::PACKAGE_TYPE],
-                self::PACKAGE_TYPES_NAMES_IDS_MAP
+                ApiMapperService::forPackageType()
             );
         }
 
         // Normalize legacy carrier names (e.g. "postnl", "dhlforyou") to the new V2 identifiers.
         // The delivery options endpoint and JS/Vue checkout app still use the legacy format.
         if (isset($data[self::CARRIER]) && is_string($data[self::CARRIER])) {
-            $legacyToNewMap = array_flip(Carrier::CARRIER_NAME_TO_LEGACY_MAP);
-            $data[self::CARRIER] = $legacyToNewMap[$data[self::CARRIER]] ?? $data[self::CARRIER];
+            $data[self::CARRIER] = ApiMapperService::forCarrier()->v2NameFromLegacyName($data[self::CARRIER])
+                ?? $data[self::CARRIER];
         }
 
         parent::__construct($data);
@@ -237,15 +168,21 @@ class DeliveryOptions extends Model
     public static function fromCapabilitiesDefinitions(array $data): self
     {
         // Map delivery type
-        $data[self::DELIVERY_TYPE] = array_flip(self::DELIVERY_TYPES_V2_MAP)[$data[self::DELIVERY_TYPE]] ?? $data[self::DELIVERY_TYPE];
+        if (isset($data[self::DELIVERY_TYPE])) {
+            $data[self::DELIVERY_TYPE] = ApiMapperService::forDeliveryType()
+                ->legacyNameFromV2Name((string) $data[self::DELIVERY_TYPE]) ?? $data[self::DELIVERY_TYPE];
+        }
 
         // Map package type
-        $data[self::PACKAGE_TYPE] = array_flip(self::PACKAGE_TYPES_V2_MAP)[$data[self::PACKAGE_TYPE]] ?? $data[self::PACKAGE_TYPE];
+        if (isset($data[self::PACKAGE_TYPE])) {
+            $data[self::PACKAGE_TYPE] = ApiMapperService::forPackageType()
+                ->legacyNameFromV2Name((string) $data[self::PACKAGE_TYPE]) ?? $data[self::PACKAGE_TYPE];
+        }
 
         // We don't map carrier names here - they need to be converted when writing to the API as the repository here only handles the new UPPER_CASE variants.
 
         // Map shipment options via ShipmentOptions::fromCapabilitiesDefinitions (which uses individual Definition classes)
-        $data[self::SHIPMENT_OPTIONS] = ShipmentOptions::fromCapabilitiesDefinitions($data[self::SHIPMENT_OPTIONS]);
+        $data[self::SHIPMENT_OPTIONS] = ShipmentOptions::fromCapabilitiesDefinitions($data[self::SHIPMENT_OPTIONS] ?? []);
 
         return new self($data);
     }
@@ -258,8 +195,10 @@ class DeliveryOptions extends Model
     public static function toCapabilitiesDefinitions(self $deliveryOptions): array
     {
         return \array_merge($deliveryOptions->toArrayWithoutNull(), [
-            self::DELIVERY_TYPE => self::DELIVERY_TYPES_V2_MAP[$deliveryOptions->deliveryType] ?? $deliveryOptions->deliveryType,
-            self::PACKAGE_TYPE  => self::PACKAGE_TYPES_V2_MAP[$deliveryOptions->packageType] ?? $deliveryOptions->packageType,
+            self::DELIVERY_TYPE => ApiMapperService::forDeliveryType()
+                ->v2NameFromLegacyName((string) $deliveryOptions->deliveryType) ?? $deliveryOptions->deliveryType,
+            self::PACKAGE_TYPE  => ApiMapperService::forPackageType()
+                ->v2NameFromLegacyName((string) $deliveryOptions->packageType) ?? $deliveryOptions->packageType,
             self::SHIPMENT_OPTIONS => ShipmentOptions::toCapabilitiesDefinitions($deliveryOptions->shipmentOptions),
         ]);
     }
@@ -315,7 +254,10 @@ class DeliveryOptions extends Model
      */
     public function getDeliveryTypeId(): ?int
     {
-        return Utils::convertToId($this->deliveryType, self::DELIVERY_TYPES_NAMES_IDS_MAP);
+        $mapper = ApiMapperService::forDeliveryType();
+        $name   = self::normalizeType((string) $this->deliveryType, $mapper);
+
+        return null === $name ? null : $mapper->idFromLegacyName($name);
     }
 
     /**
@@ -324,7 +266,25 @@ class DeliveryOptions extends Model
      */
     public function getPackageTypeId(): ?int
     {
-        return Utils::convertToId($this->packageType, self::PACKAGE_TYPES_NAMES_IDS_MAP);
+        $mapper = ApiMapperService::forPackageType();
+        $name   = self::normalizeType((string) $this->packageType, $mapper);
+
+        return null === $name ? null : $mapper->idFromLegacyName($name);
+    }
+
+    /**
+     * Accept legacy names, integer IDs and numeric strings from stored delivery options.
+     *
+     * @param  int|string                                      $value
+     * @param  \MyParcelNL\Sdk\Services\Mapping\ApiMapperService $mapper
+     *
+     * @return null|string
+     */
+    private static function normalizeType($value, ApiMapperService $mapper): ?string
+    {
+        $id = is_numeric($value) ? (int) $value : $mapper->idFromLegacyName((string) $value);
+
+        return null === $id ? null : $mapper->legacyNameFromId($id);
     }
 
     /**
@@ -332,7 +292,9 @@ class DeliveryOptions extends Model
      */
     public function isPickup(): bool
     {
-        return $this->deliveryType === self::DELIVERY_TYPE_PICKUP_NAME && $this->pickupLocation;
+        return $this->pickupLocation
+            && RefTypesDeliveryTypeV2::PICKUP === ApiMapperService::forDeliveryType()
+                ->v2NameFromLegacyName((string) $this->deliveryType);
     }
 
     /**

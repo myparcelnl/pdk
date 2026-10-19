@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace MyParcelNL\Pdk\Fulfilment\Response;
 
 use MyParcelNL\Pdk\Api\Response\ApiResponseWithBody;
-use MyParcelNL\Pdk\Base\Support\Utils;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Fulfilment\Collection\OrderCollection;
 use MyParcelNL\Pdk\Fulfilment\Model\Order;
@@ -40,7 +39,8 @@ class GetOrdersResponse extends ApiResponseWithBody
     protected function decodeOrder(array $data): Order
     {
         // Convert carrier ID to name
-        $carrierName = Utils::convertToName($data['carrier_id'] ?? null, Carrier::CARRIER_NAME_ID_MAP);
+        $carrierId   = $data['carrier_id'] ?? null;
+        $carrierName = is_numeric($carrierId) ? Carrier::v2NameFromLegacyId((int) $carrierId) : null;
 
         $shipment = \array_merge($data['shipment'] ?? [], ['carrier' => $carrierName]);
 

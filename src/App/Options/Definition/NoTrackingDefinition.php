@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\App\Options\Definition;
 
-use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentShipmentOptions;
 use MyParcelNL\Sdk\Support\Str;
 
@@ -25,11 +24,6 @@ final class NoTrackingDefinition extends AbstractOrderOptionDefinition
     public function getShipmentOptionsKey(): ?string
     {
         return Str::camel(RefShipmentShipmentOptions::attributeMap()['no_tracking']);
-    }
-
-    public function getCapabilitiesOptionsKey(): ?string
-    {
-        return RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2::attributeMap()['no_tracking'];
     }
 
     public function getAllowSettingsKey(): ?string

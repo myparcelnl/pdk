@@ -19,6 +19,7 @@ use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdatePluginSettingsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Settings\UpdateProductSettingsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Shipment\DeleteShipmentsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Shipment\ExportReturnAction;
+use MyParcelNL\Pdk\App\Action\Backend\Shipment\FetchLabelPdfAction;
 use MyParcelNL\Pdk\App\Action\Backend\Shipment\PrintShipmentsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Shipment\UpdateShipmentsAction;
 use MyParcelNL\Pdk\App\Action\Backend\Webhook\CreateWebhooksAction;
@@ -47,6 +48,7 @@ use MyParcelNL\Pdk\App\Request\Settings\UpdatePluginSettingsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Settings\UpdateProductSettingsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Shipment\DeleteShipmentsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Shipment\ExportReturnEndpointRequest;
+use MyParcelNL\Pdk\App\Request\Shipment\FetchLabelPdfEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Shipment\PrintShipmentsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Shipment\UpdateShipmentsEndpointRequest;
 use MyParcelNL\Pdk\App\Request\Webhook\CreateWebhooksEndpointRequest;
@@ -197,6 +199,14 @@ return [
         PdkBackendActions::PRINT_SHIPMENTS          => [
             'request' => PrintShipmentsEndpointRequest::class,
             'action'  => PrintShipmentsAction::class,
+        ],
+
+        /**
+         * Fetch a labels pdf that the api prepares in the background.
+         */
+        PdkBackendActions::FETCH_LABEL_PDF          => [
+            'request' => FetchLabelPdfEndpointRequest::class,
+            'action'  => FetchLabelPdfAction::class,
         ],
 
         /**

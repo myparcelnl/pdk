@@ -15,7 +15,7 @@ use MyParcelNL\Pdk\Frontend\Form\InteractiveElement;
 use MyParcelNL\Pdk\Frontend\Form\PlainElement;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
 use MyParcelNL\Pdk\Settings\Model\Settings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
+use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Support\Str;
 
 use function array_map;
@@ -173,7 +173,18 @@ abstract class AbstractSettingsView implements Arrayable
      */
     protected function createPackageTypeOptions(?array $packageTypes = null): array
     {
-        $packageTypes = $packageTypes ?? array_keys(DeliveryOptions::PACKAGE_TYPES_V2_MAP);
+        if (null === $packageTypes) {
+            $mapper       = ApiMapperService::forPackageType();
+            $packageTypes = [];
+
+            foreach ($mapper->v2ToIdMap() as $id) {
+                $name = $mapper->legacyNameFromId($id);
+
+                if (null !== $name) {
+                    $packageTypes[] = $name;
+                }
+            }
+        }
 
         $propositionService = Pdk::get(PropositionService::class);
         return $this->toSelectOptions(

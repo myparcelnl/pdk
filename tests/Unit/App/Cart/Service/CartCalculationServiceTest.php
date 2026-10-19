@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
@@ -34,7 +35,7 @@ const LINES_FITS_IN_MAILBOX = [
                 'weight'        => 1,
                 'isDeliverable' => true,
                 'settings'      => [
-                    'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                    'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                     'fitInMailbox' => 5,
                 ],
             ],
@@ -46,7 +47,7 @@ const LINES_FITS_IN_MAILBOX = [
             'isDeliverable' => true,
             'weight'        => 1,
             'settings'      => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                 'fitInMailbox' => 5,
             ],
         ],
@@ -70,7 +71,7 @@ const LINES_DONT_FIT_MAILBOX = [
             'isDeliverable' => true,
             'weight'        => 1,
             'settings'      => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                 'fitInMailbox' => 10,
             ],
         ],
@@ -84,7 +85,7 @@ const LINES_EXCEEDING_MAILBOX_SIZE = [
             'isDeliverable' => true,
             'weight'        => 1,
             'settings'      => [
-                'packageType'  => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                'packageType'  => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                 'fitInMailbox' => 4,
             ],
         ],
@@ -294,7 +295,7 @@ it('resolves cart package types from merged settings so child products inherit p
                         'isDeliverable' => true,
                         'weight'        => 1,
                         'settings'      => [
-                            'packageType' => DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME,
+                            'packageType' => ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX,
                         ],
                     ],
                 ],
@@ -302,7 +303,7 @@ it('resolves cart package types from merged settings so child products inherit p
         ],
     ]);
 
-    expect($service->getCartPackageTypes($cart))->toBe([DeliveryOptions::PACKAGE_TYPE_MAILBOX_NAME]);
+    expect($service->getCartPackageTypes($cart))->toBe([ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX]);
 });
 
 
