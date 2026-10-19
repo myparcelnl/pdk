@@ -637,3 +637,36 @@ it('lets a product without package type follow the package type of the shipping 
         1050,
     ],
 ]);
+
+it('starts at the lightest package type of the shipping method for a product without package type', function (
+    int $productWeight,
+    string $expectedPackageType
+) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+    storeCarrierSettings([$carrier => true]);
+    factory(CheckoutSettings::class)
+        ->withAllowedShippingMethods(new Collection([
+            ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE => ['free_shipping:1'],
+            ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX => ['free_shipping:1'],
+        ]))
+        ->store();
+    factory(Shop::class)->withCarriers(factory(CarrierCollection::class)->push(
+        factory(Carrier::class)->withCarrier($carrier)->withCapabilityPackageTypes(['SMALL_PACKAGE', 'MAILBOX'])
+    ))->store();
+    resetStorageCache();
+    // Small package comes first, so the lightest type is not simply the first allowed type.
+    enqueueCapabilitiesPerType([
+        'SMALL_PACKAGE' => [capabilityResult('POSTNL', 777, ['SMALL_PACKAGE'], ['STANDARD_DELIVERY'], 1, 5000)],
+        'MAILBOX' => [capabilityResult('POSTNL', 777, ['MAILBOX'], ['STANDARD_DELIVERY'], 1, 2000)],
+    ]);
+
+    $config = DeliveryOptionsConfig::fromCart(new PdkCart([
+        'shippingMethod' => ['id' => 'free_shipping:1', 'shippingAddress' => ['cc' => 'NL']],
+        'lines' => [['quantity' => 1, 'product' => ['weight' => $productWeight, 'isDeliverable' => true]]],
+    ]));
+
+    expect($config->packageType)->toBe($expectedPackageType);
+})->with([
+    'fits in a mailbox' => [1000, ShipmentResponsesDeliveryOptionsPackageTypeV2::MAILBOX],
+    'too heavy for a mailbox' => [2500, ShipmentResponsesDeliveryOptionsPackageTypeV2::SMALL_PACKAGE],
+]);
