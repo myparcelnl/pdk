@@ -78,7 +78,8 @@ interface OrderOptionDefinitionInterface
      * it required, or because another option requires it.
      *
      * isEnabled() returns true for this value, but other values can count as on too. For insurance,
-     * any amount above zero is on; this method gives the amount to start with.
+     * any amount above zero is on; this method gives the amount to start with. The exception is an
+     * option without a valid value: insurance without an amount above zero returns 0 and stays off.
      *
      * @param  null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2 $capabilityOption
      *         This option's entry in the capabilities response for the shipment. Insurance gets a

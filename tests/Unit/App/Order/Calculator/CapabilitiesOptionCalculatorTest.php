@@ -586,7 +586,7 @@ it('applies what insurance requires only when the calculated insured amount is a
 ]);
 
 it('gives insurance the carrier amount when the capabilities switch it on', function (
-    array $insuranceCapability,
+    ?array $insuranceCapability,
     array $otherOptions,
     array $orderOptions,
     int $expectedInsurance
@@ -614,10 +614,13 @@ it('gives insurance the carrier amount when the capabilities switch it on', func
         'excludes'            => [],
     ];
 
+    // Null leaves insurance out of the capabilities response.
+    $insuranceOption = null === $insuranceCapability
+        ? []
+        : ['insurance' => array_merge($option, $insuranceCapability)];
+
     $capabilities = new ExampleCapabilitiesResponse([
-        capabilityResult($carrier, 100, array_merge([
-            'insurance' => array_merge($option, $insuranceCapability),
-        ], array_map(static function (array $overrides) use ($option) {
+        capabilityResult($carrier, 100, array_merge($insuranceOption, array_map(static function (array $overrides) use ($option) {
             return array_merge($option, $overrides);
         }, $otherOptions))),
     ]);
@@ -684,5 +687,28 @@ it('gives insurance the carrier amount when the capabilities switch it on', func
         [],
         [],
         10000,
+    ],
+    'insurance is required, carrier minimum above zero' => [
+        [
+            'isRequired' => true,
+            'default'    => ['currency' => 'EUR', 'amount' => 0],
+            'min'        => ['currency' => 'EUR', 'amount' => 25000],
+            'max'        => ['currency' => 'EUR', 'amount' => 500000],
+        ],
+        [],
+        [],
+        25000,
+    ],
+    'another option requires insurance, no insurance entry' => [
+        null,
+        ['requiresReceiptCode' => ['requires' => ['insurance']]],
+        ['receiptCode' => TriStateService::ENABLED],
+        0,
+    ],
+    'insurance is required, no amounts' => [
+        ['isRequired' => true],
+        [],
+        [],
+        0,
     ],
 ]);
