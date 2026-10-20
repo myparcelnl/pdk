@@ -157,17 +157,12 @@ class CartCalculationService implements CartCalculationServiceInterface
     }
 
     /**
-     * Calculate the total cart weight including empty package weight for the given package type.
-     *
-     * @param  \MyParcelNL\Pdk\App\Cart\Model\PdkCart $cart
-     * @param  string                                  $packageTypeName
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getCartWeightForPackageType(PdkCart $cart, string $packageTypeName): int
     {
         return Pdk::get(WeightServiceInterface::class)
-            ->addEmptyPackageWeight($cart->lines->getTotalWeight(), new PackageType([
+            ->addEmptyPackageWeight($cart->lines->onlyDeliverable()->getTotalWeight(), new PackageType([
                 'name' => $packageTypeName,
                 'id'   => ApiMapperService::forPackageType()->idFromLegacyName($packageTypeName),
             ]));
