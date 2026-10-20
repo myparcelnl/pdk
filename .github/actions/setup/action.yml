@@ -13,7 +13,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: myparcelnl/actions/build-docker-image@v4
+    - uses: myparcelnl/actions/build-docker-image@v5
       id: build
       continue-on-error: true
       with:
