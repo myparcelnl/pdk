@@ -62,4 +62,32 @@ interface OrderOptionDefinitionInterface
      * @return mixed
      */
     public function getShipmentOptionsDefault();
+
+    /**
+     * Whether the given shipment options value switches this option on. Use it to decide if the
+     * requires and excludes of this option apply.
+     *
+     * @param  mixed $value
+     *
+     * @return bool
+     */
+    public function isEnabled($value): bool;
+
+    /**
+     * The value to set when this option is off and the capabilities switch it on: because they make
+     * it required, or because another option requires it.
+     *
+     * isEnabled() returns true for this value, but other values can count as on too. For insurance,
+     * any amount above zero is on; this method gives the amount to start with. The exception is an
+     * option without a valid value: insurance without an amount above zero returns 0 and stays off.
+     *
+     * @param  null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2 $capabilityOption
+     *         This option's entry in the capabilities response for the shipment. Insurance gets a
+     *         RefCapabilitiesResponseOptionsInsuranceOptionV2 with default, min and max amounts; the
+     *         other options get a RefCapabilitiesResponseOptionsOptionV2. Null when the response has no
+     *         entry for this option.
+     *
+     * @return int
+     */
+    public function getDefaultEnabledValue($capabilityOption): int;
 }

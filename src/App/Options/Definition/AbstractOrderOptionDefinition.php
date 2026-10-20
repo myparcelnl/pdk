@@ -152,4 +152,36 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     {
         return TriStateService::INHERIT;
     }
+
+    /**
+     * Whether the given shipment options value switches this option on.
+     * Default: only TriStateService::ENABLED (1).
+     *
+     * Override for options whose value is not a tri-state, such as an amount.
+     *
+     * @param  mixed $value
+     *
+     * @return bool
+     */
+    public function isEnabled($value): bool
+    {
+        return TriStateService::ENABLED === $value;
+    }
+
+    /**
+     * The value to set when this option is off and the capabilities switch it on.
+     * Default: TriStateService::ENABLED (1), the only value that isEnabled() accepts by default.
+     *
+     * Override for options whose value is not a tri-state, such as an amount.
+     *
+     * @param  null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionV2|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2 $capabilityOption
+     *         This option's entry in the capabilities response for the shipment, or null when the
+     *         response has no entry for it. The default implementation does not use it.
+     *
+     * @return int
+     */
+    public function getDefaultEnabledValue($capabilityOption): int
+    {
+        return TriStateService::ENABLED;
+    }
 }
