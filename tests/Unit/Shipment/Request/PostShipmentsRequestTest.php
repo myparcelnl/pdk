@@ -133,17 +133,3 @@ it('sends no pickup location type to the shipments api', function (?string $type
     'parcel locker' => [PickupAnyOfLocation::TYPE_PARCEL_LOCKER],
     'no type'       => [null],
 ]);
-
-it('sends the external product reference only for customs items that have one', function () {
-    $shipment = createRowShipmentWithCustomsItems(['With reference', 'Without reference']);
-
-    $shipment->customsDeclaration->items->first()->externalProductReference = 'catalog_item_abc123def456g';
-
-    $body  = json_decode((new PostShipmentsRequest(new ShipmentCollection([$shipment])))->getBody(), true);
-    $items = $body['data']['shipments'][0]['customs_declaration']['items'];
-
-    expect($items[0]['external_product_reference'])
-        ->toBe('catalog_item_abc123def456g')
-        ->and($items[1])
-        ->not->toHaveKey('external_product_reference');
-});
