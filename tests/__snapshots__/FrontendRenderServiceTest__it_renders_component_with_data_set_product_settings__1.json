@@ -24,6 +24,7 @@
                 "customsCode": -1,
                 "disableDeliveryOptions": -1,
                 "dropOffDelay": -1,
+                "externalProductReference": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -46,6 +47,7 @@
                 "customsCode": -1,
                 "disableDeliveryOptions": -1,
                 "dropOffDelay": -1,
+                "externalProductReference": -1,
                 "fitInDigitalStamp": -1,
                 "fitInMailbox": -1,
                 "packageType": -1
@@ -1172,6 +1174,15 @@
                     },
                     "label": "settings_product_customs_code",
                     "description": "settings_product_customs_code_description"
+                },
+                {
+                    "name": "externalProductReference",
+                    "$component": "TextInput",
+                    "$attributes": {
+                        "maxlength": 64
+                    },
+                    "label": "settings_product_external_product_reference",
+                    "description": "settings_product_external_product_reference_description"
                 },
                 {
                     "$component": "SettingsDivider",
