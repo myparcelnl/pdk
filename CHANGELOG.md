@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/myparcelnl/pdk/compare/v5.2.0...v5.2.1) (2026-10-20)
+
+### :bug: Bug Fixes
+
+* **customs:** revert sending the external product reference per customs item ([#570](https://github.com/myparcelnl/pdk/issues/570)) ([aa50927](https://github.com/myparcelnl/pdk/commit/aa5092734bf78da47eec0a16a3097a031c6357cc)), closes [#562](https://github.com/myparcelnl/pdk/issues/562) [#561](https://github.com/myparcelnl/pdk/issues/561) [#532](https://github.com/myparcelnl/pdk/issues/532) [#562](https://github.com/myparcelnl/pdk/issues/562)
+
 ## [5.2.0](https://github.com/myparcelnl/pdk/compare/v5.1.0...v5.2.0) (2026-10-20)
 
 ### :sparkles: New Features
