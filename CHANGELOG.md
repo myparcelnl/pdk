@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.0](https://github.com/myparcelnl/pdk/compare/v5.1.0...v5.2.0) (2026-10-20)
+
+### :sparkles: New Features
+
+* **customs:** send the external product reference per customs item ([#562](https://github.com/myparcelnl/pdk/issues/562)) ([9e45586](https://github.com/myparcelnl/pdk/commit/9e455866dc9b14a9988934899a0137363a38570a))
+
+### :bug: Bug Fixes
+
+* **checkout:** send the cart weight to the delivery options ([#532](https://github.com/myparcelnl/pdk/issues/532)) ([350234c](https://github.com/myparcelnl/pdk/commit/350234c15a2f63c63360d4085abdbe31b264d765)), closes [myparcelnl/prestashop#671](https://github.com/myparcelnl/prestashop/issues/671) [myparcelnl/prestashop#633](https://github.com/myparcelnl/prestashop/issues/633)
+* **customs:** use merged product settings for customs items ([#561](https://github.com/myparcelnl/pdk/issues/561)) ([5ac8629](https://github.com/myparcelnl/pdk/commit/5ac8629a2213d7cc6314905a84677f3309806468))
+
 ## [5.1.0](https://github.com/myparcelnl/pdk/compare/v5.0.2...v5.1.0) (2026-10-15)
 
 ### :sparkles: New Features
