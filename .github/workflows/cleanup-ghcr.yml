@@ -1,0 +1,33 @@
+name: 'Clean up GHCR'
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Only log what would be deleted'
+        type: boolean
+        default: true
+
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  packages: write
+
+# The action must not run twice on the same package at the same time.
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  pdk:
+    runs-on: ubuntu-22.04
+    steps:
+      # Every pull request and merge queue entry pushes a pdk image; nothing removes them.
+      - uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
+        with:
+          package: pdk
+          delete-untagged: true
+          delete-tags: 'pr-*,gh-readonly-queue-*'
+          older-than: 1 year
+          validate: true
+          dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run }}
