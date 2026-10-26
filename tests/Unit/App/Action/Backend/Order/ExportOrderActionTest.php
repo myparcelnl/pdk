@@ -1163,11 +1163,6 @@ it(
                 };
             },
         ],
-
-        // @TODO: "mailbox filtered when account lacks small package contract" scenario removed.
-        // This filtering is now driven by the capabilities API response (which won't include MAILBOX
-        // when the account lacks the contract). Tested via CapabilitiesPackageTypeCalculatorTest with
-        // explicit mock API responses.
     ])
     ->with('order mode toggle');
 
