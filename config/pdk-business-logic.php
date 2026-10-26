@@ -95,12 +95,13 @@ return [
             TriStateOptionCalculator::class,
             // Validate delivery type against the carrier+package_type capability; reset to standard when invalid.
             CapabilitiesDeliveryTypeCalculator::class,
+            // Resolve the insured amount first: what insurance requires applies only when the amount is above zero.
+            InsuranceCalculator::class,
             // Apply capabilities constraints (requires/excludes/isRequired) on the resolved values.
             CapabilitiesOptionCalculator::class,
             // Exception: null delivery date for carriers that don't support it (API doesn't implement this yet).
             DeliveryDateExceptionCalculator::class,
             LabelDescriptionCalculator::class,
-            InsuranceCalculator::class,
             WeightCalculator::class,
             CustomerInformationCalculator::class,
             CustomsDeclarationCalculator::class,
