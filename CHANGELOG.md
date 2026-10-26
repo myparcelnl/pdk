@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.2](https://github.com/myparcelnl/pdk/compare/v5.2.1...v5.2.2) (2026-10-26)
+
+### :bug: Bug Fixes
+
+* **insurance:** only apply what insurance requires to an insured shipment ([#567](https://github.com/myparcelnl/pdk/issues/567)) ([06fdb4c](https://github.com/myparcelnl/pdk/commit/06fdb4ccc1e3cf6edaa779b26dfcdf30f52f87aa))
+
 ## [5.2.1](https://github.com/myparcelnl/pdk/compare/v5.2.0...v5.2.1) (2026-10-20)
 
 ### :bug: Bug Fixes
