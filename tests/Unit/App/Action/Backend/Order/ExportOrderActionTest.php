@@ -13,6 +13,8 @@ use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollection;
 use MyParcelNL\Pdk\App\Order\Collection\PdkOrderCollectionFactory;
 use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrderLine;
+use MyParcelNL\Pdk\App\Order\Model\PdkProduct;
 use MyParcelNL\Pdk\App\Order\Model\PdkPhysicalProperties;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddress;
 use MyParcelNL\Pdk\App\Order\Model\ShippingAddressFactory;
@@ -26,6 +28,7 @@ use MyParcelNL\Pdk\Notification\Model\Notification;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettingsFactory;
 use MyParcelNL\Pdk\Settings\Model\OrderSettings;
+use MyParcelNL\Pdk\Settings\Model\ProductSettings;
 use MyParcelNL\Pdk\Settings\Model\Settings;
 use MyParcelNL\Pdk\Shipment\Collection\CustomsDeclarationItemCollection;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
@@ -1134,6 +1137,32 @@ it(
                         ->and($shipment['customs_declaration']['items'][0]['description'])->toBe('hello')
                         ->and($shipment['customs_declaration']['items'][0]['weight'])->toBe(400)
                         ->and($shipment['customs_declaration']['items'][0]['amount'])->toBe(3);
+                };
+            },
+        ],
+
+        'with external product reference on the product' => [
+            function () {
+                return factory(PdkOrderCollection::class)->push(
+                    factory(PdkOrder::class)
+                        ->toTheUnitedStates()
+                        ->withLines([
+                            factory(PdkOrderLine::class)->withProduct(
+                                factory(PdkProduct::class)->withSettings(
+                                    factory(ProductSettings::class)
+                                        ->withExternalProductReference('catalog_item_abc123def456g')
+                                )
+                            ),
+                        ])
+                );
+            },
+            'accountHasCarrierSmallPackageContract' => false,
+            'carrierHasInternationalMailboxAllowed' => false,
+            'assertions'                            => function () {
+                return function (array $shipment) {
+                    expect($shipment['customs_declaration']['items'])->toHaveLength(1)
+                        ->and($shipment['customs_declaration']['items'][0]['external_product_reference'])
+                        ->toBe('catalog_item_abc123def456g');
                 };
             },
         ],

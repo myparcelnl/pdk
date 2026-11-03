@@ -57,6 +57,44 @@ it('limits fulfilment customs descriptions without changing stored data or produ
         ->and($shipment->customsDeclaration->toStorableArray())->toBe($originalDeclaration);
 });
 
+it('sends the external product reference only for fulfilment customs items that have one', function () {
+    $recipient = new ContactDetails(['cc' => CountryCodes::CC_US]);
+    $order     = new Order([
+        'externalIdentifier' => '1234',
+        'invoiceAddress'     => $recipient,
+        'shipment'           => new Shipment([
+            'carrier'            => factory(Carrier::class)
+                ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+                ->make(),
+            'recipient'          => $recipient,
+            'customsDeclaration' => new CustomsDeclaration([
+                'invoice' => '1234',
+                'items'   => [
+                    [
+                        'description'              => 'With reference',
+                        'externalProductReference' => 'catalog_item_abc123def456g',
+                        'weight'                   => 100,
+                        'itemValue'                => ['amount' => 1000, 'currency' => 'EUR'],
+                    ],
+                    [
+                        'description' => 'Without reference',
+                        'weight'      => 100,
+                        'itemValue'   => ['amount' => 1000, 'currency' => 'EUR'],
+                    ],
+                ],
+            ]),
+        ]),
+    ]);
+
+    $body  = json_decode((new PostOrdersRequest(new OrderCollection([$order])))->getBody(), true);
+    $items = $body['data']['orders'][0]['shipment']['customs_declaration']['items'];
+
+    expect($items[0]['external_product_reference'])
+        ->toBe('catalog_item_abc123def456g')
+        ->and($items[1])
+        ->not->toHaveKey('external_product_reference');
+});
+
 it('sends no pickup location type to the fulfilment api', function (?string $type) {
     $location = factory(RetailLocation::class)
         ->inTheNetherlands()
