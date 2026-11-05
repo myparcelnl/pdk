@@ -54,8 +54,8 @@ The marketplace is private, so only MyParcel employees can install it.
 - Snapshots MAY still be used to assert the shape and contents of objects, API requests and responses, but not in situations where specific values are important to assert on (e.g., asserting that a specific carrier is used, or that a specific error message is returned). In those cases, write concrete assertions instead of relying on snapshots.
 - Avoid testing specific carriers, focus on testing capabilities and expectations based on it (like available package types, delivery types, shipment options etc.)
 - Write Mocks using existing PDK custom mocking utilities
-- Run all tests through docker via composer so that the bootstrap/prepend file is included: `yarn run test` or `yarn run test:unit`
-- Update snapshots with `yarn test:unit:snapshot`. Snapshots are Prettier-ignored (see `.prettierignore`) so their formatting is owned by the snapshot writer and not reformatted on save.
+- Run all tests through docker via composer so that the bootstrap/prepend file is included: `pnpm test` or `pnpm test:unit`
+- Update snapshots with `pnpm test:unit:snapshot`. Snapshots are Prettier-ignored (see `.prettierignore`) so their formatting is owned by the snapshot writer and not reformatted on save.
 - To run a specific test or filter: `docker compose run php composer test:unit -- --filter="test name"`
 - When switching PHP versions, always run `composer update` first: `PHP_VERSION=8.4 docker compose run php composer update --no-interaction --no-progress`
 - When encountering test failures, check whether `main` fails the same way. A failure that also exists on `main` is unrelated and may be ignored for the task. A failure the current branch introduced is in scope, even when the task at hand did not cause it: fix it in the same PR.

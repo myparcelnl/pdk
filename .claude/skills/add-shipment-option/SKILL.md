@@ -79,13 +79,13 @@ docker compose run php composer console generate:ide-helper
 ### 4. Run Tests
 
 ```bash
-yarn run test:unit
+pnpm test:unit
 ```
 
 The consistency tests will verify everything is wired up correctly. Update snapshots if needed:
 
 ```bash
-yarn test:unit:snapshot
+pnpm test:unit:snapshot
 ```
 
 ## Notes
