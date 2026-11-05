@@ -33,6 +33,8 @@ Dockerfile            export-ignore
 docker-compose.yml    export-ignore
 docker-compose.*.yml  export-ignore
 
-# Yarn
-package.json  export-ignore
-yarn.lock     export-ignore
+# pnpm
+.npmrc               export-ignore
+package.json         export-ignore
+pnpm-lock.yaml       export-ignore
+pnpm-workspace.yaml  export-ignore

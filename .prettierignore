@@ -1,8 +1,10 @@
 # Ignore folders
 .idea
-.yarn
 node_modules
 vendor
+
+# Ignore the lockfile as pnpm writes it
+pnpm-lock.yaml
 
 # Ignore snapshots — formatting is owned by the snapshot writer (Spatie), not Prettier.
 # Prettier's config (2-space) doesn't match Spatie's output (4-space), so running it on
