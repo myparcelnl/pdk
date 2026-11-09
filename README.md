@@ -28,8 +28,8 @@ View our [contribution guidelines] for information on how to contribute to the P
 
 ### Prerequisites
 
-- Node.js 24.21 or later
-- pnpm 12.6 or later
+- Node.js 24, version 24.21 or later
+- pnpm 12, version 12.6 or later
 - Docker
 - No Volta on your machine. Its `yarn` does not go through corepack, so the `packageManager` field in `package.json`
   does not stop it.
