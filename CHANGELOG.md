@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.1](https://github.com/myparcelnl/pdk/compare/v5.3.0...v5.3.1) (2026-11-12)
+
 ## [5.3.0](https://github.com/myparcelnl/pdk/compare/v5.2.2...v5.3.0) (2026-11-03)
 
 ### :sparkles: New Features
