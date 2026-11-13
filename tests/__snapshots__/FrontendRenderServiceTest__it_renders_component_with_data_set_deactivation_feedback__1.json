@@ -1,0 +1,44 @@
+{
+    "deactivationFeedback": {
+        "reasons": [
+            {
+                "value": "no_longer_needed",
+                "label": "deactivation_feedback_reason_no_longer_needed",
+                "hasDetails": false
+            },
+            {
+                "value": "switched_provider",
+                "label": "deactivation_feedback_reason_switched_provider",
+                "hasDetails": true
+            },
+            {
+                "value": "missing_feature",
+                "label": "deactivation_feedback_reason_missing_feature",
+                "hasDetails": true
+            },
+            {
+                "value": "not_working",
+                "label": "deactivation_feedback_reason_not_working",
+                "hasDetails": true
+            },
+            {
+                "value": "temporary",
+                "label": "deactivation_feedback_reason_temporary",
+                "hasDetails": false
+            },
+            {
+                "value": "other",
+                "label": "deactivation_feedback_reason_other",
+                "hasDetails": true
+            }
+        ],
+        "translations": {
+            "title": "deactivation_feedback_title",
+            "description": "deactivation_feedback_description",
+            "detailsPlaceholder": "deactivation_feedback_details_placeholder",
+            "submit": "deactivation_feedback_submit",
+            "skip": "deactivation_feedback_skip",
+            "cancel": "deactivation_feedback_cancel"
+        }
+    }
+}

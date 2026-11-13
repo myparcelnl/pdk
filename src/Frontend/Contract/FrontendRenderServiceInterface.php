@@ -16,6 +16,11 @@ interface FrontendRenderServiceInterface
     public function renderChildProductSettings(PdkProduct $product): string;
 
     /**
+     * Renders the modal that asks for the reason of deactivation, in the plugins overview.
+     */
+    public function renderDeactivationFeedback(): string;
+
+    /**
      * Renders the delivery options component.
      */
     public function renderDeliveryOptions(PdkCart $cart): string;

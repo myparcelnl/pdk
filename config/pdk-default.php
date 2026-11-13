@@ -144,4 +144,23 @@ return [
      * The prefix to use for delivery options translations.
      */
     'translationPrefixDeliveryOptions' => value('delivery_options_'),
+
+    /**
+     * Reasons in the modal that asks why the plugin is deactivated. Reason => whether it asks for details.
+     * The label of a reason is the translation "deactivation_feedback_reason_<reason>".
+     */
+    'deactivationFeedbackReasons'      => value([
+        'no_longer_needed'  => false,
+        'switched_provider' => true,
+        'missing_feature'   => true,
+        'not_working'       => true,
+        'temporary'         => false,
+        'other'             => true,
+    ]),
+
+    /**
+     * CSS selector of the "Deactivate" link of this plugin in the plugins overview of the platform.
+     * The plugin sets it. Without it, the deactivation modal does not show.
+     */
+    'deactivationFeedbackLinkSelector' => value(null),
 ];

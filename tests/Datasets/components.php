@@ -43,7 +43,18 @@ dataset('components', [
                 return Frontend::renderNotifications();
             };
         },
-        'views'    => MockAbstractViewService::ALL_PDK_PAGES,
+        'views'    => array_values(
+            array_diff(MockAbstractViewService::ALL_PDK_PAGES, [MockAbstractViewService::PAGE_PLUGINS_OVERVIEW])
+        ),
+    ],
+
+    'deactivation feedback' => [
+        'callback' => function () {
+            return function () {
+                return Frontend::renderDeactivationFeedback();
+            };
+        },
+        'views'    => [MockAbstractViewService::PAGE_PLUGINS_OVERVIEW],
     ],
 
     'order box' => [
