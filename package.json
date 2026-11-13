@@ -48,7 +48,7 @@
     "extends": "@myparcel-dev/semantic-release-config/github-composer"
   },
   "devDependencies": {
-    "@myparcel-dev/semantic-release-config": "^7.0.0",
+    "@myparcel-dev/semantic-release-config": "^8.1.0",
     "@myparcel/prettier-config": "^1.1.0",
     "husky": "^9.0.0",
     "is-ci": "^4.1.0",
