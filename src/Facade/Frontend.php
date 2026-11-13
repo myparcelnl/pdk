@@ -12,6 +12,7 @@ use MyParcelNL\Pdk\Frontend\Contract\FrontendRenderServiceInterface;
 
 /**
  * @method static string renderChildProductSettings(PdkProduct $product)
+ * @method static string renderDeactivationFeedback()
  * @method static string renderDeliveryOptions(PdkCart $cart)
  * @method static string renderInitScript()
  * @method static string renderModals()

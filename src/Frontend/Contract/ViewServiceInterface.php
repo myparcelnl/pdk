@@ -62,6 +62,14 @@ interface ViewServiceInterface
     public function isPluginSettingsPage(): bool;
 
     /**
+     * True if the current page is the overview of installed plugins or modules of the platform, where the plugin can
+     * be deactivated.
+     *
+     * @see \MyParcelNL\Pdk\Facade\Frontend::renderDeactivationFeedback()
+     */
+    public function isPluginsOverviewPage(): bool;
+
+    /**
      * True if the current page is the product page.
      *
      * @see \MyParcelNL\Pdk\Facade\Frontend::renderProductSettings()
