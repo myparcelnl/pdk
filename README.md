@@ -73,6 +73,43 @@ docker compose run php composer test
 
 `--pull` fetches the latest [`php-xd`](https://github.com/myparcelnl/docker-images#php-xd) base image, which gets security fixes every week.
 
+### Testing your changes in a plugin
+
+`bin/pdk-dev` links your local checkout of the PDK, and of [js-pdk], into a plugin that uses them, for example [woocommerce]. It also undoes that.
+
+Requirements:
+
+- `git`, `jq` and pnpm. The plugin must use pnpm.
+- A checkout of [js-pdk] in a folder named `js-pdk`, next to this repository, for example `projects/pdk` and `projects/js-pdk`. Has it another name or location? Set `JS_PDK_PATH` to its path.
+- When the plugin runs composer in Docker, mount this repository at the same path in the container, for example in the `docker-compose.override.yml` of the plugin:
+
+  ```yaml
+  services:
+    php:
+      volumes:
+        - /path/to/pdk:/path/to/pdk
+  ```
+
+Put the script on your `PATH` once:
+
+```shell
+ln -s "$(pwd)/bin/pdk-dev" /usr/local/bin/pdk-dev
+```
+
+Run these commands in the root folder of the plugin:
+
+```shell
+pdk-dev on        # link the PDK and js-pdk
+pdk-dev on --php  # link only the PDK
+pdk-dev on --js   # link only js-pdk
+
+pdk-dev off       # undo both
+pdk-dev off --php # undo only the PDK
+pdk-dev off --js  # undo only js-pdk
+```
+
+`on` adds a composer `path` repository to `composer.json` and pnpm `link:` overrides to `pnpm-workspace.yaml`, and installs. When the plugin has a `php` service in `docker compose`, composer runs there. `off` restores `composer.json`, `composer.lock`, `package.json`, `pnpm-workspace.yaml` and `pnpm-lock.yaml` from git, and installs again. `on` stops when one of these files has uncommitted changes, because `off` would throw them away. Never commit the changes that `on` makes.
+
 ### Adding a shipment option
 
 Shipment options are managed through the `OrderOptionDefinitionInterface` system. Each option is a single Definition class that declares all its keys (shipment, capabilities, carrier settings, product settings, allow, price). All models, views, and services build their attributes and form elements dynamically from these definitions.
@@ -136,5 +173,7 @@ pnpm lint:fix
 [Developer Portal contact page]: https://developer.myparcel.nl/contact.html
 [Developer Portal]: https://developer.myparcel.nl
 [SDK]: https://github.com/myparcelnl/sdk
+[js-pdk]: https://github.com/myparcelnl/js-pdk
+[woocommerce]: https://github.com/myparcelnl/woocommerce
 [contribution guidelines]: https://github.com/myparcelnl/developer/blob/main/DEVELOPERS.md
 [Plugin Development Kit (PDK) documentation]: https://developer.myparcel.nl/documentation/52.pdk/

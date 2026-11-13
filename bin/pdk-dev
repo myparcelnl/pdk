@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# Link the local pdk and js-pdk into a plugin, or undo that. Run it in the root folder of the plugin.
+#
+# Usage: pdk-dev on|off [--php|--js]
+#
+# PDK_PATH defaults to the pdk repository that holds this script. JS_PDK_PATH defaults to the js-pdk folder next to it.
+set -euo pipefail
+
+PDK_PATH="${PDK_PATH:-$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)}"
+JS_PDK_PATH="${JS_PDK_PATH:-$(dirname "$PDK_PATH")/js-pdk}"
+
+PHP_FILES=(composer.json composer.lock)
+JS_FILES=(package.json pnpm-workspace.yaml pnpm-lock.yaml)
+
+usage() {
+  echo "Usage: pdk-dev on|off [--php|--js]" >&2
+  exit 1
+}
+
+fail() {
+  echo "pdk-dev: $1" >&2
+  exit 1
+}
+
+# Restore the files of the list that git tracks, because only those can be restored.
+restore() {
+  echo "Restoring $*..."
+  # shellcheck disable=SC2046
+  git restore -- $(git ls-files -- "$@")
+}
+
+# Stop when a file that "off" restores has changes, because "off" would throw them away.
+require_clean() {
+  local changed
+  changed=$(git diff --name-only HEAD -- "$@")
+
+  [[ -z "$changed" ]] || fail "commit or stash your changes to these files first: ${changed//$'\n'/ }"
+}
+
+composer() {
+  if docker compose config --services 2>/dev/null | grep -qx php; then
+    docker compose run --rm php composer "$@" --ignore-platform-req="ext-*" --ignore-platform-req="lib-*"
+  else
+    command composer "$@"
+  fi
+}
+
+php_on() {
+  require_clean "${PHP_FILES[@]}"
+
+  echo "Linking $PDK_PATH..."
+  jq --arg path "$PDK_PATH" \
+    '.require["myparcelnl/pdk"] = "*" | .repositories = [{"type": "path", "url": $path}] + (.repositories // [])' \
+    composer.json >composer.json.tmp
+  mv composer.json.tmp composer.json
+
+  composer update myparcelnl/pdk --with-dependencies
+}
+
+php_off() {
+  restore "${PHP_FILES[@]}"
+  composer install
+}
+
+js_on() {
+  require_clean "${JS_FILES[@]}"
+
+  # A link: override does not install the dependencies of the linked package, so install them in js-pdk first.
+  echo "Installing the dependencies of $JS_PDK_PATH..."
+  pnpm install --dir "$JS_PDK_PATH" --frozen-lockfile
+
+  echo "Linking $JS_PDK_PATH..."
+  # pnpm config set replaces the whole object, so merge the overrides the plugin already has.
+  # A separate assignment, so set -e stops the script when pnpm refuses to run, for example in a Yarn plugin.
+  local current overrides
+  current=$(pnpm config get --location project overrides --json)
+  overrides=$(jq -n \
+    --argjson current "$current" \
+    --argjson packages "$(pnpm ls --dir "$JS_PDK_PATH" -r --depth -1 --json)" \
+    '($current // {}) + ($packages | map(select(.private | not) | {key: .name, value: "link:\(.path)"}) | from_entries)')
+
+  pnpm config set --location project overrides "$overrides" --json
+  pnpm install --no-frozen-lockfile
+}
+
+js_off() {
+  restore "${JS_FILES[@]}"
+  pnpm install --frozen-lockfile
+}
+
+[[ $# -ge 1 && $# -le 2 && ($1 == on || $1 == off) ]] || usage
+
+case "${2:-}" in
+  --php) parts=(php) ;;
+  --js) parts=(js) ;;
+  # js first, so a plugin that is not on pnpm stops before composer.json changes.
+  "") parts=(js php) ;;
+  *) usage ;;
+esac
+
+for part in "${parts[@]}"; do
+  "${part}_$1"
+done
