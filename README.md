@@ -28,9 +28,11 @@ View our [contribution guidelines] for information on how to contribute to the P
 
 ### Prerequisites
 
-- Node 18
-- Yarn
+- Node.js 24, version 24.21 or later
+- pnpm 12, version 12.11 or later
 - Docker
+- No Volta on your machine. Its `yarn` does not go through corepack, so the `packageManager` field in `package.json`
+  does not stop it.
 
 ### Installation
 
@@ -40,10 +42,10 @@ Create `.env`:
 cp .env.template .env
 ```
 
-Install Yarn dependencies:
+Install Node dependencies:
 
 ```shell
-yarn
+pnpm install
 ```
 
 Install Composer dependencies:
@@ -84,7 +86,7 @@ To add a new option:
 
 The SDK derives the capabilities key. Override `getCapabilitiesOptionsKey()` only for exceptions, such as returning `null` for an option without a capabilities equivalent.
 
-Everything else (carrier settings, product settings, allow/price toggles, validation, frontend form fields, API export/import) is derived automatically. Run `yarn test:unit` to verify the consistency tests pass.
+Everything else (carrier settings, product settings, allow/price toggles, validation, frontend form fields, API export/import) is derived automatically. Run `pnpm test:unit` to verify the consistency tests pass.
 
 If the option is not yet in the SDK types, update the SDK or regenerate the OpenAPI types first.
 
@@ -118,17 +120,17 @@ Make sure Prettier is enabled in your IDE and runs on the following files:
 Set up Git hooks to run Prettier on each commit, correcting any formatting issues.
 
 ```shell
-yarn prepare
+pnpm prepare
 ```
 
 You can also run Prettier manually:
 
 ```shell
 # Check formatting issues
-yarn lint
+pnpm lint
 
 # Fix formatting issues
-yarn lint:fix
+pnpm lint:fix
 ```
 
 [Developer Portal contact page]: https://developer.myparcel.nl/contact.html
