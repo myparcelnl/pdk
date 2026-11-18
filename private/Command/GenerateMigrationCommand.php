@@ -30,7 +30,7 @@ final class GenerateMigrationCommand extends Command
 Creates a timestamped migration — an anonymous class extending AbstractTimestampedMigration,
 in a file named YYYY_MM_DD_HHMMSS_<slug>.php.
 
-Run it from your plugin's root, with the PDK dev-linked (pdk-dev-on):
+Run it from your plugin's root, with the PDK linked by "pdk-dev on" (see the PDK README):
 
   composer console generate:migration migrate_carriers_to_v2
 
