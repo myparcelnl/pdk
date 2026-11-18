@@ -22,17 +22,18 @@ fail() {
   exit 1
 }
 
-# Restore the files of the list that git tracks, because only those can be restored.
+# Restore the files of the list that git tracks, and remove the ones that "on" created.
 restore() {
   echo "Restoring $*..."
   # shellcheck disable=SC2046
   git restore -- $(git ls-files -- "$@")
+  git clean -fq -- "$@"
 }
 
-# Stop when a file that "off" restores has changes, because "off" would throw them away.
+# Stop when a file that "off" restores or removes has changes, because "off" would throw them away.
 require_clean() {
   local changed
-  changed=$(git diff --name-only HEAD -- "$@")
+  changed=$(git diff --name-only HEAD -- "$@"; git ls-files --others --exclude-standard -- "$@")
 
   [[ -z "$changed" ]] || fail "commit or stash your changes to these files first: ${changed//$'\n'/ }"
 }
