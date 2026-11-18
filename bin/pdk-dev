@@ -35,7 +35,7 @@ require_clean() {
   local changed
   changed=$(git diff --name-only HEAD -- "$@"; git ls-files --others --exclude-standard -- "$@")
 
-  [[ -z "$changed" ]] || fail "commit or stash your changes to these files first: ${changed//$'\n'/ }"
+  [[ -z "$changed" ]] || fail "commit or stash your changes to these files first, or run pdk-dev off if pdk-dev on stopped halfway: ${changed//$'\n'/ }"
 }
 
 composer() {
