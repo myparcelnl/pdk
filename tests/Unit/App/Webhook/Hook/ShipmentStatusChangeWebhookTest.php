@@ -53,6 +53,17 @@ class TrackingWebhookPdkOrderRepository extends MockPdkOrderRepository
     }
 }
 
+/**
+ * Knows one order, like a platform repository that implements find().
+ */
+class KnownOrdersWebhookPdkOrderRepository extends MockPdkOrderRepository
+{
+    public function find($id): ?PdkOrder
+    {
+        return '197' === (string) $id ? $this->get($id) : null;
+    }
+}
+
 function dispatchWebhook(array $hookBody, bool $enqueueShipmentResponse = true, int $apiStatus = 2): array
 {
     /** @var PdkWebhooksRepositoryInterface $repository */
@@ -146,6 +157,21 @@ function useTrackingWebhookOrderRepository(): TrackingWebhookPdkOrderRepository
     $pdk->set(ShipmentStatusChangeWebhook::class, new ShipmentStatusChangeWebhook($webhookService));
 
     return $repository;
+}
+
+function useKnownOrdersWebhookOrderRepository(): void
+{
+    $repository     = new KnownOrdersWebhookPdkOrderRepository(Pdk::get(StorageInterface::class));
+    $webhookService = new ShipmentWebhookService(
+        Pdk::get(\MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface::class),
+        $repository
+    );
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
+    $pdk = Pdk::get(PdkInterface::class);
+    $pdk->set(PdkOrderRepositoryInterface::class, $repository);
+    $pdk->set(ShipmentWebhookService::class, $webhookService);
+    $pdk->set(ShipmentStatusChangeWebhook::class, new ShipmentStatusChangeWebhook($webhookService));
 }
 
 function validHookBody($orderId = 'api-uuid-string', $referenceIdentifier = null): array
@@ -251,6 +277,38 @@ it('skips order v2 webhook when only the legacy order_id is present', function (
                 'shipment_reference_identifier' => null,
             ],
         ]);
+});
+
+it('skips webhook when the shipment reference is not an order in the shop', function (array $features) {
+    useKnownOrdersWebhookOrderRepository();
+    setWebhookAccountFeatures($features);
+
+    $result = dispatchWebhook(validHookBody(null, 'fd_1234'), false);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeFalse()
+        ->and($result['logger']->getLogs('debug'))
+        ->toContain([
+            'level'   => 'debug',
+            'message' => '[PDK]: Skipping shipment status change webhook without a valid order identifier',
+            'context' => [
+                'shipment_id'                   => 192031595,
+                'order_id'                      => null,
+                'shipment_reference_identifier' => 'fd_1234',
+            ],
+        ]);
+})->with([
+    'shipments only' => [[]],
+    'order v2'       => [[PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]],
+]);
+
+it('dispatches update action when the shipment reference is an order in the shop', function () {
+    useKnownOrdersWebhookOrderRepository();
+
+    $result = dispatchWebhook(validHookBody(null, '197'));
+    $call   = $result['actions']->getCalls()->firstWhere('action', PdkBackendActions::UPDATE_SHIPMENTS);
+
+    expect($call['parameters']['orderIds'])->toBe(['197']);
 });
 
 it('skips shipment updates when the shipment id is missing', function () {
