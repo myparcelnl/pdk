@@ -96,6 +96,11 @@ it('gets context data', function (string $id, array $arguments) {
         ],
     ],
 
+    'deactivation feedback' => [
+        'id'        => Context::ID_DEACTIVATION_FEEDBACK,
+        'arguments' => [],
+    ],
+
     'delivery options config' => [
         'id'        => Context::ID_CHECKOUT,
         'arguments' => [
@@ -115,12 +120,13 @@ it('handles invalid context keys', function () {
     $contextBag = $service->createContexts(['random_word']);
 
     expect($contextBag->toArray())->toEqual([
-        'checkout'            => null,
-        'dynamic'             => null,
-        'global'              => null,
-        'orderData'           => null,
-        'pluginSettingsView'  => null,
-        'productData'         => null,
-        'productSettingsView' => null,
+        'checkout'             => null,
+        'deactivationFeedback' => null,
+        'dynamic'              => null,
+        'global'               => null,
+        'orderData'            => null,
+        'pluginSettingsView'   => null,
+        'productData'          => null,
+        'productSettingsView'  => null,
     ]);
 });

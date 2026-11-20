@@ -48,6 +48,11 @@ class MockViewService implements ViewServiceInterface
         return true;
     }
 
+    public function isPluginsOverviewPage(): bool
+    {
+        return true;
+    }
+
     public function isProductPage(): bool
     {
         return true;

@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Context\Context;
  * @property null|\MyParcelNL\Pdk\Context\Model\PluginSettingsViewContext         $pluginSettingsView
  * @property null|\MyParcelNL\Pdk\Context\Collection\ProductDataContextCollection $productData
  * @property null|\MyParcelNL\Pdk\Context\Model\ProductSettingsViewContext        $productSettingsView
+ * @property null|\MyParcelNL\Pdk\Context\Model\DeactivationFeedbackContext       $deactivationFeedback
  */
 class ContextBag extends Model
 {
@@ -28,6 +29,7 @@ class ContextBag extends Model
         Context::ID_PLUGIN_SETTINGS_VIEW  => null,
         Context::ID_PRODUCT_DATA          => null,
         Context::ID_PRODUCT_SETTINGS_VIEW => null,
+        Context::ID_DEACTIVATION_FEEDBACK => null,
     ];
 
     public $casts      = [
@@ -38,6 +40,7 @@ class ContextBag extends Model
         Context::ID_PLUGIN_SETTINGS_VIEW  => PluginSettingsViewContext::class,
         Context::ID_PRODUCT_DATA          => ProductDataContextCollection::class,
         Context::ID_PRODUCT_SETTINGS_VIEW => ProductSettingsViewContext::class,
+        Context::ID_DEACTIVATION_FEEDBACK => DeactivationFeedbackContext::class,
     ];
 
     protected $convertCase = false;

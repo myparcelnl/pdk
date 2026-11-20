@@ -36,6 +36,7 @@ class FrontendRenderService implements FrontendRenderServiceInterface
      */
     protected const COMPONENT_INIT_SCRIPT            = 'init';
     protected const COMPONENT_CHILD_PRODUCT_SETTINGS = 'ChildProductSettings';
+    protected const COMPONENT_DEACTIVATION_FEEDBACK  = 'DeactivationFeedback';
     protected const COMPONENT_MODALS                 = 'Modals';
     protected const COMPONENT_NOTIFICATIONS          = 'Notifications';
     protected const COMPONENT_ORDER_BOX              = 'OrderBox';
@@ -99,6 +100,15 @@ class FrontendRenderService implements FrontendRenderServiceInterface
             [Context::ID_PRODUCT_DATA],
             ['product' => $product]
         );
+    }
+
+    /**
+     * @return string
+     * @noinspection PhpUnused
+     */
+    public function renderDeactivationFeedback(): string
+    {
+        return $this->renderComponent(self::COMPONENT_DEACTIVATION_FEEDBACK, [Context::ID_DEACTIVATION_FEEDBACK]);
     }
 
     /**
@@ -303,6 +313,9 @@ class FrontendRenderService implements FrontendRenderServiceInterface
         switch ($component) {
             case self::COMPONENT_CHILD_PRODUCT_SETTINGS:
                 return $this->viewService->isChildProductPage();
+
+            case self::COMPONENT_DEACTIVATION_FEEDBACK:
+                return $this->viewService->isPluginsOverviewPage();
 
             case self::COMPONENT_DELIVERY_OPTIONS:
                 return $this->viewService->isCheckoutPage();

@@ -18,6 +18,7 @@ use MyParcelNL\Pdk\Context\Context;
 use MyParcelNL\Pdk\Context\Contract\ContextServiceInterface;
 use MyParcelNL\Pdk\Context\Model\CheckoutContext;
 use MyParcelNL\Pdk\Context\Model\ContextBag;
+use MyParcelNL\Pdk\Context\Model\DeactivationFeedbackContext;
 use MyParcelNL\Pdk\Context\Model\DynamicContext;
 use MyParcelNL\Pdk\Context\Model\GlobalContext;
 use MyParcelNL\Pdk\Context\Model\PluginSettingsViewContext;
@@ -51,6 +52,14 @@ class ContextService implements ContextServiceInterface
         }, []);
 
         return new ContextBag($context);
+    }
+
+    /**
+     * @return \MyParcelNL\Pdk\Context\Model\DeactivationFeedbackContext
+     */
+    public function createDeactivationFeedbackContext(): DeactivationFeedbackContext
+    {
+        return new DeactivationFeedbackContext();
     }
 
     /**
@@ -150,7 +159,7 @@ class ContextService implements ContextServiceInterface
      * @param  string $contextId
      * @param  array  $data
      *
-     * @return null|CheckoutContext|DynamicContext|GlobalContext|OrderDataContextCollection|PluginSettingsViewContext|ProductDataContextCollection|ProductSettingsViewContext
+     * @return null|CheckoutContext|DeactivationFeedbackContext|DynamicContext|GlobalContext|OrderDataContextCollection|PluginSettingsViewContext|ProductDataContextCollection|ProductSettingsViewContext
      * @noinspection MultipleReturnStatementsInspection
      */
     protected function resolveContext(string $contextId, array $data = [])
@@ -176,6 +185,9 @@ class ContextService implements ContextServiceInterface
 
             case Context::ID_CHECKOUT:
                 return $this->createCheckoutContext($data['cart'] ?? null);
+
+            case Context::ID_DEACTIVATION_FEEDBACK:
+                return $this->createDeactivationFeedbackContext();
         }
 
         Logger::alert('Invalid context key passed.', compact('contextId', 'data'));
