@@ -110,6 +110,14 @@ pdk-dev off --js  # undo only js-pdk
 
 `on` adds a composer `path` repository to `composer.json` and pnpm `link:` overrides to `pnpm-workspace.yaml`, and installs. When the plugin has a `php` service in `docker compose`, composer runs there. `off` restores `composer.json`, `composer.lock`, `package.json`, `pnpm-workspace.yaml` and `pnpm-lock.yaml` from git, and installs again. `on` stops when one of these files has uncommitted changes, because `off` would throw them away. Never commit the changes that `on` makes.
 
+`on` does not build js-pdk. The `pdk-builder` command in the plugin runs the built files of `@myparcel-dev/pdk-app-builder`, so build it in js-pdk after `on`, and again after each change to it:
+
+```shell
+pnpm --filter @myparcel-dev/pdk-app-builder build
+```
+
+The other js-pdk packages that the plugins use export their source and need no build. To see your changes in them, run `pnpm watch` in the plugin.
+
 ### Adding a shipment option
 
 Shipment options are managed through the `OrderOptionDefinitionInterface` system. Each option is a single Definition class that declares all its keys (shipment, capabilities, carrier settings, product settings, allow, price). All models, views, and services build their attributes and form elements dynamically from these definitions.
