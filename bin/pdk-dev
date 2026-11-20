@@ -26,7 +26,7 @@ fail() {
 restore() {
   echo "Restoring $*..."
   # shellcheck disable=SC2046
-  git restore -- $(git ls-files -- "$@")
+  git restore --source=HEAD --staged --worktree -- $(git ls-files -- "$@")
   git clean -fq -- "$@"
 }
 
