@@ -210,7 +210,7 @@ it('skips label created webhook when shipment reference identifier is missing', 
         ->and($result['logger']->getLogs('debug'))
         ->toContain([
             'level'   => 'debug',
-            'message' => '[PDK]: Skipping shipment label created webhook without a shipment reference identifier',
+            'message' => '[PDK]: Skipping shipment label created webhook without a valid order identifier',
             'context' => [
                 'shipment_id'                   => 231032886,
                 'order_id'                      => null,
@@ -289,7 +289,7 @@ it('skips label created webhook when the shipment reference is not an order in t
         ->and($result['logger']->getLogs('debug'))
         ->toContain([
             'level'   => 'debug',
-            'message' => '[PDK]: Skipping shipment label created webhook without a shipment reference identifier',
+            'message' => '[PDK]: Skipping shipment label created webhook without a valid order identifier',
             'context' => [
                 'shipment_id'                   => 231032886,
                 'order_id'                      => null,
