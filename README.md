@@ -73,6 +73,51 @@ docker compose run php composer test
 
 `--pull` fetches the latest [`php-xd`](https://github.com/myparcelnl/docker-images#php-xd) base image, which gets security fixes every week.
 
+### Testing your changes in a plugin
+
+`bin/pdk-dev` links your local checkout of the PDK, and of [js-pdk], into a plugin that uses them, for example [woocommerce]. It also undoes that.
+
+Requirements:
+
+- `git`, `jq` and pnpm. The plugin must use pnpm.
+- A checkout of [js-pdk] in a folder named `js-pdk`, next to this repository, for example `projects/pdk` and `projects/js-pdk`. Has it another name or location? Set `JS_PDK_PATH` to its path.
+- When the plugin runs composer in Docker, mount this repository at the same path in the container, for example in the `docker-compose.override.yml` of the plugin:
+
+  ```yaml
+  services:
+    php:
+      volumes:
+        - /path/to/pdk:/path/to/pdk
+  ```
+
+Put the script on your `PATH` once:
+
+```shell
+ln -s "$(pwd)/bin/pdk-dev" /usr/local/bin/pdk-dev
+```
+
+Run these commands in the root folder of the plugin:
+
+```shell
+pdk-dev on        # link the PDK and js-pdk
+pdk-dev on --php  # link only the PDK
+pdk-dev on --js   # link only js-pdk
+
+pdk-dev off       # undo both
+pdk-dev off --php # undo only the PDK
+pdk-dev off --js  # undo only js-pdk
+```
+
+`on` adds a composer `path` repository to `composer.json` and pnpm `link:` overrides to `pnpm-workspace.yaml`, and installs. When the plugin has a `php` service in `docker compose`, composer runs there. `off` restores `composer.json`, `composer.lock`, `package.json`, `pnpm-workspace.yaml` and `pnpm-lock.yaml` from git, and installs again. `on` stops when one of these files has uncommitted changes, because `off` would throw them away. Never commit the changes that `on` makes.
+
+`on` does not build js-pdk. The `pdk-builder` command in the plugin runs the built files of `@myparcel-dev/pdk-app-builder`, so build it in js-pdk after `on`, and again after each change to it:
+
+```shell
+pnpm --filter @myparcel-dev/pdk-app-builder build
+```
+
+The other js-pdk packages that the plugins use export their source and need no build. To see your changes in them, run `pnpm watch` in the plugin.
+
 ### Adding a shipment option
 
 Shipment options are managed through the `OrderOptionDefinitionInterface` system. Each option is a single Definition class that declares all its keys (shipment, capabilities, carrier settings, product settings, allow, price). All models, views, and services build their attributes and form elements dynamically from these definitions.
@@ -99,7 +144,7 @@ Migrations are tracked by identity in an `applied_migrations` setting and run ex
 - **Timestamped migrations** (preferred) — a file named `YYYY_MM_DD_HHMMSS_<slug>.php` in a plugin's `src/Migration/` that returns an anonymous class extending `AbstractTimestampedMigration`. The PDK auto-discovers them and runs each once regardless of version, so they fire even on release-candidate builds where version comparison is unreliable.
 - **Versioned migrations** — classes implementing `UpgradeMigrationInterface` with a `getVersion()`. **Deprecated**: prefer a timestamped migration for new work.
 
-To scaffold a timestamped migration, run this from a plugin checkout with the PDK dev-linked (`pdk-dev-on`):
+To scaffold a timestamped migration, run this from a plugin checkout with the PDK linked by `pdk-dev on` (see [Testing your changes in a plugin](#testing-your-changes-in-a-plugin)):
 
 ```shell
 composer console generate:migration <slug>
@@ -136,5 +181,7 @@ pnpm lint:fix
 [Developer Portal contact page]: https://developer.myparcel.nl/contact.html
 [Developer Portal]: https://developer.myparcel.nl
 [SDK]: https://github.com/myparcelnl/sdk
+[js-pdk]: https://github.com/myparcelnl/js-pdk
+[woocommerce]: https://github.com/myparcelnl/woocommerce
 [contribution guidelines]: https://github.com/myparcelnl/developer/blob/main/DEVELOPERS.md
 [Plugin Development Kit (PDK) documentation]: https://developer.myparcel.nl/documentation/52.pdk/
