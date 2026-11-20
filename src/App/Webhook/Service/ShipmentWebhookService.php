@@ -79,7 +79,7 @@ class ShipmentWebhookService
 
         if (empty($orderIds)) {
             $this->logSkippedWebhook(
-                'Skipping shipment label created webhook without a shipment reference identifier',
+                'Skipping shipment label created webhook without a valid order identifier',
                 $content
             );
 
