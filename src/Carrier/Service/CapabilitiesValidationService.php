@@ -183,6 +183,30 @@ class CapabilitiesValidationService
     }
 
     /**
+     * Whether the capability allows the given Incoterms rule. A capability without incoterms allows no rule.
+     *
+     * @param  RefCapabilitiesResponseCapabilityV2 $capability
+     * @param  mixed                               $rule The rule to check; a non-rule value such as INHERIT is never allowed
+     *
+     * @return bool
+     */
+    public function supportsIncotermsRule(RefCapabilitiesResponseCapabilityV2 $capability, $rule): bool
+    {
+        $incoterms     = $capability->getIncoterms();
+        $incotermsRule = $incoterms ? $incoterms->getRule() : null;
+
+        if (! $incotermsRule) {
+            return false;
+        }
+
+        // The SDK declares the rules as ShipmentDefsIncotermsRule models, but at runtime they are strings.
+        /** @var string[] $values */
+        $values = $incotermsRule->getValues();
+
+        return in_array($rule, $values, true);
+    }
+
+    /**
      * Whether the carrier supports inbound (return) shipments to the given destination.
      *
      * The capabilities endpoint requires a destination country code to answer this

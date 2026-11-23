@@ -150,6 +150,7 @@
             "return": false,
             "hideSender": null,
             "insurance": null,
+            "incoterms": null,
             "largeFormat": false,
             "onlyRecipient": false,
             "priorityDelivery": null,

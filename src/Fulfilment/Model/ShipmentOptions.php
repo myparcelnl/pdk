@@ -31,6 +31,7 @@ use MyParcelNL\Pdk\Types\Service\TriStateService;
  * @property bool   $sameDayDelivery
  * @property bool   $saturdayDelivery
  * @property bool   $signature
+ * @property null|int|string $incoterms
  */
 class ShipmentOptions extends Model
 {

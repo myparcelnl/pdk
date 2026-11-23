@@ -116,6 +116,7 @@ class GetShipmentsResponse extends ApiResponseWithBody
         $shipmentOptions = Arr::only($options, $keys);
 
         $shipmentOptions['insurance'] = $options['insurance']['amount'] ?? null;
+        $shipmentOptions['incoterms'] = $options['incoterms']['rule'] ?? null;
 
         return $shipmentOptions;
     }

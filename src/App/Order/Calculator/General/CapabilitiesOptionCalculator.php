@@ -6,15 +6,12 @@ namespace MyParcelNL\Pdk\App\Order\Calculator\General;
 
 use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\App\Order\Calculator\AbstractPdkOrderOptionCalculator;
-use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
-use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Logger;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2;
-use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
  * Applies requires/excludes/isRequired from the capabilities API response to shipment options.
@@ -23,29 +20,19 @@ use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculator
 {
     /**
-     * @var \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService
-     */
-    private $capabilitiesService;
-
-    /**
-     * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
-     */
-    public function __construct(PdkOrder $order)
-    {
-        parent::__construct($order);
-
-        $this->capabilitiesService = Pdk::get(CapabilitiesValidationService::class);
-    }
-
-    /**
      * @return void
      */
     public function calculate(): void
     {
-        $capability = $this->getCarrierCapabilities();
+        $capability = $this->fetchShipmentCapability();
 
-        /** @var OrderOptionDefinitionInterface[] $definitions */
-        $definitions = Pdk::get('orderOptionDefinitions');
+        // Only options in the capabilities options object have the tri-state metadata this calculator applies.
+        $definitions = array_filter(
+            Pdk::get('orderOptionDefinitions'),
+            static function (OrderOptionDefinitionInterface $definition): bool {
+                return null !== $definition->getCapabilitiesOptionsKey();
+            }
+        );
 
         // No capability for this carrier+package_type+delivery_type combination —
         // none of the shipment options are supported, drop them all.
@@ -86,38 +73,6 @@ final class CapabilitiesOptionCalculator extends AbstractPdkOrderOptionCalculato
                 $this->forceOption($shipmentKey, TriStateService::DISABLED);
             }
         }
-    }
-
-    /**
-     * @return null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2
-     */
-    private function getCarrierCapabilities(): ?RefCapabilitiesResponseCapabilityV2
-    {
-        $deliveryOptions = $this->order->deliveryOptions;
-        $carrierName     = $deliveryOptions->carrier->carrier;
-        $cc              = $this->order->shippingAddress->cc;
-        $v2PackageType   = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $deliveryOptions->packageType);
-        $v2DeliveryType  = ApiMapperService::forDeliveryType()->v2NameFromLegacyName((string) $deliveryOptions->deliveryType);
-
-        if (! $cc || ! $v2PackageType) {
-            return null;
-        }
-
-        $args = [
-            'carrier'      => $carrierName,
-            'recipient'    => $this->capabilitiesRecipient(),
-            'package_type' => $v2PackageType,
-        ];
-
-        if ($v2DeliveryType) {
-            $args['delivery_type'] = $v2DeliveryType;
-        }
-
-        $capabilities = $this->capabilitiesService->indexByCarrier(
-            $this->capabilitiesService->getRepository()->getCapabilities($args)
-        );
-
-        return $capabilities[$carrierName] ?? null;
     }
 
     /**

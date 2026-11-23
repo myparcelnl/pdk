@@ -36,6 +36,15 @@ interface OrderOptionDefinitionInterface
     public function getCapabilitiesOptionsKey(): ?string;
 
     /**
+     * Get the camelCase key of a top-level capability property that represents this option, such as
+     * 'incoterms'. Use it in place of getCapabilitiesOptionsKey() for an option that the capabilities
+     * do not return in their options object. Null for all other options.
+     *
+     * @return null|string
+     */
+    public function getCapabilitiesRootKey(): ?string;
+
+    /**
      * Get the delivery options "allow" toggle key (e.g. 'allowSignature').
      *
      * @return null|string

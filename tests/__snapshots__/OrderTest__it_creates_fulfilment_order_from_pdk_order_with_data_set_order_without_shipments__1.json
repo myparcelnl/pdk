@@ -98,6 +98,7 @@
             "return": false,
             "hideSender": false,
             "insurance": 0,
+            "incoterms": 0,
             "largeFormat": false,
             "onlyRecipient": true,
             "priorityDelivery": false,

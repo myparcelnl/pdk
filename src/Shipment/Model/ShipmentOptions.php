@@ -31,6 +31,7 @@ use MyParcelNL\Sdk\Support\Arr;
  * @property int<-1|0|1>         $freshFood
  * @property int<-1|0|1>         $frozen
  * @property int<-1|0|1>         $saturdayDelivery
+ * @property int|string           $incoterms
  */
 class ShipmentOptions extends Model
 {
@@ -86,7 +87,7 @@ class ShipmentOptions extends Model
              * @var OrderOptionDefinitionInterface|null $definition
              */
             $definition = Arr::first($definitions, static function (OrderOptionDefinitionInterface $definition) use ($shipmentOptionName) {
-                return $definition->getCapabilitiesOptionsKey() === $shipmentOptionName;
+                return ($definition->getCapabilitiesOptionsKey() ?? $definition->getCapabilitiesRootKey()) === $shipmentOptionName;
             });
 
             if (!$definition) {
@@ -121,13 +122,13 @@ class ShipmentOptions extends Model
 
         foreach ($definitions as $definition) {
             $shipmentOptionsKey = $definition->getShipmentOptionsKey();
-            $capabilitiesOptionsKey = $definition->getCapabilitiesOptionsKey();
+            $capabilitiesKey = $definition->getCapabilitiesOptionsKey() ?? $definition->getCapabilitiesRootKey();
 
-            if (!$shipmentOptionsKey || !$capabilitiesOptionsKey) {
+            if (!$shipmentOptionsKey || !$capabilitiesKey) {
                 continue;
             }
 
-            $data[$capabilitiesOptionsKey] = $shipmentOptions->{$shipmentOptionsKey};
+            $data[$capabilitiesKey] = $shipmentOptions->{$shipmentOptionsKey};
         }
 
         return $data;

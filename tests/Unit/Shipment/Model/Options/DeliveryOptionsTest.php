@@ -75,6 +75,7 @@ it('instantiates shipment options', function () {
     expect($deliveryOptions->shipmentOptions->toArray())
         ->toEqual([
             'insurance'        => 5000,
+            'incoterms'        => TriStateService::INHERIT,
             'labelDescription' => 'hello',
             'ageCheck'         => TriStateService::ENABLED,
             'hideSender'       => TriStateService::ENABLED,

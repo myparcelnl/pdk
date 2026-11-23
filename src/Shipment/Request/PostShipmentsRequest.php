@@ -189,6 +189,10 @@ class PostShipmentsRequest extends Request
                         'amount'   => $shipmentOptions->insurance,
                         'currency' => 'EUR',
                     ] : null,
+                // Only a string is an Incoterms rule. Any other value sends the shipment without a rule.
+                'incoterms'     => is_string($shipmentOptions->incoterms)
+                    ? ['rule' => $shipmentOptions->incoterms]
+                    : null,
             ] + $options
         );
     }

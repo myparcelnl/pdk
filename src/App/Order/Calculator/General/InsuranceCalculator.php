@@ -9,7 +9,6 @@ use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
 use MyParcelNL\Pdk\Base\Contract\CountryServiceInterface;
 use MyParcelNL\Pdk\Base\Contract\CurrencyServiceInterface;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Carrier\Util\InsuranceTierMath;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Proposition\Service\PropositionService;
@@ -17,7 +16,6 @@ use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2;
-use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 {
@@ -32,11 +30,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private $currencyService;
 
     /**
-     * @var \MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService
-     */
-    private $capabilitiesService;
-
-    /**
      * @param  \MyParcelNL\Pdk\App\Order\Model\PdkOrder $order
      */
     public function __construct(PdkOrder $order)
@@ -45,7 +38,6 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
 
         $this->countryService      = Pdk::get(CountryServiceInterface::class);
         $this->currencyService     = Pdk::get(CurrencyServiceInterface::class);
-        $this->capabilitiesService = Pdk::get(CapabilitiesValidationService::class);
     }
 
     /**
@@ -82,7 +74,7 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
     private function calculateInsurance(?int $amount): int
     {
         $carrier          = $this->order->deliveryOptions->carrier;
-        $carrierInsurance = $this->fetchShipmentInsurance($carrier);
+        $carrierInsurance = $this->fetchShipmentInsurance();
 
         // No insurance possible for this shipment context.
         if (null === $carrierInsurance) {
@@ -144,36 +136,13 @@ final class InsuranceCalculator extends AbstractPdkOrderOptionCalculator
      *
      * @return null|\MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsInsuranceOptionV2
      */
-    private function fetchShipmentInsurance(Carrier $carrier): ?RefCapabilitiesResponseOptionsInsuranceOptionV2
+    private function fetchShipmentInsurance(): ?RefCapabilitiesResponseOptionsInsuranceOptionV2
     {
-        $deliveryOptions = $this->order->deliveryOptions;
-        $cc              = $this->order->shippingAddress->cc;
-        $v2PackageType   = ApiMapperService::forPackageType()->v2NameFromLegacyName((string) $deliveryOptions->packageType);
-        $v2DeliveryType  = ApiMapperService::forDeliveryType()->v2NameFromLegacyName((string) $deliveryOptions->deliveryType);
+        $capability = $this->fetchShipmentCapability();
+        // The SDK declares options as non-nullable, but the API may omit them.
+        $options    = $capability ? $capability->getOptions() : null;
 
-        if (! $v2PackageType) {
-            return null;
-        }
-
-        $args = [
-            'carrier'      => $carrier->carrier,
-            'recipient'    => $this->capabilitiesRecipient(),
-            'package_type' => $v2PackageType,
-        ];
-
-        if ($v2DeliveryType) {
-            $args['delivery_type'] = $v2DeliveryType;
-        }
-
-        $capability = $this->capabilitiesService->getRepository()->getCapabilities($args)[0] ?? null;
-
-        if (! $capability) {
-            return null;
-        }
-
-        $options = $capability->getOptions();
-
-        return $options ? $options->getInsurance() : null; // @phpstan-ignore-line SDK declares non-nullable but API may omit
+        return $options ? $options->getInsurance() : null;
     }
 
     /**

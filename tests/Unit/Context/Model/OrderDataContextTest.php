@@ -85,6 +85,7 @@ it('exposes inherited options', function () {
     expect($context->deliveryOptions['shipmentOptions'])
         ->toEqual([
             'insurance'                   => TriStateService::INHERIT,
+            'incoterms'                   => TriStateService::INHERIT,
             'requiresAgeVerification'     => TriStateService::INHERIT,
             'hideSender'                  => TriStateService::INHERIT,
             'oversizedPackage'            => TriStateService::INHERIT,
@@ -126,6 +127,8 @@ it('exposes inherited options', function () {
                     'freshFood'                   => TriStateService::DISABLED,
                     'frozen'                      => TriStateService::DISABLED,
                     'saturdayDelivery'            => TriStateService::DISABLED,
+                    // No rule in the carrier settings
+                    'incoterms'                   => TriStateService::DISABLED,
                 ],
             ],
             'DHL_FOR_YOU' => [
@@ -151,6 +154,8 @@ it('exposes inherited options', function () {
                     'freshFood'                   => TriStateService::DISABLED,
                     'frozen'                      => TriStateService::DISABLED,
                     'saturdayDelivery'            => TriStateService::DISABLED,
+                    // No rule in the carrier settings
+                    'incoterms'                   => TriStateService::DISABLED,
                 ],
             ],
         ]);

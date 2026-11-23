@@ -9,6 +9,7 @@ use MyParcelNL\Pdk\App\Options\Definition\ExcludeParcelLockersDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FreshFoodDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\FrozenDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\HideSenderDefinition;
+use MyParcelNL\Pdk\App\Options\Definition\IncotermsDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\InsuranceDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\LargeFormatDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\OnlyRecipientDefinition;
@@ -24,6 +25,7 @@ use MyParcelNL\Pdk\App\Order\Calculator\General\CapabilitiesPackageTypeCalculato
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomerInformationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\CustomsDeclarationCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\DeliveryDateExceptionCalculator;
+use MyParcelNL\Pdk\App\Order\Calculator\General\IncotermsCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\InsuranceCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\LabelDescriptionCalculator;
 use MyParcelNL\Pdk\App\Order\Calculator\General\TriStateOptionCalculator;
@@ -74,6 +76,7 @@ return [
             new DirectReturnDefinition(),
             new HideSenderDefinition(),
             new InsuranceDefinition(),
+            new IncotermsDefinition(),
             new LargeFormatDefinition(),
             new OnlyRecipientDefinition(),
             new PriorityDeliveryDefinition(),
@@ -97,6 +100,8 @@ return [
             TriStateOptionCalculator::class,
             // Validate delivery type against the carrier+package_type capability; reset to standard when invalid.
             CapabilitiesDeliveryTypeCalculator::class,
+            // Check the Incoterms rule against the carrier+destination capability; needs the final package and delivery type.
+            IncotermsCalculator::class,
             // Resolve the insured amount first: what insurance requires applies only when the amount is above zero.
             InsuranceCalculator::class,
             // Apply capabilities constraints (requires/excludes/isRequired) on the resolved values.

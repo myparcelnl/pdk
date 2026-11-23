@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace MyParcelNL\Pdk\Context\Model;
 
+use MyParcelNL\Pdk\App\Options\Definition\AbstractOrderOptionDefinition;
 use MyParcelNL\Pdk\App\Options\Definition\SignatureDefinition;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
@@ -16,6 +17,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use function MyParcelNL\Pdk\Tests\factory;
+use function MyParcelNL\Pdk\Tests\mockPdkProperty;
 use function MyParcelNL\Pdk\Tests\usesShared;
 
 uses()->group('context', 'carrier-settings');
@@ -176,4 +178,45 @@ it('dynamic context carrier settings forces ENABLED even when explicitly DISABLE
 
     expect($settings)->not->toBeNull()
         ->and($settings->exportSignature)->toBe(TriStateService::ENABLED);
+});
+
+it('dynamic context leaves the carrier setting of an option outside the capabilities options alone', function () {
+    $reset = mockPdkProperty('orderOptionDefinitions', [
+        new class extends AbstractOrderOptionDefinition {
+            public function getShipmentOptionsKey(): ?string
+            {
+                return 'topLevelOption';
+            }
+
+            public function getCapabilitiesOptionsKey(): ?string
+            {
+                return null;
+            }
+
+            public function getCapabilitiesRootKey(): ?string
+            {
+                return 'incoterms';
+            }
+        },
+    ]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities()
+        ->store();
+
+    $storage = Pdk::get(StorageInterface::class);
+    $storage->delete('carrier:POSTNL');
+    $storage->delete('carrier:all');
+
+    factory(Settings::class)
+        ->withCarrier('POSTNL')
+        ->store();
+
+    $context  = new DynamicContext();
+    $settings = $context->pluginSettings->carrier->firstWhere('id', 'POSTNL');
+
+    expect($settings)->not->toBeNull()
+        ->and($settings->getAttribute('exportTopLevelOption'))->toBe(TriStateService::INHERIT);
+
+    $reset();
 });

@@ -130,8 +130,13 @@ class DynamicContext extends Model
         /** @var CarrierRepositoryInterface $carrierRepository */
         $carrierRepository = Pdk::get(CarrierRepositoryInterface::class);
 
-        /** @var OrderOptionDefinitionInterface[] $definitions */
-        $definitions = Pdk::get('orderOptionDefinitions');
+        // Only options in the capabilities options object have the tri-state metadata resolved here.
+        $definitions = array_filter(
+            Pdk::get('orderOptionDefinitions'),
+            static function (OrderOptionDefinitionInterface $definition): bool {
+                return null !== $definition->getCapabilitiesOptionsKey();
+            }
+        );
 
         $globalDefaults = $settings->carrier->firstWhere('id', SettingsManager::KEY_ALL);
 

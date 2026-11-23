@@ -512,6 +512,60 @@
                     }
                 },
                 {
+                    "carrier": "GOFO",
+                    "packageTypes": [
+                        "PACKAGE",
+                        "MAILBOX",
+                        "UNFRANKED",
+                        "DIGITAL_STAMP",
+                        "PALLET",
+                        "SMALL_PACKAGE",
+                        "ENVELOPE"
+                    ],
+                    "options": {
+                        "freshFood": [],
+                        "frozen": [],
+                        "hideSender": [],
+                        "noTracking": [],
+                        "oversizedPackage": [],
+                        "priorityDelivery": [],
+                        "recipientOnlyDelivery": [],
+                        "requiresAgeVerification": [],
+                        "requiresReceiptCode": [],
+                        "requiresSignature": [],
+                        "returnOnFirstFailedDelivery": [],
+                        "sameDayDelivery": [],
+                        "saturdayDelivery": [],
+                        "scheduledCollection": [],
+                        "insurance": {
+                            "default": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "min": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "max": {
+                                "currency": "EUR",
+                                "amount": 500000
+                            }
+                        }
+                    },
+                    "deliveryTypes": [
+                        "MORNING_DELIVERY",
+                        "STANDARD_DELIVERY",
+                        "EVENING_DELIVERY",
+                        "PICKUP_DELIVERY",
+                        "SAME_DAY_DELIVERY",
+                        "EXPRESS_DELIVERY",
+                        "EARLY_MORNING_DELIVERY"
+                    ],
+                    "collo": {
+                        "max": 10
+                    }
+                },
+                {
                     "carrier": "INPOST",
                     "packageTypes": [
                         "PACKAGE",
@@ -891,6 +945,60 @@
                 },
                 {
                     "carrier": "VIA_TIM",
+                    "packageTypes": [
+                        "PACKAGE",
+                        "MAILBOX",
+                        "UNFRANKED",
+                        "DIGITAL_STAMP",
+                        "PALLET",
+                        "SMALL_PACKAGE",
+                        "ENVELOPE"
+                    ],
+                    "options": {
+                        "freshFood": [],
+                        "frozen": [],
+                        "hideSender": [],
+                        "noTracking": [],
+                        "oversizedPackage": [],
+                        "priorityDelivery": [],
+                        "recipientOnlyDelivery": [],
+                        "requiresAgeVerification": [],
+                        "requiresReceiptCode": [],
+                        "requiresSignature": [],
+                        "returnOnFirstFailedDelivery": [],
+                        "sameDayDelivery": [],
+                        "saturdayDelivery": [],
+                        "scheduledCollection": [],
+                        "insurance": {
+                            "default": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "min": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "max": {
+                                "currency": "EUR",
+                                "amount": 500000
+                            }
+                        }
+                    },
+                    "deliveryTypes": [
+                        "MORNING_DELIVERY",
+                        "STANDARD_DELIVERY",
+                        "EVENING_DELIVERY",
+                        "PICKUP_DELIVERY",
+                        "SAME_DAY_DELIVERY",
+                        "EXPRESS_DELIVERY",
+                        "EARLY_MORNING_DELIVERY"
+                    ],
+                    "collo": {
+                        "max": 10
+                    }
+                },
+                {
+                    "carrier": "INSTABEE",
                     "packageTypes": [
                         "PACKAGE",
                         "MAILBOX",

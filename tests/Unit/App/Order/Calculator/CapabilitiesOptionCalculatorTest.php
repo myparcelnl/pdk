@@ -712,3 +712,43 @@ it('gives insurance the carrier amount when the capabilities switch it on', func
         0,
     ],
 ]);
+
+it('leaves an option without a capabilities options key alone', function (array $results) {
+    $carrier = RefCapabilitiesSharedCarrierV2::POSTNL;
+
+    $resetCalculators = mockPdkProperty('orderCalculators', [CapabilitiesOptionCalculator::class]);
+    $resetDefinitions = mockPdkProperty('orderOptionDefinitions', [
+        new class extends AbstractOrderOptionDefinition {
+            public function getShipmentOptionsKey(): ?string
+            {
+                return 'signature';
+            }
+
+            public function getCapabilitiesOptionsKey(): ?string
+            {
+                return null;
+            }
+
+            public function getCapabilitiesRootKey(): ?string
+            {
+                return 'incoterms';
+            }
+        },
+    ]);
+
+    factory(Carrier::class)
+        ->withAllCapabilities($carrier)
+        ->store();
+
+    MockSdkApiHandler::enqueue(new ExampleCapabilitiesResponse($results));
+
+    $order = calculateOrder($carrier, ['signature' => TriStateService::ENABLED]);
+
+    expect($order->deliveryOptions->shipmentOptions->signature)->toBe(TriStateService::ENABLED);
+
+    $resetDefinitions();
+    $resetCalculators();
+})->with([
+    'capability without the option' => [[capabilityResult(RefCapabilitiesSharedCarrierV2::POSTNL, 100, [])]],
+    'no capability'                 => [[]],
+]);
