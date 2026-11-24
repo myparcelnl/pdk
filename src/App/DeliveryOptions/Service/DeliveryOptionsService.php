@@ -29,6 +29,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use MyParcelNL\Sdk\Support\Str;
 
@@ -500,12 +501,12 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
     public static function getCarrierSettingsMap(): array
     {
         // Auto-derived from the SDK V2 enums, filtered to PDK-supported types
-        // via DeliveryOptions::isDeliveryTypeSupported() / isPackageTypeSupported().
+        // via SupportedCapabilitiesFilter::isDeliveryTypeSupported() / isPackageTypeSupported().
         // PDK-only consts (no SDK counterpart) appended explicitly.
         $supportedDeliveryTypes = array_values(array_filter(
             RefTypesDeliveryTypeV2::getAllowableEnumValues(),
             static function (string $v2): bool {
-                return DeliveryOptions::isDeliveryTypeSupported($v2);
+                return SupportedCapabilitiesFilter::isDeliveryTypeSupported($v2);
             }
         ));
 
@@ -517,7 +518,7 @@ class DeliveryOptionsService implements DeliveryOptionsServiceInterface
         $pricePackageTypes = array_filter(
             RefShipmentPackageTypeV2::getAllowableEnumValues(),
             static function (string $v2): bool {
-                return DeliveryOptions::isPackageTypeSupported($v2)
+                return SupportedCapabilitiesFilter::isPackageTypeSupported($v2)
                     && $v2 !== DeliveryOptions::DEFAULT_PACKAGE_TYPE_V2;
             }
         );

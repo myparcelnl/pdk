@@ -17,7 +17,6 @@ use MyParcelNL\Pdk\Facade\FrontendData;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Settings\Model\CarrierSettings;
 use MyParcelNL\Pdk\Settings\Model\ProductSettings;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\SdkApi\MockSdkApiHandler;
 use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
@@ -27,6 +26,7 @@ use MyParcelNL\Pdk\Tests\Uses\UsesSdkApiMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -67,7 +67,7 @@ beforeEach(function () {
     ];
 
     foreach (RefShipmentPackageTypeV2::getAllowableEnumValues() as $packageType) {
-        if (! DeliveryOptions::isPackageTypeSupported($packageType)) {
+        if (! SupportedCapabilitiesFilter::isPackageTypeSupported($packageType)) {
             continue;
         }
 

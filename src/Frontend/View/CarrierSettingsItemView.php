@@ -30,6 +30,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesCarrierV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Support\Str;
 
 /**
@@ -711,7 +712,7 @@ class CarrierSettingsItemView extends AbstractSettingsView
             }
 
             // Skip V2 values the PDK has no mapping for; their settings attrs do not exist.
-            if (! DeliveryOptions::isPackageTypeSupported($packageType)) {
+            if (! SupportedCapabilitiesFilter::isPackageTypeSupported($packageType)) {
                 continue;
             }
 

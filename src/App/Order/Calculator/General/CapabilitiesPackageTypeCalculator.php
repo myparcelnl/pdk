@@ -17,6 +17,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Shipment\Model\PackageType;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
@@ -133,7 +134,7 @@ final class CapabilitiesPackageTypeCalculator extends AbstractPdkOrderOptionCalc
 
         foreach (($carrier->packageTypes ?? []) as $v2Name) {
             if (
-                ! DeliveryOptions::isPackageTypeSupported($v2Name)
+                ! SupportedCapabilitiesFilter::isPackageTypeSupported($v2Name)
                 || $this->isInternationalMailboxBlocked($v2Name, $cc, $carrier)
             ) {
                 continue;

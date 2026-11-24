@@ -316,6 +316,38 @@ it('getContractDefinitions returns API items unfiltered by default', function ()
         ->and($items[0]->getPackageTypes())->toEqual(['PACKAGE', 'PALLET']);
 });
 
+it('drops carriers, delivery types and package types that the SDK cannot send when filterSupported is true', function (string $key, string $method) {
+    TestBootstrapper::hasApiKey('test-key');
+
+    $service = new MockableCapabilitiesService();
+    $service->mockHandler->append(new Response(200, [], json_encode([
+        $key => [
+            [
+                'carrier'       => RefCapabilitiesSharedCarrierV2::POSTNL,
+                'deliveryTypes' => ['STANDARD_DELIVERY', 'UNKNOWN_DELIVERY'],
+                'packageTypes'  => ['PACKAGE', 'UNKNOWN_PACKAGE'],
+            ],
+            [
+                'carrier'       => 'UNKNOWN_CARRIER',
+                'deliveryTypes' => ['STANDARD_DELIVERY'],
+                'packageTypes'  => ['PACKAGE'],
+            ],
+        ],
+    ])));
+
+    $models = 'getCapabilities' === $method
+        ? $service->getCapabilities(['recipient' => ['country_code' => 'NL']], true)
+        : $service->getContractDefinitions(null, true);
+
+    expect($models)->toHaveCount(1)
+        ->and($models[0]->getCarrier())->toBe(RefCapabilitiesSharedCarrierV2::POSTNL)
+        ->and($models[0]->getDeliveryTypes())->toEqual(['STANDARD_DELIVERY'])
+        ->and($models[0]->getPackageTypes())->toEqual(['PACKAGE']);
+})->with([
+    'capabilities'         => ['results', 'getCapabilities'],
+    'contract definitions' => ['items', 'getContractDefinitions'],
+]);
+
 // Tests for getContractDefinitions()
 it('getContractDefinitions returns array of items from API response', function () {
     TestBootstrapper::hasApiKey('valid-key');

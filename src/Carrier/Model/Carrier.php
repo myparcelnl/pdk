@@ -8,6 +8,7 @@ use MyParcelNL\Pdk\App\Options\Contract\OrderOptionDefinitionInterface;
 use MyParcelNL\Pdk\Base\Model\SdkBackedModel;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
@@ -41,14 +42,9 @@ class Carrier extends SdkBackedModel
     protected $sdkModelClass = RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2::class;
 
     /**
-     * Whether the SDK can map a V2 carrier name to a v1 export ID.
+     * Check if the SDK can map a V2 carrier name to a v1 export ID.
      *
-     * Carriers without an ID are filtered out at the boundary
-     * ({@see \MyParcelNL\Pdk\Account\Service\AccountSettingsService::getCarriers},
-     * {@see \MyParcelNL\Pdk\App\Action\Capabilities\CapabilitiesAction}'s response)
-     * so a server-side proposition update introducing a new carrier cannot expose
-     * it to admin or checkout, which would otherwise lead to encode-side throws
-     * during export. A new carrier becomes supported with an SDK update.
+     * @deprecated Will be removed in v6.0.0. Use SupportedCapabilitiesFilter::isCarrierSupported() instead.
      *
      * @param  string $carrierName
      *
@@ -56,7 +52,7 @@ class Carrier extends SdkBackedModel
      */
     public static function isSupported(string $carrierName): bool
     {
-        return null !== ApiMapperService::forCarrier()->idFromV2Name($carrierName);
+        return SupportedCapabilitiesFilter::isCarrierSupported($carrierName);
     }
 
     /**
