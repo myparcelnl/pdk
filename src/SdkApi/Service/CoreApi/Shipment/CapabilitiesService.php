@@ -6,7 +6,6 @@ namespace MyParcelNL\Pdk\SdkApi\Service\CoreApi\Shipment;
 
 use GuzzleHttp\HandlerStack;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
-use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostCapabilitiesRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesPostContractDefinitionsRequestV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\CapabilitiesResponsesCapabilitiesV2;
@@ -15,6 +14,7 @@ use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinit
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesContractDefinitionsResponseOptionsOptionsV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseCapabilityV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesResponseOptionsOptionsV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Support\Str;
 use Psr\Http\Message\RequestInterface;
 
@@ -121,12 +121,8 @@ class CapabilitiesService extends AbstractShipmentApiService
     }
 
     /**
-     * Drop carriers and capabilities this PDK version does not recognise, and narrow each surviving model's
-     * delivery types, package types and options to the PDK-supported subset.
-     *
-     * Mutates the passed-in SDK models in place. The two response models share an identical
-     * carrier/deliveryTypes/packageTypes/options surface area, so a union typehint avoids
-     * the generated-model template gymnastics phpstan would otherwise need.
+     * Drop the carriers, delivery types, package types and options that the SDK cannot send, then the options
+     * that have no order option definition in this PDK.
      *
      * @param  array<int, RefCapabilitiesResponseCapabilityV2|RefCapabilitiesContractDefinitionsResponseContractDefinitionsV2> $models
      *
@@ -134,39 +130,13 @@ class CapabilitiesService extends AbstractShipmentApiService
      */
     private function filterSupportedCapabilities(array $models): array
     {
-        $supported = [];
+        $supported = SupportedCapabilitiesFilter::filter($models);
 
-        foreach ($models as $model) {
-            /** @var string $carrierName */
-            $carrierName = $model->getCarrier();
-            if (! Carrier::isSupported($carrierName)) {
-                continue;
-            }
-
-            $model->setDeliveryTypes(array_values(array_filter(
-                // @phpstan-ignore nullCoalesce.expr (attribute can be null if model is manually constructed with missing fields, but API responses always include it as an array)
-                $model->getDeliveryTypes() ?? [],
-                // @phpstan-ignore argument.type (SDK enum values come back as plain strings)
-                static function (string $type): bool {
-                    return DeliveryOptions::isDeliveryTypeSupported($type);
-                }
-            )));
-
-            $model->setPackageTypes(array_values(array_filter(
-                // @phpstan-ignore nullCoalesce.expr (attribute can be null if model is manually constructed with missing fields, but API responses always include it as an array)
-                $model->getPackageTypes() ?? [],
-                // @phpstan-ignore argument.type (SDK enum values come back as plain strings)
-                static function (string $type): bool {
-                    return DeliveryOptions::isPackageTypeSupported($type);
-                }
-            )));
-
+        foreach ($supported as $model) {
             $options = $model->getOptions();
             if ($options !== null) {
                 $model->setOptions($this->stripUnregisteredOptions($options));
             }
-
-            $supported[] = $model;
         }
 
         return $supported;

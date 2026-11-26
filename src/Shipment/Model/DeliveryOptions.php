@@ -75,36 +75,6 @@ class DeliveryOptions extends Model
     public const DEFAULT_DELIVERY_TYPE_ID  = RefTypesDeliveryType::STANDARD;
     public const DEFAULT_DELIVERY_TYPE_NAME = ShipmentDefsDeliveryOptionsDeliveryNameV2::STANDARD;
 
-    /**
-     * Whether the SDK can map a V2 delivery type to a model name and a v1 export ID.
-     *
-     * @param  string $v2DeliveryType
-     *
-     * @return bool
-     */
-    public static function isDeliveryTypeSupported(string $v2DeliveryType): bool
-    {
-        $mapper = ApiMapperService::forDeliveryType();
-
-        return null !== $mapper->legacyNameFromV2Name($v2DeliveryType)
-            && null !== $mapper->idFromV2Name($v2DeliveryType);
-    }
-
-    /**
-     * Whether the SDK can map a V2 package type to a model name and a v1 export ID.
-     *
-     * @param  string $v2PackageType
-     *
-     * @return bool
-     */
-    public static function isPackageTypeSupported(string $v2PackageType): bool
-    {
-        $mapper = ApiMapperService::forPackageType();
-
-        return null !== $mapper->legacyNameFromV2Name($v2PackageType)
-            && null !== $mapper->idFromV2Name($v2PackageType);
-    }
-
     public const  DEFAULT_PACKAGE_TYPE_ID         = RefShipmentPackageType::PACKAGE;
     public const  DEFAULT_PACKAGE_TYPE_NAME       = ShipmentResponsesDeliveryOptionsPackageTypeV2::PACKAGE;
     public const  DEFAULT_PACKAGE_TYPE_V2         = RefShipmentPackageTypeV2::PACKAGE;

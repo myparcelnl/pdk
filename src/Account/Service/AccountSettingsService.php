@@ -13,6 +13,7 @@ use MyParcelNL\Pdk\Base\Support\Collection;
 use MyParcelNL\Pdk\Carrier\Collection\CarrierCollection;
 use MyParcelNL\Pdk\Carrier\Model\Carrier;
 use MyParcelNL\Pdk\Facade\Pdk;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 
 class AccountSettingsService implements AccountSettingsServiceInterface
 {
@@ -51,7 +52,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
      *
      * Filters out carriers this PDK version does not support so a server-side
      * proposition update cannot expose an unsupported carrier to the admin UI.
-     * @see Carrier::isSupported()
+     * @see SupportedCapabilitiesFilter::isCarrierSupported()
      *
      * @return \MyParcelNL\Pdk\Carrier\Collection\CarrierCollection
      */
@@ -70,7 +71,7 @@ class AccountSettingsService implements AccountSettingsServiceInterface
         return $shop->carriers->filter(static function ($carrier): bool {
             return $carrier instanceof Carrier
                 && is_string($carrier->carrier)
-                && Carrier::isSupported($carrier->carrier);
+                && SupportedCapabilitiesFilter::isCarrierSupported($carrier->carrier);
         })->values();
     }
 

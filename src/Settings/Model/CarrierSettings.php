@@ -14,6 +14,7 @@ use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageTypeV2;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 
 /**
  * @property string               $id
@@ -246,7 +247,7 @@ class CarrierSettings extends AbstractSettingsModel
     /**
      * Delivery-type allow-attrs (e.g. allowEveningDelivery). Auto-derived from
      * the SDK V2 enum, filtered to PDK-supported types via
-     * {@see DeliveryOptions::isDeliveryTypeSupported()}, plus PDK-only consts
+     * {@see SupportedCapabilitiesFilter::isDeliveryTypeSupported()}, plus PDK-only consts
      * for delivery options that have no SDK counterpart (Monday delivery and
      * the master home-delivery toggle).
      *
@@ -257,7 +258,7 @@ class CarrierSettings extends AbstractSettingsModel
         $types = array_values(array_filter(
             RefTypesDeliveryTypeV2::getAllowableEnumValues(),
             static function (string $v2): bool {
-                return DeliveryOptions::isDeliveryTypeSupported($v2);
+                return SupportedCapabilitiesFilter::isDeliveryTypeSupported($v2);
             }
         ));
         $types[] = DeliveryOptions::DELIVERY_OPTION_ALLOW_HOME;
@@ -287,7 +288,7 @@ class CarrierSettings extends AbstractSettingsModel
         $types = array_values(array_filter(
             RefTypesDeliveryTypeV2::getAllowableEnumValues(),
             static function (string $v2): bool {
-                return DeliveryOptions::isDeliveryTypeSupported($v2);
+                return SupportedCapabilitiesFilter::isDeliveryTypeSupported($v2);
             }
         ));
         $types[] = DeliveryOptions::DELIVERY_OPTION_MONDAY;
@@ -308,7 +309,7 @@ class CarrierSettings extends AbstractSettingsModel
     /**
      * Package-type price-attrs (e.g. pricePackageTypeMailbox). Auto-derived
      * from the SDK V2 enum, filtered to PDK-supported types via
-     * {@see DeliveryOptions::isPackageTypeSupported()}. The legacy
+     * {@see SupportedCapabilitiesFilter::isPackageTypeSupported()}. The legacy
      * 'SMALL_PACKAGE' ↔ 'packageSmall' asymmetry is absorbed by SettingKey's
      * PRICE_PACKAGE_TYPE_EXCEPTIONS map.
      *
@@ -321,7 +322,7 @@ class CarrierSettings extends AbstractSettingsModel
         $types = array_filter(
             RefShipmentPackageTypeV2::getAllowableEnumValues(),
             static function (string $v2): bool {
-                return DeliveryOptions::isPackageTypeSupported($v2)
+                return SupportedCapabilitiesFilter::isPackageTypeSupported($v2)
                     && $v2 !== DeliveryOptions::DEFAULT_PACKAGE_TYPE_V2;
             }
         );

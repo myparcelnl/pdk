@@ -11,6 +11,7 @@ use MyParcelNL\Pdk\Carrier\Service\CapabilitiesValidationService;
 use MyParcelNL\Pdk\Facade\Pdk;
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefTypesDeliveryTypeV2;
+use MyParcelNL\Sdk\Services\Capabilities\SupportedCapabilitiesFilter;
 use MyParcelNL\Sdk\Services\Mapping\ApiMapperService;
 
 /**
@@ -85,7 +86,7 @@ final class CapabilitiesDeliveryTypeCalculator extends AbstractPdkOrderOptionCal
         $firstKnown = Arr::first(
             $supportedV2Types,
             static function ($v2Type) {
-                return DeliveryOptions::isDeliveryTypeSupported($v2Type);
+                return SupportedCapabilitiesFilter::isDeliveryTypeSupported($v2Type);
             }
         );
 
