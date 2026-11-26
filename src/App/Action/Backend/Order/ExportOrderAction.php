@@ -117,7 +117,7 @@ class ExportOrderAction extends AbstractOrderAction
         // SHIPMENTS or V2 — both currently run the shipments-export path so manual export
         // works inside V2 (hybrid: V2 fulfilment continues externally, manual export creates
         // shipments via the shipments API).
-        // @TODO INT-1590: once sales-channel detection lands, V2 should become a distinct
+        // @TODO INT-2218: once sales-channel detection lands, V2 should become a distinct
         //       no-op branch here so manual export does not duplicate sales-channel-driven
         //       fulfilment.
         return $this->exportShipments($orders);

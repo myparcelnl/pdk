@@ -59,7 +59,7 @@ interface AccountFeaturesServiceInterface
      * IAM feature value (display, diagnostics, or behaviour that must follow IAM
      * regardless of plugin-side business rules).
      *
-     * @TODO INT-1590: implementations will downgrade ORDER_MODE_V2 to
+     * @TODO INT-2218: implementations will downgrade ORDER_MODE_V2 to
      *       ORDER_MODE_SHIPMENTS when the customer has no active sales channel,
      *       so manual shipment export keeps working without callers needing
      *       per-mode branches.
