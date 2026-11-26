@@ -19,6 +19,7 @@
                         "return": 0,
                         "hideSender": -1,
                         "insurance": 20000,
+                        "incoterms": -1,
                         "largeFormat": 0,
                         "onlyRecipient": 0,
                         "priorityDelivery": -1,

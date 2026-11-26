@@ -15,7 +15,9 @@ use MyParcelNL\Pdk\Tests\SdkApi\Response\ExampleCapabilitiesResponse;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
 use MyParcelNL\Pdk\Tests\Uses\UsesSdkApiMock;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsIncotermsRule;
 
 use function MyParcelNL\Pdk\Tests\factory;
 use function MyParcelNL\Pdk\Tests\usesShared;
@@ -430,3 +432,38 @@ it('supportsWeight skips the max check when only min is defined', function () {
     // Far above any plausible max, but within min, must pass: max is unconstrained.
     expect($service->supportsWeight($capability, 999999))->toBeTrue();
 });
+
+it('supportsIncotermsRule accepts only a rule that the capability allows', function (?array $incoterms, $rule, bool $expected) {
+    $capability = fetchCapability(array_filter([
+        'carrier'          => 'POSTNL',
+        'contract'         => ['id' => 1, 'type' => 'MAIN'],
+        'packageTypes'     => ['PACKAGE'],
+        'options'          => (object) [],
+        'deliveryTypes'    => ['STANDARD_DELIVERY'],
+        'transactionTypes' => [],
+        'collo'            => ['max' => 1],
+        'incoterms'        => $incoterms,
+    ]));
+
+    /** @var CapabilitiesValidationService $service */
+    $service = Pdk::get(CapabilitiesValidationService::class);
+
+    expect($service->supportsIncotermsRule($capability, $rule))->toBe($expected);
+})->with([
+    'allowed rule'                 => [
+        ['rule' => ['default' => ShipmentDefsIncotermsRule::DAP, 'values' => [ShipmentDefsIncotermsRule::DAP, ShipmentDefsIncotermsRule::DDP]]],
+        ShipmentDefsIncotermsRule::DDP,
+        true,
+    ],
+    'rule not allowed'             => [
+        ['rule' => ['default' => ShipmentDefsIncotermsRule::DAP, 'values' => [ShipmentDefsIncotermsRule::DAP]]],
+        ShipmentDefsIncotermsRule::DDP,
+        false,
+    ],
+    'no rule chosen'               => [
+        ['rule' => ['default' => ShipmentDefsIncotermsRule::DAP, 'values' => [ShipmentDefsIncotermsRule::DAP]]],
+        TriStateService::INHERIT,
+        false,
+    ],
+    'capability without incoterms' => [null, ShipmentDefsIncotermsRule::DAP, false],
+]);

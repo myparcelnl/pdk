@@ -81,16 +81,6 @@
                 "property": "orderNotes",
                 "useDataEnvelope": true
             },
-            "fetchLabelPdf": {
-                "headers": [],
-                "method": "GET",
-                "parameters": {
-                    "action": "fetchLabelPdf"
-                },
-                "path": "",
-                "property": "pdfs",
-                "useDataEnvelope": true
-            },
             "fetchOrders": {
                 "headers": [],
                 "method": "GET",
@@ -156,6 +146,16 @@
                 "method": "POST",
                 "parameters": {
                     "action": "printShipments"
+                },
+                "path": "",
+                "property": "pdfs",
+                "useDataEnvelope": true
+            },
+            "fetchLabelPdf": {
+                "headers": [],
+                "method": "GET",
+                "parameters": {
+                    "action": "fetchLabelPdf"
                 },
                 "path": "",
                 "property": "pdfs",
@@ -797,6 +797,60 @@
                             }
                         },
                         {
+                            "carrier": "GOFO",
+                            "packageTypes": [
+                                "PACKAGE",
+                                "MAILBOX",
+                                "UNFRANKED",
+                                "DIGITAL_STAMP",
+                                "PALLET",
+                                "SMALL_PACKAGE",
+                                "ENVELOPE"
+                            ],
+                            "options": {
+                                "freshFood": [],
+                                "frozen": [],
+                                "hideSender": [],
+                                "noTracking": [],
+                                "oversizedPackage": [],
+                                "priorityDelivery": [],
+                                "recipientOnlyDelivery": [],
+                                "requiresAgeVerification": [],
+                                "requiresReceiptCode": [],
+                                "requiresSignature": [],
+                                "returnOnFirstFailedDelivery": [],
+                                "sameDayDelivery": [],
+                                "saturdayDelivery": [],
+                                "scheduledCollection": [],
+                                "insurance": {
+                                    "default": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "min": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "max": {
+                                        "currency": "EUR",
+                                        "amount": 500000
+                                    }
+                                }
+                            },
+                            "deliveryTypes": [
+                                "MORNING_DELIVERY",
+                                "STANDARD_DELIVERY",
+                                "EVENING_DELIVERY",
+                                "PICKUP_DELIVERY",
+                                "SAME_DAY_DELIVERY",
+                                "EXPRESS_DELIVERY",
+                                "EARLY_MORNING_DELIVERY"
+                            ],
+                            "collo": {
+                                "max": 10
+                            }
+                        },
+                        {
                             "carrier": "INPOST",
                             "packageTypes": [
                                 "PACKAGE",
@@ -1176,6 +1230,60 @@
                         },
                         {
                             "carrier": "VIA_TIM",
+                            "packageTypes": [
+                                "PACKAGE",
+                                "MAILBOX",
+                                "UNFRANKED",
+                                "DIGITAL_STAMP",
+                                "PALLET",
+                                "SMALL_PACKAGE",
+                                "ENVELOPE"
+                            ],
+                            "options": {
+                                "freshFood": [],
+                                "frozen": [],
+                                "hideSender": [],
+                                "noTracking": [],
+                                "oversizedPackage": [],
+                                "priorityDelivery": [],
+                                "recipientOnlyDelivery": [],
+                                "requiresAgeVerification": [],
+                                "requiresReceiptCode": [],
+                                "requiresSignature": [],
+                                "returnOnFirstFailedDelivery": [],
+                                "sameDayDelivery": [],
+                                "saturdayDelivery": [],
+                                "scheduledCollection": [],
+                                "insurance": {
+                                    "default": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "min": {
+                                        "currency": "EUR",
+                                        "amount": 0
+                                    },
+                                    "max": {
+                                        "currency": "EUR",
+                                        "amount": 500000
+                                    }
+                                }
+                            },
+                            "deliveryTypes": [
+                                "MORNING_DELIVERY",
+                                "STANDARD_DELIVERY",
+                                "EVENING_DELIVERY",
+                                "PICKUP_DELIVERY",
+                                "SAME_DAY_DELIVERY",
+                                "EXPRESS_DELIVERY",
+                                "EARLY_MORNING_DELIVERY"
+                            ],
+                            "collo": {
+                                "max": 10
+                            }
+                        },
+                        {
+                            "carrier": "INSTABEE",
                             "packageTypes": [
                                 "PACKAGE",
                                 "MAILBOX",
@@ -1738,6 +1846,60 @@
                 }
             },
             {
+                "carrier": "GOFO",
+                "packageTypes": [
+                    "PACKAGE",
+                    "MAILBOX",
+                    "UNFRANKED",
+                    "DIGITAL_STAMP",
+                    "PALLET",
+                    "SMALL_PACKAGE",
+                    "ENVELOPE"
+                ],
+                "options": {
+                    "freshFood": [],
+                    "frozen": [],
+                    "hideSender": [],
+                    "noTracking": [],
+                    "oversizedPackage": [],
+                    "priorityDelivery": [],
+                    "recipientOnlyDelivery": [],
+                    "requiresAgeVerification": [],
+                    "requiresReceiptCode": [],
+                    "requiresSignature": [],
+                    "returnOnFirstFailedDelivery": [],
+                    "sameDayDelivery": [],
+                    "saturdayDelivery": [],
+                    "scheduledCollection": [],
+                    "insurance": {
+                        "default": {
+                            "currency": "EUR",
+                            "amount": 0
+                        },
+                        "min": {
+                            "currency": "EUR",
+                            "amount": 0
+                        },
+                        "max": {
+                            "currency": "EUR",
+                            "amount": 500000
+                        }
+                    }
+                },
+                "deliveryTypes": [
+                    "MORNING_DELIVERY",
+                    "STANDARD_DELIVERY",
+                    "EVENING_DELIVERY",
+                    "PICKUP_DELIVERY",
+                    "SAME_DAY_DELIVERY",
+                    "EXPRESS_DELIVERY",
+                    "EARLY_MORNING_DELIVERY"
+                ],
+                "collo": {
+                    "max": 10
+                }
+            },
+            {
                 "carrier": "INPOST",
                 "packageTypes": [
                     "PACKAGE",
@@ -2168,6 +2330,60 @@
                 "collo": {
                     "max": 10
                 }
+            },
+            {
+                "carrier": "INSTABEE",
+                "packageTypes": [
+                    "PACKAGE",
+                    "MAILBOX",
+                    "UNFRANKED",
+                    "DIGITAL_STAMP",
+                    "PALLET",
+                    "SMALL_PACKAGE",
+                    "ENVELOPE"
+                ],
+                "options": {
+                    "freshFood": [],
+                    "frozen": [],
+                    "hideSender": [],
+                    "noTracking": [],
+                    "oversizedPackage": [],
+                    "priorityDelivery": [],
+                    "recipientOnlyDelivery": [],
+                    "requiresAgeVerification": [],
+                    "requiresReceiptCode": [],
+                    "requiresSignature": [],
+                    "returnOnFirstFailedDelivery": [],
+                    "sameDayDelivery": [],
+                    "saturdayDelivery": [],
+                    "scheduledCollection": [],
+                    "insurance": {
+                        "default": {
+                            "currency": "EUR",
+                            "amount": 0
+                        },
+                        "min": {
+                            "currency": "EUR",
+                            "amount": 0
+                        },
+                        "max": {
+                            "currency": "EUR",
+                            "amount": 500000
+                        }
+                    }
+                },
+                "deliveryTypes": [
+                    "MORNING_DELIVERY",
+                    "STANDARD_DELIVERY",
+                    "EVENING_DELIVERY",
+                    "PICKUP_DELIVERY",
+                    "SAME_DAY_DELIVERY",
+                    "EXPRESS_DELIVERY",
+                    "EARLY_MORNING_DELIVERY"
+                ],
+                "collo": {
+                    "max": 10
+                }
             }
         ],
         "pluginSettings": {
@@ -2232,6 +2448,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2302,6 +2519,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2372,6 +2590,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2442,6 +2661,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2512,6 +2732,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2582,6 +2803,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2652,6 +2874,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2722,6 +2945,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2792,6 +3016,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2862,6 +3087,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -2927,11 +3153,83 @@
                     "exportReturnLargeFormat": -1,
                     "exportReturnPackageType": "package"
                 },
+                "GOFO": {
+                    "exportAgeCheck": 0,
+                    "exportReturn": 0,
+                    "exportHideSender": 0,
+                    "exportInsurance": 0,
+                    "exportIncoterms": -1,
+                    "exportLargeFormat": 0,
+                    "exportOnlyRecipient": 0,
+                    "exportPriorityDelivery": 0,
+                    "exportSignature": 0,
+                    "exportNoTracking": 0,
+                    "exportReceiptCode": 0,
+                    "exportCollect": 0,
+                    "exportFreshFood": 0,
+                    "exportFrozen": 0,
+                    "allowOnlyRecipient": false,
+                    "allowPriorityDelivery": false,
+                    "allowSameDayDelivery": false,
+                    "allowSaturdayDelivery": false,
+                    "allowSignature": false,
+                    "priceOnlyRecipient": 0,
+                    "pricePriorityDelivery": 0,
+                    "priceSignature": 0,
+                    "priceCollect": 0,
+                    "allowMorningDelivery": false,
+                    "allowStandardDelivery": false,
+                    "allowEveningDelivery": false,
+                    "allowPickupLocations": false,
+                    "allowDeliveryTypeExpress": false,
+                    "allowEarlyMorningDelivery": false,
+                    "allowDeliveryOptions": false,
+                    "allowMondayDelivery": false,
+                    "priceDeliveryTypeMorning": 0,
+                    "priceDeliveryTypeStandard": 0,
+                    "priceDeliveryTypeEvening": 0,
+                    "priceDeliveryTypePickup": 0,
+                    "priceDeliveryTypeSameDay": 0,
+                    "priceDeliveryTypeExpress": 0,
+                    "priceDeliveryTypeEarlyMorning": 0,
+                    "priceDeliveryTypeMonday": 0,
+                    "priceDeliveryTypeSaturday": 0,
+                    "pricePackageTypeMailbox": 0,
+                    "pricePackageTypeUnfranked": 0,
+                    "pricePackageTypeDigitalStamp": 0,
+                    "pricePackageTypePallet": 0,
+                    "pricePackageTypePackageSmall": 0,
+                    "pricePackageTypeEnvelope": 0,
+                    "allowInternationalMailbox": false,
+                    "priceInternationalMailbox": 0,
+                    "id": "GOFO",
+                    "cutoffTime": "16:00",
+                    "cutoffTimeSameDay": "10:00",
+                    "defaultPackageType": "package",
+                    "deliveryDaysWindow": 7,
+                    "deliveryOptionsEnabled": false,
+                    "deliveryOptionsEnabledForBackorders": false,
+                    "digitalStampDefaultWeight": 0,
+                    "dropOffDelay": 0,
+                    "dropOffPossibilities": {
+                        "dropOffDays": [],
+                        "dropOffDaysDeviations": []
+                    },
+                    "exportInsuranceFromAmount": 0,
+                    "exportInsurancePricePercentage": 100,
+                    "exportInsuranceUpTo": 0,
+                    "exportInsuranceUpToEu": 0,
+                    "exportInsuranceUpToRow": 0,
+                    "exportInsuranceUpToUnique": 0,
+                    "exportReturnLargeFormat": -1,
+                    "exportReturnPackageType": "package"
+                },
                 "INPOST": {
                     "exportAgeCheck": 0,
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3002,6 +3300,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3072,6 +3371,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3142,6 +3442,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3212,6 +3513,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3282,6 +3584,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3352,6 +3655,7 @@
                     "exportReturn": 0,
                     "exportHideSender": 0,
                     "exportInsurance": 0,
+                    "exportIncoterms": -1,
                     "exportLargeFormat": 0,
                     "exportOnlyRecipient": 0,
                     "exportPriorityDelivery": 0,
@@ -3396,6 +3700,77 @@
                     "allowInternationalMailbox": false,
                     "priceInternationalMailbox": 0,
                     "id": "VIA_TIM",
+                    "cutoffTime": "16:00",
+                    "cutoffTimeSameDay": "10:00",
+                    "defaultPackageType": "package",
+                    "deliveryDaysWindow": 7,
+                    "deliveryOptionsEnabled": false,
+                    "deliveryOptionsEnabledForBackorders": false,
+                    "digitalStampDefaultWeight": 0,
+                    "dropOffDelay": 0,
+                    "dropOffPossibilities": {
+                        "dropOffDays": [],
+                        "dropOffDaysDeviations": []
+                    },
+                    "exportInsuranceFromAmount": 0,
+                    "exportInsurancePricePercentage": 100,
+                    "exportInsuranceUpTo": 0,
+                    "exportInsuranceUpToEu": 0,
+                    "exportInsuranceUpToRow": 0,
+                    "exportInsuranceUpToUnique": 0,
+                    "exportReturnLargeFormat": -1,
+                    "exportReturnPackageType": "package"
+                },
+                "INSTABEE": {
+                    "exportAgeCheck": 0,
+                    "exportReturn": 0,
+                    "exportHideSender": 0,
+                    "exportInsurance": 0,
+                    "exportIncoterms": -1,
+                    "exportLargeFormat": 0,
+                    "exportOnlyRecipient": 0,
+                    "exportPriorityDelivery": 0,
+                    "exportSignature": 0,
+                    "exportNoTracking": 0,
+                    "exportReceiptCode": 0,
+                    "exportCollect": 0,
+                    "exportFreshFood": 0,
+                    "exportFrozen": 0,
+                    "allowOnlyRecipient": false,
+                    "allowPriorityDelivery": false,
+                    "allowSameDayDelivery": false,
+                    "allowSaturdayDelivery": false,
+                    "allowSignature": false,
+                    "priceOnlyRecipient": 0,
+                    "pricePriorityDelivery": 0,
+                    "priceSignature": 0,
+                    "priceCollect": 0,
+                    "allowMorningDelivery": false,
+                    "allowStandardDelivery": false,
+                    "allowEveningDelivery": false,
+                    "allowPickupLocations": false,
+                    "allowDeliveryTypeExpress": false,
+                    "allowEarlyMorningDelivery": false,
+                    "allowDeliveryOptions": false,
+                    "allowMondayDelivery": false,
+                    "priceDeliveryTypeMorning": 0,
+                    "priceDeliveryTypeStandard": 0,
+                    "priceDeliveryTypeEvening": 0,
+                    "priceDeliveryTypePickup": 0,
+                    "priceDeliveryTypeSameDay": 0,
+                    "priceDeliveryTypeExpress": 0,
+                    "priceDeliveryTypeEarlyMorning": 0,
+                    "priceDeliveryTypeMonday": 0,
+                    "priceDeliveryTypeSaturday": 0,
+                    "pricePackageTypeMailbox": 0,
+                    "pricePackageTypeUnfranked": 0,
+                    "pricePackageTypeDigitalStamp": 0,
+                    "pricePackageTypePallet": 0,
+                    "pricePackageTypePackageSmall": 0,
+                    "pricePackageTypeEnvelope": 0,
+                    "allowInternationalMailbox": false,
+                    "priceInternationalMailbox": 0,
+                    "id": "INSTABEE",
                     "cutoffTime": "16:00",
                     "cutoffTimeSameDay": "10:00",
                     "defaultPackageType": "package",
@@ -3913,6 +4288,60 @@
                     }
                 },
                 {
+                    "carrier": "GOFO",
+                    "packageTypes": [
+                        "PACKAGE",
+                        "MAILBOX",
+                        "UNFRANKED",
+                        "DIGITAL_STAMP",
+                        "PALLET",
+                        "SMALL_PACKAGE",
+                        "ENVELOPE"
+                    ],
+                    "options": {
+                        "freshFood": [],
+                        "frozen": [],
+                        "hideSender": [],
+                        "noTracking": [],
+                        "oversizedPackage": [],
+                        "priorityDelivery": [],
+                        "recipientOnlyDelivery": [],
+                        "requiresAgeVerification": [],
+                        "requiresReceiptCode": [],
+                        "requiresSignature": [],
+                        "returnOnFirstFailedDelivery": [],
+                        "sameDayDelivery": [],
+                        "saturdayDelivery": [],
+                        "scheduledCollection": [],
+                        "insurance": {
+                            "default": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "min": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "max": {
+                                "currency": "EUR",
+                                "amount": 500000
+                            }
+                        }
+                    },
+                    "deliveryTypes": [
+                        "MORNING_DELIVERY",
+                        "STANDARD_DELIVERY",
+                        "EVENING_DELIVERY",
+                        "PICKUP_DELIVERY",
+                        "SAME_DAY_DELIVERY",
+                        "EXPRESS_DELIVERY",
+                        "EARLY_MORNING_DELIVERY"
+                    ],
+                    "collo": {
+                        "max": 10
+                    }
+                },
+                {
                     "carrier": "INPOST",
                     "packageTypes": [
                         "PACKAGE",
@@ -4292,6 +4721,60 @@
                 },
                 {
                     "carrier": "VIA_TIM",
+                    "packageTypes": [
+                        "PACKAGE",
+                        "MAILBOX",
+                        "UNFRANKED",
+                        "DIGITAL_STAMP",
+                        "PALLET",
+                        "SMALL_PACKAGE",
+                        "ENVELOPE"
+                    ],
+                    "options": {
+                        "freshFood": [],
+                        "frozen": [],
+                        "hideSender": [],
+                        "noTracking": [],
+                        "oversizedPackage": [],
+                        "priorityDelivery": [],
+                        "recipientOnlyDelivery": [],
+                        "requiresAgeVerification": [],
+                        "requiresReceiptCode": [],
+                        "requiresSignature": [],
+                        "returnOnFirstFailedDelivery": [],
+                        "sameDayDelivery": [],
+                        "saturdayDelivery": [],
+                        "scheduledCollection": [],
+                        "insurance": {
+                            "default": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "min": {
+                                "currency": "EUR",
+                                "amount": 0
+                            },
+                            "max": {
+                                "currency": "EUR",
+                                "amount": 500000
+                            }
+                        }
+                    },
+                    "deliveryTypes": [
+                        "MORNING_DELIVERY",
+                        "STANDARD_DELIVERY",
+                        "EVENING_DELIVERY",
+                        "PICKUP_DELIVERY",
+                        "SAME_DAY_DELIVERY",
+                        "EXPRESS_DELIVERY",
+                        "EARLY_MORNING_DELIVERY"
+                    ],
+                    "collo": {
+                        "max": 10
+                    }
+                },
+                {
+                    "carrier": "INSTABEE",
                     "packageTypes": [
                         "PACKAGE",
                         "MAILBOX",

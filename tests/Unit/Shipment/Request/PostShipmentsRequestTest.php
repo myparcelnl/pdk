@@ -13,7 +13,9 @@ use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Shipment\Model\Shipment;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsIncotermsRule;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -147,3 +149,16 @@ it('sends the external product reference only for customs items that have one', 
         ->and($items[1])
         ->not->toHaveKey('external_product_reference');
 });
+
+it('sends the incoterms rule as options.incoterms.rule only when the shipment has a rule', function ($incoterms, ?array $expected) {
+    $shipment = createRowShipmentWithCustomsItems(['Stofzuiger']);
+    $shipment->deliveryOptions->shipmentOptions->incoterms = $incoterms;
+
+    $body    = json_decode((new PostShipmentsRequest(new ShipmentCollection([$shipment])))->getBody(), true);
+    $options = $body['data']['shipments'][0]['options'];
+
+    expect($options['incoterms'] ?? null)->toBe($expected);
+})->with([
+    'rule'    => [ShipmentDefsIncotermsRule::DDP, ['rule' => ShipmentDefsIncotermsRule::DDP]],
+    'no rule' => [TriStateService::INHERIT, null],
+]);

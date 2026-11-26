@@ -133,6 +133,13 @@ class PostOrdersRequest extends Request
             'currency' => 'EUR',
         ];
 
+        // Only a string is an Incoterms rule. Any other value sends the shipment without a rule.
+        if (is_string($shipment->options->incoterms)) {
+            $options['incoterms'] = ['rule' => $shipment->options->incoterms];
+        } else {
+            unset($options['incoterms']);
+        }
+
         return array_map(static function ($item) {
             return is_bool($item) ? (int) $item : $item;
         }, $options);

@@ -8,6 +8,7 @@ namespace MyParcelNL\Pdk\Fulfilment\Model;
 
 use MyParcelNL\Pdk\Shipment\Model\DeliveryOptions;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefShipmentPackageType;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentResponsesDeliveryOptionsPackageTypeV2;
@@ -33,6 +34,7 @@ it('can create instance from pdk delivery options', function () {
         'packageType'      => RefShipmentPackageType::MAILBOX,
         'deliveryDate'     => null,
         'insurance'        => 100,
+        'incoterms'        => TriStateService::DISABLED,
         'labelDescription' => 'test',
         'ageCheck'         => true,
         'collect'          => false,

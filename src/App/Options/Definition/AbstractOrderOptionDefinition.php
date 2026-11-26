@@ -67,6 +67,16 @@ abstract class AbstractOrderOptionDefinition implements OrderOptionDefinitionInt
     }
 
     /**
+     * Get the key of a top-level capability property for this option. Default: null.
+     *
+     * @return null|string
+     */
+    public function getCapabilitiesRootKey(): ?string
+    {
+        return null;
+    }
+
+    /**
      * The carrier-level settings key (e.g. 'exportSignature').
      * Derived by default: 'export' + ucfirst(shipmentOptionsKey).
      *

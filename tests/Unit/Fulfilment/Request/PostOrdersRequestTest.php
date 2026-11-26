@@ -14,7 +14,9 @@ use MyParcelNL\Pdk\Fulfilment\Model\Shipment;
 use MyParcelNL\Pdk\Shipment\Model\CustomsDeclaration;
 use MyParcelNL\Pdk\Tests\Uses\UsesAccountMock;
 use MyParcelNL\Pdk\Tests\Uses\UsesMockPdkInstance;
+use MyParcelNL\Pdk\Types\Service\TriStateService;
 use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\RefCapabilitiesSharedCarrierV2;
+use MyParcelNL\Sdk\Client\Generated\CoreApi\Model\ShipmentDefsIncotermsRule;
 use MyParcelNL\Pdk\Shipment\Model\RetailLocation;
 use MyParcelNL\Sdk\Client\Generated\OrderApi\Model\PickupAnyOfLocation;
 use function MyParcelNL\Pdk\Tests\factory;
@@ -158,3 +160,38 @@ it('sends no empty pickup location fields to the fulfilment api', function () {
         ->and($encoded['drop_off_point'])
         ->toBe(['location_code' => '215795', 'cc' => CountryCodes::CC_NL]);
 });
+
+it('sends the incoterms rule as options.incoterms.rule only when the order has a rule', function ($incoterms, bool $hasRule) {
+    $recipient = new ContactDetails(['cc' => CountryCodes::CC_US]);
+    $order     = new Order([
+        'externalIdentifier' => '1234',
+        'invoiceAddress'     => $recipient,
+        'shipment'           => new Shipment([
+            'carrier'            => factory(Carrier::class)
+                ->withCarrier(RefCapabilitiesSharedCarrierV2::POSTNL)
+                ->make(),
+            'recipient'          => $recipient,
+            'options'            => ['incoterms' => $incoterms],
+            'customsDeclaration' => new CustomsDeclaration([
+                'invoice' => '1234',
+                'items'   => [[
+                    'description' => 'Stofzuiger',
+                    'weight'      => 100,
+                    'itemValue'   => ['amount' => 1000, 'currency' => 'EUR'],
+                ]],
+            ]),
+        ]),
+    ]);
+
+    $body    = json_decode((new PostOrdersRequest(new OrderCollection([$order])))->getBody(), true);
+    $options = $body['data']['orders'][0]['shipment']['options'];
+
+    if ($hasRule) {
+        expect($options['incoterms'])->toBe(['rule' => $incoterms]);
+    } else {
+        expect($options)->not->toHaveKey('incoterms');
+    }
+})->with([
+    'rule'    => [ShipmentDefsIncotermsRule::DDP, true],
+    'no rule' => [TriStateService::DISABLED, false],
+]);
