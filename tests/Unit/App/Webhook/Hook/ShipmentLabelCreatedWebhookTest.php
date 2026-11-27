@@ -10,6 +10,13 @@ use MyParcelNL\Pdk\Account\Service\PdkAccountFeaturesService;
 use MyParcelNL\Pdk\App\Account\Contract\PdkAccountRepositoryInterface;
 use MyParcelNL\Pdk\App\Api\Backend\PdkBackendActions;
 use MyParcelNL\Pdk\App\Api\Contract\PdkActionsServiceInterface;
+use MyParcelNL\Pdk\App\Order\Contract\PdkOrderRepositoryInterface;
+use MyParcelNL\Pdk\App\Order\Model\PdkOrder;
+use MyParcelNL\Pdk\App\Webhook\Service\ShipmentWebhookService;
+use MyParcelNL\Pdk\Account\Contract\AccountFeaturesServiceInterface;
+use MyParcelNL\Pdk\Base\Concern\PdkInterface;
+use MyParcelNL\Pdk\Storage\Contract\StorageInterface;
+use MyParcelNL\Pdk\Tests\Bootstrap\MockPdkOrderRepository;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhookManagerInterface;
 use MyParcelNL\Pdk\App\Webhook\Contract\PdkWebhooksRepositoryInterface;
 use MyParcelNL\Pdk\Base\Contract\CronServiceInterface;
@@ -203,7 +210,7 @@ it('skips label created webhook when shipment reference identifier is missing', 
         ->and($result['logger']->getLogs('debug'))
         ->toContain([
             'level'   => 'debug',
-            'message' => '[PDK]: Skipping shipment label created webhook without a shipment reference identifier',
+            'message' => '[PDK]: Skipping shipment label created webhook without a valid order identifier',
             'context' => [
                 'shipment_id'                   => 231032886,
                 'order_id'                      => null,
@@ -255,3 +262,41 @@ it('dispatches update shipments for label created webhooks in shipments-only mod
             'linkFirstShipmentToFirstOrder'   => true,
         ]);
 });
+
+it('skips label created webhook when the shipment reference is not an order in the shop', function (array $features) {
+    $repository = new class(Pdk::get(StorageInterface::class)) extends MockPdkOrderRepository {
+        public function find($id): ?PdkOrder
+        {
+            return null;
+        }
+    };
+
+    $webhookService = new ShipmentWebhookService(Pdk::get(AccountFeaturesServiceInterface::class), $repository);
+
+    /** @var \MyParcelNL\Pdk\Tests\Bootstrap\MockPdk $pdk */
+    $pdk = Pdk::get(PdkInterface::class);
+    $pdk->set(PdkOrderRepositoryInterface::class, $repository);
+    $pdk->set(ShipmentWebhookService::class, $webhookService);
+    $pdk->set(ShipmentLabelCreatedWebhook::class, new ShipmentLabelCreatedWebhook($webhookService));
+
+    setShipmentLabelCreatedAccountFeatures($features);
+
+    $body   = validShipmentLabelCreatedHookBody(['shipment_reference_identifier' => 'fd_1234']);
+    $result = dispatchShipmentLabelCreatedWebhook($body, false);
+
+    expect($result['actions']->getCalls()->pluck('action')->contains(PdkBackendActions::UPDATE_SHIPMENTS))
+        ->toBeFalse()
+        ->and($result['logger']->getLogs('debug'))
+        ->toContain([
+            'level'   => 'debug',
+            'message' => '[PDK]: Skipping shipment label created webhook without a valid order identifier',
+            'context' => [
+                'shipment_id'                   => 231032886,
+                'order_id'                      => null,
+                'shipment_reference_identifier' => 'fd_1234',
+            ],
+        ]);
+})->with([
+    'shipments only' => [[]],
+    'order v2'       => [[PdkAccountFeaturesService::FEATURE_ORDER_MANAGEMENT]],
+]);

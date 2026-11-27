@@ -79,7 +79,7 @@ class ShipmentWebhookService
 
         if (empty($orderIds)) {
             $this->logSkippedWebhook(
-                'Skipping shipment label created webhook without a shipment reference identifier',
+                'Skipping shipment label created webhook without a valid order identifier',
                 $content
             );
 
@@ -136,7 +136,13 @@ class ShipmentWebhookService
     {
         $orderId = $this->getTrimmedValue($content, 'shipment_reference_identifier');
 
-        return '' === $orderId ? [] : [$orderId];
+        // The reference is free text. Another system on the same account can fill it with a value that is not
+        // an order in this shop. Without this check the platform creates an empty order for that value.
+        if ('' === $orderId || ! $this->pdkOrderRepository->exists($orderId)) {
+            return [];
+        }
+
+        return [$orderId];
     }
 
     /**
